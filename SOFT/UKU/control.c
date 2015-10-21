@@ -1593,12 +1593,14 @@ else if(work_stat==wsGS)
 	{
 	signed long temp_SL_U,temp_SL_I;
 	
+	if((CURR_FADE_IN) && (time_proc<CURR_FADE_IN))
+		{
+		I_ug_temp= (signed short)((signed long)I_ug_temp*(signed long)time_proc)/(signed long)CURR_FADE_IN;
+		}	
+	
 	if(b1Hz_sh) {
 
-		if(CURR_FADE_IN)
-			{
-			I_ug_temp= (signed short)((signed long)I_ug_temp*(signed long)time_proc)/(signed long)CURR_FADE_IN;
-			}
+
 
 
 		if(!((REV_IS_ON)&&(AVT_REV_IS_ON)&&((proc_phase==ppFF_P_REW)||(proc_phase==ppREW_P_FF)))) {

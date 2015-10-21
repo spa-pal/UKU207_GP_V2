@@ -1242,7 +1242,9 @@ if(ind==iMn)
 			}
 	
 
-		//int2lcdyx(fiks_stat_I,0,4,0);
+		int2lcdyx(time_proc,0,4,0);
+		int2lcdyx(CURR_FADE_IN,0,9,0);
+		int2lcdyx(I_ug_temp,0,14,0);
 		//int2lcdyx(bps[1]._vol_i,0,8,0);
 		//int2lcdyx(_x_,0,19,0);
 	/*	int2lcdyx(_xu_,0,14,0);*/
