@@ -460,7 +460,7 @@ extern signed short TBATENABLE;
 
 extern signed short NUMBAT;
 extern signed short NUMIST;
-extern signed short NUMINV;
+//extern signed short NUMINV;
 extern signed short NUMDT;
 extern signed short NUMSK;
 extern signed short NUMEXT;
@@ -564,6 +564,9 @@ extern signed short ETH_GW_3;
 extern signed short ETH_GW_4;
 extern signed short MODBUS_ADRESS;
 extern signed short MODBUS_BAUDRATE;
+extern signed short CURR_FADE_IN; //плавное нарастание тока. 0 - выкл, 1 - 500 - время нарастания в секундах
+
+
 
 //***********************************************
 //Состояние батарей

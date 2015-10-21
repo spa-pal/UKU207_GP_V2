@@ -107,7 +107,7 @@ signed short TBATENABLE;
 
 signed short NUMBAT;
 signed short NUMIST;
-signed short NUMINV;
+//signed short NUMINV;
 signed short NUMDT;
 signed short NUMSK;
 signed short NUMEXT;
@@ -210,6 +210,8 @@ signed short ETH_GW_4;
 
 signed short MODBUS_ADRESS;
 signed short MODBUS_BAUDRATE;
+
+signed short CURR_FADE_IN; //плавное нарастание тока. 0 - выкл, 1 - 500 - время нарастания в секундах
 
 
 
@@ -1063,7 +1065,7 @@ if(spc_stat==spcVZ)
 	sub_cnt_max++;
 	}*/
 
-cnt_of_slave=NUMIST+NUMINV;
+cnt_of_slave=NUMIST/*+NUMINV*/;
 
 
 
@@ -2346,7 +2348,7 @@ else if((ind==iSet_prl)||(ind==iK_prl))
 	
 else if(ind==iSet)
 	{
-	#define SI_SET_MAX	23
+	#define SI_SET_MAX	25
     	ptrs[0]=				" Источников        !";
 	ptrs[1]=				" Максимальная длит- ";
     	ptrs[2]=				" сть процесса  0[:0]";
@@ -2368,6 +2370,8 @@ else if(ind==iSet)
 	ptrs[18]=				" MODBUS BAUDRATE    ";
 	ptrs[19]=				"                  >0";
 	ptrs[20]=				" Автореверс         ";
+	ptrs[21]=				" Плавное нарастание ";
+	ptrs[22]=				" тока          (сек.";
 	ptrs[SI_SET_MAX-2]=		" Выход              ";
 	ptrs[SI_SET_MAX-1]=		" Калибровка         ";
 	ptrs[SI_SET_MAX]=		" Тест ШИМ           ";
@@ -2422,6 +2426,9 @@ else if(ind==iSet)
 
 	int2lcd(MODBUS_ADRESS,'<',0);
 	int2lcd(MODBUS_BAUDRATE,'>',0);
+
+	if(CURR_FADE_IN==0) 	  	sub_bgnd("ВЫКЛ.",'(',-3);
+	else 					int2lcd(CURR_FADE_IN,'(',0);
 	}
 
 
@@ -6740,7 +6747,17 @@ else if(ind==iSet)
                {
                sub_ind=20;
                //index_set=15;
-               }		
+               }
+          if(sub_ind==21)
+               {
+			//sub_ind=22;
+			index_set=20;
+               }
+          if(sub_ind==22)
+               {
+			sub_ind=23;
+			//index_set=20;
+               }								
 		gran_char(&sub_ind,0,SI_SET_MAX);
 		}
 	else if(but==butU)
@@ -6784,6 +6801,16 @@ else if(ind==iSet)
 			{
 			sub_ind=18;
 			index_set=17;
+			}
+/*		if(sub_ind==19)
+			{
+			sub_ind=18;
+			index_set=17;
+			}*/
+		if(sub_ind==22)
+			{
+			sub_ind=21;
+			index_set=20;
 			}
 		gran_char(&sub_ind,0,SI_SET_MAX);
 		}
@@ -6998,6 +7025,25 @@ else if(ind==iSet)
 			tree_up(iAvtRev,0,0,0);
 			}
 	    	}
+
+     else if(sub_ind==21)
+	     {
+	     if((but==butR)||(but==butR_))
+	     	{
+	     	CURR_FADE_IN++;
+	     	gran(&CURR_FADE_IN,0,500);
+	     	lc640_write_int(EE_CURR_FADE_IN,CURR_FADE_IN);
+			speed=1;
+	     	}
+	     
+	     else if((but==butL)||(but==butL_))
+	     	{
+	     	CURR_FADE_IN--;
+	     	gran(&CURR_FADE_IN,0,500);
+	     	lc640_write_int(EE_CURR_FADE_IN,CURR_FADE_IN);
+			speed=1;
+	     	}
+		}
 	else if(sub_ind==SI_SET_MAX-2)
 	    	{
 		if(but==butE)
@@ -7250,7 +7296,7 @@ else if(ind==iStr)
 	     	}
           }	
 /**/
-	  else if(sub_ind==2)
+/*	  else if(sub_ind==2)
 	     {
 	     if((but==butR)||(but==butR_))
 	     	{
@@ -7265,7 +7311,7 @@ else if(ind==iStr)
 	     	gran(&NUMINV,0,12-NUMIST);
 	     	lc640_write_int(EE_NUMINV,NUMINV);
 	     	}
-          }	
+          }*/	
 /**/
 /**/     else if(sub_ind==3)  /**/
 	     {
