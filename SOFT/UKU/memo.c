@@ -101,6 +101,8 @@ TZAS=lc640_read_int(EE_TZAS);
 NUMIST=lc640_read_int(EE_NUMIST);
 //gran(&NUMIST,0,8);
 CURR_FADE_IN=lc640_read_int(EE_CURR_FADE_IN);
+SK_START_LEV=lc640_read_int(EE_SK_START_LEV);
+SK_START=lc640_read_int(EE_SK_START);
 //gran(&NUMINV,0,8);
 NUMSK=lc640_read_int(EE_NUMSK);
 NUMDT=lc640_read_int(EE_NUMDT);

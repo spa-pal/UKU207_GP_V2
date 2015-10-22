@@ -212,8 +212,8 @@ signed short MODBUS_ADRESS;
 signed short MODBUS_BAUDRATE;
 
 signed short CURR_FADE_IN; //плавное нарастание тока. 0 - выкл, 1 - 500 - время нарастания в секундах
-
-
+signed short SK_START;	  //управление сухим контактом, 0 - выкл, 1 - вкл	
+signed short SK_START_LEV; //управление сухим контактом, 0 - включение размыканием, 1 - включение замыканием
 
 //***********************************************
 //Состояние батарей
@@ -2350,7 +2350,7 @@ else if((ind==iSet_prl)||(ind==iK_prl))
 	
 else if(ind==iSet)
 	{
-	#define SI_SET_MAX	25
+	#define SI_SET_MAX	27
     	ptrs[0]=				" Источников        !";
 	ptrs[1]=				" Максимальная длит- ";
     	ptrs[2]=				" сть процесса  0[:0]";
@@ -2374,6 +2374,8 @@ else if(ind==iSet)
 	ptrs[20]=				" Автореверс         ";
 	ptrs[21]=				" Плавное нарастание ";
 	ptrs[22]=				" тока          (сек.";
+	ptrs[23]=				" Управление сухим   ";
+	ptrs[24]=				" контактом          ";
 	ptrs[SI_SET_MAX-2]=		" Выход              ";
 	ptrs[SI_SET_MAX-1]=		" Калибровка         ";
 	ptrs[SI_SET_MAX]=		" Тест ШИМ           ";
@@ -2429,7 +2431,7 @@ else if(ind==iSet)
 	int2lcd(MODBUS_ADRESS,'<',0);
 	int2lcd(MODBUS_BAUDRATE,'>',0);
 
-	if(CURR_FADE_IN==0) 	  	sub_bgnd("ВЫКЛ.",'(',-3);
+	if(CURR_FADE_IN==0) 	  	sub_bgnd("ВЫКЛ.",'(',0);
 	else 					int2lcd(CURR_FADE_IN,'(',0);
 	}
 
@@ -2604,6 +2606,34 @@ else if (ind==iLan_set)
 	//int2lcdyx(snmp_community[2],0,14,0);
 	//int2lcdyx(snmp_community[sub_ind1],0,19,0);	
 	}
+
+else if(ind==iExtCtrl)
+	{
+	if(SK_START==1)
+	ptrs[0]=		" Активно            ";
+	else 
+	ptrs[0]=		" Неактивно          ";
+
+	ptrs[1]=		" Включение       !  ";
+	ptrs[2]=	    	" Выход              ";
+	ptrs[3]=	    	"                    ";
+	ptrs[4]=	    	"                    ";
+
+	if(sub_ind<index_set) index_set=sub_ind;
+	else if((sub_ind-index_set)>2) index_set=sub_ind-2;
+				
+	bgnd_par(		"     УПРАВЛЕНИЕ     ",
+				"   СУХИМ КОНТАКТОМ  ",
+				ptrs[index_set],
+				ptrs[index_set+1]);
+
+	pointer_set(2);
+	     	
+     if(SK_START_LEV==1)	sub_bgnd("ЗАМКН.",'!',-3);
+	else 			sub_bgnd("РАЗОМКН.",'!',-5);
+     
+                   	      	   	    		
+     }
 
 else if(ind==iTst_pwm)
 	{
@@ -6759,7 +6789,12 @@ else if(ind==iSet)
                {
 			sub_ind=23;
 			//index_set=20;
-               }								
+               }
+         	if(sub_ind==24)
+               {
+			sub_ind=25;
+			//index_set=20;
+               }											
 		gran_char(&sub_ind,0,SI_SET_MAX);
 		}
 	else if(but==butU)
@@ -6812,7 +6847,12 @@ else if(ind==iSet)
 		if(sub_ind==22)
 			{
 			sub_ind=21;
-			index_set=20;
+			//index_set=20;
+			}
+		if(sub_ind==24)
+			{
+			sub_ind=23;
+			//index_set=20;
 			}
 		gran_char(&sub_ind,0,SI_SET_MAX);
 		}
@@ -7046,6 +7086,13 @@ else if(ind==iSet)
 			speed=1;
 	     	}
 		}
+	else if(sub_ind==23)
+	    	{
+		if(but==butE)
+			{
+			tree_up(iExtCtrl,0,0,0);
+			}
+	    	}
 	else if(sub_ind==SI_SET_MAX-2)
 	    	{
 		if(but==butE)
@@ -8179,6 +8226,63 @@ else if (ind==iLan_set)
 	          tree_down(0,0);
 	          }
           }	          	
+	}
+
+else if(ind==iExtCtrl)
+	{
+	ret(3000);
+	if(but==butD)
+		{
+		sub_ind++;
+		gran_char(&sub_ind,0,2);
+		}
+	else if(but==butU)
+		{
+		sub_ind--;
+		gran_char(&sub_ind,0,2);
+		}
+	else if(but==butD_)
+		{
+		sub_ind=2;
+		}
+
+    	else if(sub_ind==0)
+		{
+		if((but==butR)||(but==butR_))
+			{
+			SK_START=1;
+			lc640_write_int(EE_SK_START,SK_START);
+			}
+		else if((but==butL)||(but==butL_))
+			{
+			SK_START=0;
+			lc640_write_int(EE_SK_START,SK_START);
+			}
+		speed=0;
+          }
+
+    	else if(sub_ind==1)
+		{
+		if((but==butR)||(but==butR_))
+			{
+			SK_START_LEV=1;
+			lc640_write_int(EE_SK_START_LEV,SK_START_LEV);
+			}
+		else if((but==butL)||(but==butL_))
+			{
+			SK_START_LEV=0;
+			lc640_write_int(EE_SK_START_LEV,SK_START_LEV);
+			}
+		speed=0;
+          }
+
+    	else if(sub_ind==2)
+	     {
+	     if(but==butE)
+	          {
+	          tree_down(0,0);
+	          }
+          }
 	}
 
 else if(ind==iTst_pwm)

@@ -346,7 +346,7 @@ typedef enum {
 	iStr,
 	iVrs,iApv,
 	iK_bps,iK_bps_sel,iK_bat,iK_bat_simple,iK_bat_sel,iK_load,iK_net,iK_net3,
-	iTst_pwm,iDebug,
+	iTst_pwm,iDebug,iExtCtrl,
 	iDef,iDef_3U,iDef_RSTKM,iDef_GLONASS,iDef_KONTUR,iDef_6U,iDef_220,
 	iSet_st_prl,iK_pdp,iSet_T,
 	iDeb,iJ_bat,iK_inv,iK_inv_sel,
@@ -565,6 +565,8 @@ extern signed short ETH_GW_4;
 extern signed short MODBUS_ADRESS;
 extern signed short MODBUS_BAUDRATE;
 extern signed short CURR_FADE_IN; //плавное нарастание тока. 0 - выкл, 1 - 500 - время нарастания в секундах
+extern signed short SK_START;	  //управление сухим контактом, 0 - выкл, 1 - вкл	
+extern signed short SK_START_LEV; //управление сухим контактом, 0 - включение размыканием, 1 - включение замыканием
 
 
 
