@@ -925,6 +925,9 @@ extern signed short U_up_d;
 extern signed short tst_pwm_u;
 extern signed short tst_pwm_i;
 
+extern signed short sk_in_drv_cnt;
+extern signed short sk_in_drv_stat,sk_in_drv_stat_old;
+
 typedef enum {vsOFF,vsON}enum_viz_stat;
 extern enum_viz_stat viz_stat;
 extern signed short viz_stat_cnt;

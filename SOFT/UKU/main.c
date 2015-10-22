@@ -374,6 +374,9 @@ signed short Isumm_;
 signed short tst_pwm_u;
 signed short tst_pwm_i;
 
+signed short sk_in_drv_cnt;
+signed short sk_in_drv_stat,sk_in_drv_stat_old;
+
 #include <LPC17xx.H>                        /* LPC21xx definitions */
 
 
@@ -2620,7 +2623,7 @@ else if(ind==iExtCtrl)
 	ptrs[4]=	    	"                    ";
 
 	if(sub_ind<index_set) index_set=sub_ind;
-	else if((sub_ind-index_set)>2) index_set=sub_ind-2;
+	else if((sub_ind-index_set)>1) index_set=sub_ind-1;
 				
 	bgnd_par(		"     ”œ–¿¬À≈Õ»≈     ",
 				"   —”’»Ã  ŒÕ“¿ “ŒÃ  ",
@@ -4188,6 +4191,79 @@ int2lcdyx(retcntsec,0,7,0);	*/
 //int2lcdyx(speed_cnt,0,15,0);
 
 }							    
+
+
+//-----------------------------------------------
+void sk_in_drv(void)
+{
+char i;
+
+if(adc_buff_[14]<2000)sk_in_drv_cnt++;
+else sk_in_drv_cnt--;
+gran(&sk_in_drv_cnt,-10,10);
+
+if(sk_in_drv_cnt>=10)sk_in_drv_stat=1;
+else if(sk_in_drv_cnt>=-10)sk_in_drv_stat=-1;
+
+if(sk_in_drv_stat!=sk_in_drv_stat_old)
+	{
+	if(SK_START)
+		{
+		if(SK_START_LEV)
+			{
+			if(sk_in_drv_stat==1)
+				{
+				if(main_menu_mode==mmmIT)
+					{
+					if(work_stat!=wsGS)
+						{
+						start_GS();
+						}
+					}
+				else if(main_menu_mode==mmmIN)
+					{
+					if(work_stat!=wsPS)
+						{
+						start_PS();
+						}
+					}
+				}
+			else if(sk_in_drv_stat==-1)
+				{
+				stop_proc();
+				}
+			}
+		if(!SK_START_LEV)
+			{
+			if(sk_in_drv_stat==-1)
+				{
+				if(main_menu_mode==mmmIT)
+					{
+					if(work_stat!=wsGS)
+						{
+						start_GS();
+						}
+					}
+				else if(main_menu_mode==mmmIN)
+					{
+					if(work_stat!=wsPS)
+						{
+						start_PS();
+						}
+					}
+				}
+			else if(sk_in_drv_stat==1)
+				{
+				stop_proc();
+				}
+			}
+		}
+	}
+sk_in_drv_stat_old=sk_in_drv_stat;
+
+}
+
+
 
 
 #define BUT0	16
@@ -6788,7 +6864,7 @@ else if(ind==iSet)
           if(sub_ind==22)
                {
 			sub_ind=23;
-			//index_set=20;
+			index_set=22;
                }
          	if(sub_ind==24)
                {
@@ -10897,6 +10973,7 @@ while (1)
 
 		if(!bRESET)but_drv();
 		but_an();
+		sk_in_drv();
 		}
 		 
 	if(b50Hz)
