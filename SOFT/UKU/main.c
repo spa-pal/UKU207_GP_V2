@@ -546,11 +546,17 @@ signed short I_MIN_IPS;		//минимальный ток всего источника, =I_MIN*NUMIST
 signed short I_LOAD_MODE;	//способ измерения выходного тока - по шунту или как сумму токов источников
 enum_main_menu_mode main_menu_mode;	//режим работы главного меню 
 enum_restart_enable restart_enable;	//рестарт включен-выключен
-enum_rele_log RELE_LOG;			   	//логика работы реле индикации токоограничения
-signed short T_DEL_REL_START;		
-signed short T_DEL_REL_WRK;			
-signed short DELT_REL_U;				
-signed short DELT_REL_I;
+signed short RELE_LOG_CURR;			//логика работы реле индикации токоограничения (1 - замкнуто == токоограничение)
+signed short RELE_LOG_VOLT;			//логика работы реле контроля напряжения 	  (1 - замкнуто == напряжение в норме)
+signed short T_DEL_REL_CURR_START;		//период нечувствительности по времени реле токоограничения после старта процесса, секунд 
+signed short T_DEL_REL_CURR_WRK;			//период нечувствительности по времени реле токоограничения после наступления токоограничения, секунд
+signed short T_DEL_REL_VOLT_START;		//период нечувствительности по времени реле контроля напряжения после старта процесса, секунд 
+signed short T_DEL_REL_VOLT_WRK;			//период нечувствительности по времени реле контроля напряжения после наступления условия срабатывания реле, секунд
+
+signed short DELT_REL_CURR_U;				
+signed short DELT_REL_CURR_I;
+signed short REL_VOLT_UMAX;				
+signed short REL_VOLT_UMIN;
 signed long time_proc;		//время процесса прямое
 signed long time_proc_remain;	//время процесса обратное
 signed long cap_time_proc;
@@ -624,6 +630,8 @@ short CAP_TIME_HOUR;
 
 char  bOFF;
 char bRAZR;
+
+signed short RELE_FUNC[2];
 
 //-----------------------------------------------
 void rtc_init (void) 
@@ -2353,7 +2361,7 @@ else if((ind==iSet_prl)||(ind==iK_prl))
 	
 else if(ind==iSet)
 	{
-	#define SI_SET_MAX	27
+	#define SI_SET_MAX	30
     	ptrs[0]=				" Источников        !";
 	ptrs[1]=				" Максимальная длит- ";
     	ptrs[2]=				" сть процесса  0[:0]";
@@ -2365,20 +2373,23 @@ else if(ind==iSet)
 	ptrs[8]=				" нагрузки          $";
 	ptrs[9]=				" Режим главного меню";
 	ptrs[10]=				"                   %";
-	ptrs[11]=				" Фиксированные     ";
-	ptrs[12]=				"          настройки";
-	ptrs[13]=				" Реле индикации     ";
+	ptrs[11]=				" Фиксированные      ";
+	ptrs[12]=				"           настройки";
+	ptrs[13]=				" Реле               ";
 	ptrs[14]=				" токоограничения    ";
-	ptrs[15]=				" Рестарт           ^";
-	ptrs[16]=				" Ethernet           ";
-	ptrs[17]=				" MODBUS ADRESS     <";
-	ptrs[18]=				" MODBUS BAUDRATE    ";
-	ptrs[19]=				"                  >0";
-	ptrs[20]=				" Автореверс         ";
-	ptrs[21]=				" Плавное нарастание ";
-	ptrs[22]=				" тока          (сек.";
-	ptrs[23]=				" Управление сухим   ";
-	ptrs[24]=				" контактом          ";
+	ptrs[15]=				" Реле контроля      ";
+	ptrs[16]=				" напряжения         ";
+	ptrs[17]=				" Рестарт           ^";
+	ptrs[18]=				" Ethernet           ";
+	ptrs[19]=				" MODBUS ADRESS     <";
+	ptrs[20]=				" MODBUS BAUDRATE    ";
+	ptrs[21]=				"                  >0";
+	ptrs[22]=				" Автореверс         ";
+	ptrs[23]=				" Плавное нарастание ";
+	ptrs[24]=				" тока          (сек.";
+	ptrs[25]=				" Управление сухим   ";
+	ptrs[26]=				" контактом          ";
+	ptrs[27]=				" Настройка реле     ";
 	ptrs[SI_SET_MAX-2]=		" Выход              ";
 	ptrs[SI_SET_MAX-1]=		" Калибровка         ";
 	ptrs[SI_SET_MAX]=		" Тест ШИМ           ";
@@ -2665,9 +2676,9 @@ else if(ind==iTst_pwm)
      
                    	      	   	    		
      }
-else if (ind==iRele_set)
+else if (ind==iCurr_contr_set)
 	{ 
-	ptrs[0]=		" Сигнал           ! ";
+	ptrs[0]=		" Актив. сигн.     ! ";
 	ptrs[1]=		" Tзад.вкл.      @сек";
 	ptrs[2]=		" Tзад.сраб.     #сек";
 	ptrs[3]=		" dU             <%  ";
@@ -2685,16 +2696,95 @@ else if (ind==iRele_set)
 	
 	pointer_set(2);
 
-	if(RELE_LOG==rlOFF)sub_bgnd("ВЫКЛ.",'!',-3);
-	else if(RELE_LOG==rlON_NZ)sub_bgnd("ВКЛ.(НЗ)",'!',-6);
-	else if(RELE_LOG==rlON_NR)sub_bgnd("ВКЛ.(НР)",'!',-6);
+	if(RELE_LOG_CURR==1)sub_bgnd("ЗАМКН.",'!',-4);
+	else 			sub_bgnd("РАЗОМКН.",'!',-7);
 
-	int2lcd(T_DEL_REL_START,'@',0);
-	int2lcd(T_DEL_REL_WRK,'#',0);
-	int2lcd(DELT_REL_U,'<',0);
-	int2lcd(DELT_REL_I,'>',0);
+
+	int2lcd(T_DEL_REL_CURR_START,'@',0);
+	int2lcd(T_DEL_REL_CURR_WRK,'#',0);
+	int2lcd(DELT_REL_CURR_U,'<',0);
+	int2lcd(DELT_REL_CURR_I,'>',0);
 	}
 
+else if (ind==iVolt_contr_set)
+	{ 
+	ptrs[0]=		" Актив. сигн.     ! ";
+	ptrs[1]=		" Tзад.вкл.      @сек";
+	ptrs[2]=		" Tзад.сраб.     #сек";
+	ptrs[3]=		" Umax           <В  ";
+	ptrs[4]=		" Umin           >В  ";
+	ptrs[5]=  	" Выход              ";
+	ptrs[6]=  	"                    ";
+	ptrs[7]=  	"                    ";
+	
+	if(sub_ind<index_set) index_set=sub_ind;
+	else if((sub_ind-index_set)>1) index_set=sub_ind-1;
+     bgnd_par(	"   УСТАНОВКИ РЕЛЕ   ",
+			"КОНТРОЛЯ НАПРЯЖЕНИЯ ",
+			ptrs[index_set],
+			ptrs[index_set+1]);
+	
+	pointer_set(2);
+
+	if(RELE_LOG_VOLT==1)sub_bgnd("ЗАМКН.",'!',-4);
+	else 			sub_bgnd("РАЗОМКН.",'!',-7);
+
+	int2lcd(T_DEL_REL_VOLT_START,'@',0);
+	int2lcd(T_DEL_REL_VOLT_WRK,'#',0);
+	int2lcd(REL_VOLT_UMAX,'<',0);
+	int2lcd(REL_VOLT_UMIN,'>',0);
+	}
+
+else if (ind==iRele_sel)
+	{ 
+	
+//	if(sub_ind<index_set) index_set=sub_ind;
+//	else if((sub_ind-index_set)>2) index_set=sub_ind-2;
+     bgnd_par(	"   НАСТРОЙКА РЕЛЕ   ",
+			" Реле1              ",
+			" Реле2              ",
+			" Выход              ");
+	
+	pointer_set(1);
+
+	}
+
+else if (ind==iRele_set)
+	{ 
+	ptrs[0]=		" Выключено          ";
+	ptrs[1]=		" Реверс             ";
+	ptrs[2]=		" Токоограничение    ";
+	ptrs[3]=		" Напряжение в норме ";
+	ptrs[4]=		" Напряжение не выше ";
+	ptrs[5]=		" Напряжение не ниже ";
+	ptrs[6]=  	" Выход              ";
+	ptrs[7]=  	"                    ";
+
+	if(bFL2)
+		{
+		ptrs[RELE_FUNC[sub_ind1]]="                    ";
+		}
+
+	if(sub_ind<index_set) index_set=sub_ind;
+	else if((sub_ind-index_set)>2) index_set=sub_ind-2;
+     bgnd_par(	" НАСТРОЙКА РЕЛЕ N!  ",
+			ptrs[index_set],
+			ptrs[index_set+1],
+			ptrs[index_set+2]);
+	
+	pointer_set(1);
+
+	int2lcd(sub_ind1,'!',0);
+	//int2lcdyx(sub_ind,0,17,0);
+	//int2lcdyx(index_set,0,19,0);	
+
+
+	int2lcdyx(lc640_read_int(EE_RELE_FUNC1),1,15,0);
+	int2lcdyx(lc640_read_int(EE_RELE_FUNC2),1,19,0);
+	int2lcdyx(RELE_FUNC[0],2,15,0);
+	int2lcdyx(RELE_FUNC[1],2,19,0);
+	
+	}
 else if (ind==iFiks_set)
 	{ 
 	ptrs[0]=		" U2          !В     ";
@@ -6836,39 +6926,35 @@ else if(ind==iSet)
           if(sub_ind==14)
                {
 			sub_ind=15;
+			index_set=14;
+               }
+          if(sub_ind==16)
+               {
+			sub_ind=17;
 			//index_set=12;
                }
-          if(sub_ind==14)
+          if(sub_ind==20)
                {
-               //index_set=13;
-               }
-          /*if(sub_ind==15)
-               {
-               sub_ind=16;
-               //index_set=15;
-               }*/
-          if(sub_ind==18)
-               {
-               index_set=17;
-               }
-          if(sub_ind==19)
-               {
-               sub_ind=20;
-               //index_set=15;
+               index_set=19;
                }
           if(sub_ind==21)
                {
-			//sub_ind=22;
-			index_set=20;
+               sub_ind=22;
+               //index_set=15;
                }
-          if(sub_ind==22)
+          if(sub_ind==23)
                {
-			sub_ind=23;
+			//sub_ind=22;
 			index_set=22;
                }
-         	if(sub_ind==24)
+          if(sub_ind==24)
                {
 			sub_ind=25;
+			index_set=24;
+               }
+         	if(sub_ind==26)
+               {
+			sub_ind=27;
 			//index_set=20;
                }											
 		gran_char(&sub_ind,0,SI_SET_MAX);
@@ -6910,24 +6996,29 @@ else if(ind==iSet)
 			sub_ind=13;
 			//index_set=3;
 			}
-		if(sub_ind==19)
+		if(sub_ind==16)
 			{
-			sub_ind=18;
-			index_set=17;
+			sub_ind=15;
+			//index_set=3;
+			}
+		if(sub_ind==21)
+			{
+			sub_ind=20;
+			index_set=19;
 			}
 /*		if(sub_ind==19)
 			{
 			sub_ind=18;
 			index_set=17;
 			}*/
-		if(sub_ind==22)
-			{
-			sub_ind=21;
-			//index_set=20;
-			}
 		if(sub_ind==24)
 			{
 			sub_ind=23;
+			//index_set=20;
+			}
+		if(sub_ind==26)
+			{
+			sub_ind=25;
 			//index_set=20;
 			}
 		gran_char(&sub_ind,0,SI_SET_MAX);
@@ -7057,11 +7148,19 @@ else if(ind==iSet)
 	    	{
 		if(but==butE)
 			{
-			tree_up(iRele_set,0,0,0);
+			tree_up(iCurr_contr_set,0,0,0);
 			}
 	    	}
 
-     else if(sub_ind==15)
+	else if(sub_ind==15)
+	    	{
+		if(but==butE)
+			{
+			tree_up(iVolt_contr_set,0,0,0);
+			}
+	    	}
+
+     else if(sub_ind==17)
 	     {
 	     if((but==butR)||(but==butR_))
 	     	{
@@ -7078,7 +7177,7 @@ else if(ind==iSet)
 	     	}
           }
 
-	else if(sub_ind==16)
+	else if(sub_ind==18)
 	    	{
 		if(but==butE)
 			{
@@ -7086,7 +7185,7 @@ else if(ind==iSet)
 			}
 	    	}
 
-     else if(sub_ind==17)
+     else if(sub_ind==19)
 	     {
 	     if((but==butR)||(but==butR_))
 	     	{
@@ -7104,7 +7203,7 @@ else if(ind==iSet)
 			speed=1;
 	     	}
           }
-     else if(sub_ind==18)
+     else if(sub_ind==20)
 	     {
 	     if((but==butR)||(but==butR_))
 	     	{
@@ -7136,7 +7235,7 @@ else if(ind==iSet)
 	     	lc640_write_int(EE_MODBUS_BAUDRATE,MODBUS_BAUDRATE);
 	     	}
           }
-	else if(sub_ind==20)
+	else if(sub_ind==22)
 	    	{
 		if(but==butE)
 			{
@@ -7144,7 +7243,7 @@ else if(ind==iSet)
 			}
 	    	}
 
-     else if(sub_ind==21)
+     else if(sub_ind==23)
 	     {
 	     if((but==butR)||(but==butR_))
 	     	{
@@ -7162,11 +7261,18 @@ else if(ind==iSet)
 			speed=1;
 	     	}
 		}
-	else if(sub_ind==23)
+	else if(sub_ind==25)
 	    	{
 		if(but==butE)
 			{
 			tree_up(iExtCtrl,0,0,0);
+			}
+	    	}
+	else if(sub_ind==27)
+	    	{
+		if(but==butE)
+			{
+			tree_up(iRele_sel,0,0,0);
 			}
 	    	}
 	else if(sub_ind==SI_SET_MAX-2)
@@ -9258,8 +9364,7 @@ else if(ind==iBatLogWrk)
 		} 
 	}
 
-
-else if(ind==iRele_set)
+else if(ind==iCurr_contr_set)
 	{
 	if(but==butD)
 		{
@@ -9283,22 +9388,18 @@ else if(ind==iRele_set)
 		{
 		if((but==butE)||(but==butR))
 			{
-			if(RELE_LOG==rlOFF)RELE_LOG=rlON_NZ;
-			else if(RELE_LOG==rlON_NZ)RELE_LOG=rlON_NR;
-			else RELE_LOG=rlOFF;
-			lc640_write_int(EE_RELE_LOG,RELE_LOG);
+			RELE_LOG_CURR=1;
+			lc640_write_int(EE_RELE_LOG_CURR,RELE_LOG_CURR);
 			}
 		else if(but==butL)
 			{
-			if(RELE_LOG==rlOFF)RELE_LOG=rlON_NR;
-			else if(RELE_LOG==rlON_NR)RELE_LOG=rlON_NZ;
-			else RELE_LOG=rlOFF;
-			lc640_write_int(EE_RELE_LOG,RELE_LOG);
+			RELE_LOG_CURR=0;
+			lc640_write_int(EE_RELE_LOG_CURR,RELE_LOG_CURR);
 			}
 		} 
 	else if(sub_ind==1)
 		{
-		temp_SS=lc640_read_int(EE_T_DEL_REL_START);
+		temp_SS=lc640_read_int(EE_T_DEL_REL_CURR_START);
 	     if(but==butR)
 	     	{
 		    temp_SS++;
@@ -9316,12 +9417,12 @@ else if(ind==iRele_set)
 	     	temp_SS--;
 	     	}
 	    	gran(&temp_SS,0,1000);
-		lc640_write_int(EE_T_DEL_REL_START,temp_SS);					
+		lc640_write_int(EE_T_DEL_REL_CURR_START,temp_SS);					
 		speed=1;	
 		}
 	else if(sub_ind==2)
 		{
-		temp_SS=lc640_read_int(EE_T_DEL_REL_WRK);
+		temp_SS=lc640_read_int(EE_T_DEL_REL_CURR_WRK);
 	     if(but==butR)
 	     	{
 		    temp_SS++;
@@ -9339,13 +9440,13 @@ else if(ind==iRele_set)
 	     	temp_SS--;
 	     	}
 	    	gran(&temp_SS,0,1000);
-		lc640_write_int(EE_T_DEL_REL_WRK,temp_SS);					
+		lc640_write_int(EE_T_DEL_REL_CURR_WRK,temp_SS);					
 		speed=1;	
 		}
 
 	else if(sub_ind==3)
 		{
-		temp_SS=lc640_read_int(EE_DELT_REL_U);
+		temp_SS=lc640_read_int(EE_DELT_REL_CURR_U);
 	     if(but==butR)
 	     	{
 		    	temp_SS++;
@@ -9363,14 +9464,14 @@ else if(ind==iRele_set)
 	     	temp_SS--;
 	     	}
 	    	gran(&temp_SS,1,50);
-		lc640_write_int(EE_DELT_REL_U,temp_SS);					
+		lc640_write_int(EE_DELT_REL_CURR_U,temp_SS);					
 		speed=1;	
 					
 		}
 
 	else if(sub_ind==4)
 		{
-		temp_SS=lc640_read_int(EE_DELT_REL_I);
+		temp_SS=lc640_read_int(EE_DELT_REL_CURR_I);
 	     if(but==butR)
 	     	{
 		    	temp_SS++;
@@ -9388,7 +9489,7 @@ else if(ind==iRele_set)
 	     	temp_SS--;
 	     	}
 	    	gran(&temp_SS,1,50);
-		lc640_write_int(EE_DELT_REL_I,temp_SS);					
+		lc640_write_int(EE_DELT_REL_CURR_I,temp_SS);					
 		speed=1;	
 		}
 
@@ -9397,6 +9498,192 @@ else if(ind==iRele_set)
 		tree_down(0,0);
 		}*/		
     //	else if(but==butR) ke_mem_hndl(sub_ind1,_sec);		
+	}
+
+else if(ind==iVolt_contr_set)
+	{
+	if(but==butD)
+		{
+		sub_ind++;
+		gran_char(&sub_ind,0,5);
+		}
+	else if(but==butU)
+		{
+		sub_ind--;
+		gran_char(&sub_ind,0,5);
+		}
+	else if(but==butE)
+		{
+		if(sub_ind==5)
+			{
+			tree_down(0,0);
+			}
+		} 
+
+	else if(sub_ind==0)
+		{
+		if((but==butE)||(but==butR))
+			{
+			RELE_LOG_VOLT=1;
+			lc640_write_int(EE_RELE_LOG_VOLT,RELE_LOG_VOLT);
+			}
+		else if(but==butL)
+			{
+			RELE_LOG_VOLT=1;
+			lc640_write_int(EE_RELE_LOG_VOLT,RELE_LOG_VOLT);
+			}
+		} 
+	else if(sub_ind==1)
+		{
+		temp_SS=lc640_read_int(EE_T_DEL_REL_VOLT_START);
+	     if(but==butR)
+	     	{
+		    temp_SS++;
+	     	}
+	     else if(but==butR_)
+	     	{
+	     	temp_SS++;
+	     	}	
+	     else if(but==butL)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==butL_)
+	     	{
+	     	temp_SS--;
+	     	}
+	    	gran(&temp_SS,0,1000);
+		lc640_write_int(EE_T_DEL_REL_VOLT_START,temp_SS);					
+		speed=1;	
+		}
+	else if(sub_ind==2)
+		{
+		temp_SS=lc640_read_int(EE_T_DEL_REL_VOLT_WRK);
+	     if(but==butR)
+	     	{
+		    temp_SS++;
+	     	}
+	     else if(but==butR_)
+	     	{
+	     	temp_SS++;
+	     	}	
+	     else if(but==butL)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==butL_)
+	     	{
+	     	temp_SS--;
+	     	}
+	    	gran(&temp_SS,0,1000);
+		lc640_write_int(EE_T_DEL_REL_VOLT_WRK,temp_SS);					
+		speed=1;	
+		}
+
+	else if(sub_ind==3)
+		{
+		temp_SS=lc640_read_int(EE_REL_VOLT_UMAX);
+	     if(but==butR)
+	     	{
+		    	temp_SS++;
+	     	}
+	     else if(but==butR_)
+	     	{
+	     	temp_SS++;
+	     	}	
+	     else if(but==butL)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==butL_)
+	     	{
+	     	temp_SS--;
+	     	}
+	    	gran(&temp_SS,1,50);
+		lc640_write_int(EE_REL_VOLT_UMAX,temp_SS);					
+		speed=1;	
+					
+		}
+
+	else if(sub_ind==4)
+		{
+		temp_SS=lc640_read_int(EE_REL_VOLT_UMIN);
+	     if(but==butR)
+	     	{
+		    	temp_SS++;
+	     	}
+	     else if(but==butR_)
+	     	{
+	     	temp_SS++;
+	     	}	
+	     else if(but==butL)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==butL_)
+	     	{
+	     	temp_SS--;
+	     	}
+	    	gran(&temp_SS,1,50);
+		lc640_write_int(EE_REL_VOLT_UMIN,temp_SS);					
+		speed=1;	
+		}
+
+/*	else if(but==butL)
+		{
+		tree_down(0,0);
+		}*/		
+    //	else if(but==butR) ke_mem_hndl(sub_ind1,_sec);		
+	}
+
+else if (ind==iRele_sel)
+	{ 
+	if(but==butD)
+		{
+		sub_ind++;
+		gran_char(&sub_ind,0,2);
+		}
+	else if(but==butU)
+		{
+		sub_ind--;
+		gran_char(&sub_ind,0,2);
+		}
+	else if(but==butE)
+		{
+		if(sub_ind==2)
+			{
+			tree_down(0,0);
+			}
+		else if((sub_ind==0)||(sub_ind==1))
+			{
+			tree_up(iRele_set,0,0,sub_ind);
+			}
+		} 
+	}
+
+else if(ind==iRele_set)
+	{
+	if(but==butD)
+		{
+		sub_ind++;
+		gran_char(&sub_ind,0,6);
+		}
+	else if(but==butU)
+		{
+		sub_ind--;
+		gran_char(&sub_ind,0,6);
+		}
+	else if(but==butE)
+		{
+		if(sub_ind==6)
+			{
+			tree_down(0,0);
+			}
+		else 
+			{
+			lc640_write_int(EE_RELE_FUNC1+sub_ind1*2,sub_ind);
+			}
+		} 
 	}
 
 

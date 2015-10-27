@@ -2056,7 +2056,7 @@ else
 	cnt_del_rel=0;
 	}
 
-if((delta_U_rel>DELT_REL_U)&&(delta_I_rel<DELT_REL_I))
+if((delta_U_rel>DELT_REL_CURR_U)&&(delta_I_rel<DELT_REL_CURR_I))
 	{
 	cnt_del_rel++;
 	}
@@ -2065,18 +2065,18 @@ else
 	cnt_del_rel--;
 	}
 
-gran(&cnt_del_rel,0,(T_DEL_REL_WRK*10)+10);
+gran(&cnt_del_rel,0,(T_DEL_REL_CURR_WRK*10)+10);
 
 if(work_stat==wsOFF) cnt_del_rel=0;
 
 
-if ( (time_proc>=(T_DEL_REL_START)) &&
-	(cnt_del_rel>(T_DEL_REL_WRK*10)) )
+if ( (time_proc>=(T_DEL_REL_CURR_START)) &&
+	(cnt_del_rel>(T_DEL_REL_CURR_WRK*10)) )
 	{
 	bCURRENT_STAB=1;
 	}
-if ( (time_proc<(T_DEL_REL_START)) ||
-	(cnt_del_rel<=(T_DEL_REL_WRK*10)) )
+if ( (time_proc<(T_DEL_REL_CURR_START)) ||
+	(cnt_del_rel<=(T_DEL_REL_CURR_WRK*10)) )
 	{
 	bCURRENT_STAB=0;
 	}
@@ -2086,11 +2086,11 @@ SET_REG(LPC_PINCON->PINSEL0,0,5*2,2);
 SET_REG(LPC_GPIO0->FIODIR,1,5,1);
 //SET_REG(LPC_GPIO0->FIOSET,1,5,1);
 
-if(RELE_LOG==rlOFF)
+if(RELE_LOG_CURR==0)
 	{
 	SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
 	}
-else if(RELE_LOG==rlON_NZ)
+else if(RELE_LOG_CURR==1)
 	{
 	if(bCURRENT_STAB==0)SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
 	else SET_REG(LPC_GPIO0->FIOPIN,1,5,1);

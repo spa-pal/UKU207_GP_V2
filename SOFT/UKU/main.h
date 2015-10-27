@@ -364,8 +364,8 @@ typedef enum {
 	iEnerg3,iEnerg,
 	iVent,iAvtRev,
 	iK_power_net3,
-	iAvt,iLan_set,iRele_set,iFiks_set,
-	iK_max_param}i_enum;
+	iAvt,iLan_set,iRele_set,iRele_sel,iFiks_set,
+	iK_max_param,iCurr_contr_set,iVolt_contr_set}i_enum;
 typedef struct  
 {
 
@@ -895,13 +895,17 @@ typedef enum {mmmIT,mmmIN,mmmITIN,mmmINIT} enum_main_menu_mode;
 extern enum_main_menu_mode main_menu_mode;	//режим работы главного меню 
 typedef enum {reOFF,reON}enum_restart_enable;
 extern enum_restart_enable restart_enable;	//рестарт включен-выключен
-typedef enum {rlOFF,rlON_NZ,rlON_NR}enum_rele_log;
-extern enum_rele_log RELE_LOG;
+extern signed short RELE_LOG_CURR;		//логика работы реле индикации токоограничения (1 - замкнуто == токоограничение)
+extern signed short RELE_LOG_VOLT;		//логика работы реле контроля напряжения 	  (1 - замкнуто == напряжение в норме)
 extern char can2_plazma;
-extern signed short T_DEL_REL_START;		
-extern signed short T_DEL_REL_WRK;			
-extern signed short DELT_REL_U;				
-extern signed short DELT_REL_I;
+extern signed short T_DEL_REL_CURR_START;		//период нечувствительности по времени реле токоограничения после старта процесса, секунд 
+extern signed short T_DEL_REL_CURR_WRK;			//период нечувствительности по времени реле токоограничения после наступления токоограничения, секунд
+extern signed short T_DEL_REL_VOLT_START;		//период нечувствительности по времени реле контроля напряжения после старта процесса, секунд 
+extern signed short T_DEL_REL_VOLT_WRK;			//период нечувствительности по времени реле контроля напряжения после наступления условия срабатывания реле, секунд
+extern signed short DELT_REL_CURR_U;				
+extern signed short DELT_REL_CURR_I;
+extern signed short REL_VOLT_UMAX;				
+extern signed short REL_VOLT_UMIN;				
 extern signed long cap_time_proc;
 
 
@@ -977,6 +981,8 @@ extern short main_cnt;
 
 extern char  bOFF;
 extern char bRAZR;
+
+extern signed short RELE_FUNC[2];
 
 /*----------------------------------------------------------------------------
  * end of file
