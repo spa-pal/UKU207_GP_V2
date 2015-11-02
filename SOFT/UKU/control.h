@@ -29,7 +29,7 @@ extern enum_adc_stat adc_stat;
 extern unsigned short net_buff[32],net_buff_;
 extern char net_buff_cnt;
 extern short ADWR,period_cnt,non_zero_cnt;
-extern char rele_stat;
+//extern char rele_stat;
 extern char bRELE_OUT;
 extern short plazma_adc_cnt;
 extern signed short adc_self_ch_buff[3],adc_self_ch_disp[3];
@@ -122,8 +122,16 @@ extern char bFAST_REG;
 extern char bU_VALID;
 
 
+typedef enum {rsOFF,rsON} enum_rele_stat;
+extern enum_rele_stat rele_stat[2];
+
+extern char bVOLT_IS_NOT_DOWN;
+extern char bVOLT_IS_NOT_UP;
+extern char bVOLT_IS_NORM;
+
 void zar_superviser_drv(void);
 void zar_superviser_start(void);
-void rele_current_stab_hndl(void);
+void current_stab_hndl(void);
+void volt_stab_hndl(void);
 
 

@@ -390,7 +390,7 @@ extern void lcd_clear(void);
 extern short plazma_adc_cnt;
 extern char net_buff_cnt;
 extern unsigned short net_buff[32],net_buff_;
-extern char rele_stat/*,rele_stat_*/;
+//extern char rele_stat/*,rele_stat_*/;
 extern char bRXIN0;
 
 
@@ -878,16 +878,18 @@ else if(cnt_net_drv==18)
      if(!bCAN_OFF)can1_out(0xff,0xff,MEM_KF4,*((char*)(&T_MAX)),*((char*)((&T_MAX))+1),*((char*)(&T_SIGN)),*((char*)((&T_SIGN))+1),((char)(I_MAX/10)));
      } 
 	/*
+	can1_out(0xff,0xff,MEM_KF1,*((char*)(&TMAX)),*((char*)((&TMAX))+1),*((char*)(&TSIGN)),*((char*)((&TSIGN))+1),(char)TZAS);
 else if(cnt_net_drv==14)
 	{                 
 //	can2_out(0xff,0xff,MEM_KF2,*((char*)(&U_INV_MAX)),*((char*)((&U_INV_MAX))+1),*((char*)(&U_INV_MIN)),*((char*)((&U_INV_MIN))+1),(char)T_INV_MAX);
      }
+*/	
 	
-	
-else if(cnt_net_drv==20)
+else if(cnt_net_drv==19)
 	{
-     if(!bCAN_OFF)can1_out(cnt_net_drv,cnt_net_drv,*((char*)(&POWER_CNT_ADRESS)),*((char*)((&POWER_CNT_ADRESS))+1),0,0,0,0);
-     }
+     //if(!bCAN_OFF)can1_out(0xff,0xff,MEM_KF1,0,0,0,0,3);
+
+     }/*
 else if(cnt_net_drv==21)
 	{
      if(!bCAN_OFF)can1_out(cnt_net_drv,cnt_net_drv,0,0,0,0,0,0);
@@ -1253,9 +1255,9 @@ if(ind==iMn)
 			}
 	
 
-		int2lcdyx(time_proc,0,4,0);
-		int2lcdyx(CURR_FADE_IN,0,9,0);
-		int2lcdyx(I_ug_temp,0,14,0);
+		//int2lcdyx(time_proc,0,4,0);
+		//int2lcdyx(CURR_FADE_IN,0,9,0);
+		//int2lcdyx(I_ug_temp,0,14,0);
 		//int2lcdyx(bps[1]._vol_i,0,8,0);
 		//int2lcdyx(_x_,0,19,0);
 	/*	int2lcdyx(_xu_,0,14,0);*/
@@ -2678,7 +2680,7 @@ else if(ind==iTst_pwm)
      }
 else if (ind==iCurr_contr_set)
 	{ 
-	ptrs[0]=		" Актив. сигн.     ! ";
+	ptrs[0]=		" Актив. сигн.      !";
 	ptrs[1]=		" Tзад.вкл.      @сек";
 	ptrs[2]=		" Tзад.сраб.     #сек";
 	ptrs[3]=		" dU             <%  ";
@@ -2696,8 +2698,8 @@ else if (ind==iCurr_contr_set)
 	
 	pointer_set(2);
 
-	if(RELE_LOG_CURR==1)sub_bgnd("ЗАМКН.",'!',-4);
-	else 			sub_bgnd("РАЗОМКН.",'!',-7);
+	if(RELE_LOG_CURR==1)sub_bgnd("ЗМКН.",'!',-4);
+	else 			sub_bgnd("РЗМКН.",'!',-5);
 
 
 	int2lcd(T_DEL_REL_CURR_START,'@',0);
@@ -2708,7 +2710,7 @@ else if (ind==iCurr_contr_set)
 
 else if (ind==iVolt_contr_set)
 	{ 
-	ptrs[0]=		" Актив. сигн.     ! ";
+	ptrs[0]=		" Актив. сигн.      !";
 	ptrs[1]=		" Tзад.вкл.      @сек";
 	ptrs[2]=		" Tзад.сраб.     #сек";
 	ptrs[3]=		" Umax           <В  ";
@@ -2726,8 +2728,8 @@ else if (ind==iVolt_contr_set)
 	
 	pointer_set(2);
 
-	if(RELE_LOG_VOLT==1)sub_bgnd("ЗАМКН.",'!',-4);
-	else 			sub_bgnd("РАЗОМКН.",'!',-7);
+	if(RELE_LOG_VOLT==1)sub_bgnd("ЗМКН.",'!',-4);
+	else 			sub_bgnd("РЗМКН.",'!',-5);
 
 	int2lcd(T_DEL_REL_VOLT_START,'@',0);
 	int2lcd(T_DEL_REL_VOLT_WRK,'#',0);
@@ -2774,15 +2776,15 @@ else if (ind==iRele_set)
 	
 	pointer_set(1);
 
-	int2lcd(sub_ind1,'!',0);
+	int2lcd(sub_ind1+1,'!',0);
 	//int2lcdyx(sub_ind,0,17,0);
 	//int2lcdyx(index_set,0,19,0);	
 
 
-	int2lcdyx(lc640_read_int(EE_RELE_FUNC1),1,15,0);
-	int2lcdyx(lc640_read_int(EE_RELE_FUNC2),1,19,0);
-	int2lcdyx(RELE_FUNC[0],2,15,0);
-	int2lcdyx(RELE_FUNC[1],2,19,0);
+	//int2lcdyx(lc640_read_int(EE_RELE_FUNC1),1,15,0);
+	//int2lcdyx(lc640_read_int(EE_RELE_FUNC2),1,19,0);
+	//int2lcdyx(RELE_FUNC[0],2,15,0);
+	//int2lcdyx(RELE_FUNC[1],2,19,0);
 	
 	}
 else if (ind==iFiks_set)
@@ -3718,7 +3720,7 @@ if(ind==iDeb)
 
 
 		//int2lcdhyx(avar_ind_stat,0,7);
-		char2lcdbyx(rele_stat,1,7);
+		char2lcdbyx(rele_stat[0],1,7);
 		
 		int2lcdyx(sk_av_stat[0],0,19,0);
 		int2lcdyx(sk_av_stat[1],1,19,0);
@@ -3841,7 +3843,7 @@ if(ind==iDeb)
 		int2lcdyx(main_10Hz_cnt,0,7,0);
 		int2lcdyx(bat[0]._av,0,10,0);
 		int2lcdyx(bat[1]._av,0,12,0);
-		char2lcdhyx(rele_stat,0,19);
+		//char2lcdhyx(rele_stat,0,19);
 
  		long2lcdhyx(avar_stat,1,7);
 		long2lcdhyx(avar_stat_old,2,7);
@@ -4278,7 +4280,15 @@ int2lcdyx(retcntsec,0,7,0);	*/
 
 //int2lcdyx(lc640_read_int(EE_ETH_IS_ON),0,19,0);
 //int2lcdyx(lc640_read_int(EE_ETH_IS_NOT),0,15,0);
-//int2lcdyx(speed_cnt,0,15,0);
+int2lcdyx(bVOLT_IS_NOT_DOWN,0,19,0);
+int2lcdyx(bVOLT_IS_NOT_UP,0,18,0);
+int2lcdyx(bVOLT_IS_NORM,0,17,0);
+int2lcdyx(rele_stat[1],0,16,0);
+int2lcdyx(rele_stat[0],0,15,0);
+int2lcdyx(RELE_FUNC[1],0,14,0);
+int2lcdyx(RELE_FUNC[0],0,13,0);
+int2lcdyx(RELE_LOG_VOLT,0,12,0);
+//int2lcdyx(RELE_LOG_VOLT,0,14,0);
 
 }							    
 
@@ -9386,7 +9396,7 @@ else if(ind==iCurr_contr_set)
 
 	else if(sub_ind==0)
 		{
-		if((but==butE)||(but==butR))
+		if(but==butR)
 			{
 			RELE_LOG_CURR=1;
 			lc640_write_int(EE_RELE_LOG_CURR,RELE_LOG_CURR);
@@ -9522,14 +9532,14 @@ else if(ind==iVolt_contr_set)
 
 	else if(sub_ind==0)
 		{
-		if((but==butE)||(but==butR))
+		if(but==butR)
 			{
 			RELE_LOG_VOLT=1;
 			lc640_write_int(EE_RELE_LOG_VOLT,RELE_LOG_VOLT);
 			}
 		else if(but==butL)
 			{
-			RELE_LOG_VOLT=1;
+			RELE_LOG_VOLT=0;
 			lc640_write_int(EE_RELE_LOG_VOLT,RELE_LOG_VOLT);
 			}
 		} 
@@ -9599,7 +9609,7 @@ else if(ind==iVolt_contr_set)
 	     	{
 	     	temp_SS--;
 	     	}
-	    	gran(&temp_SS,1,50);
+	    	gran(&temp_SS,1,500);
 		lc640_write_int(EE_REL_VOLT_UMAX,temp_SS);					
 		speed=1;	
 					
@@ -9624,7 +9634,7 @@ else if(ind==iVolt_contr_set)
 	     	{
 	     	temp_SS--;
 	     	}
-	    	gran(&temp_SS,1,50);
+	    	gran(&temp_SS,1,500);
 		lc640_write_int(EE_REL_VOLT_UMIN,temp_SS);					
 		speed=1;	
 		}
@@ -11319,8 +11329,13 @@ while (1)
 		speed__old=speed__;
 
 		viz_hndl();
-		rele_current_stab_hndl();
+		current_stab_hndl();
+		volt_contr_hndl();
 		cap_time_hndl();
+		
+		volt_contr_hndl();
+		rele_hndl();
+		rele_drv();
 		}
 
 	if(b5Hz)
@@ -11404,8 +11419,8 @@ while (1)
 
 		time_hndl();
 
-		rele_current_stab_hndl();
-		revers_hndl();
+		//rele_current_stab_hndl();
+		//revers_hndl();
 		if(main_cnt<1000)main_cnt++;
 
 

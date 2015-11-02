@@ -72,7 +72,7 @@ enum_adc_stat adc_stat=asCH;
 unsigned short net_buff[32],net_buff_;
 char net_buff_cnt;
 short ADWR,period_cnt,non_zero_cnt;
-char rele_stat;
+//char rele_stat;
 char bRELE_OUT;
 signed short adc_self_ch_buff[3],adc_self_ch_disp[3];
 long main_power_buffer[8],main_power_buffer_;
@@ -207,6 +207,19 @@ char plazma_bat;
 
 char bFAST_REG;
 char bU_VALID;
+
+
+
+signed short cnt_volt_contr;
+signed short cnt_rel_volt_umin;
+signed short cnt_rel_volt_umax;
+
+char bVOLT_IS_NOT_DOWN;
+char bVOLT_IS_NOT_UP;
+char bVOLT_IS_NORM;
+
+enum_rele_stat rele_stat[2];
+
 
 
 //-----------------------------------------------
@@ -2031,7 +2044,45 @@ sign_I[1]=1;
 }
 
 //-----------------------------------------------
-void rele_current_stab_hndl(void)
+void volt_contr_hndl(void)
+{
+if(work_stat==wsOFF)
+	{
+	cnt_volt_contr=0;
+	}
+else 
+	{
+	if(cnt_volt_contr<(T_DEL_REL_VOLT_START*10))
+		{
+		cnt_volt_contr++;
+		}
+	
+	if(load_U>REL_VOLT_UMIN*10)
+		{
+		cnt_rel_volt_umin++;
+		gran(&cnt_rel_volt_umin,0,30000);
+		}
+	else cnt_rel_volt_umin=0;
+	if((cnt_rel_volt_umin>=T_DEL_REL_VOLT_WRK*10)&&(cnt_volt_contr>=(T_DEL_REL_VOLT_START*10))) 	bVOLT_IS_NOT_DOWN=1;
+	else if(cnt_rel_volt_umin==0)							  							bVOLT_IS_NOT_DOWN=0;
+
+	if(load_U<REL_VOLT_UMAX*10)
+		{
+		cnt_rel_volt_umax++;
+		gran(&cnt_rel_volt_umax,0,30000);
+		}
+	else cnt_rel_volt_umax=0;
+	if((cnt_rel_volt_umax>=T_DEL_REL_VOLT_WRK*10)&&(cnt_volt_contr>=(T_DEL_REL_VOLT_START*10))) 	bVOLT_IS_NOT_UP=1;
+	else if(cnt_rel_volt_umax==0)							  							bVOLT_IS_NOT_UP=0;
+	
+	if(bVOLT_IS_NOT_UP && bVOLT_IS_NOT_DOWN) bVOLT_IS_NORM=1;
+	else bVOLT_IS_NORM=0;
+
+	}
+}
+
+//-----------------------------------------------
+void current_stab_hndl(void)
 {
 
 if(work_stat==wsPS)
@@ -2081,7 +2132,7 @@ if ( (time_proc<(T_DEL_REL_CURR_START)) ||
 	bCURRENT_STAB=0;
 	}
 
-
+/*
 SET_REG(LPC_PINCON->PINSEL0,0,5*2,2);
 SET_REG(LPC_GPIO0->FIODIR,1,5,1);
 //SET_REG(LPC_GPIO0->FIOSET,1,5,1);
@@ -2099,7 +2150,7 @@ else
 	{
 	if(bCURRENT_STAB==0)SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
 	else SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
-	}
+	}*/
 
 }
 
@@ -2125,5 +2176,170 @@ if(work_stat==wsCAP) {
 }
 
 }
+
+//-----------------------------------------------
+void rele_hndl(void)
+{
+//Реле1
+if(RELE_FUNC[0]==0)rele_stat[0]=rsOFF; 		//Выключено
+else if(RELE_FUNC[0]==1)					//Реверс
+	{
+	if(work_stat==wsCAP) 
+		{
+		if(bRAZR) rele_stat[0]=rsOFF;
+		else 	rele_stat[0]=rsON;
+		} 
+	else 
+		{
+		if(REV_STAT==rsREW)	rele_stat[0]=rsOFF;
+		else 			rele_stat[0]=rsON;
+		}
+	}
+else if(RELE_FUNC[0]==2)					//Токоограничение
+	{
+	if(RELE_LOG_CURR==0)
+		{
+		if(bCURRENT_STAB==0)	rele_stat[0]=rsON;
+		else 				rele_stat[0]=rsOFF;
+		}
+	else if(RELE_LOG_CURR==1)
+		{
+		if(bCURRENT_STAB==0)	rele_stat[0]=rsOFF;
+		else 				rele_stat[0]=rsON;
+		}
+	}									
+else if(RELE_FUNC[0]==3)					//Напряжение в норме
+	{
+	if(RELE_LOG_VOLT==0)
+		{
+		if(bVOLT_IS_NORM==0)	rele_stat[0]=rsON;
+		else 				rele_stat[0]=rsOFF;
+		}
+	else if(RELE_LOG_VOLT==1)
+		{
+		if(bVOLT_IS_NORM==0)	rele_stat[0]=rsOFF;
+		else 				rele_stat[0]=rsON;
+		}
+	}
+else if(RELE_FUNC[0]==4)					//Напряжение не выше
+	{
+	if(RELE_LOG_VOLT==0)
+		{
+		if(bVOLT_IS_NOT_UP==0)	rele_stat[0]=rsON;
+		else 				rele_stat[0]=rsOFF;
+		}
+	else if(RELE_LOG_VOLT==1)
+		{
+		if(bVOLT_IS_NOT_UP==0)	rele_stat[0]=rsOFF;
+		else 				rele_stat[0]=rsON;
+		}
+	}
+else if(RELE_FUNC[0]==5)					//Напряжение не ниже
+	{
+	if(RELE_LOG_VOLT==0)
+		{
+		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[0]=rsON;
+		else 				rele_stat[0]=rsOFF;
+		}
+	else if(RELE_LOG_VOLT==1)
+		{
+		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[0]=rsOFF;
+		else 				rele_stat[0]=rsON;
+		}
+	}
+											
+//Реле2
+if(RELE_FUNC[1]==0)rele_stat[1]=rsOFF; 		//Выключено
+else if(RELE_FUNC[1]==1)					//Реверс
+	{
+	if(work_stat==wsCAP) 
+		{
+		if(bRAZR) 		rele_stat[1]=rsOFF;
+		else 			rele_stat[1]=rsON;
+		} 
+	else 
+		{
+		if(REV_STAT==rsREW)	rele_stat[1]=rsOFF;
+		else 			rele_stat[1]=rsON;
+		}
+	}
+else if(RELE_FUNC[1]==2)					//Токоограничение
+	{
+	if(RELE_LOG_CURR==0)
+		{
+		if(bCURRENT_STAB==0)rele_stat[1]=rsON;
+		else 			rele_stat[1]=rsOFF;
+		}
+	else if(RELE_LOG_CURR==1)
+		{
+		if(bCURRENT_STAB==0)rele_stat[1]=rsOFF;
+		else 			rele_stat[1]=rsON;
+		}
+	}									
+else if(RELE_FUNC[1]==3)					//Напряжение в норме
+	{
+	if(RELE_LOG_VOLT==0)
+		{
+		if(bVOLT_IS_NORM==0)	rele_stat[1]=rsON;
+		else 				rele_stat[1]=rsOFF;
+		}
+	else if(RELE_LOG_VOLT==1)
+		{
+		if(bVOLT_IS_NORM==0)	rele_stat[1]=rsOFF;
+		else 				rele_stat[1]=rsON;
+		}
+	}
+else if(RELE_FUNC[1]==4)					//Напряжение не выше
+	{
+	if(RELE_LOG_VOLT==0)
+		{
+		if(bVOLT_IS_NOT_UP==0)	rele_stat[1]=rsON;
+		else 				rele_stat[1]=rsOFF;
+		}
+	else if(RELE_LOG_VOLT==1)
+		{
+		if(bVOLT_IS_NOT_UP==0)	rele_stat[1]=rsOFF;
+		else 				rele_stat[1]=rsON;
+		}
+	}
+else if(RELE_FUNC[1]==5)					//Напряжение не ниже
+	{
+	if(RELE_LOG_VOLT==0)
+		{
+		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[1]=rsON;
+		else 				rele_stat[1]=rsOFF;
+		}
+	else if(RELE_LOG_VOLT==1)
+		{
+		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[1]=rsOFF;
+		else 				rele_stat[1]=rsON;
+		}
+	}
+	
+
+//rele_stat[0]=rsON;
+//rele_stat[1]=rsON;
+										
+}
+ 
+//-----------------------------------------------
+void rele_drv(void)
+{
+SET_REG(LPC_PINCON->PINSEL0,0,4*2,2);
+SET_REG(LPC_GPIO0->FIODIR,1,4,1);
+
+SET_REG(LPC_PINCON->PINSEL0,0,5*2,2);
+SET_REG(LPC_GPIO0->FIODIR,1,5,1);
+
+
+if(rele_stat[0]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,4,1);
+else SET_REG(LPC_GPIO0->FIOPIN,1,4,1);
+
+if(rele_stat[1]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
+else SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
+
+
+}
+
 
 
