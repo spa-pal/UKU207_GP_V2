@@ -4280,15 +4280,15 @@ int2lcdyx(retcntsec,0,7,0);	*/
 
 //int2lcdyx(lc640_read_int(EE_ETH_IS_ON),0,19,0);
 //int2lcdyx(lc640_read_int(EE_ETH_IS_NOT),0,15,0);
-int2lcdyx(bVOLT_IS_NOT_DOWN,0,19,0);
-int2lcdyx(bVOLT_IS_NOT_UP,0,18,0);
-int2lcdyx(bVOLT_IS_NORM,0,17,0);
-int2lcdyx(rele_stat[1],0,16,0);
-int2lcdyx(rele_stat[0],0,15,0);
-int2lcdyx(RELE_FUNC[1],0,14,0);
-int2lcdyx(RELE_FUNC[0],0,13,0);
-int2lcdyx(RELE_LOG_VOLT,0,12,0);
-//int2lcdyx(RELE_LOG_VOLT,0,14,0);
+//int2lcdyx(bVOLT_IS_NOT_DOWN,0,19,0);
+//int2lcdyx(bVOLT_IS_NOT_UP,0,18,0);
+//int2lcdyx(bVOLT_IS_NORM,0,17,0);
+//int2lcdyx(rele_stat[1],0,16,0);
+//int2lcdyx(rele_stat[0],0,15,0);
+//int2lcdyx(RELE_FUNC[1],0,14,0);
+//int2lcdyx(cnt_volt_contr,0,6,0);
+//int2lcdyx(cnt_rel_volt_umax,0,10,0);
+//int2lcdyx(cnt_rel_volt_umin,0,14,0);
 
 }							    
 
@@ -4305,7 +4305,7 @@ gran(&sk_in_drv_cnt,-10,10);
 if(sk_in_drv_cnt>=10)sk_in_drv_stat=1;
 else if(sk_in_drv_cnt>=-10)sk_in_drv_stat=-1;
 
-if(sk_in_drv_stat!=sk_in_drv_stat_old)
+if((sk_in_drv_stat!=sk_in_drv_stat_old)&&(main_cnt>2))
 	{
 	if(SK_START)
 		{
@@ -9562,7 +9562,7 @@ else if(ind==iVolt_contr_set)
 	     	{
 	     	temp_SS--;
 	     	}
-	    	gran(&temp_SS,0,1000);
+	    	gran(&temp_SS,1,1000);
 		lc640_write_int(EE_T_DEL_REL_VOLT_START,temp_SS);					
 		speed=1;	
 		}
@@ -9585,7 +9585,7 @@ else if(ind==iVolt_contr_set)
 	     	{
 	     	temp_SS--;
 	     	}
-	    	gran(&temp_SS,0,1000);
+	    	gran(&temp_SS,1,1000);
 		lc640_write_int(EE_T_DEL_REL_VOLT_WRK,temp_SS);					
 		speed=1;	
 		}

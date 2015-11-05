@@ -1608,7 +1608,15 @@ else if(work_stat==wsGS)
 	
 	if((CURR_FADE_IN) && (time_proc<CURR_FADE_IN))
 		{
-		I_ug_temp= (signed short)((signed long)I_ug_temp*(signed long)time_proc)/(signed long)CURR_FADE_IN;
+		signed long temp_SL_;
+		
+		temp_SL_=	(signed long)I_ug_temp;
+		temp_SL_*= (signed long)time_proc;
+		temp_SL_/= (signed long)CURR_FADE_IN;
+
+		//I_ug_temp= (signed short)((signed long)I_ug_temp*(signed long)time_proc)/(signed long)CURR_FADE_IN;
+
+		I_ug_temp= (signed short)temp_SL_;
 		}	
 	
 	if(b1Hz_sh) {
@@ -2056,6 +2064,8 @@ else
 		{
 		cnt_volt_contr++;
 		}
+	}
+
 	
 	if(load_U>REL_VOLT_UMIN*10)
 		{
@@ -2078,7 +2088,7 @@ else
 	if(bVOLT_IS_NOT_UP && bVOLT_IS_NOT_DOWN) bVOLT_IS_NORM=1;
 	else bVOLT_IS_NORM=0;
 
-	}
+
 }
 
 //-----------------------------------------------

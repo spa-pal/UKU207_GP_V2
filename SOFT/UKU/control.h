@@ -125,6 +125,10 @@ extern char bU_VALID;
 typedef enum {rsOFF,rsON} enum_rele_stat;
 extern enum_rele_stat rele_stat[2];
 
+extern signed short cnt_volt_contr;
+extern signed short cnt_rel_volt_umin;
+extern signed short cnt_rel_volt_umax;
+
 extern char bVOLT_IS_NOT_DOWN;
 extern char bVOLT_IS_NOT_UP;
 extern char bVOLT_IS_NORM;
