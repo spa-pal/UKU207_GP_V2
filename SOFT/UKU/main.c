@@ -2041,9 +2041,16 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 					"     .    .         ");
 	}
 
-
-	int2lcdyx(sub_ind+1,1,0,0);
-	int2lcdyx(sub_ind+2,2,0,0);
+	if(sub_ind>=6)
+		{
+		int2lcdyx(sub_ind+1,1,1,0);
+		int2lcdyx(sub_ind+2,2,1,0);
+		}
+	else 
+		{
+		int2lcdyx(sub_ind+1,1,0,0);
+		int2lcdyx(sub_ind+2,2,0,0);
+		}
 	
 		
 		
@@ -2064,7 +2071,8 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	
 	
 	if((sub_ind<(NUMIST-2))) {
-	int2lcdyx(sub_ind+3,3,0,0);
+	if(sub_ind>=6)int2lcdyx(sub_ind+3,3,1,0);
+	else int2lcdyx(sub_ind+3,3,0,0);
 	int2lcdyx(bps[sub_ind+2]._Uii,3,6,1);
 	int2lcdyx(bps[sub_ind+2]._Ii,3,11,1);
 	int2lcdyx(bps[sub_ind+2]._Ti,3,15,0);
