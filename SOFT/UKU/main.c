@@ -2027,58 +2027,76 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	{
 	const char* ptr[8];
 
-	if((sub_ind==(NUMIST-2))) {
-	bgnd_par(			"N   U,Â  I,A  t°C   ",
-					"     .    .         ",
-					"     .    .         ",
-					" Âûõîä              ");
-	}
-
-	else { 
-	bgnd_par(			"N   U,Â  I,A  t°C   ",
-					"     .    .         ",
-					"     .    .         ",
-					"     .    .         ");
-	}
-
-	if(sub_ind>=6)
-		{
-		int2lcdyx(sub_ind+1,1,1,0);
-		int2lcdyx(sub_ind+2,2,1,0);
-		}
-	else 
-		{
-		int2lcdyx(sub_ind+1,1,0,0);
-		int2lcdyx(sub_ind+2,2,0,0);
-		}
+	if(NUMIST==1) {
+		bgnd_par(			"N   U,Â  I,A  t°C   ",
+						"     .    .         ",
+						" Âûõîä              ",
+						"                    ");
 	
+		int2lcdyx(1,1,0,0);
 		
+		int2lcdyx(bps[0]._Uii,1,6,1);
+				
+		int2lcdyx(bps[0]._Ii,1,11,1);
 		
-	int2lcdyx(bps[sub_ind  ]._Uii,1,6,1);
-	int2lcdyx(bps[sub_ind+1]._Uii,2,6,1);
-	
-	
-	int2lcdyx(bps[sub_ind  ]._Ii,1,11,1);
-	int2lcdyx(bps[sub_ind+1]._Ii,2,11,1);
-	
-	
-	int2lcdyx(bps[sub_ind  ]._Ti,1,15,0);
-	int2lcdyx(bps[sub_ind+1]._Ti,2,15,0);
-	
-	
-	char2lcdhyx(bps[sub_ind1  ]._flags_tm,1,19);
-	char2lcdhyx(bps[sub_ind1+1]._flags_tm,2,19);
-	
-	
-	if((sub_ind<(NUMIST-2))) {
-	if(sub_ind>=6)int2lcdyx(sub_ind+3,3,1,0);
-	else int2lcdyx(sub_ind+3,3,0,0);
-	int2lcdyx(bps[sub_ind+2]._Uii,3,6,1);
-	int2lcdyx(bps[sub_ind+2]._Ii,3,11,1);
-	int2lcdyx(bps[sub_ind+2]._Ti,3,15,0);
-	char2lcdhyx(bps[sub_ind1+2]._flags_tm,3,19);
+		int2lcdyx(bps[0]._Ti,1,15,0);
+				
+		char2lcdhyx(bps[0]._flags_tm,1,19);
+				
+		lcd_buffer[40]=1;
+		
 	} else {
-	lcd_buffer[60]=1;
+		if((sub_ind>=(NUMIST-2))) {
+			bgnd_par(			"N   U,Â  I,A  t°C   ",
+							"     .    .         ",
+							"     .    .         ",
+							" Âûõîä              ");
+		} else { 
+			bgnd_par(			"N   U,Â  I,A  t°C   ",
+							"     .    .         ",
+							"     .    .         ",
+							"     .    .         ");
+		}
+	
+		if(sub_ind>=6)
+			{
+			int2lcdyx(sub_ind+1,1,1,0);
+			int2lcdyx(sub_ind+2,2,1,0);
+			}
+		else 
+			{
+			int2lcdyx(sub_ind+1,1,0,0);
+			int2lcdyx(sub_ind+2,2,0,0);
+			}
+		
+			
+			
+		int2lcdyx(bps[sub_ind  ]._Uii,1,6,1);
+		int2lcdyx(bps[sub_ind+1]._Uii,2,6,1);
+		
+		
+		int2lcdyx(bps[sub_ind  ]._Ii,1,11,1);
+		int2lcdyx(bps[sub_ind+1]._Ii,2,11,1);
+		
+		
+		int2lcdyx(bps[sub_ind  ]._Ti,1,15,0);
+		int2lcdyx(bps[sub_ind+1]._Ti,2,15,0);
+		
+		
+		char2lcdhyx(bps[sub_ind1  ]._flags_tm,1,19);
+		char2lcdhyx(bps[sub_ind1+1]._flags_tm,2,19);
+		
+		
+		if((sub_ind<(NUMIST-2))) {
+		if(sub_ind>=6)int2lcdyx(sub_ind+3,3,1,0);
+		else int2lcdyx(sub_ind+3,3,0,0);
+		int2lcdyx(bps[sub_ind+2]._Uii,3,6,1);
+		int2lcdyx(bps[sub_ind+2]._Ii,3,11,1);
+		int2lcdyx(bps[sub_ind+2]._Ti,3,15,0);
+		char2lcdhyx(bps[sub_ind1+2]._flags_tm,3,19);
+		} else {
+		lcd_buffer[60]=1;
+		}
 	}
 					
 
@@ -6594,7 +6612,7 @@ else if(ind==iBps)
 		
 		}
 
-	else if((but==butE)&&(sub_ind==(NUMIST-2)))
+	else if((but==butE)&&((sub_ind==(NUMIST-2)))||((NUMIST==1)&&(sub_ind==0)))
 		{
 	     tree_down(0,0);
 	     ret(0);
