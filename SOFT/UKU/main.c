@@ -8849,7 +8849,7 @@ else if(ind==iK_load)
 	     	{
 	     	temp_SS-=2;
 	     	}
-	    gran(&temp_SS,100,6000);
+	    gran(&temp_SS,100,10000);
 		lc640_write_int(EE_KULOAD,temp_SS);					
 		speed=1;	
 					
@@ -8883,7 +8883,7 @@ else if(ind==iK_load)
 			phase=1;
 	     	temp_SS-=5;
 	     	}
-	    gran(&temp_SS,100,30000);
+	    gran(&temp_SS,50,30000);
 		lc640_write_int(EE_KILOAD1,temp_SS);					
 		speed=1;	
 					
