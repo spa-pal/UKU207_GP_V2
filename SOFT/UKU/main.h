@@ -365,7 +365,9 @@ typedef enum {
 	iVent,iAvtRev,
 	iK_power_net3,
 	iAvt,iLan_set,iRele_set,iRele_sel,iFiks_set,
-	iK_max_param,iCurr_contr_set,iVolt_contr_set}i_enum;
+	iK_max_param,iCurr_contr_set,iVolt_contr_set,
+	iAch_off,iCurr_off}i_enum;
+
 typedef struct  
 {
 
@@ -567,7 +569,13 @@ extern signed short MODBUS_BAUDRATE;
 extern signed short CURR_FADE_IN; //плавное нарастание тока. 0 - выкл, 1 - 500 - время нарастания в секундах
 extern signed short SK_START;	  //управление сухим контактом, 0 - выкл, 1 - вкл	
 extern signed short SK_START_LEV; //управление сухим контактом, 0 - включение размыканием, 1 - включение замыканием
-
+extern signed short ACH_OFF_EN;		//функция выключения заряда по амперчасам, включено-выключено
+extern signed short ACH_OFF_LEVEL;	//функция выключения заряда по амперчасам, предельный уровень (амперчасы), дискретность 0.1А*ч
+extern signed short CURR_OFF_EN;
+extern signed short CUR_OFF_LEVEL_RELATIV;
+extern signed short CUR_OFF_LEVEL_ABSOLUT;
+extern signed short CUR_OFF_T_OFF;
+extern signed short CUR_OFF_T_ON;
 
 
 //***********************************************

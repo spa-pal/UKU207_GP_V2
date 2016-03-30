@@ -215,6 +215,13 @@ signed short CURR_FADE_IN; //плавное нарастание тока. 0 - выкл, 1 - 500 - время 
 signed short SK_START;	  //управление сухим контактом, 0 - выкл, 1 - вкл	
 signed short SK_START_LEV; //управление сухим контактом, 0 - включение размыканием, 1 - включение замыканием
 
+signed short ACH_OFF_EN;		//функция выключения заряда по амперчасам, включено-выключено
+signed short ACH_OFF_LEVEL;	//функция выключения заряда по амперчасам, предельный уровень (амперчасы), дискретность 0.1А*ч
+signed short CURR_OFF_EN;
+signed short CUR_OFF_LEVEL_RELATIV;
+signed short CUR_OFF_LEVEL_ABSOLUT;
+signed short CUR_OFF_T_OFF;
+signed short CUR_OFF_T_ON;
 //***********************************************
 //Состояние батарей
 BAT_STAT bat[2];
@@ -2389,7 +2396,7 @@ else if((ind==iSet_prl)||(ind==iK_prl))
 	
 else if(ind==iSet)
 	{
-	#define SI_SET_MAX	30
+	#define SI_SET_MAX	34
     	ptrs[0]=				" Источников        !";
 	ptrs[1]=				" Максимальная длит- ";
     	ptrs[2]=				" сть процесса  0[:0]";
@@ -2418,6 +2425,10 @@ else if(ind==iSet)
 	ptrs[25]=				" Управление сухим   ";
 	ptrs[26]=				" контактом          ";
 	ptrs[27]=				" Настройка реле     ";
+	ptrs[28]=				" Выключение по      ";
+	ptrs[29]=				" счетчику амперчасов";
+	ptrs[30]=				" Выключение по      ";
+	ptrs[31]=				" снижению тока      ";
 	ptrs[SI_SET_MAX-2]=		" Выход              ";
 	ptrs[SI_SET_MAX-1]=		" Калибровка         ";
 	ptrs[SI_SET_MAX]=		" Тест ШИМ           ";
@@ -2475,6 +2486,9 @@ else if(ind==iSet)
 
 	if(CURR_FADE_IN==0) 	  	sub_bgnd("ВЫКЛ.",'(',0);
 	else 					int2lcd(CURR_FADE_IN,'(',0);
+
+	//int2lcdyx(sub_ind,0,4,0);
+	//int2lcdyx(index_set,0,8,0);
 	}
 
 
@@ -4216,6 +4230,66 @@ else if((ind==iAv_view)||(ind==iAv_view_avt))
 		} 
 					
 	} 
+
+else if(ind==iAch_off)
+	{
+	if(ACH_OFF_EN==1) {
+	ptrs[0]=		" Активно            ";
+	ptrs[1]=	    	" Qmax          !А*ч ";
+	ptrs[2]=	    	" Выход              ";
+
+	} else {
+	ptrs[0]=		" Неактивно          ";
+	ptrs[1]=	    	" Выход              ";
+	ptrs[2]=		"                    ";
+	}
+
+	if(sub_ind<index_set) index_set=sub_ind;
+	else if((sub_ind-index_set)>1) index_set=sub_ind-1;
+				
+	bgnd_par(		"   ВЫКЛЮЧЕНИЕ ПО    ",
+				"СЧЕТЧИКУ АМПЕРЧАСОВ ",
+				ptrs[index_set],
+				ptrs[index_set+1]);
+
+	pointer_set(2);
+	     	
+     int2lcd(ACH_OFF_LEVEL,'!',1);
+     
+                   	      	   	    		
+     }
+else if(ind==iCurr_off)
+	{
+	if(CURR_OFF_EN==1) {
+	ptrs[0]=		" Активно            ";
+	ptrs[1]=	    	" Iнагр/Iуст       !%";
+	ptrs[2]=	    	" Tнеактивн.    @сек.";
+	ptrs[3]=	    	" Tсрабатыв.    #сек.";
+	ptrs[4]=	    	" Выход              ";
+
+	} else {
+	ptrs[0]=		" Неактивно          ";
+	ptrs[1]=	    	" Выход              ";
+	ptrs[2]=		"                    ";
+	}
+
+	if(sub_ind<index_set) index_set=sub_ind;
+	else if((sub_ind-index_set)>1) index_set=sub_ind-1;
+				
+	bgnd_par(		"   ВЫКЛЮЧЕНИЕ ПО    ",
+				"   СНИЖЕНИЮ ТОКА    ",
+				ptrs[index_set],
+				ptrs[index_set+1]);
+
+	pointer_set(2);
+	     	
+     int2lcd(CUR_OFF_LEVEL_RELATIV,'!',0);
+	int2lcd(CUR_OFF_LEVEL_ABSOLUT,'$',0);
+	int2lcd(CUR_OFF_T_OFF,'@',0);
+	int2lcd(CUR_OFF_T_ON,'#',0);
+     
+                   	      	   	    		
+     }
 #ifndef _DEBUG_	
 else if(ind==iAvz)
 	{
@@ -6992,7 +7066,26 @@ else if(ind==iSet)
                {
 			sub_ind=27;
 			//index_set=20;
-               }											
+               }
+          if(sub_ind==27)
+               {
+			index_set=26;
+               }
+          if(sub_ind==29)
+               {
+			sub_ind=30;
+			index_set=29;
+               }
+          /*if(sub_ind==29)
+               {
+			index_set=28;
+               } */
+          if(sub_ind==31)
+               {
+			sub_ind=32;
+			index_set=29;
+               }
+														
 		gran_char(&sub_ind,0,SI_SET_MAX);
 		}
 	else if(but==butU)
@@ -7057,6 +7150,16 @@ else if(ind==iSet)
 			sub_ind=25;
 			//index_set=20;
 			}
+          if(sub_ind==29)
+               {
+			sub_ind=28;
+			index_set=28;
+               }
+          if(sub_ind==31)
+               {
+			sub_ind=30;
+			index_set=30;
+               }
 		gran_char(&sub_ind,0,SI_SET_MAX);
 		}
 	else if(but==butD_)
@@ -7309,6 +7412,20 @@ else if(ind==iSet)
 		if(but==butE)
 			{
 			tree_up(iRele_sel,0,0,0);
+			}
+	    	}
+	else if(sub_ind==28)
+	    	{
+		if(but==butE)
+			{
+			tree_up(iAch_off,0,0,0);
+			}
+	    	}
+	else if(sub_ind==30)
+	    	{
+		if(but==butE)
+			{
+			tree_up(iCurr_off,0,0,0);
 			}
 	    	}
 	else if(sub_ind==SI_SET_MAX-2)
@@ -10846,6 +10963,180 @@ else if(ind==iAvtRev)
 	     ret(0);
 		}
      }
+
+else if(ind==iAch_off)
+	{
+	if(but==butD)
+		{
+		sub_ind++;
+		if(ACH_OFF_EN)gran_char(&sub_ind,0,2);
+		else gran_char(&sub_ind,0,1);
+		}
+	else if(but==butU)
+		{
+		sub_ind--;
+		gran_char(&sub_ind,0,2);
+		}
+	else if(ACH_OFF_EN)
+		{
+		if(sub_ind==0)
+			{
+			if((but==butL)||(but==butL_))
+				{
+				ACH_OFF_EN=0;
+				lc640_write_int(EE_ACH_OFF_EN,0);
+				}
+			}
+		if(sub_ind==1)
+			{
+			if((but==butR)||(but==butR_))
+				{
+				ACH_OFF_LEVEL++;
+				if(but==butR_)ACH_OFF_LEVEL+=4;
+				gran(&ACH_OFF_LEVEL,1,20000);
+				lc640_write_int(EE_ACH_OFF_LEVEL,ACH_OFF_LEVEL);
+				}
+			else if((but==butL)||(but==butL_))
+				{
+				ACH_OFF_LEVEL--;
+				if(but==butL_)ACH_OFF_LEVEL-=4;
+				gran(&ACH_OFF_LEVEL,1,20000);
+				lc640_write_int(EE_ACH_OFF_LEVEL,ACH_OFF_LEVEL);
+				}
+			speed=1;
+			}
+		if(sub_ind==2)
+			{
+			if(but==butE)
+				{
+				tree_down(0,0);
+				}
+			}
+		}
+	else if(!ACH_OFF_EN)
+		{
+ 		if(sub_ind==0)
+			{
+			if((but==butR)||(but==butR_))
+				{
+				ACH_OFF_EN=1;
+				lc640_write_int(EE_ACH_OFF_EN,1);
+				}
+			}
+		if(sub_ind==1)
+			{
+			if(but==butE)
+				{
+				tree_down(0,0);
+				}
+			}
+		}		
+	}
+else if(ind==iCurr_off)
+	{
+	if(but==butD)
+		{
+		sub_ind++;
+		if(CURR_OFF_EN)gran_char(&sub_ind,0,4);
+		else gran_char(&sub_ind,0,1);
+		}
+	else if(but==butU)
+		{
+		sub_ind--;
+		gran_char(&sub_ind,0,4);
+		}
+	else if(CURR_OFF_EN)
+		{
+		if(sub_ind==0)
+			{
+			if((but==butL)||(but==butL_))
+				{
+				CURR_OFF_EN=0;
+				lc640_write_int(EE_CURR_OFF_EN,0);
+				}
+			}
+		if(sub_ind==1)
+			{
+			if((but==butR)||(but==butR_))
+				{
+				CUR_OFF_LEVEL_RELATIV++;
+				//if(but==butR_)ACH_OFF_LEVEL+=4;
+				gran(&CUR_OFF_LEVEL_RELATIV,10,100);
+				lc640_write_int(EE_CUR_OFF_LEVEL_RELATIV,CUR_OFF_LEVEL_RELATIV);
+				}
+			else if((but==butL)||(but==butL_))
+				{
+				CUR_OFF_LEVEL_RELATIV--;
+				//if(but==butL_)ACH_OFF_LEVEL-=4;
+				gran(&CUR_OFF_LEVEL_RELATIV,10,100);
+				lc640_write_int(EE_CUR_OFF_LEVEL_RELATIV,CUR_OFF_LEVEL_RELATIV);
+				}
+			speed=1;
+			}
+		if(sub_ind==2)
+			{
+			if((but==butR)||(but==butR_))
+				{
+				CUR_OFF_T_OFF++;
+				if(but==butR_)CUR_OFF_T_OFF+=4;
+				gran(&CUR_OFF_T_OFF,1,1000);
+				lc640_write_int(EE_CUR_OFF_T_OFF,CUR_OFF_T_OFF);
+				}
+			else if((but==butL)||(but==butL_))
+				{
+				CUR_OFF_T_OFF--;
+				if(but==butR_)CUR_OFF_T_OFF-=4;
+				gran(&CUR_OFF_T_OFF,1,1000);
+				lc640_write_int(EE_CUR_OFF_T_OFF,CUR_OFF_T_OFF);
+				}
+			speed=1;
+			}
+		if(sub_ind==3)
+			{
+			if((but==butR)||(but==butR_))
+				{
+				CUR_OFF_T_ON++;
+				if(but==butR_)CUR_OFF_T_ON+=4;
+				gran(&CUR_OFF_T_ON,1,1000);
+				lc640_write_int(EE_CUR_OFF_T_ON,CUR_OFF_T_ON);
+				}
+			else if((but==butL)||(but==butL_))
+				{
+				CUR_OFF_T_ON--;
+				if(but==butR_)CUR_OFF_T_ON-=4;
+				gran(&CUR_OFF_T_ON,1,1000);
+				lc640_write_int(EE_CUR_OFF_T_ON,CUR_OFF_T_ON);
+				}
+			speed=1;
+			}
+
+		if(sub_ind==4)
+			{
+			if(but==butE)
+				{
+				tree_down(0,0);
+				}
+			}
+		}
+	else if(!CURR_OFF_EN)
+		{
+ 		if(sub_ind==0)
+			{
+			if((but==butR)||(but==butR_))
+				{
+				CURR_OFF_EN=1;
+				lc640_write_int(EE_CURR_OFF_EN,1);
+				}
+			}
+		if(sub_ind==1)
+			{
+			if(but==butE)
+				{
+				tree_down(0,0);
+				}
+			}
+		}		
+	}
 but_an_end:
 n_but=0;
 
@@ -11451,7 +11742,8 @@ while (1)
 
 
 
-
+		ach_off_hndl(); 	//драйвер функции выключения по амперчасам
+		curr_off_hndl();	//драйвер функции выключения по снижению тока
 		}
 	if(b1min)
 		{
