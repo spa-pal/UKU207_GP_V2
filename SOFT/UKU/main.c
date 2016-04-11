@@ -570,6 +570,8 @@ signed long cap_time_proc;
 char can2_plazma;
 char plazma_restart;
 
+signed long AMPERCHAS;	//Счетчик амперчасов
+
 //-----------------------------------------------
 //Данные для передачи по КАН
 short can_time;
@@ -639,6 +641,16 @@ char  bOFF;
 char bRAZR;
 
 signed short RELE_FUNC[2];
+
+//-----------------------------------------------
+//Драйвер выключения по счетчику амперчасов
+signed long milliAmperSecunda;
+
+//-----------------------------------------------
+//Драйвер выключения по снижению тока
+signed short curr_off_stop_cnt;
+signed short curr_off_start_cnt;
+signed short curr_off_temp;
 
 //-----------------------------------------------
 void rtc_init (void) 
@@ -1171,8 +1183,11 @@ if(ind==iMn)
 		//ptrs[0]=		"                    ";
 	  	ptrs[1]=		" Iу    +А Umax    @B";
 	   	ptrs[2]=		" Длит-сть.  0t:0T:0s";
-		if(work_stat==wsGS)
+		if(work_stat==wsGS) {
 		ptrs[2]=		"      0t:0T:0s      ";
+		if(ACH_OFF_EN)
+		ptrs[2]=		" 0t:0T:0s      qА*ч ";
+		}
 	   	ptrs[3]=		" I     #А U       $B";
 		ptrs[4]=		" Uмax.ист.тока    {В";
 	   	ptrs[5]=		" Выход              ";
@@ -1261,6 +1276,7 @@ if(ind==iMn)
 				}
 			}
 	
+		int2lcd(AMPERCHAS,'q',1);
 
 		//int2lcdyx(time_proc,0,4,0);
 		//int2lcdyx(CURR_FADE_IN,0,9,0);
@@ -1319,8 +1335,11 @@ if(ind==iMn)
 		ptrs[0]=		"                    "; */
 	  	ptrs[1]=		" Uу    %B Imax    }A";
 	   	ptrs[2]=		" Длит-сть.  0t:0T:0s";
-		if(work_stat==wsPS)
+		if(work_stat==wsPS) {
 		ptrs[2]=		"      0t:0T:0s      ";
+		if(ACH_OFF_EN)
+		ptrs[2]=		" 0t:0T:0s      qА*ч ";
+		}
 	   	ptrs[3]=		" U     &B I       *A";
 		ptrs[4]=		" Iмax.ист.напр.   }A";
 	   	ptrs[5]=		" Выход              ";
@@ -1430,6 +1449,8 @@ if(ind==iMn)
 				}
 			}
 	
+		int2lcd(AMPERCHAS,'q',1);
+
 	/*	int2lcdyx(bps[0]._vol_u,0,4,0);
 		int2lcdyx(bps[0]._vol_i,0,8,0);
 		int2lcdyx(bps[0]._flags_tu,0,0,0);
@@ -1485,15 +1506,13 @@ if(ind==iMn)
 
 	  	ptrs[1]=		" Iу    +А Umax    @B";
 	   	ptrs[2]=		" Длит-сть.  0t:0T:0s";
-		if(work_stat==wsGS)
+		if(work_stat==wsGS)	{
 		ptrs[2]=		"      0t:0T:0s      ";
+		if(ACH_OFF_EN)
+		ptrs[2]=		" 0t:0T:0s      qА*ч ";
+		}
 	   	ptrs[3]=		" I     #А U       $B";
-/*	 	ptrs[4]=		" Источник напряж.   ";
-		if((bFL_REV)&&(REV_IS_ON))
-			{
-			if(REV_STAT==rsFF)	ptrs[4]=		" Реверс         ВКЛ.";
-			else 			ptrs[4]=		" Реверс        ВЫКЛ."; 
-			}*/
+
 		if(work_stat!=wsPS)	{	 	
 	 		ptrs[4]=		" Источник напр. ^   ";
 			
@@ -1528,9 +1547,12 @@ if(ind==iMn)
 		ptrs[4]=		"                    ";
 	  	ptrs[5]=		" Uу    %B Imax    }A";
 	   	ptrs[6]=		" Длит-сть.  0t:0T:0s";
-		if(work_stat==wsPS)
+		if(work_stat==wsPS){
 		ptrs[6]=		"      0t:0T:0s      ";
-	   	ptrs[7]=		" U     &B I       *A";
+		if(ACH_OFF_EN)
+		ptrs[6]=		" 0t:0T:0s      qА*ч ";
+		}
+	   	ptrs[7]=		" U     &B I       #A";
 		ptrs[8]=		" Uмax.ист.тока    {В";
 		ptrs[9]=		" Iмax.ист.напр.   }A";
 	   	ptrs[10]=		" Выход              ";
@@ -1551,34 +1573,17 @@ if(ind==iMn)
 			pointer_set(0);
 			}
 		if((!REV_IS_ON)||(!AVT_REV_IS_ON))sub_bgnd(" ",'^',0);
-	/*	if(work_stat==wsOFF)
-			{
-			if(bFL2)int2lcd(I_ug,'!',1);
-			else sub_bgnd("     ",'!',-2);
-			}
-		else int2lcd(I_ug,'!',1);
-	
-		if(work_stat==wsOFF)
-			{
-			if(bFL2)int2lcd(U_up,'%',1);
-			else sub_bgnd("     ",'%',-2);
-			}
-		else int2lcd(U_up,'%',1); */
 	   	
 		if(I_ug_temp<1000)int2lcd(I_ug_temp,'+',1);
 		else int2lcd(I_ug_temp/10,'+',0);
 		//int2lcd(U_maxg,'@',1);
 	   	if(load_I<1000) {
 			int2lcd(load_I,'#',1);
-			int2lcd(load_I,'*',1);
+			int2lcd(load_I,'#',1);
 		} else {
 			int2lcd(load_I/10,'#',0);
-			int2lcd(load_I/10,'*',0);
+			int2lcd(load_I/10,'#',0);
 		}
-		//int2lcd(load_U,'$',1);
-	   	//int2lcd(U_up,'%',1);
-		
-	   	//int2lcd(load_U,'&',1);
 
 		if(U_up_temp<1000) {
 			int2lcd(U_up_temp,'%',1);
@@ -1684,6 +1689,8 @@ if(ind==iMn)
 					}				
 				}
 			}
+
+		int2lcd(AMPERCHAS,'q',1);
 	
 	/*	int2lcdyx(bps[0]._vol_u,0,4,0);
 		int2lcdyx(bps[0]._vol_i,0,8,0);
@@ -1697,14 +1704,6 @@ if(ind==iMn)
 		}
 	else 
 		{
-/*	 	ptrs[0]=		" Источник напряж.   ";
-		if((bFL_REV)&&(REV_IS_ON))
-			{
-			if(REV_STAT==rsFF)	ptrs[0]=		" Реверс         ВКЛ.";
-			else 			ptrs[0]=		" Реверс        ВЫКЛ."; 
-			}
-		if((work_stat==wsPS)&&(!bFL34))
-		ptrs[0]=		"                    ";*/
 
 		if(work_stat!=wsPS)	{	 	
 	 		ptrs[0]=		" Источник напр. ^   ";
@@ -1740,18 +1739,13 @@ if(ind==iMn)
 
 	  	ptrs[1]=		" Uу    %B Imax    }A";
 	   	ptrs[2]=		" Длит-сть.  0t:0T:0s";
-		if(work_stat==wsPS)
+		if(work_stat==wsPS){
 		ptrs[2]=		"      0t:0T:0s      ";
-	   	ptrs[3]=		" U     &B I       *A";			 	
-/*	 	ptrs[4]=		" Источник тока      ";
-		if((bFL_REV)&&(REV_IS_ON))
-			{
-			if(REV_STAT==rsFF)	ptrs[4]=		" Реверс         ВКЛ.";
-			else 			ptrs[4]=		" Реверс        ВЫКЛ."; 
-			}		
-		if((work_stat==wsGS)&&(!bFL34))
-		//ptrs[0]=		"    {    }    [    ]";
-		ptrs[4]=		"                    ";*/
+		if(ACH_OFF_EN)
+		ptrs[2]=		" 0t:0T:0s      qА*ч ";
+		}
+	   	ptrs[3]=		" U     &B I       #A";			 	
+
 		if(work_stat!=wsGS)	{	 	
 	 		ptrs[4]=		" Источник тока  ^   ";
 			
@@ -1783,8 +1777,11 @@ if(ind==iMn)
 		}
 	  	ptrs[5]=		" Iу    +А Umax    @B";
 	   	ptrs[6]=		" Длит-сть.  0t:0T:0s";
-		if(work_stat==wsGS)
+		if(work_stat==wsGS){
 		ptrs[6]=		"      0t:0T:0s      ";
+		if(ACH_OFF_EN)
+		ptrs[6]=		" 0t:0T:0s      qА*ч ";
+		}
 	   	ptrs[7]=		" I     #А U       $B";
 		ptrs[8]=		" Uмax.ист.тока    {В";
 		ptrs[9]=		" Iмax.ист.напр.   }A";
@@ -1806,20 +1803,6 @@ if(ind==iMn)
 			pointer_set(0);
 			}
 	
-	/*	if(work_stat==wsOFF)
-			{
-			if(bFL2)int2lcd(I_ug,'!',1);
-			else sub_bgnd("     ",'!',-2);
-			}
-		else int2lcd(I_ug,'!',1);
-	
-		if(work_stat==wsOFF)
-			{
-			if(bFL2)int2lcd(U_up,'%',1);
-			else sub_bgnd("     ",'%',-2);
-			}
-		else int2lcd(U_up,'%',1); */
-
 		if((!REV_IS_ON)||(!AVT_REV_IS_ON))sub_bgnd(" ",'^',0);
 	   	
 		if(I_ug_temp<1000)int2lcd(I_ug_temp,'+',1);
@@ -1827,10 +1810,10 @@ if(ind==iMn)
 		//int2lcd(U_maxg,'@',1);
 	   	if(load_I<1000) {
 			int2lcd(load_I,'#',1);
-			int2lcd(load_I,'*',1);
+			int2lcd(load_I,'#',1);
 		} else {
 			int2lcd(load_I/10,'#',0);
-			int2lcd(load_I/10,'*',0);
+			int2lcd(load_I/10,'#',0);
 		}
 		//int2lcd(load_U,'$',1);
 	   	//int2lcd(U_up,'%',1);
@@ -1843,10 +1826,10 @@ if(ind==iMn)
 	   	//int2lcd(load_U,'&',1);
 		if(load_I<1000) {
 			int2lcd(load_I,'#',1);
-			int2lcd(load_I,'*',1);
+			int2lcd(load_I,'#',1);
 		} else {
 			int2lcd(load_I/10,'#',0);
-			int2lcd(load_I/10,'*',0);
+			int2lcd(load_I/10,'#',0);
 		}
 		//int2lcd(U_maxg,'<',1);
 		//int2lcd(I_maxp,'>',1);
@@ -1950,7 +1933,7 @@ if(ind==iMn)
 			}
 	
 
-	
+		int2lcd(AMPERCHAS,'q',1);
 
 	/*	//int2lcdyx(can2_plazma,0,19,0);*/
 		//int2lcd(bps[0]._vol_i,'{',0);
@@ -1958,10 +1941,10 @@ if(ind==iMn)
 		//int2lcd(bps[0]._vol_u,'[',0);
 		//int2lcd(bps[1]._vol_u,']',0);
 		}
-		/*int2lcdyx(bps[0]._vol_u,0,4,0);
-		int2lcdyx(bps[0]._vol_i,0,8,0);
-		int2lcdyx(I_ug_temp,0,12,0);
-		int2lcdyx(U_maxg,0,19,0);*/	
+		//int2lcdyx(bps[0]._vol_u,0,4,0);
+		//int2lcdyx(300+_xu_,0,8,0);
+		//int2lcdyx(bps[0]._vol_i,0,12,0);
+		//int2lcdyx(300+_x_,0,16,0);	
 	
 /*nt2lcdyx((((LPC_CAN1->GSR)&(0xff000000))>>24),0,19,0);
 	int2lcdyx((((LPC_CAN1->GSR)&(0x00ff0000))>>16),0,15,0);
@@ -2024,7 +2007,9 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 
 
 	//int2lcdyx(fiks_stat_I,0,4,0);
-	//int2lcdyx(fiks_stat_U,0,6,0);
+	//int2lcdyx(curr_off_stop_cnt,0,6,0);
+	//int2lcdyx(curr_off_start_cnt,0,9,0);
+	//int2lcdyx(curr_off_temp,0,19,0);
 	}
 
 
@@ -4290,6 +4275,35 @@ else if(ind==iCurr_off)
      
                    	      	   	    		
      }
+
+else if (ind==iProcIsComplete)
+	{ 
+	if(sub_ind==0)
+		{
+		bgnd_par(	
+			"       ПРОЦЕСС      ",
+			"      ЗАВЕРШЕН      ",
+			"         ПО         ",
+			"       ВРЕМЕНИ      ");
+		}
+	else if(sub_ind==1)
+		{
+		bgnd_par(	
+			"       ПРОЦЕСС      ",
+			"      ЗАВЕРШЕН      ",
+			"         ПО         ",
+			"     АМПЕРЧАСАМ     ");
+		}
+	else if(sub_ind==2)
+		{
+		bgnd_par(	
+			"       ПРОЦЕСС      ",
+			"      ЗАВЕРШЕН      ",
+			"         ПО         ",
+			"    СНИЖЕНИЮ ТОКА   ");
+		}
+	}
+
 #ifndef _DEBUG_	
 else if(ind==iAvz)
 	{
@@ -7433,6 +7447,7 @@ else if(ind==iSet)
 		if(but==butE)
 			{
 			tree_down(0,0);
+			sub_ind=0;
 			}
 	    	}
 	else if(sub_ind==SI_SET_MAX-1)
@@ -11136,6 +11151,10 @@ else if(ind==iCurr_off)
 				}
 			}
 		}		
+	}
+else if (ind==iProcIsComplete)
+	{
+	tree_down(0,0);
 	}
 but_an_end:
 n_but=0;

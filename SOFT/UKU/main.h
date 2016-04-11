@@ -366,7 +366,8 @@ typedef enum {
 	iK_power_net3,
 	iAvt,iLan_set,iRele_set,iRele_sel,iFiks_set,
 	iK_max_param,iCurr_contr_set,iVolt_contr_set,
-	iAch_off,iCurr_off}i_enum;
+	iAch_off,iCurr_off,
+	iProcIsComplete}i_enum;
 
 typedef struct  
 {
@@ -915,6 +916,7 @@ extern signed short DELT_REL_CURR_I;
 extern signed short REL_VOLT_UMAX;				
 extern signed short REL_VOLT_UMIN;				
 extern signed long cap_time_proc;
+extern signed long AMPERCHAS;	//Счетчик амперчасов
 
 
 //-----------------------------------------------
@@ -991,6 +993,16 @@ extern char  bOFF;
 extern char bRAZR;
 
 extern signed short RELE_FUNC[2];
+
+//-----------------------------------------------
+//Драйвер выключения по счетчику амперчасов
+extern signed long milliAmperSecunda;
+
+//-----------------------------------------------
+//Драйвер выключения по снижению тока
+extern signed short curr_off_stop_cnt;
+extern signed short curr_off_start_cnt;
+extern signed short curr_off_temp;
 
 /*----------------------------------------------------------------------------
  * end of file

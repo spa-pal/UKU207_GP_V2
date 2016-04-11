@@ -783,6 +783,79 @@ bp_tumbler[in-1]=0;
  */
 
 //-----------------------------------------------
+//драйвер функции выключения по амперчасам
+void ach_off_hndl(void)
+{
+
+if(work_stat!=wsOFF)
+	{
+	milliAmperSecunda+=((long)load_I);
+	if(milliAmperSecunda>=3600L)
+		{
+		milliAmperSecunda-=3600L;
+		AMPERCHAS+=1;
+		lc640_write_long(EE_AMPERCHAS,AMPERCHAS);
+
+		if(AMPERCHAS>=ACH_OFF_LEVEL)
+			{
+			work_stat=wsOFF;
+			restart_off();
+			tree_up(iProcIsComplete,1,0,0);
+			ret(0);
+			}
+		}
+	}
+else 
+	{
+	milliAmperSecunda=0;
+	}
+
+}
+ 	
+//-----------------------------------------------
+//драйвер функции выключения по снижению тока
+void curr_off_hndl(void)
+{
+
+if(work_stat!=wsOFF)
+	{
+	if(curr_off_start_cnt<CUR_OFF_T_OFF)curr_off_start_cnt++;
+	else
+		{
+		signed int temp_I;
+		if(work_stat==wsGS)
+			{
+			temp_I=(signed int)I_ug_temp;
+			}
+		else if(work_stat==wsPS)
+			{
+			temp_I=(signed int)I_maxp;
+			}
+		temp_I*=(signed int)CUR_OFF_LEVEL_RELATIV;
+		temp_I/=100;
+		curr_off_temp=(short)temp_I;
+		if(load_I<curr_off_temp)
+			{
+			curr_off_stop_cnt++;
+			if(curr_off_stop_cnt>=CUR_OFF_T_ON)
+				{
+				work_stat=wsOFF;
+				restart_off();
+				tree_up(iProcIsComplete,2,0,0);
+				ret(0);
+				}
+			}
+		else curr_off_stop_cnt=0;
+		}
+	}
+else 
+	{
+	curr_off_start_cnt=0;
+	curr_off_stop_cnt=0;
+	}
+}	
+
+//-----------------------------------------------
 void time_hndl(void) /*ГЦ раз в секунду*/
 {
 if((REV_IS_ON)&&(AVT_REV_IS_ON))
@@ -808,6 +881,8 @@ if(work_stat==wsGS)
 		{
 		work_stat=wsOFF;
 		restart_off();
+		tree_up(iProcIsComplete,2,0,0);
+		ret(0);
 		}
 	if((REV_IS_ON)&&(AVT_REV_IS_ON)){
 		time_proc_phase++;
@@ -858,6 +933,8 @@ if(work_stat==wsPS)
 		{
 		work_stat=wsOFF;
 		restart_off();
+		tree_up(iProcIsComplete,2,0,0);
+		ret(0);
 		}
 	if((REV_IS_ON)&&(AVT_REV_IS_ON)){
 		time_proc_phase++;
@@ -972,6 +1049,10 @@ void start_GS(void) {
 		proc_phase=0;
 		REV_STAT=rsFF;	
 	}
+
+	milliAmperSecunda=0L;
+	AMPERCHAS=0L;
+	lc640_write_long(EE_AMPERCHAS,AMPERCHAS);
 }
 
 
@@ -990,6 +1071,9 @@ void start_PS(void) {
 		proc_phase=0;
 		REV_STAT=rsFF;	
 	}
+	milliAmperSecunda=0L;
+	AMPERCHAS=0L;
+	lc640_write_long(EE_AMPERCHAS,AMPERCHAS);
 }
 
 //-----------------------------------------------
@@ -1627,12 +1711,12 @@ else if(work_stat==wsGS)
 		if(!((REV_IS_ON)&&(AVT_REV_IS_ON)&&((proc_phase==ppFF_P_REW)||(proc_phase==ppREW_P_FF)))) {
 	 		if(load_I<I_ug_temp)_x_++;
    			else if(load_I>I_ug_temp)_x_--;
-			gran(&_x_,-temp_SL_I,1022-temp_SL_I);
+			//gran(&_x_,-temp_SL_I,1022-temp_SL_I);
 			gran(&_x_,-50,50); 
 
 	 		if(load_U<U_maxg)_xu_++;
    			else if(load_U>U_maxg)_xu_--;
-			gran(&_x_,-temp_SL_U,1022-temp_SL_U);
+			//gran(&_x_,-temp_SL_U,1022-temp_SL_U);
 			gran(&_xu_,-50,50); 
 		}
 	}
