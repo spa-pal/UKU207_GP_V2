@@ -1,3 +1,9 @@
+#ifdef UKU2071x
+#define MCP2515_CAN
+#define SC16IS740_UART
+//#define can1_out mcp2515_transmit
+#endif
+
 #include <rtl.h>
 
 #define SOFT_NUM	1051
@@ -170,6 +176,7 @@
 
 
 #define delay_ms(x) {long xx; xx=(unsigned long)x * 12000UL; while(xx)xx--;}
+#define delay_us(x) {long xx; xx=(unsigned long)x * 12UL; while(xx)xx--;}
 
 //*************************************************
 //сообщения
@@ -920,14 +927,14 @@ extern signed long AMPERCHAS;	//Счетчик амперчасов
 
 
 //-----------------------------------------------
-//Данные для передачи по КАН
-extern short can_time;
-extern short can_time_set;
-extern short can_u;
-extern short can_u_set;
-extern short can_i;
-extern short can_i_set;
-extern enum_work_stat can_work_stat;
+//Данные для передачи в пульт
+extern short pult_time;
+extern short pult_time_set;
+extern short pult_u;
+extern short pult_u_set;
+extern short pult_i;
+extern short pult_i_set;
+extern enum_work_stat pult_work_stat;
 
 //-----------------------------------------------
 //Управление от пульта

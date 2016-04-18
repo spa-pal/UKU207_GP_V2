@@ -48,7 +48,7 @@ ADC2_CSR_CH	stm8s.h	263;"	macro
 ADC2_CSR_EOC	stm8s.h	261;"	macro
 ADC2_CSR_EOCIE	stm8s.h	262;"	macro
 ADC2_CSR_RESET_VALUE	stm8s.h	247;"	macro
-ADC2_EOC_Interrupt	main.c	1217;"	function	signature:(void)
+ADC2_EOC_Interrupt	main.c	1235;"	function	signature:(void)
 ADC2_TDRH_RESET_VALUE	stm8s.h	251;"	macro
 ADC2_TDRL_RESET_VALUE	stm8s.h	250;"	macro
 ADC2_TypeDef	stm8s.h	241;"	typedef	typeref:struct:ADC2_struct
@@ -222,7 +222,7 @@ CAN_RFR_FOVR	stm8s.h	2144;"	macro
 CAN_RFR_FULL	stm8s.h	2143;"	macro
 CAN_RFR_RESET_VALUE	stm8s.h	2274;"	macro
 CAN_RFR_RFOM	stm8s.h	2145;"	macro
-CAN_RX_Interrupt	main.c	1181;"	function	signature:(void)
+CAN_RX_Interrupt	main.c	1199;"	function	signature:(void)
 CAN_RX_Interrupt	stm8_interrupt_vector.c	22;"	prototype	file:	signature:(void)
 CAN_TECR_RESET_VALUE	stm8s.h	2281;"	macro
 CAN_TECR_TEC0	stm8s.h	2202;"	macro
@@ -249,7 +249,7 @@ CAN_TSR_RQCP2	stm8s.h	2128;"	macro
 CAN_TSR_TXOK0	stm8s.h	2130;"	macro
 CAN_TSR_TXOK1	stm8s.h	2131;"	macro
 CAN_TSR_TXOK2	stm8s.h	2132;"	macro
-CAN_TX_Interrupt	main.c	1206;"	function	signature:(void)
+CAN_TX_Interrupt	main.c	1224;"	function	signature:(void)
 CAN_TX_Interrupt	stm8_interrupt_vector.c	23;"	prototype	file:	signature:(void)
 CAN_TypeDef	stm8s.h	2102;"	typedef	typeref:struct:__anon5
 CCER1	stm8s.h	479;"	member	struct:TIM1_struct
@@ -1193,7 +1193,7 @@ TIM4_PSCR_RESET_VALUE	stm8s.h	938;"	macro
 TIM4_SR1_RESET_VALUE	stm8s.h	935;"	macro
 TIM4_SR1_UIF	stm8s.h	957;"	macro
 TIM4_TypeDef	stm8s.h	927;"	typedef	typeref:struct:TIM4_struct
-TIM4_UPD_Interrupt	main.c	1067;"	function	signature:(void)
+TIM4_UPD_Interrupt	main.c	1085;"	function	signature:(void)
 TIM4_UPD_Interrupt	stm8_interrupt_vector.c	21;"	prototype	file:	signature:(void)
 TIM4_struct	stm8s.h	913;"	struct
 TIM5	stm8s.h	2468;"	macro
@@ -1548,7 +1548,7 @@ can_out_buff	main.c	37;"	variable
 can_plazma	main.c	44;"	variable
 can_transmit	main.c	704;"	function	signature:(unsigned short id_st,char data0,char data1,char data2,char data3,char data4,char data5,char data6,char data7)
 can_transmit	main.h	29;"	prototype	signature:(unsigned short id_st,char data0,char data1,char data2,char data3,char data4,char data5,char data6,char data7)
-can_tx_hndl	main.c	998;"	function	signature:(void)
+can_tx_hndl	main.c	1016;"	function	signature:(void)
 ch_en	main.c	75;"	variable
 cmnd	main.c	76;"	variable
 cnt_T4	main.c	16;"	variable
@@ -1608,7 +1608,7 @@ interrupt_handler	stm8_interrupt_vector.c	9;"	member	struct:interrupt_vector	fil
 interrupt_handler_t	stm8_interrupt_vector.c	5;"	typedef	file:
 interrupt_instruction	stm8_interrupt_vector.c	8;"	member	struct:interrupt_vector	file:
 interrupt_vector	stm8_interrupt_vector.c	7;"	struct	file:
-main	main.c	1243;"	function
+main	main.c	1261;"	function
 memchr	c:\program files\cosmic\cxstm8_32k\hstm8\string.h	28;"	prototype	signature:(void *s, char c, unsigned int n)
 memcmp	c:\program files\cosmic\cxstm8_32k\hstm8\string.h	22;"	prototype	signature:(void *s1, void *s2, unsigned int n)
 memcpy	c:\program files\cosmic\cxstm8_32k\hstm8\string.h	29;"	prototype	signature:(void *s1, void *s2, unsigned int n)
@@ -1652,8 +1652,8 @@ t0_cnt1	main.c	14;"	variable
 t0_cnt2	main.c	14;"	variable
 t0_cnt3	main.c	14;"	variable
 t0_cnt4	main.c	14;"	variable
-t1_init	main.c	1044;"	function	signature:(void)
-t4_init	main.c	1034;"	function	signature:(void)
+t1_init	main.c	1062;"	function	signature:(void)
+t4_init	main.c	1052;"	function	signature:(void)
 time	main.c	86;"	variable
 time_set	main.c	87;"	variable
 tmblr_cnt	main.c	63;"	variable

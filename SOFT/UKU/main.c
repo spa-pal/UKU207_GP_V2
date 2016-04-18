@@ -27,6 +27,15 @@
 #include "uart0.h"
 #include <rtl.h>
 #include "modbus.h"
+#include "mcp2515.h"
+#include "sc16is7xx.h"
+
+#ifdef UKU2071x
+//#define MCP2515_CAN
+//#define SC16IS740_UART
+#define can1_out mcp2515_transmit
+#endif
+
 
 extern U8 own_hw_adr[];
 
@@ -573,14 +582,14 @@ char plazma_restart;
 signed long AMPERCHAS;	//Счетчик амперчасов
 
 //-----------------------------------------------
-//Данные для передачи по КАН
-short can_time;
-short can_time_set;
-short can_u;
-short can_u_set;
-short can_i;
-short can_i_set;
-enum_work_stat can_work_stat;
+//Данные для передачи в пульт
+short pult_time;
+short pult_time_set;
+short pult_u;
+short pult_u_set;
+short pult_i;
+short pult_i_set;
+enum_work_stat pult_work_stat;
 
 //-----------------------------------------------
 //Управление от пульта
@@ -935,98 +944,64 @@ sub_ind=0;
 }
 
 //-----------------------------------------------
-void can_data_hndl(void)
+void pult_data_hndl(void)
 {
 if(main_menu_mode==mmmIT)
 	{
-	can_u_set=U_maxg;
-	can_i_set=I_ug;
-	can_u=load_U;
-	can_i=load_I;
+	pult_u_set=U_maxg;
+	pult_i_set=I_ug;
+	pult_u=load_U;
+	pult_i=load_I;
 	if(T_PROC_GS_MODE)				//если установлен режим непрерывного времени
 		{
-		can_time_set=0xffff;
+		pult_time_set=0xffff;
 		}
 	else
 		{
-		if(TIME_VISION_PULT)can_time_set=(short)(T_PROC_GS/60);
-		else can_time_set=(short)(T_PROC_GS);
+		if(TIME_VISION_PULT)pult_time_set=(short)(T_PROC_GS/60);
+		else pult_time_set=(short)(T_PROC_GS);
 		}
 
 	if((TIME_VISION)||(T_PROC_GS_MODE))	//если установлен режим непрерывного времени	или режим прямого отсчета времени
 		{
-		if(TIME_VISION_PULT)can_time=(short)(time_proc/60);
-		else can_time=(short)(time_proc);
+		if(TIME_VISION_PULT)pult_time=(short)(time_proc/60);
+		else pult_time=(short)(time_proc);
 		}
 	else
 		{
-		if(TIME_VISION_PULT)can_time=(short)(time_proc_remain/60);
-		else can_time=(short)(time_proc_remain);
+		if(TIME_VISION_PULT)pult_time=(short)(time_proc_remain/60);
+		else pult_time=(short)(time_proc_remain);
 		}
-	can_work_stat=work_stat;
-
-
-
-/*	if(work_stat==wsGS)
-		{
-		if((TIME_VISION)||(T_PROC_GS_MODE))				//если установлен режим непрерывного времени
-			{
-			if(TIME_VISION_PULT)can_time=(short)(time_proc/60);
-			else can_time=(short)(time_proc);
-			}
-		else
-			{
-			if(TIME_VISION_PULT)can_time=(short)(time_proc_remain/60);
-			else can_time=(short)(time_proc_remain);
-			}
-
-		}
-	else 
-		{
-		can_u=U_maxg;
-		can_i=I_ug;
-			
-		if(T_PROC_GS_MODE)				//если установлен режим непрерывного времени
-			{
-			can_time=0xffff;
-			}
-		else
-			{
-			if(TIME_VISION_PULT)can_time=(short)(T_PROC_GS/60);
-			else can_time=(short)(T_PROC_GS);
-			}
-		} */
-
-
+	pult_work_stat=work_stat;
 	}
 
 if(main_menu_mode==mmmIN)
 	{
-	can_u_set=U_up;
-	can_i_set=I_maxp;
-	can_u=load_U;
-	can_i=load_I;
+	pult_u_set=U_up;
+	pult_i_set=I_maxp;
+	pult_u=load_U;
+	pult_i=load_I;
 	if(T_PROC_PS_MODE)				//если установлен режим непрерывного времени
 		{
-		can_time_set=0xffff;
+		pult_time_set=0xffff;
 		}
 	else
 		{
-		if(TIME_VISION_PULT)can_time_set=(short)(T_PROC_PS/60);
-		else can_time_set=(short)(T_PROC_PS);
+		if(TIME_VISION_PULT)pult_time_set=(short)(T_PROC_PS/60);
+		else pult_time_set=(short)(T_PROC_PS);
 		}
 
 	if((TIME_VISION)||(T_PROC_PS_MODE))	//если установлен режим непрерывного времени	или режим прямого отсчета времени
 		{
-		if(TIME_VISION_PULT)can_time=(short)(time_proc/60);
-		else can_time=(short)(time_proc);
+		if(TIME_VISION_PULT)pult_time=(short)(time_proc/60);
+		else pult_time=(short)(time_proc);
 		}
 	else
 		{
-		if(TIME_VISION_PULT)can_time=(short)(time_proc_remain/60);
-		else can_time=(short)(time_proc_remain);
+		if(TIME_VISION_PULT)pult_time=(short)(time_proc_remain/60);
+		else pult_time=(short)(time_proc_remain);
 		}
-	can_work_stat=work_stat;
+	pult_work_stat=work_stat;
 	}
 
 //can_time=1357;
@@ -1459,7 +1434,7 @@ if(ind==iMn)
 		//int2lcd(bps[0]._vol_i,'{',0);
 		//int2lcd(bps[1]._vol_i,'}',0);
 		//int2lcd(bps[0]._vol_u,'[',0);
-		//int2lcd(bps[1]._vol_u,']',0);
+		//int2lcd(,']',0);
 		}
 	else if(main_menu_mode==mmmITIN)
 		{
@@ -2009,7 +1984,7 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	//int2lcdyx(fiks_stat_I,0,4,0);
 	//int2lcdyx(curr_off_stop_cnt,0,6,0);
 	//int2lcdyx(curr_off_start_cnt,0,9,0);
-	//int2lcdyx(curr_off_temp,0,19,0);
+	//int2lcdyx(modbus_plazma,0,19,0);
 	}
 
 
@@ -2664,7 +2639,7 @@ else if(ind==iExtCtrl)
 	else if((sub_ind-index_set)>1) index_set=sub_ind-1;
 				
 	bgnd_par(		"     УПРАВЛЕНИЕ     ",
-				"   СУХИМ КОНТАКТОМ  ",
+				" СУХИМ КОНТАКТОМ СК1",
 				ptrs[index_set],
 				ptrs[index_set+1]);
 
@@ -4412,7 +4387,7 @@ void sk_in_drv(void)
 {
 char i;
 
-if(adc_buff_[14]<2000)sk_in_drv_cnt++;
+if(adc_buff_[11]<2000)sk_in_drv_cnt++;
 else sk_in_drv_cnt--;
 gran(&sk_in_drv_cnt,-10,10);
 
@@ -11416,10 +11391,13 @@ ind=iMn;
 
 memo_read();
 
+#ifndef MCP2515_CAN
 can1_init(BITRATE62_5K25MHZ); 
 can2_init(BITRATE125K25MHZ);
 FullCAN_SetFilter(1,0x18a);
 FullCAN_SetFilter(0,0x18e);
+#endif
+
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);
 mac_adr[4]=*(((char*)&AUSW_MAIN_NUMBER)+1);
@@ -11537,12 +11515,13 @@ if(lc640_read_int(EE_RESTART_ENABLE)==reON)
 		}
 	}
 
-//lc640_write_int(EE_CAP_ZAR_TIME,1234);					
-//lc640_write_int(EE_CAP_PAUSE1_TIME,2345);					
-//lc640_write_int(EE_CAP_RAZR_TIME,3456);					
-//lc640_write_int(EE_CAP_PAUSE2_TIME,4567);					
+#ifdef MCP2515_CAN
+can_mcp2515_init();
+#endif
 
-//lc640_write_int(EE_AVT_REV_TIME_FF,200);
+#ifdef SC16IS740_UART
+sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
+#endif
 main_cnt=0;
 
 watchdog_enable();
@@ -11553,7 +11532,14 @@ while (1)
      //timer_poll ();
      main_TcpNet ();
 
-	//watchdog_reset();
+#ifdef MCP2515_CAN
+	if(bMCP2515_IN)
+		{
+		bMCP2515_IN=0;
+		can_in_an1();
+		}
+#endif
+
 	if(bMODBUS_TIMEOUT)
 		{
 		bMODBUS_TIMEOUT=0;
@@ -11594,6 +11580,15 @@ while (1)
 		{
 		b1000Hz=0;
 		adc_drv7();
+
+		#ifdef MCP2515_CAN
+		can_mcp2515_hndl();
+		//mcp2515_read_status();
+		#endif
+
+		#ifdef SC16IS740_UART
+		sc16is700_uart_hndl();
+		#endif		
 
 		}
 	
@@ -11693,9 +11688,9 @@ while (1)
 		snmp_data();
 		//LPC_GPIO1->FIODIR|=(1UL<<31);
 		//LPC_GPIO1->FIOPIN^=(1UL<<31);
-		can_data_hndl();
-		can2_out(33,*((char*)(&can_u)),*(((char*)(&can_u))+1),*((char*)(&can_i)),*(((char*)(&can_i))+1),(char)can_work_stat,*((char*)(&can_u_set)),*(((char*)(&can_u_set))+1));
-		can2_out(34,*((char*)(&can_time)),*(((char*)(&can_time))+1),*((char*)(&can_time_set)),*(((char*)(&can_time_set))+1),0,*((char*)(&can_i_set)),*(((char*)(&can_i_set))+1));
+		pult_data_hndl();
+		can2_out(33,*((char*)(&pult_u)),*(((char*)(&pult_u))+1),*((char*)(&pult_i)),*(((char*)(&pult_i))+1),(char)pult_work_stat,*((char*)(&pult_u_set)),*(((char*)(&pult_u_set))+1));
+		can2_out(34,*((char*)(&pult_time)),*(((char*)(&pult_time))+1),*((char*)(&pult_time_set)),*(((char*)(&pult_time_set))+1),0,*((char*)(&pult_i_set)),*(((char*)(&pult_i_set))+1));
 		
 
   		}
