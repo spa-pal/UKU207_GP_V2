@@ -1,4 +1,4 @@
-
+							  
 #include "modbus.h"
 //#include "LPC17xx.H"
 #include "main.h"
@@ -13,7 +13,7 @@ unsigned char modbus_rx_buffer[30];	//Буфер, куда складывает принимаемые даннные
 unsigned char modbus_an_buffer[30];    	//Буфер, куда они потом копируются для анализа
 unsigned char modbus_rx_buffer_ptr;	//Указатель на текущую позицию принимающего буфера
 unsigned char modbus_rx_counter;		//Количество принятых байт, используется при анализе целостности посылки и при расшифровке
-signed short modbusTimeoutInMills;
+
 short modbus_plazma;				//Отладка
 short modbus_plazma1;				//Отладка
 short modbus_plazma2;				//Отладка
@@ -81,16 +81,16 @@ if(crc16_calculated==crc16_incapsulated)
 	
 
 	if(modbus_an_buffer[0]==200)	 //если запрос от пульта
-		{modbus_plazma++;
+		{//modbus_plazma++;
 		if(modbus_func==4)		//чтение произвольного кол-ва регистров
 			{
-			modbus_for_pult_registers_transmit(7);
+			modbus_for_pult_registers_transmit(14);
 			}
 		else if(modbus_func==6) 	//запись регистра
 			{
 			if(modbus_rx_arg0==1)		//
 				{
-				modbus_for_pult_registers_transmit(7);
+				modbus_for_pult_registers_transmit(14);
 				tumbler_stat=(char)modbus_rx_arg1;
 				if((tumbler_stat!=tumbler_stat_old))
 					{
@@ -110,8 +110,7 @@ if(crc16_calculated==crc16_incapsulated)
 				
 				}
 			 else if(modbus_rx_arg0==0)
-			 	{
-				//modbus_plazma++;		
+			 	{		
 				if(modbus_rx_arg1==61)
 					{
 					if(I_ug<1000)I_ug++;

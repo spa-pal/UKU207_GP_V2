@@ -1,3 +1,6 @@
+//#define CAN_TO_UKU
+#define RS_TO_UKU
+
 #include "string.h"
 //#include <iostm8s208.h>
 #include <iostm8s103.h>
@@ -95,6 +98,26 @@ short ind_I_set;
 //Управление процессом
 enum_work_stat work_stat=wsOFF;
 
+
+//UART и MODBUS
+#define TX_BUFFER_SIZE1 50
+#define RX_BUFFER_SIZE1 50
+
+@near char tx_buffer1[TX_BUFFER_SIZE1]={0};
+signed char tx_counter1;
+signed char tx_wr_index1,tx_rd_index1;
+@near char rx_buffer[RX_BUFFER_SIZE1]={0};
+signed short rx_counter1;
+signed short rx_wr_index1,rx_rd_index1;
+tx_stat_enum tx_stat=tsOFF;
+@near char tx_stat_cnt;
+char tx_wd_cnt=100;
+char bOUT_FREE;
+char	modbusTimeOutCnt=0;
+char	bMODBUS_TIMEOUT=0;
+short modbus_plazma;
+//char enc_plazma;
+
 //-----------------------------------------------
 void bcd2ind_zero(void);
 void bcd2ind(void);
@@ -113,6 +136,162 @@ for(ii=0;ii<i;ii++)
 	}
 
 }
+
+//-----------------------------------------------
+unsigned short CRC16_2(char* buf, short len)
+{
+unsigned short crc = 0xFFFF;
+short pos;
+short i;
+
+for (pos = 0; pos < len; pos++)
+  	{
+    	crc ^= (unsigned short)buf[pos];          // XOR byte into least sig. byte of crc
+
+    	for ( i = 8; i != 0; i--) 
+		{    // Loop over each bit
+      	if ((crc & 0x0001) != 0) 
+			{      // If the LSB is set
+        		crc >>= 1;                    // Shift right and XOR 0xA001
+        		crc ^= 0xA001;
+      		}
+      	else  crc >>= 1;                    // Just shift right
+    		}
+  	}
+  // Note, this number has low and high bytes swapped, so use it accordingly (or swap bytes)
+return crc;
+}
+
+
+//-----------------------------------------------
+void modbus_in(void)
+{
+@near char modbus_an_buffer[30];	
+short crc16_calculated;		//au?eneyaiay ec i?eiyouo aaiiuo CRC
+short crc16_incapsulated;	//ano?iaiiiay a iinueeo CRC
+unsigned short modbus_rx_arg0;		//ano?iaiiue a iinueeo ia?aue a?aoiaio
+unsigned short modbus_rx_arg1;		//ano?iaiiue a iinueeo aoi?ie a?aoiaio
+unsigned short modbus_rx_arg2;		//ano?iaiiue a iinueeo o?aoee a?aoiaio
+unsigned short modbus_rx_arg3;		//ano?iaiiue a iinueeo ?aoaa?oue a?aoiaio
+unsigned char modbus_func;			//ano?iaiiue a iinueeo eia ooieoee
+
+//modbus_plazma++;
+
+memcpy(modbus_an_buffer,rx_buffer,rx_wr_index1);
+//modbus_rx_counter=modbus_rx_buffer_ptr;
+//modbus_rx_buffer_ptr=0;
+//bMODBUS_TIMEOUT=0;
+modbus_plazma=rx_wr_index1;
+
+crc16_calculated  = CRC16_2(modbus_an_buffer, rx_wr_index1-2);
+crc16_incapsulated = modbus_an_buffer[rx_wr_index1-2]+(modbus_an_buffer[rx_wr_index1-1])*256;
+
+//modbus_plazma=modbus_rx_counter;
+//modbus_plazma2=crc16_calculated;
+//modbus_plazma3=crc16_incapsulated;
+
+//modbus_func=modbus_an_buffer[1];
+//modbus_rx_arg0=(((unsigned short)modbus_an_buffer[2])*((unsigned short)256))+((unsigned short)modbus_an_buffer[3]);
+//modbus_rx_arg1=(((unsigned short)modbus_an_buffer[4])*((unsigned short)256))+((unsigned short)modbus_an_buffer[5]);
+//modbus_rx_arg2=(((unsigned short)modbus_an_buffer[6])*((unsigned short)256))+((unsigned short)modbus_an_buffer[7]);
+//modbus_rx_arg3=(((unsigned short)modbus_an_buffer[8])*((unsigned short)256))+((unsigned short)modbus_an_buffer[9]);
+rx_wr_index1=0;
+
+//if(crc16_calculated==crc16_incapsulated)
+	{
+	if(modbus_an_buffer[0]==200)	 //anee cai?in io ioeuoa
+		{
+		if((modbus_an_buffer[1]==6)||(modbus_an_buffer[1]==4))		//?oaiea i?iecaieuiiai eie-aa ?aaeno?ia
+			{
+			if(modbus_an_buffer[2]==14)
+				{
+				ind_U=(modbus_an_buffer[3]+(modbus_an_buffer[4]*256));
+				ind_I=(modbus_an_buffer[5]+(modbus_an_buffer[6]*256));
+				work_stat=(enum_work_stat)modbus_an_buffer[7];
+				ind_U_set=(modbus_an_buffer[9]+(modbus_an_buffer[10]*256));
+				time= (modbus_an_buffer[11]+(modbus_an_buffer[12]*256));
+				time_set= (modbus_an_buffer[13]+(modbus_an_buffer[14]*256));
+				ind_I_set=(modbus_an_buffer[15]+(modbus_an_buffer[16]*256));	
+				}
+			}
+		}
+	}
+}
+
+
+//-----------------------------------------------
+void putchar1(char c)
+{
+while (tx_counter1 == TX_BUFFER_SIZE1);
+///#asm("cli")
+if (tx_counter1 || ((UART1->SR & UART1_SR_TXE)==0))
+   {
+   tx_buffer1[tx_wr_index1]=c;
+   if (++tx_wr_index1 == TX_BUFFER_SIZE1) tx_wr_index1=0;
+   ++tx_counter1;
+   }
+else 
+	{
+	UART1->DR=c;
+	GPIOA->ODR|=(1<<6);
+	tx_stat=tsON;
+	}
+
+
+UART1->CR2|= UART1_CR2_TIEN | UART1_CR2_TCIEN;
+}
+
+//-----------------------------------------------
+void modbus_transmit_request(char addr,char func,short reg_adr,short reg_quant)
+{
+@near char modbus_buff[20],i;
+@near short crc_temp;
+
+modbus_buff[0] = addr;
+modbus_buff[1] = func;
+modbus_buff[2] = (char)(reg_adr>>8);
+modbus_buff[3] = (char)reg_adr;
+modbus_buff[4] = (char)(reg_quant>>8);
+modbus_buff[5] = (char)reg_quant;
+
+crc_temp= CRC16_2(modbus_buff,6);
+
+modbus_buff[6]= (char)crc_temp;
+modbus_buff[7]= (char)(crc_temp>>8);
+
+for (i=0;i<8;i++)
+{
+	putchar1(modbus_buff[i]);
+}
+
+}
+
+//-----------------------------------------------
+void modbus_write_request(char addr,char func,short reg_adr, short arg)
+{
+@near char modbus_buff[20],i;
+@near short crc_temp;
+
+modbus_buff[0] = addr;
+modbus_buff[1] = func;
+modbus_buff[2] = (char)(reg_adr>>8);
+modbus_buff[3] = (char)reg_adr;
+modbus_buff[4] = (char)(arg>>8);
+modbus_buff[5] = (char)arg;
+
+crc_temp= CRC16_2(modbus_buff,6);
+
+modbus_buff[6]= (char)crc_temp;
+modbus_buff[7]= (char)(crc_temp>>8);
+
+for (i=0;i<8;i++)
+{
+	putchar1(modbus_buff[i]);
+}
+
+}
+
+
 
 //-----------------------------------------------
 void spi_init(void){
@@ -482,6 +661,7 @@ else
 		
 if(encCW||encOW||encCW_||encOW_)
 	{
+		enc_plazma++;
 	if(!ind_fad_cnt)
 		{
 		ind_fad_cnt=10;
@@ -495,40 +675,48 @@ if(encCW||encOW||encCW_||encOW_)
 				{
 				if(encCW)
 					{
-					can_transmit(0x18a,51,0,0,0,0,0,0,0);		//Время+
+					//can_transmit(0x18a,51,0,0,0,0,0,0,0);		//Время+
+					modbus_write_request(200,6,0,51);
 					}
 				if(encCW_)
 					{
-					can_transmit(0x18a,53,0,0,0,0,0,0,0);		//Время++
+					//can_transmit(0x18a,53,0,0,0,0,0,0,0);		//Время++
+					modbus_write_request(200,6,0,53);
 					}
 
 				if(encOW)
 					{
-					can_transmit(0x18a,52,0,0,0,0,0,0,0);		//Время-
+					//can_transmit(0x18a,52,0,0,0,0,0,0,0);		//Время-
+					modbus_write_request(200,6,0,52);
 					}
 
 				if(encOW_)
 					{
-					can_transmit(0x18a,54,0,0,0,0,0,0,0);		//Время--
+					//can_transmit(0x18a,54,0,0,0,0,0,0,0);		//Время--
+					modbus_write_request(200,6,0,54);
 					}
 				}
 			else
 				{
 				if(encCW)
 					{
-					can_transmit(0x18a,61,0,0,0,0,0,0,0);
+					//can_transmit(0x18a,61,0,0,0,0,0,0,0);
+					modbus_write_request(200,6,0,61);
 					}
 				if(encCW_)
 					{
-					can_transmit(0x18a,63,0,0,0,0,0,0,0);
+					//can_transmit(0x18a,63,0,0,0,0,0,0,0);
+					modbus_write_request(200,6,0,63);
 					}
 				if(encOW)
 					{
-					can_transmit(0x18a,62,0,0,0,0,0,0,0);
+					//can_transmit(0x18a,62,0,0,0,0,0,0,0);
+					modbus_write_request(200,6,0,62);
 					}
 				if(encOW_)
 					{
-					can_transmit(0x18a,64,0,0,0,0,0,0,0);
+					//can_transmit(0x18a,64,0,0,0,0,0,0,0);
+					modbus_write_request(200,6,0,64);
 					}
 				}
 			}
@@ -540,20 +728,24 @@ if(encCW||encOW||encCW_||encOW_)
 				if(encCW)
 					{
 					can_transmit(0x18a,51,0,0,0,0,0,0,0);		//Время+
+					modbus_write_request(200,6,0,51);
 					}
 				if(encCW_)
 					{
 					can_transmit(0x18a,53,0,0,0,0,0,0,0);		//Время++
+					modbus_write_request(200,6,0,53);
 					}
 
 				if(encOW)
 					{
 					can_transmit(0x18a,52,0,0,0,0,0,0,0);		//Время-
+					modbus_write_request(200,6,0,52);
 					}
 
 				if(encOW_)
 					{
 					can_transmit(0x18a,54,0,0,0,0,0,0,0);		//Время--
+					modbus_write_request(200,6,0,54);
 					}
 				}
 			else
@@ -561,18 +753,22 @@ if(encCW||encOW||encCW_||encOW_)
 				if(encCW)
 					{
 					can_transmit(0x18a,71,0,0,0,0,0,0,0);
+					modbus_write_request(200,6,0,71);
 					}
 				if(encCW_)
 					{
 					can_transmit(0x18a,73,0,0,0,0,0,0,0);
+					modbus_write_request(200,6,0,73);
 					}
 				if(encOW)
 					{
 					can_transmit(0x18a,72,0,0,0,0,0,0,0);
+					modbus_write_request(200,6,0,72);
 					}
 				if(encOW_)
 					{
 					can_transmit(0x18a,74,0,0,0,0,0,0,0);
+					modbus_write_request(200,6,0,74);
 					}
 				}
 			}
@@ -587,9 +783,38 @@ if(encCW||encOW||encCW_||encOW_)
 if(cmnd)
 	{
 	can_transmit(0x18a,90,0,0,0,0,0,0,0);
+	modbus_write_request(200,6,0,90);
 	cmnd=0;
 	}
 
+}
+
+
+//-----------------------------------------------
+void uart1_init (void)
+{
+//Порт A4 - RX
+GPIOA->DDR&=~(1<<4);
+GPIOA->CR1|=(1<<4);
+GPIOA->CR2&=~(1<<4);
+
+//Порт A5 - TX
+GPIOA->DDR|=(1<<5);
+GPIOA->CR1|=(1<<5);
+GPIOA->CR2&=~(1<<5);	
+
+//Порт A6 - DE
+GPIOA->DDR|=(1<<6);
+GPIOA->CR1|=(1<<6);
+GPIOA->CR2&=~(1<<6);
+
+
+	
+UART1->CR1&=~UART1_CR1_M;					
+UART1->CR3|= (0<<4) & UART1_CR3_STOP;  	
+UART1->BRR2= 0x02;
+UART1->BRR1= 0x41;
+UART1->CR2|= UART1_CR2_TEN | UART1_CR2_REN | UART1_CR2_RIEN/*| UART2_CR2_TIEN*/ ;	
 }
 
 //-----------------------------------------------
@@ -1009,6 +1234,9 @@ else
 		}
 //int2ind_slkuf3(ind_fad_cnt,0,4,2,0,0,0);
 	}
+	
+//int2ind_slkuf1(encApin,0,3,1,1,0,1);
+//int2ind_slkuf2(encBpin,0,3,1,1,0,1);
 
 }
 
@@ -1153,10 +1381,27 @@ if(++t0_cnt0>=12)
 		}
 	}
 
-if(GPIOB->IDR&=(1<<6))encApin=1;
+if(modbusTimeOutCnt<6)
+	{
+	modbusTimeOutCnt++;
+	if(modbusTimeOutCnt>=6)
+		{
+		bMODBUS_TIMEOUT=1;
+		
+		}
+	}
+else if (modbusTimeOutCnt>6)
+	{
+	modbusTimeOutCnt=0;
+	bMODBUS_TIMEOUT=0;
+	}
+  
+
+
+if(GPIOB->IDR&(1<<6))encApin=1;
 else encApin=0;
 
-if(GPIOB->IDR&=(1<<4))encBpin=1;
+if(GPIOB->IDR&(1<<4))encBpin=1;
 else encBpin=0;
 
 if(encApin_old==encApin)
@@ -1252,6 +1497,67 @@ GPIOE->ODR&=~(1<<6);
 
 }
 
+//***********************************************
+@far @interrupt void UART1TxInterrupt (void) 
+{
+@near char tx_status;
+
+tx_status=UART1->SR;
+
+if (tx_status & (UART1_SR_TXE))
+{
+	if (tx_counter1)
+		{
+		--tx_counter1;
+		UART1->DR=tx_buffer1[tx_rd_index1];
+		if (++tx_rd_index1 == TX_BUFFER_SIZE1) tx_rd_index1=0;
+		}
+	else 
+		{
+		tx_stat_cnt=3;
+			bOUT_FREE=1;
+			UART1->CR2&= ~UART1_CR2_TIEN;
+			
+		}
+}
+if (tx_status & (UART1_SR_TC))
+	{		
+	GPIOA->ODR&=~(1<<6);
+	tx_stat=txsOFF;
+	UART1->SR&=~UART1_SR_TC;
+	}
+}
+
+//***********************************************
+@far @interrupt void UART1RxInterrupt (void) 
+{
+@near char temp,rx_status,rx_data;
+
+rx_status=UART1->SR;
+rx_data=UART1->DR;
+
+/*if(rx_data==0x0a)
+	{
+GPIOD->DDR|=(1<<5);
+GPIOD->CR1|=(1<<5);
+GPIOD->CR2&=~(1<<5);
+GPIOD->ODR^=(1<<5);	
+	}*/
+
+if ((rx_status & (UART1_SR_RXNE))&&(tx_stat!=tsON))
+	{
+		
+	temp=rx_data;
+	rx_buffer[rx_wr_index1]=rx_data;
+	
+	rx_wr_index1++;
+
+	modbusTimeOutCnt=0;
+	}
+
+
+}
+
 
 //===============================================
 //===============================================
@@ -1323,7 +1629,9 @@ spi_init();
 		GPIOD->CR1|=(1<<7);
 		GPIOD->CR2&=~(1<<7);*/
 
+#ifdef CAN_TO_UKU
 init_CAN();
+#endif
 //adc2_init();
 
 //CAN->DGR&=0xfc;
@@ -1348,11 +1656,14 @@ TZAS=10;
 adc2_init();
 adc2_start(0);
 */
+#ifdef RS_TO_UKU
+uart1_init();
+#endif
 
 while (1)
 	{
 
-		
+#ifdef CAN_TO_UKU		
 	if(bCAN_RX)
 		{
 
@@ -1361,7 +1672,20 @@ while (1)
 
 
 		}
+#endif
+#ifdef RS_TO_UKU
+	if(bMODBUS_TIMEOUT)
+		{
+		bMODBUS_TIMEOUT=0;
 		
+		modbus_in();
+		}
+#endif
+//	if(bRX485)
+//		{
+//		rx485_in_an();
+//		}
+
 	if(b100Hz)
 		{
 		b100Hz=0;
@@ -1399,7 +1723,10 @@ while (1)
 		GPIOE->CR2|=(1<<1);		
 		
 		GPIOE->ODR^=(1<<1);
-
+#ifdef RS_TO_UKU
+		modbus_write_request(200,6,1,(tmblr_state&0x0f)+((cmnd<<4)&0xf0));
+		//modbus_transmit_request(200,4,0,7);
+#endif
 		
       	}
       	
@@ -1410,8 +1737,9 @@ while (1)
 
 //		GPIOA->ODR^=(1<<5);
 
+#ifdef CAN_TO_UKU
 		can_transmit(0x18a,45,(tmblr_state&0x0f)+((cmnd<<4)&0xf0),/**(((char*)&ust_U)+1)*/0,/**((char*)&ust_U)*/0,/**(((char*)&ust_I)+1)*/0,/**((char*)&ust_I)*/0,/**(((char*)&ust_time)+1)*/0,/**((char*)&ust_time)*/0);
-		
+#endif		
 		}
     	
 	if(b1Hz)

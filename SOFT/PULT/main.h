@@ -1,3 +1,7 @@
+
+typedef enum {txsOFF=0,tsON}tx_stat_enum;
+extern tx_stat_enum tx_stat;
+
 typedef enum {tsOFF=0,tsU=1,tsI=2} enum_tmblr_state;
 extern enum_tmblr_state tmblr_state;
 typedef enum {bsOFF,bsON} enum_but_state;

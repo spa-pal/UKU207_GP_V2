@@ -809,7 +809,7 @@ void can_reset_hndl(void)
 
 can_reset_cnt++;
 
-if((can_reset_cnt>=10)&&(lc640_read_int(EE_CAN_RESET_CNT)==0)&&(!(avar_stat&0x0001))&&(!bRESET))
+if((can_reset_cnt>=3)&&(lc640_read_int(EE_CAN_RESET_CNT)==0)&&(!(avar_stat&0x0001))&&(!bRESET))
 	{
 	lc640_write_int(EE_CAN_RESET_CNT,1);
 	bRESET=1;
@@ -821,7 +821,7 @@ if((can_reset_cnt>=300)&&(lc640_read_int(EE_CAN_RESET_CNT)==1)&&(!(avar_stat&0x0
 	bRESET=1;
 	}
 
-if((main_1Hz_cnt>=360UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
+if((main_1Hz_cnt>=20/*360UL*/)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	{
 	lc640_write_int(EE_CAN_RESET_CNT,0);
 	}
@@ -1981,10 +1981,10 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	if(work_stat!=wsPS) fiks_stat_U=0;
 
 
-	//int2lcdyx(fiks_stat_I,0,4,0);
-	//int2lcdyx(curr_off_stop_cnt,0,6,0);
-	//int2lcdyx(curr_off_start_cnt,0,9,0);
-	//int2lcdyx(modbus_plazma,0,19,0);
+	//int2lcdyx(CRC16_2(modbus_an_buffer,6),0,5,0);
+/*	int2lcdyx(lc640_read_int(EE_CAN_RESET_CNT),0,11,0);*/
+	//int2lcdyx(modbusTimeoutInMills,0,16,0);			
+	//int2lcdyx(modbus_plazma,0,19,0);	
 	}
 
 
@@ -3514,27 +3514,18 @@ if(ind==iDeb)
 	int2lcdyx(SOFT_NUM,0,4,0);
 	long2lcdyx_mmm(SOFT_DATE,0,11,0);
 
-/*	int2lcdyx(a_ind.i,0,2,0);
-	int2lcdyx(a_ind.s_i,0,6,0);
-	int2lcdyx(a_ind.s_i1,0,10,0);
-	int2lcdyx(a_ind.s_i2,0,14,0);
-	int2lcdyx(a_ind.i_s,0,16,0);
+	
+	
+	int2lcdyx(lc640_read_int(RESET_CNT),0,19,0);
+	//int2lcdyx(can_reset_cnt,1,19,0);
+	//int2lcdyx(lc640_read_int(EE_CAN_RESET_CNT),0,11,0);
+	
 
-
-
-
-	int2lcdyx(c_ind.i,1,2,0);
-	int2lcdyx(c_ind.s_i,1,6,0);
-	int2lcdyx(c_ind.s_i1,1,10,0);
-	int2lcdyx(c_ind.s_i2,1,14,0);
-	int2lcdyx(c_ind.i_s,1,16,0);*/
-
-
-	int2lcdyx(t_box,2,4,0);
-	int2lcdyx(t_ext_can,3,5,0);
+	//int2lcdyx(t_box,2,4,0);
+	//int2lcdyx(t_ext_can,3,5,0);
 	//int2lcdyx(t_ext_can_nd,3,6,0);
-	int2lcdyx(t_ext[1],2,10,0);
-	int2lcdyx(t_ext[2],3,10,0);
+	//int2lcdyx(t_ext[1],2,10,0);
+	//int2lcdyx(t_ext[2],3,10,0);
 
 	//int2lcdyx(cntrl_stat,0,19,0);
 
@@ -4715,10 +4706,12 @@ else if(ind==iDeb)
 
 else if(ind==iMn)
 	{
-	if(but==butD_)can1_init(BITRATE62_5K25MHZ);//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-     unet_drv_cnt=0;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+	//if(but==butD_)can1_init(BITRATE62_5K25MHZ);//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+     //unet_drv_cnt=0;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
  
-	
+	//if(but==butD_)tree_up(iSet,20,0,0);	
+
+	//if(but==butR_)sc16is700_out(6,0,1,2,3,4,5);
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
     //tree_up(iLan_set ,0,0,0);
 	if(main_menu_mode==mmmIT)
@@ -7342,15 +7335,18 @@ else if(ind==iSet)
 			else if(MODBUS_BAUDRATE==1920)MODBUS_BAUDRATE=3840;
 			//else if(MODBUS_BAUDRATE==3840)MODBUS_BAUDRATE=5760;
 			else if(MODBUS_BAUDRATE==3840)MODBUS_BAUDRATE=5760;
-			else if(MODBUS_BAUDRATE==5760)MODBUS_BAUDRATE=11520;
-			else MODBUS_BAUDRATE=120;
-	     	gran(&MODBUS_BAUDRATE,120,11520);
+			else if(MODBUS_BAUDRATE==5760)MODBUS_BAUDRATE=120;
+			else MODBUS_BAUDRATE=960;
+	     	gran(&MODBUS_BAUDRATE,120,5760);
 	     	lc640_write_int(EE_MODBUS_BAUDRATE,MODBUS_BAUDRATE);
+			#ifdef SC16IS740_UART
+			sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
+			#endif
 	     	}
 	     
 	     else if((but==butL)||(but==butL_))
 	     	{
-			if(MODBUS_BAUDRATE==120)MODBUS_BAUDRATE=11520;
+			if(MODBUS_BAUDRATE==120)MODBUS_BAUDRATE=5760;
 			else if(MODBUS_BAUDRATE==240)MODBUS_BAUDRATE=120;
 	     	else if(MODBUS_BAUDRATE==480)MODBUS_BAUDRATE=240;
 			else if(MODBUS_BAUDRATE==960)MODBUS_BAUDRATE=480;
@@ -7358,9 +7354,12 @@ else if(ind==iSet)
 			else if(MODBUS_BAUDRATE==3840)MODBUS_BAUDRATE=1920;
 			//else if(MODBUS_BAUDRATE==3840)MODBUS_BAUDRATE=3840;
 			else if(MODBUS_BAUDRATE==5760)MODBUS_BAUDRATE=3840;
-			else MODBUS_BAUDRATE=11520;
-	     	gran(&MODBUS_BAUDRATE,120,11520);
+			else MODBUS_BAUDRATE=960;
+	     	gran(&MODBUS_BAUDRATE,120,5760);
 	     	lc640_write_int(EE_MODBUS_BAUDRATE,MODBUS_BAUDRATE);
+			#ifdef SC16IS740_UART
+			sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
+			#endif
 	     	}
           }
 	else if(sub_ind==22)
@@ -11180,6 +11179,20 @@ b1000Hz=1;
 	if(bFF!=bFF_) hz_out++;
 	bFF_=bFF;
 
+if(modbus_timeout_cnt<modbusTimeoutInMills)
+	{
+	modbus_timeout_cnt++;
+	if(modbus_timeout_cnt>=modbusTimeoutInMills)
+		{
+		bMODBUS_TIMEOUT=1;
+		}
+	}
+else if (modbus_timeout_cnt>modbusTimeoutInMills)
+	{
+	modbus_timeout_cnt=0;
+	bMODBUS_TIMEOUT=0;
+	}
+
 
 if(++t0cnt5>=20)
      {
@@ -11247,20 +11260,8 @@ if(++t0cnt>=10)
 	}
 //LPC_GPIO0->FIOCLR|=0x00000001;
 
-if(modbus_timeout_cnt<6)
-	{
-	modbus_timeout_cnt++;
-	if(modbus_timeout_cnt>=6)
-		{
-		bMODBUS_TIMEOUT=1;
-		}
-	}
-else if (modbus_timeout_cnt>6)
-	{
-	modbus_timeout_cnt=0;
-	bMODBUS_TIMEOUT=0;
-	}
-  return;          
+
+//  return;          
 
 
 
@@ -11524,8 +11525,18 @@ sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
 #endif
 main_cnt=0;
 
+modbusTimeoutInMills=3000/MODBUS_BAUDRATE;
+if(modbusTimeoutInMills<2)modbusTimeoutInMills=2;
+
 watchdog_enable();
-	
+{
+short temp;
+temp=lc640_read_int(RESET_CNT);
+temp++;
+if(temp<0)temp=0;
+if(temp>1000)temp=0;
+lc640_write_int(RESET_CNT,temp);
+}	
 while (1)  
 	{
 	bTPS=0; 
@@ -11758,6 +11769,8 @@ while (1)
 
 		ach_off_hndl(); 	//драйвер функции выключения по амперчасам
 		curr_off_hndl();	//драйвер функции выключения по снижению тока
+
+		
 		}
 	if(b1min)
 		{

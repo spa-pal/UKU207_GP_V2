@@ -3,6 +3,7 @@
 #include <LPC17xx.H>
 #include "main.h"
 #include "modbus.h"
+#include "cmd.c"
 
 char sc16is700ByteAvailable;
 char sc16is700TxFifoLevel;
@@ -94,6 +95,9 @@ unsigned char baud_h,baud_l;
 baud_h = (char)((10000000U/16U/baudrate)>>8);
 baud_l = (char)((10000000U/16U/baudrate)); 
 
+if(baudrate==57600U)baud_l=11;
+//if(baudrate==115200U)baud_l=6;
+
 sc16is700_wr_byte(CS16IS7xx_LCR, 0x80);
 sc16is700_wr_byte(CS16IS7xx_DLL, baud_l);
 sc16is700_wr_byte(CS16IS7xx_DLH, baud_h);
@@ -133,6 +137,34 @@ void putchar_sc16is700(char out_byte)
 {
 tx_buffer_sc16is700[tx_wr_index_sc16is700]=out_byte;
 if (++tx_wr_index_sc16is700 == TX_BUFFER_SIZE_SC16IS700) tx_wr_index_sc16is700=0;
+}
+
+//-----------------------------------------------
+void sc16is700_out (char num,char data0,char data1,char data2,char data3,char data4,char data5)
+{
+char i,t=0;
+//char *ptr=&data1;
+char UOB0[16]; 
+UOB0[0]=data0;
+UOB0[1]=data1;
+UOB0[2]=data2;
+UOB0[3]=data3;
+UOB0[4]=data4;
+UOB0[5]=data5;
+
+for (i=0;i<num;i++)
+	{
+	t^=UOB0[i];
+	}    
+UOB0[num]=num;
+t^=UOB0[num];
+UOB0[num+1]=t;
+UOB0[num+2]=END;
+
+for (i=0;i<num+3;i++)
+	{
+	putchar_sc16is700(UOB0[i]);
+	}   	
 }
 
 

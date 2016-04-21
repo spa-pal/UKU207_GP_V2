@@ -7,7 +7,7 @@ extern unsigned char modbus_rx_buffer[30];	//Буфер, куда складывает принимаемые 
 extern unsigned char modbus_an_buffer[30];	//Буфер, куда они потом копируются для анализа
 extern unsigned char modbus_rx_buffer_ptr;	//Указатель на текущую позицию принимающего буфера
 extern unsigned char modbus_rx_counter;		//Количество принятых байт, используется при анализе целостности посылки и при расшифровке
-
+extern signed short modbusTimeoutInMills;
 extern short modbus_plazma;				//Отладка
 extern short modbus_plazma1;				//Отладка
 extern short modbus_plazma2;				//Отладка

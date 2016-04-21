@@ -2419,15 +2419,24 @@ else if(RELE_FUNC[1]==5)					//Напряжение не ниже
 //-----------------------------------------------
 void rele_drv(void)
 {
+#ifdef EXT_BOARD_V_1
+SET_REG(LPC_PINCON->PINSEL0,0,4*2,2);
+SET_REG(LPC_GPIO0->FIODIR,1,4,1);
+
+if(rele_stat[0]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,4,1);
+else SET_REG(LPC_GPIO0->FIOPIN,1,4,1);
+#endif
+
+#ifdef EXT_BOARD_V_2
 SET_REG(LPC_PINCON->PINSEL0,0,7*2,2);
 SET_REG(LPC_GPIO0->FIODIR,1,7,1);
 
-SET_REG(LPC_PINCON->PINSEL0,0,5*2,2);
-SET_REG(LPC_GPIO0->FIODIR,1,5,1);
-
-
 if(rele_stat[0]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,7,1);
 else SET_REG(LPC_GPIO0->FIOPIN,1,7,1);
+#endif
+
+SET_REG(LPC_PINCON->PINSEL0,0,5*2,2);
+SET_REG(LPC_GPIO0->FIODIR,1,5,1);
 
 if(rele_stat[1]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
 else SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
