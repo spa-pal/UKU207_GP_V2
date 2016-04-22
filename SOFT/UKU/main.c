@@ -29,6 +29,7 @@
 #include "modbus.h"
 #include "mcp2515.h"
 #include "sc16is7xx.h"
+#include "snmp_data_file.h" 
 
 #ifdef UKU2071x
 //#define MCP2515_CAN
@@ -238,11 +239,11 @@ signed short		bat_u_old_cnt;
 
 //***********************************************
 //Состояние источников
-BPS_STAT bps[12];
+BPS_STAT bps[16];
 
 //***********************************************
 //Состояние инверторов
-INV_STAT inv[3];
+//INV_STAT inv[3];
 char first_inv_slot;
 
 //***********************************************
@@ -666,7 +667,7 @@ void rtc_init (void)
 {
 LPC_RTC->CCR=0x11;
 }
-
+/*
 //-----------------------------------------------
 static void timer_poll () 
 {
@@ -676,7 +677,7 @@ if (SysTick->CTRL & 0x10000)
      tick = __TRUE;
      }
 }
-
+*/
 
 
 //-----------------------------------------------
@@ -1056,9 +1057,9 @@ void ind_hndl(void)
 const char* ptrs[40];
 //const char* sub_ptrs[40];
 static char sub_cnt,sub_cnt1;
-char i,sub_cnt_max;
-char ii_;
-static char ii_cnt/*,cnt_ind_bat*/;
+char /*i,*/sub_cnt_max;
+//char ii_;
+//static char ii_cnt/*,cnt_ind_bat*/;
 
 
 	   
@@ -1090,7 +1091,7 @@ if(sub_cnt1>=20)
 
 if(ind==iMn)
 	{
-	signed long temp_SL_U;
+	//signed long temp_SL_U;
 	if(work_stat==wsCAP)
 		{
 		ptrs[0]=		"   ИСПЫТАНИЕ ФАЗА ! ";
@@ -1992,7 +1993,7 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 
  else if(ind==iBps)
 	{
-	const char* ptr[8];
+	//const char* ptr[8];
 
 	if(NUMIST==1) {
 		bgnd_par(			"N   U,В  I,A  t°C   ",
@@ -3017,8 +3018,8 @@ else if(ind==iK_viz_sel)
 
 else if(ind==iK_viz_u)
 	{
-	char i;
-	i=0;
+	//char i;
+	//i=0;
 	
 	if(viz_stat!=vsON)
 		{
@@ -3053,8 +3054,8 @@ else if(ind==iK_viz_u)
 
 else if(ind==iK_viz_i)
 	{
-	char i;
-	i=0;
+	//char i;
+	//i=0;
 	
 	if(viz_stat!=vsON)
 		{
@@ -3231,90 +3232,8 @@ else if(ind==iK_bat_simple)
 	//int2lcdyx(ad7705_buff_[0],0,6,0);
 	//int2lcdyx(adc_buff_[12],0,15,0);
 	
-	}  	
-
-
-
-else if(ind==iK_inv)
-	{
+	}
 	
-	ptrs[0]=" Uинв =    @В       ";
-	ptrs[1]=" откалибруйте Uинв  ";
-	ptrs[2]="  нажатием љ или њ  "; 
-	ptrs[3]=" Iинв =     %А      ";
-	if(phase==0)
-          {
-          ptrs[4]=	"   нажмите ¤ для    ";
-          ptrs[5]=	"калибровки нуля Iинв";
-          }
-     else
-     	{
-          ptrs[4]=" откалибруйте Iинв  ";
-          ptrs[5]="  нажатием љ или њ  ";     	
-     	} 
-     	
-	ptrs[6]=" tинв =   ^°C       ";    
-	ptrs[7]=" откалибруйте tинв  ";
-	ptrs[8]="  нажатием љ или њ  ";
-	ptrs[9]=sm_exit;
-	ptrs[10]=sm_;
-	ptrs[11]=sm_;     	     	    
-	
-
-     if((sub_ind==0)||(sub_ind==1)||(sub_ind==2))index_set=0;
-	else if((sub_ind==3)||(sub_ind==4)||(sub_ind==5))index_set=3;
-	else if((sub_ind==6)||(sub_ind==7)||(sub_ind==8))index_set=6;
-	else index_set=9;
-	
-	bgnd_par("КАЛИБРОВКА ИНВЕРТ N!",ptrs[index_set],ptrs[index_set+1],ptrs[index_set+2]);
-
-	pointer_set(1);	
-	int2lcd(sub_ind1+1,'!',0);
-	int2lcd(inv[sub_ind1]._Uii,'@',1);
-	int2lcd(inv[sub_ind1]._Ii,'%',1);
-	int2lcd(inv[sub_ind1]._Ti,'^',0); 
-
-
-     if((sub_ind==0))
-		{
-//		mess_send(MESS2BPS_HNDL,PARAM_BPS_MASK_ON_OFF_AFTER_2SEC,(1<<sub_ind1),10);
-//		mess_send(MESS2BAT_HNDL,PARAM_BAT_ALL_OFF_AFTER_2SEC,0,10);
-	    mess_send(MESS2CNTRL_HNDL,PARAM_CNTRL_STAT_SET,1000,10);
-          }
-     if(sub_ind==3)
-		{
-		if(phase==0)
-			{
-//          	mess_send(MESS2BPS_HNDL,PARAM_BPS_MASK_ON_OFF_AFTER_2SEC,~(1<<sub_ind1),10);
-          	}
-      	else if(phase==1)
-			{
-//          	mess_send(MESS2BPS_HNDL,PARAM_BPS_MASK_ON_OFF_AFTER_2SEC,(1<<sub_ind1),10);
-//			mess_send(MESS2BAT_HNDL,PARAM_BAT_ALL_OFF_AFTER_2SEC,0,10);
-          	}
-          mess_send(MESS2CNTRL_HNDL,PARAM_CNTRL_STAT_SET,1000,10);
-          }
-	
-
-	
-  
-	     
-	//MSG_IND2PWM_SRC1=900;
-	//MSG_IND2PWM_SRC2=900;         
-/*int2lcdyx(sub_ind1,0,0,0);
-int2lcdyx(sub_ind,0,1,0);
-int2lcdyx(phase,0,2,0);
-int2lcdyx(MSG_IND2OUT_DIS_SRC1,0,3,0);
-int2lcdyx(MSG_IND2OUT_DIS_SRC2,0,4,0);  
-int2lcdyx(MSG_IND2OUT_EN_SRC1,0,5,0);
-int2lcdyx(MSG_IND2OUT_EN_SRC2,0,6,0); */
-
-//int2lcdyx(cntrl_stat1,0,19,0); 
-//int2lcdyx(load_U,0,5,0); 
-//int2lcdyx(cntrl_stat,0,10,0); 
-//int2lcdyx(bps[sub_ind1]._rotor,0,19,0); 
-//int2lcdyx(u_necc,0,19,0);  
-	 }
 
 else if(ind==iK_bps_sel)
 	{
@@ -4376,7 +4295,7 @@ int2lcdyx(retcntsec,0,7,0);	*/
 //-----------------------------------------------
 void sk_in_drv(void)
 {
-char i;
+//char i;
 
 if(adc_buff_[11]<2000)sk_in_drv_cnt++;
 else sk_in_drv_cnt--;
@@ -4561,8 +4480,8 @@ but_s=but_n;
 void but_an(void)
 {
 signed short temp_SS;
-signed short deep,i,cap,ptr;
-char av_head[4];
+//signed short /*deep,i,cap,*/ptr;
+//char av_head[4];
 
 
 if(!n_but)goto but_an_end;
@@ -6947,7 +6866,7 @@ else if(ind==iVz)
 		{
           if(spc_stat!=spcVZ)
           	{
-          	char temp;
+          	char temp=0;
           	//temp=vz_start(VZ_HR);
           	if(temp==22) 
           		{
@@ -11624,7 +11543,7 @@ while (1)
 
 	if(b10Hz)
 		{
-		char i;
+//		char i;
 
      timer_tick ();
      tick = __TRUE;
@@ -11719,7 +11638,7 @@ while (1)
 		modbus_buf[5]=0x01;
 		//modbus_buf[0]=33;
 		//modbus_buf[0]=33;
-		modbus_crc16=CRC16_2(modbus_buf,6);
+		modbus_crc16=CRC16_2((char*)modbus_buf,6);
 		
   		}
 

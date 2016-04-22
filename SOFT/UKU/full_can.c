@@ -8,6 +8,7 @@
 #include "eeprom_map.h"
 #include "control.h"
 #include "25lc640.h"
+#include "gran.h"
 
 // Counts number of filters (CAN message objects) used so far
 short volatile gCANFilter = 0;
@@ -598,7 +599,7 @@ can2_plazma++;
 
 if(RXBUFF[0]==45)
 	{
-	tumbler_stat=RXBUFF[1];
+	tumbler_stat=(enum_tumbler_stat)RXBUFF[1];
 	if((tumbler_stat!=tumbler_stat_old))
 		{
 		if(tumbler_stat==tsU)
@@ -1219,7 +1220,7 @@ if( ((RXBUFF[0]&0x1f)==23)&&((RXBUFF[1])==PUTTM) )
 	can_reset_cnt=0;
      }
 
-CAN_IN_AN1_end:
+//CAN_IN_AN1_end:
 bIN2=0;
 }
 
@@ -1301,7 +1302,7 @@ void CAN_ISR_Rx2( void )
 unsigned int buf;
 unsigned int *pDest;
 char temp;
-char *ptr,j;
+//char /**ptr,*/j;
 //can_cnt++;
 
 //rotor_can[0]++;
@@ -1402,7 +1403,6 @@ void can_isr_tx1 (void)
 //unsigned int *pDest;
 char temp;
 //char *ptr,j;
-
 //plazma_can2++;
 
 can_tx_cnt++;
@@ -1421,7 +1421,7 @@ if(ptr_can1_tx_wr!=ptr_can1_tx_rd)
 	}
 else bOUT_FREE=1;
 temp=LPC_CAN1->ICR;
-
+if(temp)temp=0;
 }
 
 /***************************************************************************/
@@ -1444,6 +1444,7 @@ if(ptr_can2_tx_wr!=ptr_can2_tx_rd)
 	}
 else bOUT_FREE2=1;
 temp=LPC_CAN2->ICR;
+if(temp)temp=0;
 }
 
 /**************************************************************************

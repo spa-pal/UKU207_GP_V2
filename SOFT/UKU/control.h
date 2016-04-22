@@ -137,5 +137,17 @@ void zar_superviser_drv(void);
 void zar_superviser_start(void);
 void current_stab_hndl(void);
 void volt_stab_hndl(void);
+void stop_proc(void);
+void start_GS(void);
+void start_PS(void);
+void volt_contr_hndl(void);
+void cap_time_hndl(void);
+void rele_drv(void);
+void ach_off_hndl(void);
+void curr_off_hndl(void);
+void reset_CAP(void);
+void stop_CAP(void);
+void pause_CAP(void);
+void start_CAP(void); 
 
 

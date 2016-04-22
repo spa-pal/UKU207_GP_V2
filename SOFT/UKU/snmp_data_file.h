@@ -30,18 +30,18 @@ extern signed short snmp_out_current;
 
 
 //Состояние БПСов
-extern signed short snmp_bps_number[8];
-extern signed short snmp_bps_voltage[8];
-extern signed short snmp_bps_current[8];
-extern signed short snmp_bps_temperature[8];
-extern signed short snmp_bps_stat[8];
+extern signed short snmp_bps_number[16];
+extern signed short snmp_bps_voltage[16];
+extern signed short snmp_bps_current[16];
+extern signed short snmp_bps_temperature[16];
+extern signed short snmp_bps_stat[16];
 
 //Состояние инверторов
-extern signed short snmp_inv_number[3];
-extern signed short snmp_inv_voltage[3];
-extern signed short snmp_inv_current[3];
-extern signed short snmp_inv_temperature[3];
-extern signed short snmp_inv_stat[3];
+//extern signed short snmp_inv_number[3];
+//extern signed short snmp_inv_voltage[3];
+//extern signed short snmp_inv_current[3];
+//extern signed short snmp_inv_temperature[3];
+//extern signed short snmp_inv_stat[3];
 
 //Спецфункции
 //Спецфункции
@@ -163,7 +163,8 @@ void snmp_avtoreverse_pause_time_write(int mode);
 void snmp_avtoreverse_ff_i_write(int mode);
 void snmp_avtoreverse_rew_i_write(int mode);
 void snmp_avtoreverse_ff_u_write(int mode);
-void snmp_avtoreverse_rew_u_write(int mode);	
+void snmp_avtoreverse_rew_u_write(int mode);
+void snmp_data (void);	
 
 
 

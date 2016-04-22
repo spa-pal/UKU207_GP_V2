@@ -1,3 +1,4 @@
+#include "stdint.h"
 #include "uart0.h"
 #include "LPC17XX.H" 
 #include "main.h"
@@ -6,6 +7,7 @@
 #include "eeprom_map.h"
 #include "25lc640.h"
 #include "modbus.h"
+
 
 char bRXIN0;
 char UIB0[100]={0,0,0,0,0,0,0,0,0,0};

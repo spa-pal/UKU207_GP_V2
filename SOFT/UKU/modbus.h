@@ -27,5 +27,8 @@ void modbus_hold_register_transmit(unsigned char adr,unsigned char func,unsigned
 void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
 //-----------------------------------------------
 void modbus_for_pult_registers_transmit(unsigned short reg_quantity);
+//-----------------------------------------------
+void modbus_in(void);
+
 
 

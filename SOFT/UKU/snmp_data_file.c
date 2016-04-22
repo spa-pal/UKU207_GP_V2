@@ -8,6 +8,7 @@
 #include <string.h>
 #include "25lc640.h"
 #include "common_func.h"
+#include "gran.h"
 
 char snmp_community[10];
 
@@ -64,18 +65,18 @@ signed short snmp_out_voltage;
 signed short snmp_out_current;
 
 //Состояние БПСов
-signed short snmp_bps_number[8];
-signed short snmp_bps_voltage[8];
-signed short snmp_bps_current[8];
-signed short snmp_bps_temperature[8];
-signed short snmp_bps_stat[8];
+signed short snmp_bps_number[16];
+signed short snmp_bps_voltage[16];
+signed short snmp_bps_current[16];
+signed short snmp_bps_temperature[16];
+signed short snmp_bps_stat[16];
 
 //Состояние инверторов
-signed short snmp_inv_number[3];
-signed short snmp_inv_voltage[3];
-signed short snmp_inv_current[3];
-signed short snmp_inv_temperature[3];
-signed short snmp_inv_stat[3];
+//signed short snmp_inv_number[3];
+//signed short snmp_inv_voltage[3];
+//signed short snmp_inv_current[3];
+//signed short snmp_inv_temperature[3];
+//signed short snmp_inv_stat[3];
 
 
 
@@ -165,6 +166,8 @@ U16 obj[10];
 U8 temp_ip[4];
 char snmp_trap_send_i,snmp_trap_send_ii;
 
+char temp_str[20];
+
 //-----------------------------------------------
 void snmp_data (void) 
 {
@@ -233,12 +236,23 @@ snmp_energy_current_energy=power_current;
 
 
 
+{
+char i;
 
-snmp_bps_number[0]=1;
-snmp_bps_voltage[0]=bps[0]._Uii;
-snmp_bps_current[0]=bps[0]._Ii;
-snmp_bps_temperature[0]=bps[0]._Ti;
-snmp_bps_stat[0]=bps[0]._av;												//Байт состояния БПСа.
+for(i=0;i<16;i++)
+	{
+	snmp_bps_number[i]=i+1;
+	snmp_bps_voltage[i]=bps[i]._Uii;
+	snmp_bps_current[i]=bps[i]._Ii;
+	snmp_bps_temperature[i]=bps[i]._Ti;
+	snmp_bps_stat[i]=bps[i]._av;
+	}
+}
+
+
+
+
+												//Байт состояния БПСа.
 
 /*if(St_[0]&(1<<2))snmp_bps_stat[0]=(1<<3); 							//авария по Umin
 else if(St_[0]&(1<<3))snmp_bps_stat[0]=(1<<2); 						//авария по Umax
@@ -246,12 +260,13 @@ else if(bps[0]._av&(1<<0))snmp_bps_stat[0]=(1<<1); 						//авария по Tmax
 else if(St_[0]&(1<<5))snmp_bps_stat[0]=(1<<5); 						//заблокирован
 else if((!(St_[0]&0x3c))&&(!St&0x01)&&(!OFFBP1))snmp_bps_stat[0]=1; 		//Работает
 */
-
+/*
 snmp_bps_number[1]=2;
 snmp_bps_voltage[1]=bps[1]._Uii;
 snmp_bps_current[1]=bps[1]._Ii;
 snmp_bps_temperature[1]=bps[1]._Ti;
 snmp_bps_stat[1]=bps[1]._av;
+*/
 												//Байт состояния БПСа.
 /*if(St_[1]&(1<<2))snmp_bps_stat[1]=(1<<3); 							//авария по Umin
 else if(St_[1]&(1<<3))snmp_bps_stat[1]=(1<<2); 						//авария по Umax
@@ -259,7 +274,7 @@ else if(St_[1]&(1<<4))snmp_bps_stat[1]=(1<<1); 						//авария по Tmax
 else if(St_[1]&(1<<5))snmp_bps_stat[1]=(1<<5); 						//заблокирован
 else if((!(St_[1]&0x3c))&&(!St&0x01)&&(!OFFBP2))snmp_bps_stat[1]=1; 		//Работает
 */
-
+/*
 snmp_bps_number[2]=3;
 snmp_bps_voltage[2]=bps[2]._Uii;
 snmp_bps_current[2]=bps[2]._Ii;
@@ -295,7 +310,7 @@ snmp_bps_voltage[7]=bps[7]._Uii;
 snmp_bps_current[7]=bps[7]._Ii;
 snmp_bps_temperature[7]=bps[7]._Ti;
 snmp_bps_stat[7]=bps[7]._av;
-
+*/
 
 
 snmp_U_up=U_up;  	
@@ -451,7 +466,7 @@ void snmp_restart_enabled_write(int mode)
 {
 if(mode==MIB_WRITE)
 	{
-	if(snmp_restart_enabled=1)lc640_write_int(EE_RESTART_ENABLED,reON);
+	if(snmp_restart_enabled==1)lc640_write_int(EE_RESTART_ENABLED,reON);
 	else lc640_write_int(EE_RESTART_ENABLED,reOFF);
 	}
 }
@@ -934,7 +949,7 @@ if(mode==MIB_WRITE)
 //-----------------------------------------------
 char* datatime2str(char day,char month,char year, char hour, char min, char sec)
 {
-char temp_str[20];
+
 memcpy(temp_str,"00/янв/00  00:00:00       ",20);
 
 temp_str[1]=(day%10)+0x30;

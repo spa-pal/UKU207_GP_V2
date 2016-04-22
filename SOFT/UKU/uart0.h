@@ -57,4 +57,6 @@ signed short index_offset0 (signed short index,signed short offset);
 char control_check0(signed short index);
 void uart_in0(void);
 void uart_out_adr_block (unsigned long adress,char *ptr, char len);
+uint32_t UARTInit( uint32_t PortNum, uint32_t baudrate );
+
 

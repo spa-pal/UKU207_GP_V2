@@ -7,7 +7,8 @@
 #include "avar_hndl.h"
 #include "main.h"
 #include "beep.h"
-//#include "snmp_data_file.h" 
+//#include "snmp_data_file.h"
+#include "ret.h" 
 #include <LPC17xx.h>
 
 #define KOEFPOT  105L
@@ -822,7 +823,7 @@ if((work_stat!=wsOFF)&&(CURR_OFF_EN))
 	if(curr_off_start_cnt<CUR_OFF_T_OFF)curr_off_start_cnt++;
 	else
 		{
-		signed int temp_I;
+		signed int temp_I=0;
 		if(work_stat==wsGS)
 			{
 			temp_I=(signed int)I_ug_temp;
@@ -1046,7 +1047,7 @@ void start_GS(void) {
 	
 	if((REV_IS_ON)&&(AVT_REV_IS_ON)){
 		time_proc_phase=0;
-		proc_phase=0;
+		proc_phase=ppFF;
 		REV_STAT=rsFF;	
 	}
 
@@ -1068,7 +1069,7 @@ void start_PS(void) {
 	
 	if((REV_IS_ON)&&(AVT_REV_IS_ON)){
 		time_proc_phase=0;
-		proc_phase=0;
+		proc_phase=ppFF;
 		REV_STAT=rsFF;	
 	}
 	milliAmperSecunda=0L;
@@ -1112,7 +1113,7 @@ restart_off();
 //-----------------------------------------------
 short find_U_curve(signed short in)
 {
-short ii,i,out;
+short ii,i=0,out=0;
 
 ii=0;
 
@@ -1162,7 +1163,7 @@ return out;
 //-----------------------------------------------
 short find_I_curve(signed short in)
 {
-short ii,i,out;
+short ii,i=0,out=0;
 
 ii=0;
 
@@ -1259,36 +1260,7 @@ if(ind==iK_viz_i)
 //-----------------------------------------------
 void bps_hndl(void) /*ГЦ, 10 раз в секунду*/
 {
-char ptr__,i;
-/*
-if((REV_IS_ON)&&(AVT_REV_IS_ON))
-	{
-	I_ug_temp=AVT_REV_I_NOM_FF;
-	}
-else 
-	{
-
-
-if(fiks_stat_I==2)I_ug_temp=I_ug3;
-else if(fiks_stat_I==1)I_ug_temp=I_ug2;
-else I_ug_temp=I_ug;
-}
-
-gran(&I_ug_temp,I_MIN_IPS,I_MAX_IPS);
-
-
-
-if((REV_IS_ON)&&(AVT_REV_IS_ON)) {
-	U_up_temp=AVT_REV_U_NOM_FF;
-} else {
-	if(fiks_stat_U==2)U_up_temp=U_up3;
-	else if(fiks_stat_U==1)U_up_temp=U_up2;
-	else U_up_temp=U_up;
-}
-
-gran(&U_up_temp,U_MIN,U_MAX);
-
-*/
+char /*ptr__,*/i;
 
 if((REV_IS_ON)&&(AVT_REV_IS_ON)) {
 	if(work_stat==wsGS) {
@@ -1836,7 +1808,7 @@ else if(work_stat==wsPS)
 
 else if(work_stat==wsCAP)
 	{
-	signed long temp_SL_U,temp_SL_I;
+	signed long temp_SL_U=0,temp_SL_I=0;
 
 
 
@@ -1912,39 +1884,6 @@ else
 
 //gran(&bps[0]._vol_u,10,1010);
 //gran(&bps[0]._vol_i,10,1010);
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-
-
-
-
-
-if(bps_stat==stON)bps[0]._flags_tu=0;
-else bps[0]._flags_tu=1;
-bps[0]._flags_tu=1;
-
-
-
-
-
-
-/*
-num_of_wrks_bps=0;
-for(i=0;i<NUMIST;i++)
-	{
-	if(bps[i]._state==bsWRK)num_of_wrks_bps++;
-	}*/
 
 b1Hz_sh=0;
 }

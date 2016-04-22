@@ -170,7 +170,7 @@
 #define MASK_OFFSET(shift,lengt)	(MASK(lengt)<<shift)
 
 #define GET_REG( reg, shift, lengt) 		( (reg & MASK_OFFSET(shift,lengt)) >> shift)
-#define SET_REG( reg, val, shift, lengt)  	reg = ( (reg & ~MASK_OFFSET(shift,lengt)) | (val << shift) )
+#define SET_REG( reg, val, shift, lengt)  	reg = ( (reg & ~MASK_OFFSET(shift,lengt)) | ((unsigned)val << shift) )
 //#define CHK_REG( reg, mask ) ( (reg) & (mask) == (mask) )
 
 
@@ -356,7 +356,7 @@ typedef enum {
 	iTst_pwm,iDebug,iExtCtrl,
 	iDef,iDef_3U,iDef_RSTKM,iDef_GLONASS,iDef_KONTUR,iDef_6U,iDef_220,
 	iSet_st_prl,iK_pdp,iSet_T,
-	iDeb,iJ_bat,iK_inv,iK_inv_sel,
+	iDeb,iJ_bat,iK_inv_sel,
 	iK_viz_sel,iK_viz_i,iK_viz_u,
 	iAusw,iAusw_prl,iAusw_set,
 	iK_t_ext,iK_t_3U,iK_t_ext_6U,
@@ -668,55 +668,8 @@ typedef struct
      char _adr_ee;
 	char _last_avar;
      } BPS_STAT; 
-extern BPS_STAT bps[12];
+extern BPS_STAT bps[16];
 
-//***********************************************
-//Состояние инверторов
-typedef struct
-     {
-     //enum {dSRC=3,dINV=5}_device;
-	char _av;
-	//0бит - авария по перегреву
-	//1бит - авария по завышенному Uвых
-	//2бит - авария по заниженному Uвых
-	//3бит - авария по обрыву связи	    
-     enum {isAPV,isWRK,isRDY,isBL,isAV,isOFF_AV_NET}_state;
-     char _cnt;
-     char _cnt_old;
-     char _cnt_more2;
-     char _buff[16]; 
-     //char _av_net;
-     //char _av_u_max;
-     //char _av_u_min;
-     //char _av_temper; 
-     signed _Uii; 
-     signed _Uin;
-     signed _Ii;
-     signed _Ti; 
-     char _flags_tu;
-     //char _flags_tu_old;
-     //char _is_ready;
-     //char _is_wrk;
-     //char _is_link;
-     //char _is_av;
-     signed _vol_u;
-     signed _vol_i;
-     char _is_on_cnt;
-     //int _ist_blok_host_cnt_; //блокирование источников извне(CAN или RS), если не 0 то источник заблокирован.
-     int _ist_blok_host_cnt;
-     short _blok_cnt; //блокирование источников 
-     char _flags_tm;
-	char _flags_tm_old;
-	signed short _overload_av_cnt;     
-     signed short _temp_av_cnt;
-     signed short _umax_av_cnt;
-     signed short _umin_av_cnt;
-     signed _rotor;
-     signed  short _x_; 
-     char _adr_ee;
-	char _last_avar;
-     } INV_STAT; 
-extern INV_STAT inv[3];
 extern char first_inv_slot;
 
 //***********************************************
@@ -973,7 +926,7 @@ extern short AVT_REV_I_NOM_REW;
 extern short AVT_REV_U_NOM_FF;
 extern short AVT_REV_U_NOM_REW;
 extern short time_proc_phase;
-typedef enum {ppFF,ppFF_P_REW,ppREW,ppREW_P_FF}enum_proc_phase;
+typedef enum {ppFF=0,ppFF_P_REW,ppREW,ppREW_P_FF}enum_proc_phase;
 extern enum_proc_phase proc_phase;
 
 extern signed short I_ug_temp;

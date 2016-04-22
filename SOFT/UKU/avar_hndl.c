@@ -119,7 +119,7 @@ avar_stat_old=avar_stat;
 void avar_bps_hndl(char dev, char v, char in)
 {
 char data[4];
-unsigned short event_ptr,lc640_adr,event_ptr_find,event_cnt;
+unsigned short event_ptr=0,lc640_adr=0,event_ptr_find=0,event_cnt;
 char avar_simbol;
 
 avar_simbol='T';

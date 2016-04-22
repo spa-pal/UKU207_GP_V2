@@ -1,9 +1,16 @@
-
+#include "stdint.h"
 #include "modbus.h"
 //#include "LPC17xx.H"
 #include "main.h"
-//#include "sdio.h"
+#include "stdio.h"
 #include "eeprom_map.h"
+#include "25lc640.h"
+#include "gran.h"
+#include "uart0.h"
+#include "sc16is7xx.h"
+#include "control.h"
+	
+#include <string.h>
 
 unsigned char modbus_buf[20];
 short modbus_crc16;
@@ -52,17 +59,17 @@ short crc16_incapsulated;	//встроеннная в посылку CRC
 unsigned short modbus_rx_arg0;		//встроенный в посылку первый аргумент
 unsigned short modbus_rx_arg1;		//встроенный в посылку второй аргумент
 unsigned short modbus_rx_arg2;		//встроенный в посылку третий аргумент
-unsigned short modbus_rx_arg3;		//встроенный в посылку четвертый аргумент
+//unsigned short modbus_rx_arg3;		//встроенный в посылку четвертый аргумент
 unsigned char modbus_func;			//встроенный в посылку код функции
 
 //modbus_plazma++;
 
-mem_copy(modbus_an_buffer,modbus_rx_buffer,modbus_rx_buffer_ptr);
+memcpy(modbus_an_buffer,modbus_rx_buffer,modbus_rx_buffer_ptr);
 modbus_rx_counter=modbus_rx_buffer_ptr;
 modbus_rx_buffer_ptr=0;
 bMODBUS_TIMEOUT=0;
 	
-crc16_calculated  = CRC16_2(modbus_an_buffer, modbus_rx_counter-2);
+crc16_calculated  = CRC16_2((char*)modbus_an_buffer, modbus_rx_counter-2);
 crc16_incapsulated = *((short*)&modbus_an_buffer[modbus_rx_counter-2]);
 
 modbus_plazma=modbus_rx_counter;
@@ -73,7 +80,7 @@ modbus_func=modbus_an_buffer[1];
 modbus_rx_arg0=(((unsigned short)modbus_an_buffer[2])*((unsigned short)256))+((unsigned short)modbus_an_buffer[3]);
 modbus_rx_arg1=(((unsigned short)modbus_an_buffer[4])*((unsigned short)256))+((unsigned short)modbus_an_buffer[5]);
 modbus_rx_arg2=(((unsigned short)modbus_an_buffer[6])*((unsigned short)256))+((unsigned short)modbus_an_buffer[7]);
-modbus_rx_arg3=(((unsigned short)modbus_an_buffer[8])*((unsigned short)256))+((unsigned short)modbus_an_buffer[9]);
+//modbus_rx_arg3=(((unsigned short)modbus_an_buffer[8])*((unsigned short)256))+((unsigned short)modbus_an_buffer[9]);
 
 
 if(crc16_calculated==crc16_incapsulated)
@@ -91,7 +98,7 @@ if(crc16_calculated==crc16_incapsulated)
 			if(modbus_rx_arg0==1)		//
 				{
 				modbus_for_pult_registers_transmit(7);
-				tumbler_stat=(char)modbus_rx_arg1;
+				tumbler_stat=(enum_tumbler_stat)modbus_rx_arg1;
 				if((tumbler_stat!=tumbler_stat_old))
 					{
 					if(tumbler_stat==tsU)
@@ -1013,7 +1020,7 @@ modbus_tx_buff[0]=adr;
 modbus_tx_buff[1]=func;
 modbus_tx_buff[2]=(char)(reg_quantity*2);
 
-mem_copy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-1)*2],reg_quantity*2);
+memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-1)*2],reg_quantity*2);
 
 crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
 
@@ -1060,7 +1067,7 @@ modbus_tx_buff[0]=200;
 modbus_tx_buff[1]=4;
 modbus_tx_buff[2]=(char)(reg_quantity*2);
 
-mem_copy((char*)&modbus_tx_buff[3],(char*)modbus_registers,reg_quantity*2);
+memcpy((char*)&modbus_tx_buff[3],(char*)modbus_registers,reg_quantity*2);
 
 crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
 
@@ -1151,7 +1158,7 @@ modbus_registers[4]=0x14;
 modbus_registers[5]=0x15;
 */
 
-mem_copy((char*)&modbus_tx_buff[4],(char*)&modbus_registers[(reg_adr-1)*2],2);
+memcpy((char*)&modbus_tx_buff[4],(char*)&modbus_registers[(reg_adr-1)*2],2);
 
 crc_temp=CRC16_2(modbus_tx_buff,6);
 
@@ -1276,7 +1283,7 @@ modbus_registers[4]=0x14;
 modbus_registers[5]=0x15;
 */
 
-mem_copy((char*)&modbus_tx_buff[4],(char*)&modbus_registers[(reg_adr-1)*2],2);
+memcpy((char*)&modbus_tx_buff[4],(char*)&modbus_registers[(reg_adr-1)*2],2);
 
 crc_temp=CRC16_2(modbus_tx_buff,6);
 
@@ -1400,7 +1407,7 @@ modbus_registers[5]=0x15;
 
 //if((reg_adr<17)&&(reg_quantity<10))
 	{
-	mem_copy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-1)*2],reg_quantity*2);
+	memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-1)*2],reg_quantity*2);
 	}
 crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
 

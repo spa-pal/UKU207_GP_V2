@@ -179,8 +179,8 @@ void plot(signed short x_b,signed short y_b,unsigned long data,signed short len,
 //signed short byte_offset;
 //unsigned short x_target;
 //unsigned short i;
-char num_bite;
-unsigned short /*y_begin*/y_bit_begin;
+//char num_bite;
+//unsigned short /*y_begin*/y_bit_begin;
 //unsigned short y_target,y_bit_target;
 unsigned long data1/*,data2*/;
 char data1_0,data1_1,data1_2,data1_3;
@@ -343,13 +343,13 @@ for(i=0;i<num;i++)
 	}	
 	
 {	
-signed char i;
+//signed char i;
 //char n;
-char s[10];
-char minus='+';
-char zero_on;
-char simb_num;
-
+//char s[10];
+//char minus='+';
+//char zero_on;
+//char simb_num;
+/*
 if(data<0)
 	{
 	data=-data;
@@ -360,10 +360,12 @@ for(i=0;i<10;i++)
 	{
 	s[i]=data%10;
 	data/=10;
-	}   
+	} */  
 
-zero_on=1;
-simb_num=0;
+//zero_on=1;
+//simb_num=0;
+
+//if(s[0]==0)s[0]=0;
 /*
 for (i=9;i>=0;i--)
 	{
