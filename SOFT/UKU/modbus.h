@@ -12,6 +12,7 @@ extern short modbus_plazma;				//Отладка
 extern short modbus_plazma1;				//Отладка
 extern short modbus_plazma2;				//Отладка
 extern short modbus_plazma3;				//Отладка
+extern char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt;
 
 //-----------------------------------------------
 unsigned short CRC16_2(char* buf, short len);
@@ -22,7 +23,7 @@ void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigne
 //-----------------------------------------------
 void modbus_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr);
 //-----------------------------------------------
-void modbus_hold_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr);
+//void modbus_hold_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr);
 //-----------------------------------------------
 void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
 //-----------------------------------------------

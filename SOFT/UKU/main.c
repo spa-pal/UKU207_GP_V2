@@ -585,7 +585,7 @@ signed long AMPERCHAS;	//Счетчик амперчасов
 //-----------------------------------------------
 //Данные для передачи в пульт
 short pult_time;
-short pult_time_set;
+unsigned short pult_time_set;
 short pult_u;
 short pult_u_set;
 short pult_i;
@@ -594,7 +594,7 @@ enum_work_stat pult_work_stat;
 
 //-----------------------------------------------
 //Управление от пульта
-enum_tumbler_stat tumbler_stat=tsOFF,tumbler_stat_old=tsOFF;
+enum_tumbler_stat tumbler_stat=tsI,tumbler_stat_old=tsI;
 
 
 signed short plazma_vol_u_0,plazma_vol_u_1;
@@ -1985,7 +1985,11 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	//int2lcdyx(CRC16_2(modbus_an_buffer,6),0,5,0);
 /*	int2lcdyx(lc640_read_int(EE_CAN_RESET_CNT),0,11,0);*/
 	//int2lcdyx(modbusTimeoutInMills,0,16,0);			
-	//int2lcdyx(modbus_plazma,0,19,0);	
+/*	int2lcdyx(modbus_plazma,0,19,0);
+	int2lcdyx(modbus_plazma1,0,14,0);
+	int2lcdyx(modbus_plazma2,0,9,0);
+	int2lcdyx(modbus_plazma3,0,4,0);*/	
+
 	}
 
 
@@ -11104,6 +11108,7 @@ if(modbus_timeout_cnt<modbusTimeoutInMills)
 	if(modbus_timeout_cnt>=modbusTimeoutInMills)
 		{
 		bMODBUS_TIMEOUT=1;
+		//modbus_plazma3++;
 		}
 	}
 else if (modbus_timeout_cnt>modbusTimeoutInMills)
@@ -11446,6 +11451,7 @@ main_cnt=0;
 
 modbusTimeoutInMills=3000/MODBUS_BAUDRATE;
 if(modbusTimeoutInMills<2)modbusTimeoutInMills=2;
+modbusTimeoutInMills+=2;
 
 watchdog_enable();
 {

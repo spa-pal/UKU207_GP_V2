@@ -48,7 +48,7 @@ ADC2_CSR_CH	stm8s.h	263;"	macro
 ADC2_CSR_EOC	stm8s.h	261;"	macro
 ADC2_CSR_EOCIE	stm8s.h	262;"	macro
 ADC2_CSR_RESET_VALUE	stm8s.h	247;"	macro
-ADC2_EOC_Interrupt	main.c	1480;"	function	signature:(void)
+ADC2_EOC_Interrupt	main.c	1425;"	function	signature:(void)
 ADC2_TDRH_RESET_VALUE	stm8s.h	251;"	macro
 ADC2_TDRL_RESET_VALUE	stm8s.h	250;"	macro
 ADC2_TypeDef	stm8s.h	241;"	typedef	typeref:struct:ADC2_struct
@@ -222,7 +222,7 @@ CAN_RFR_FOVR	stm8s.h	2144;"	macro
 CAN_RFR_FULL	stm8s.h	2143;"	macro
 CAN_RFR_RESET_VALUE	stm8s.h	2274;"	macro
 CAN_RFR_RFOM	stm8s.h	2145;"	macro
-CAN_RX_Interrupt	main.c	1444;"	function	signature:(void)
+CAN_RX_Interrupt	main.c	1389;"	function	signature:(void)
 CAN_RX_Interrupt	stm8_interrupt_vector.c	22;"	prototype	file:	signature:(void)
 CAN_TECR_RESET_VALUE	stm8s.h	2281;"	macro
 CAN_TECR_TEC0	stm8s.h	2202;"	macro
@@ -249,7 +249,7 @@ CAN_TSR_RQCP2	stm8s.h	2128;"	macro
 CAN_TSR_TXOK0	stm8s.h	2130;"	macro
 CAN_TSR_TXOK1	stm8s.h	2131;"	macro
 CAN_TSR_TXOK2	stm8s.h	2132;"	macro
-CAN_TX_Interrupt	main.c	1469;"	function	signature:(void)
+CAN_TX_Interrupt	main.c	1414;"	function	signature:(void)
 CAN_TX_Interrupt	stm8_interrupt_vector.c	23;"	prototype	file:	signature:(void)
 CAN_TypeDef	stm8s.h	2102;"	typedef	typeref:struct:__anon6
 CCER1	stm8s.h	479;"	member	struct:TIM1_struct
@@ -418,7 +418,7 @@ CR5	stm8s.h	1651;"	member	struct:UART1_struct
 CR5	stm8s.h	1749;"	member	struct:UART2_struct
 CR6	stm8s.h	1750;"	member	struct:UART2_struct
 CR6	stm8s.h	1858;"	member	struct:UART3_struct
-CRC16_2	main.c	141;"	function	signature:(char* buf, short len)
+CRC16_2	main.c	143;"	function	signature:(char* buf, short len)
 CRCPR	stm8s.h	1566;"	member	struct:SPI_struct
 CSR	stm8s.h	158;"	member	struct:ADC1_struct
 CSR	stm8s.h	1631;"	member	struct:SWIM_struct
@@ -837,7 +837,7 @@ RST_TypeDef	stm8s.h	1538;"	typedef	typeref:struct:RST_struct
 RST_struct	stm8s.h	1534;"	struct
 RS_TO_UKU	main.c	2;"	macro	file:
 RXCRCR	stm8s.h	1567;"	member	struct:SPI_struct
-RX_BUFFER_SIZE1	main.c	104;"	macro	file:
+RX_BUFFER_SIZE1	main.c	106;"	macro	file:
 Reserved1	stm8s.h	2071;"	member	struct:__anon6::__anon7::__anon13
 Reserved2	stm8s.h	2077;"	member	struct:__anon6::__anon7::__anon13
 RxFIFO	stm8s.h	2100;"	member	union:__anon6::__anon7	typeref:struct:__anon6::__anon7::__anon14
@@ -1196,7 +1196,7 @@ TIM4_PSCR_RESET_VALUE	stm8s.h	938;"	macro
 TIM4_SR1_RESET_VALUE	stm8s.h	935;"	macro
 TIM4_SR1_UIF	stm8s.h	957;"	macro
 TIM4_TypeDef	stm8s.h	927;"	typedef	typeref:struct:TIM4_struct
-TIM4_UPD_Interrupt	main.c	1313;"	function	signature:(void)
+TIM4_UPD_Interrupt	main.c	1258;"	function	signature:(void)
 TIM4_UPD_Interrupt	stm8_interrupt_vector.c	21;"	prototype	file:	signature:(void)
 TIM4_struct	stm8s.h	913;"	struct
 TIM5	stm8s.h	2468;"	macro
@@ -1315,15 +1315,15 @@ TRISER	stm8s.h	1206;"	member	struct:I2C_struct
 TRUE	stm8s_type.h	63;"	enumerator	enum:__anon15
 TSR	stm8s.h	1944;"	member	struct:__anon6
 TXCRCR	stm8s.h	1568;"	member	struct:SPI_struct
-TX_BUFFER_SIZE1	main.c	103;"	macro	file:
+TX_BUFFER_SIZE1	main.c	105;"	macro	file:
 TxMailbox	stm8s.h	1972;"	member	union:__anon6::__anon7	typeref:struct:__anon6::__anon7::__anon8
 U16_MAX	stm8s_type.h	90;"	macro
 U32_MAX	stm8s_type.h	93;"	macro
 U8_MAX	stm8s_type.h	87;"	macro
 UART1	stm8s.h	2442;"	macro
-UART1RxInterrupt	main.c	1532;"	function	signature:(void)
+UART1RxInterrupt	main.c	1477;"	function	signature:(void)
 UART1RxInterrupt	stm8_interrupt_vector.c	25;"	prototype	file:	signature:(void)
-UART1TxInterrupt	main.c	1501;"	function	signature:(void)
+UART1TxInterrupt	main.c	1446;"	function	signature:(void)
 UART1TxInterrupt	stm8_interrupt_vector.c	24;"	prototype	file:	signature:(void)
 UART1_BRR1_DIVM	stm8s.h	1689;"	macro
 UART1_BRR1_RESET_VALUE	stm8s.h	1662;"	macro
@@ -1526,43 +1526,43 @@ b10Hz	main.c	18;"	variable
 b1Hz	main.c	18;"	variable
 b2Hz	main.c	18;"	variable
 b5Hz	main.c	18;"	variable
-bAV	main.c	86;"	variable
+bAV	main.c	88;"	variable
 bB	main.c	18;"	variable
 bCAN_RX	main.c	45;"	variable
 bFL	main.c	37;"	variable
 bFL2	main.c	37;"	variable
 bFL5	main.c	37;"	variable
 bFL_	main.c	37;"	variable
-bMODBUS_TIMEOUT	main.c	117;"	variable
-bOUT_FREE	main.c	115;"	variable
-bREW	main.c	85;"	variable
+bMODBUS_TIMEOUT	main.c	119;"	variable
+bOUT_FREE	main.c	117;"	variable
+bREW	main.c	87;"	variable
 bT4	main.c	18;"	variable
 bTX_FREE	main.c	43;"	variable
-bcd2ind	main.c	123;"	prototype	file:	signature:(void)
-bcd2ind	main.c	382;"	function
-bcd2ind_zero	main.c	122;"	prototype	file:	signature:(void)
-bcd2ind_zero	main.c	363;"	function
-bin2bcd_int	main.c	124;"	prototype	file:	signature:(unsigned int in)
-bin2bcd_int	main.c	351;"	function	signature:(unsigned int in)
+bcd2ind	main.c	125;"	prototype	file:	signature:(void)
+bcd2ind	main.c	388;"	function
+bcd2ind_zero	main.c	124;"	prototype	file:	signature:(void)
+bcd2ind_zero	main.c	369;"	function
+bin2bcd_int	main.c	126;"	prototype	file:	signature:(unsigned int in)
+bin2bcd_int	main.c	357;"	function	signature:(unsigned int in)
 bool	stm8s_type.h	65;"	typedef	typeref:enum:__anon15
 bsOFF	main.h	7;"	enumerator	enum:__anon3
 bsON	main.h	7;"	enumerator	enum:__anon3
 but_cnt	main.c	70;"	variable
-but_drv	main.c	559;"	function	signature:(void)
+but_drv	main.c	565;"	function	signature:(void)
 but_state	main.c	71;"	variable
 can_buff_rd_ptr	main.c	42;"	variable
 can_buff_wr_ptr	main.c	41;"	variable
 can_error_cnt	main.c	46;"	variable
-can_in_an	main.c	821;"	function	signature:(void)
+can_in_an	main.c	860;"	function	signature:(void)
 can_out_buff	main.c	40;"	variable
 can_plazma	main.c	47;"	variable
-can_transmit	main.c	929;"	function	signature:(unsigned short id_st,char data0,char data1,char data2,char data3,char data4,char data5,char data6,char data7)
+can_transmit	main.c	968;"	function	signature:(unsigned short id_st,char data0,char data1,char data2,char data3,char data4,char data5,char data6,char data7)
 can_transmit	main.h	33;"	prototype	signature:(unsigned short id_st,char data0,char data1,char data2,char data3,char data4,char data5,char data6,char data7)
-can_tx_hndl	main.c	1244;"	function	signature:(void)
+can_tx_hndl	main.c	1189;"	function	signature:(void)
 ch_en	main.c	78;"	variable
 cmnd	main.c	79;"	variable
 cnt_T4	main.c	19;"	variable
-delay_ms	main.c	127;"	function	signature:(short in)
+delay_ms	main.c	129;"	function	signature:(short in)
 dig	main.c	33;"	variable
 dig1	main.c	24;"	variable
 dig1_	main.c	27;"	variable
@@ -1591,9 +1591,11 @@ encOW	main.c	56;"	variable
 encOW_	main.c	63;"	variable
 encOW_cnt1	main.c	61;"	variable
 encOW_cnt2	main.c	62;"	variable
-enc_an	main.c	599;"	function	signature:(void)
-enc_but_drv	main.c	582;"	function	signature:(void)
-enc_but_drv_cnt	main.c	82;"	variable
+enc_an	main.c	605;"	function	signature:(void)
+enc_but_drv	main.c	588;"	function	signature:(void)
+enc_but_drv_cnt	main.c	84;"	variable
+enc_cmnd	main.c	80;"	variable
+enc_cmnd_cnt	main.c	81;"	variable
 enc_plazma	main.c	57;"	variable
 enum_but_state	main.h	7;"	typedef	typeref:enum:__anon3
 enum_tmblr_state	main.h	5;"	typedef	typeref:enum:__anon2
@@ -1601,48 +1603,48 @@ enum_work_stat	main.h	30;"	typedef	typeref:enum:__anon5
 enum_wrk_mode	main.h	15;"	typedef	typeref:enum:__anon4
 halt	stm8s.h	2497;"	macro
 halt	stm8s.h	2506;"	macro
-ind_I	main.c	94;"	variable
-ind_I_set	main.c	96;"	variable
-ind_U	main.c	93;"	variable
-ind_U_set	main.c	95;"	variable
+ind_I	main.c	96;"	variable
+ind_I_set	main.c	98;"	variable
+ind_U	main.c	95;"	variable
+ind_U_set	main.c	97;"	variable
 ind_cnt	main.c	30;"	variable
 ind_fad_cnt	main.c	31;"	variable
-ind_hndl	main.c	951;"	function	signature:(void)
+ind_hndl	main.c	990;"	function	signature:(void)
 ind_out	main.c	36;"	variable
 ind_out_	main.c	35;"	variable
-init_CAN	main.c	868;"	function	signature:(void)
-int2ind_slkuf1	main.c	393;"	function	signature:(unsigned short in, char start, char len, char komma, char unzero, char fl, char fad)
-int2ind_slkuf2	main.c	438;"	function	signature:(unsigned short in, char start, char len, char komma, char unzero, char fl, char fad)
-int2ind_slkuf3	main.c	490;"	function	signature:(unsigned short in, char start, char len, char komma, char unzero, char fl, char fad)
+init_CAN	main.c	907;"	function	signature:(void)
+int2ind_slkuf1	main.c	399;"	function	signature:(unsigned short in, char start, char len, char komma, char unzero, char fl, char fad)
+int2ind_slkuf2	main.c	444;"	function	signature:(unsigned short in, char start, char len, char komma, char unzero, char fl, char fad)
+int2ind_slkuf3	main.c	496;"	function	signature:(unsigned short in, char start, char len, char komma, char unzero, char fl, char fad)
 interrupt_handler	stm8_interrupt_vector.c	9;"	member	struct:interrupt_vector	file:
 interrupt_handler_t	stm8_interrupt_vector.c	5;"	typedef	file:
 interrupt_instruction	stm8_interrupt_vector.c	8;"	member	struct:interrupt_vector	file:
 interrupt_vector	stm8_interrupt_vector.c	7;"	struct	file:
-main	main.c	1567;"	function
+main	main.c	1512;"	function
 memchr	c:\program files\cosmic\cxstm8_32k\hstm8\string.h	28;"	prototype	signature:(void *s, char c, unsigned int n)
 memcmp	c:\program files\cosmic\cxstm8_32k\hstm8\string.h	22;"	prototype	signature:(void *s1, void *s2, unsigned int n)
 memcpy	c:\program files\cosmic\cxstm8_32k\hstm8\string.h	29;"	prototype	signature:(void *s1, void *s2, unsigned int n)
 memmove	c:\program files\cosmic\cxstm8_32k\hstm8\string.h	30;"	prototype	signature:(void *s1, void *s2, unsigned int n)
 memset	c:\program files\cosmic\cxstm8_32k\hstm8\string.h	31;"	prototype	signature:(void *s, char c, unsigned int n)
 mess	main.c	48;"	variable
-modbusTimeOutCnt	main.c	116;"	variable
-modbus_in	main.c	167;"	function	signature:(void)
-modbus_plazma	main.c	118;"	variable
-modbus_transmit_request	main.c	245;"	function	signature:(char addr,char func,short reg_adr,short reg_quant)
-modbus_write_request	main.c	270;"	function	signature:(char addr,char func,short reg_adr, short arg)
+modbusTimeOutCnt	main.c	118;"	variable
+modbus_in	main.c	169;"	function	signature:(void)
+modbus_plazma	main.c	120;"	variable
+modbus_transmit_request	main.c	248;"	function	signature:(char addr,char func,short reg_adr,short reg_quant)
+modbus_write_request	main.c	273;"	function	signature:(char addr,char func,short reg_adr, short arg)
 nop	stm8s.h	2494;"	macro
 nop	stm8s.h	2503;"	macro
 out_I	main.c	74;"	variable
 out_I_	main.c	74;"	variable
 out_U	main.c	74;"	variable
-putchar1	main.c	223;"	function	signature:(char c)
+putchar1	main.c	226;"	function	signature:(char c)
 rdata	main.c	50;"	variable
 rim	stm8s.h	2492;"	macro
 rim	stm8s.h	2501;"	macro
-rx_buffer	main.c	109;"	variable
-rx_counter1	main.c	110;"	variable
-rx_rd_index1	main.c	111;"	variable
-rx_wr_index1	main.c	111;"	variable
+rx_buffer	main.c	111;"	variable
+rx_counter1	main.c	112;"	variable
+rx_rd_index1	main.c	113;"	variable
+rx_wr_index1	main.c	113;"	variable
 s16	stm8s_type.h	29;"	typedef
 s32	stm8s_type.h	28;"	typedef
 s8	stm8s_type.h	30;"	typedef
@@ -1651,8 +1653,8 @@ sc32	stm8s_type.h	32;"	typedef
 sc8	stm8s_type.h	34;"	typedef
 sim	stm8s.h	2493;"	macro
 sim	stm8s.h	2502;"	macro
-spi	main.c	341;"	function	signature:(char in)
-spi_init	main.c	297;"	function	signature:(void)
+spi	main.c	347;"	function	signature:(char in)
+spi_init	main.c	303;"	function	signature:(void)
 strcat	c:\program files\cosmic\cxstm8_32k\hstm8\string.h	14;"	prototype	signature:(char *s1, char *s2)
 strchr	c:\program files\cosmic\cxstm8_32k\hstm8\string.h	15;"	prototype	signature:(char *s, char c)
 strcmp	c:\program files\cosmic\cxstm8_32k\hstm8\string.h	23;"	prototype	signature:(char *s1, char *s2)
@@ -1672,12 +1674,12 @@ t0_cnt1	main.c	17;"	variable
 t0_cnt2	main.c	17;"	variable
 t0_cnt3	main.c	17;"	variable
 t0_cnt4	main.c	17;"	variable
-t1_init	main.c	1290;"	function	signature:(void)
-t4_init	main.c	1280;"	function	signature:(void)
-time	main.c	89;"	variable
-time_set	main.c	90;"	variable
+t1_init	main.c	1235;"	function	signature:(void)
+t4_init	main.c	1225;"	function	signature:(void)
+time	main.c	91;"	variable
+time_set	main.c	92;"	variable
 tmblr_cnt	main.c	66;"	variable
-tmblr_drv	main.c	536;"	function	signature:(void)
+tmblr_drv	main.c	542;"	function	signature:(void)
 tmblr_state	main.c	67;"	variable
 trap	stm8s.h	2495;"	macro
 trap	stm8s.h	2504;"	macro
@@ -1685,20 +1687,20 @@ tsI	main.h	5;"	enumerator	enum:__anon2
 tsOFF	main.h	5;"	enumerator	enum:__anon2
 tsON	main.h	2;"	enumerator	enum:__anon1
 tsU	main.h	5;"	enumerator	enum:__anon2
-tx_buffer1	main.c	106;"	variable
+tx_buffer1	main.c	108;"	variable
 tx_busy_cnt	main.c	44;"	variable
-tx_counter1	main.c	107;"	variable
-tx_rd_index1	main.c	108;"	variable
-tx_stat	main.c	112;"	variable
-tx_stat_cnt	main.c	113;"	variable
+tx_counter1	main.c	109;"	variable
+tx_rd_index1	main.c	110;"	variable
+tx_stat	main.c	114;"	variable
+tx_stat_cnt	main.c	115;"	variable
 tx_stat_enum	main.h	2;"	typedef	typeref:enum:__anon1
-tx_wd_cnt	main.c	114;"	variable
-tx_wr_index1	main.c	108;"	variable
+tx_wd_cnt	main.c	116;"	variable
+tx_wr_index1	main.c	110;"	variable
 txsOFF	main.h	2;"	enumerator	enum:__anon1
 u16	stm8s_type.h	45;"	typedef
 u32	stm8s_type.h	44;"	typedef
 u8	stm8s_type.h	46;"	typedef
-uart1_init	main.c	794;"	function	signature:(void)
+uart1_init	main.c	833;"	function	signature:(void)
 uc16	stm8s_type.h	49;"	typedef
 uc32	stm8s_type.h	48;"	typedef
 uc8	stm8s_type.h	50;"	typedef
@@ -1722,9 +1724,9 @@ wfi	stm8s.h	2496;"	macro
 wfi	stm8s.h	2505;"	macro
 wmI	main.h	15;"	enumerator	enum:__anon4
 wmI_	main.h	15;"	enumerator	enum:__anon4
-work_stat	main.c	99;"	variable
+work_stat	main.c	101;"	variable
 wrk_mode	main.c	77;"	variable
-wrk_state	main.c	84;"	variable
+wrk_state	main.c	86;"	variable
 wsGS	main.h	30;"	enumerator	enum:__anon5
 wsOFF	main.h	30;"	enumerator	enum:__anon5
 wsPS	main.h	30;"	enumerator	enum:__anon5

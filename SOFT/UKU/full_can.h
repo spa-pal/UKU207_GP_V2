@@ -113,7 +113,8 @@ short FullCAN_SetFilter (
   unsigned int CANID // 11-bit CAN ID
   );
 void can2_out(char dat0,char dat1,char dat2,char dat3,char dat4,char dat5,char dat6,char dat7);
-
+//-----------------------------------------------
+void can_in_an1(void);
 
 extern char bCAN1_INIT;
 

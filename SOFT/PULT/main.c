@@ -37,7 +37,7 @@ char ind_out[5];
 char bFL5,bFL2,bFL,bFL_;
 
 //КАН
-char can_out_buff[4][16];
+@near char can_out_buff[4][16];
 char can_buff_wr_ptr;
 char can_buff_rd_ptr;
 char bTX_FREE=1;
@@ -77,6 +77,8 @@ signed short ust_Iloc, ust_I_loc;
 enum_wrk_mode wrk_mode;
 char ch_en=0;
 char cmnd;
+short enc_cmnd;
+short enc_cmnd_cnt;
 
 //Кнопка энкодера
 short enc_but_drv_cnt;
@@ -100,10 +102,10 @@ enum_work_stat work_stat=wsOFF;
 
 
 //UART и MODBUS
-#define TX_BUFFER_SIZE1 50
+#define TX_BUFFER_SIZE1 64
 #define RX_BUFFER_SIZE1 50
 
-@near char tx_buffer1[TX_BUFFER_SIZE1]={0};
+char tx_buffer1[TX_BUFFER_SIZE1]={0};
 signed char tx_counter1;
 signed char tx_wr_index1,tx_rd_index1;
 @near char rx_buffer[RX_BUFFER_SIZE1]={0};
@@ -181,7 +183,7 @@ memcpy(modbus_an_buffer,rx_buffer,rx_wr_index1);
 //modbus_rx_counter=modbus_rx_buffer_ptr;
 //modbus_rx_buffer_ptr=0;
 //bMODBUS_TIMEOUT=0;
-modbus_plazma=rx_wr_index1;
+//modbus_plazma=rx_wr_index1;
 
 crc16_calculated  = CRC16_2(modbus_an_buffer, rx_wr_index1-2);
 crc16_incapsulated = modbus_an_buffer[rx_wr_index1-2]+(modbus_an_buffer[rx_wr_index1-1])*256;
@@ -199,8 +201,9 @@ rx_wr_index1=0;
 
 //if(crc16_calculated==crc16_incapsulated)
 	{
-	if(modbus_an_buffer[0]==200)	 //anee cai?in io ioeuoa
+	if(modbus_an_buffer[0]==201)	 //anee cai?in io ioeuoa
 		{
+			modbus_plazma++;
 		if((modbus_an_buffer[1]==6)||(modbus_an_buffer[1]==4))		//?oaiea i?iecaieuiiai eie-aa ?aaeno?ia
 			{
 			if(modbus_an_buffer[2]==14)
@@ -284,10 +287,13 @@ crc_temp= CRC16_2(modbus_buff,6);
 modbus_buff[6]= (char)crc_temp;
 modbus_buff[7]= (char)(crc_temp>>8);
 
+
 for (i=0;i<8;i++)
 {
 	putchar1(modbus_buff[i]);
 }
+
+
 
 }
 
@@ -676,24 +682,32 @@ if(encCW||encOW||encCW_||encOW_)
 				if(encCW)
 					{
 					//can_transmit(0x18a,51,0,0,0,0,0,0,0);		//Время+
-					modbus_write_request(200,6,0,51);
+					//modbus_write_request(200,6,0,51);
+					enc_cmnd=51;
+					enc_cmnd_cnt++;
 					}
 				if(encCW_)
 					{
 					//can_transmit(0x18a,53,0,0,0,0,0,0,0);		//Время++
-					modbus_write_request(200,6,0,53);
+					//modbus_write_request(200,6,0,53);
+					enc_cmnd=53;
+					enc_cmnd_cnt++;
 					}
 
 				if(encOW)
 					{
 					//can_transmit(0x18a,52,0,0,0,0,0,0,0);		//Время-
-					modbus_write_request(200,6,0,52);
+					//modbus_write_request(200,6,0,52);
+					enc_cmnd=52;
+					enc_cmnd_cnt++;
 					}
 
 				if(encOW_)
 					{
 					//can_transmit(0x18a,54,0,0,0,0,0,0,0);		//Время--
-					modbus_write_request(200,6,0,54);
+					//modbus_write_request(200,6,0,54);
+					enc_cmnd=54;
+					enc_cmnd_cnt++;
 					}
 				}
 			else
@@ -701,22 +715,30 @@ if(encCW||encOW||encCW_||encOW_)
 				if(encCW)
 					{
 					//can_transmit(0x18a,61,0,0,0,0,0,0,0);
-					modbus_write_request(200,6,0,61);
+					//modbus_write_request(200,6,0,61);
+					enc_cmnd=61;
+					enc_cmnd_cnt++;
 					}
 				if(encCW_)
 					{
 					//can_transmit(0x18a,63,0,0,0,0,0,0,0);
-					modbus_write_request(200,6,0,63);
+					//modbus_write_request(200,6,0,63);
+					enc_cmnd=63;
+					enc_cmnd_cnt++;
 					}
 				if(encOW)
 					{
 					//can_transmit(0x18a,62,0,0,0,0,0,0,0);
-					modbus_write_request(200,6,0,62);
+					//modbus_write_request(200,6,0,62);
+					enc_cmnd=62;
+					enc_cmnd_cnt++;
 					}
 				if(encOW_)
 					{
 					//can_transmit(0x18a,64,0,0,0,0,0,0,0);
-					modbus_write_request(200,6,0,64);
+					//modbus_write_request(200,6,0,64);
+					enc_cmnd=64;
+					enc_cmnd_cnt++;
 					}
 				}
 			}
@@ -727,48 +749,64 @@ if(encCW||encOW||encCW_||encOW_)
 				{
 				if(encCW)
 					{
-					can_transmit(0x18a,51,0,0,0,0,0,0,0);		//Время+
-					modbus_write_request(200,6,0,51);
+					//can_transmit(0x18a,51,0,0,0,0,0,0,0);		//Время+
+					//modbus_write_request(200,6,0,51);
+					enc_cmnd=51;
+					enc_cmnd_cnt++;
 					}
 				if(encCW_)
 					{
-					can_transmit(0x18a,53,0,0,0,0,0,0,0);		//Время++
-					modbus_write_request(200,6,0,53);
+					//can_transmit(0x18a,53,0,0,0,0,0,0,0);		//Время++
+					//modbus_write_request(200,6,0,53);
+					enc_cmnd=53;
+					enc_cmnd_cnt++;
 					}
 
 				if(encOW)
 					{
-					can_transmit(0x18a,52,0,0,0,0,0,0,0);		//Время-
-					modbus_write_request(200,6,0,52);
+					//can_transmit(0x18a,52,0,0,0,0,0,0,0);		//Время-
+					//modbus_write_request(200,6,0,52);
+					enc_cmnd=52;
+					enc_cmnd_cnt++;
 					}
 
 				if(encOW_)
 					{
-					can_transmit(0x18a,54,0,0,0,0,0,0,0);		//Время--
-					modbus_write_request(200,6,0,54);
+					//can_transmit(0x18a,54,0,0,0,0,0,0,0);		//Время--
+					//modbus_write_request(200,6,0,54);
+					enc_cmnd=54;
+					enc_cmnd_cnt++;
 					}
 				}
 			else
 				{
 				if(encCW)
 					{
-					can_transmit(0x18a,71,0,0,0,0,0,0,0);
-					modbus_write_request(200,6,0,71);
+					//can_transmit(0x18a,71,0,0,0,0,0,0,0);
+					//modbus_write_request(200,6,0,71);
+					enc_cmnd=71;
+					enc_cmnd_cnt++;
 					}
 				if(encCW_)
 					{
-					can_transmit(0x18a,73,0,0,0,0,0,0,0);
-					modbus_write_request(200,6,0,73);
+					//can_transmit(0x18a,73,0,0,0,0,0,0,0);
+					//modbus_write_request(200,6,0,73);
+					enc_cmnd=73;
+					enc_cmnd_cnt++;
 					}
 				if(encOW)
 					{
-					can_transmit(0x18a,72,0,0,0,0,0,0,0);
-					modbus_write_request(200,6,0,72);
+					//can_transmit(0x18a,72,0,0,0,0,0,0,0);
+					//modbus_write_request(200,6,0,72);
+					enc_cmnd=72;
+					enc_cmnd_cnt++;
 					}
 				if(encOW_)
 					{
-					can_transmit(0x18a,74,0,0,0,0,0,0,0);
-					modbus_write_request(200,6,0,74);
+					//can_transmit(0x18a,74,0,0,0,0,0,0,0);
+					//modbus_write_request(200,6,0,74);
+					enc_cmnd=74;
+					enc_cmnd_cnt++;
 					}
 				}
 			}
@@ -778,13 +816,17 @@ if(encCW||encOW||encCW_||encOW_)
 	encCW_=0;
 	encOW=0;
 	encOW_=0;
+	if(enc_cmnd_cnt>15)enc_cmnd_cnt=0;
 	}
 
 if(cmnd)
 	{
-	can_transmit(0x18a,90,0,0,0,0,0,0,0);
-	modbus_write_request(200,6,0,90);
+	//can_transmit(0x18a,90,0,0,0,0,0,0,0);
+	//modbus_write_request(200,6,0,90);
 	cmnd=0;
+	enc_cmnd=1;
+	enc_cmnd_cnt++;
+	if(enc_cmnd_cnt>15)enc_cmnd_cnt=0;
 	}
 
 }
@@ -956,102 +998,7 @@ if(ind_fad_cnt)
 	ind_fad_cnt--;
 	}
 
-/*
 
-	
-	if(wrk_mode==wmI)
-		{
-		int2ind_slkuf2(ust_Iloc,0,4,0,1,0,1);
-		//int2ind_slkuf1(ust_I_,3,4,1,1,0,0);
-		dig1[0]=0xff;
-		dig1[1]=0xff;
-		dig1[2]=0xff;
-		dig1[3]=0xff;
-		dig1_[0]=0xff;
-		dig1_[1]=0xff;
-		dig1_[2]=0xff;
-		dig1_[3]=0xff;
-
-		if((bFL5)||(wrk_state==1)||(wrk_state==2))dig2_[3]&=0xdf;
-		}
-	else 
-		{
-		//int2ind_slkuf2(ust_I,4,4,0,1,0,0);
-		dig2[0]=0xff;
-		dig2[1]=0xff;
-		dig2[2]=0xff;
-		dig2[3]=0xff;
-		dig2_[0]=0xff;
-		dig2_[1]=0xff;
-		dig2_[2]=0xff;
-		dig2_[3]=0xff;
-		int2ind_slkuf1(ust_I_loc,0,4,1,1,0,1);
-		if((bFL5)||(wrk_state==1)||(wrk_state==2))dig1_[3]&=0xdf;
-		}
-	}
-else
-	{
-	if(bREW)
-		{
-		dig1[0]=0x8c;
-		dig1[1]=0xff;
-		dig1[2]=0xff;
-		dig1[3]=0xff;
-		dig1_[0]=0x8c;
-		dig1_[1]=0xff;
-		dig1_[2]=0xff;
-		dig1_[3]=0xff;
-		}
-	else
-		{
-		int2ind_slkuf1(out_I_,0,4,1,1,0,0);
-		}
-	int2ind_slkuf2(out_I,0,4,0,1,0,0);
-	if(wrk_mode==wmI)
-		{
-		if((bFL5)||(wrk_state==1)||(wrk_state==2))dig2_[3]&=0xdf;
-		}
-	else 
-		{
-		if((bFL5)||(wrk_state==1)||(wrk_state==2))dig1_[3]&=0xdf;
-		}
-	}
-
-int2ind_slkuf3(out_U,0,4,1,1,0,0);
-
-if(wrk_state==3)
-	{
-	dig1[0]=0xc0;
-	dig1[1]=0x40;
-	dig1[2]=0xaf;
-	dig1[3]=0x86;
-	dig1_[0]=0xc0;
-	dig1_[1]=0x40;
-	dig1_[2]=0xaf;
-	dig1_[3]=0x86;
-
-	dig2[0]=0xff;
-	dig2[1]=0xff;
-	dig2[2]=0xff;
-	dig2[3]=0xff;
-	dig2_[0]=0xff;
-	dig2_[1]=0xff;
-	dig2_[2]=0xff;
-	dig2_[3]=0xff;
-
-	dig3[0]=0xff;
-	dig3[1]=0xff;
-	dig3[2]=0xff;
-	dig3[3]=0xff;
-	dig3_[0]=0xff;
-	dig3_[1]=0xff;
-	dig3_[2]=0xff;
-	dig3_[3]=0xff;
-	}
-
-//int2ind_slkuf1(1234,0,4,1,2,0,0);
-//int2ind_slkuf2(4325,0,4,1,2,0,0);
-*/
 
 //if(ind_I<=999)int2ind_slkuf1(ind_I,0,3,1,0,0,0);
 //else int2ind_slkuf1(ind_I/10,0,3,0,0,0,0);
@@ -1236,7 +1183,8 @@ else
 	}
 	
 //int2ind_slkuf1(encApin,0,3,1,1,0,1);
-//int2ind_slkuf2(encBpin,0,3,1,1,0,1);
+//int2ind_slkuf2(enc_cmnd_cnt,0,3,1,1,0,1);
+//int2ind_slkuf1(enc_cmnd,0,3,1,1,0,1);
 
 }
 
@@ -1724,8 +1672,17 @@ while (1)
 		
 		GPIOE->ODR^=(1<<1);
 #ifdef RS_TO_UKU
-		modbus_write_request(200,6,1,(tmblr_state&0x0f)+((cmnd<<4)&0xf0));
+		modbus_write_request(200,6,1,(enc_cmnd_cnt&0x0f)+(((cmnd<<4)&0xf0)+(tmblr_state&0x01)<<15)+((enc_cmnd&0x7f)<<8));
 		//modbus_transmit_request(200,4,0,7);
+		
+		//putchar1(200);
+		//putchar1(6);
+		//putchar1(0);
+		//putchar1(1);
+		//putchar1(0);
+		//putchar1(2);
+		//putchar1(0x48);
+		//putchar1(0x52);
 #endif
 		
       	}
@@ -1738,7 +1695,7 @@ while (1)
 //		GPIOA->ODR^=(1<<5);
 
 #ifdef CAN_TO_UKU
-		can_transmit(0x18a,45,(tmblr_state&0x0f)+((cmnd<<4)&0xf0),/**(((char*)&ust_U)+1)*/0,/**((char*)&ust_U)*/0,/**(((char*)&ust_I)+1)*/0,/**((char*)&ust_I)*/0,/**(((char*)&ust_time)+1)*/0,/**((char*)&ust_time)*/0);
+		can_transmit(0x18a,45,(tmblr_state&0x0f)+((cmnd<<4)&0xf0)+(enc_cmnd<<8),/**(((char*)&ust_U)+1)*/0,/**((char*)&ust_U)*/0,/**(((char*)&ust_I)+1)*/0,/**((char*)&ust_I)*/0,/**(((char*)&ust_time)+1)*/0,/**((char*)&ust_time)*/0);
 #endif		
 		}
     	

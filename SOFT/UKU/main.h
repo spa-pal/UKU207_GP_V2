@@ -882,7 +882,7 @@ extern signed long AMPERCHAS;	//Счетчик амперчасов
 //-----------------------------------------------
 //Данные для передачи в пульт
 extern short pult_time;
-extern short pult_time_set;
+extern unsigned short pult_time_set;
 extern short pult_u;
 extern short pult_u_set;
 extern short pult_i;
@@ -891,7 +891,7 @@ extern enum_work_stat pult_work_stat;
 
 //-----------------------------------------------
 //Управление от пульта
-typedef enum {tsOFF=0,tsU=1,tsI=2}enum_tumbler_stat;
+typedef enum {/*tsOFF=0,*/tsU=1,tsI=0}enum_tumbler_stat;
 extern enum_tumbler_stat tumbler_stat,tumbler_stat_old;
 
 extern signed short U_up_d;

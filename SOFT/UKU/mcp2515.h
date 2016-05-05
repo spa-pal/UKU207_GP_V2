@@ -170,4 +170,7 @@ void mcp2515_rts(char in);
 void can_mcp2515_init(void);
 //-----------------------------------------------
 void can_mcp2515_hndl(void);
+//-----------------------------------------------
+void mcp2515_transmit(char data0,char data1,char data2,char data3,char data4,char data5,char data6,char data7);
+
 

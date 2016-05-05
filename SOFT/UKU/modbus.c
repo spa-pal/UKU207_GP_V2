@@ -25,6 +25,7 @@ short modbus_plazma;				//Ξςλΰδκΰ
 short modbus_plazma1;				//Ξςλΰδκΰ
 short modbus_plazma2;				//Ξςλΰδκΰ
 short modbus_plazma3;				//Ξςλΰδκΰ
+char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt=33;
 
 //-----------------------------------------------
 unsigned short CRC16_2(char* buf, short len)
@@ -68,37 +69,46 @@ memcpy(modbus_an_buffer,modbus_rx_buffer,modbus_rx_buffer_ptr);
 modbus_rx_counter=modbus_rx_buffer_ptr;
 modbus_rx_buffer_ptr=0;
 bMODBUS_TIMEOUT=0;
+
 	
 crc16_calculated  = CRC16_2((char*)modbus_an_buffer, modbus_rx_counter-2);
 crc16_incapsulated = *((short*)&modbus_an_buffer[modbus_rx_counter-2]);
 
-modbus_plazma=modbus_rx_counter;
-modbus_plazma2=crc16_calculated;
-modbus_plazma3=crc16_incapsulated;
+//modbus_plazma=modbus_rx_counter;
+//modbus_plazma2=crc16_calculated;
+//modbus_plazma3=crc16_incapsulated;
+
+
+
 
 modbus_func=modbus_an_buffer[1];
 modbus_rx_arg0=(((unsigned short)modbus_an_buffer[2])*((unsigned short)256))+((unsigned short)modbus_an_buffer[3]);
 modbus_rx_arg1=(((unsigned short)modbus_an_buffer[4])*((unsigned short)256))+((unsigned short)modbus_an_buffer[5]);
 modbus_rx_arg2=(((unsigned short)modbus_an_buffer[6])*((unsigned short)256))+((unsigned short)modbus_an_buffer[7]);
 //modbus_rx_arg3=(((unsigned short)modbus_an_buffer[8])*((unsigned short)256))+((unsigned short)modbus_an_buffer[9]);
+modbus_cmnd=(modbus_rx_arg1>>8)&0x7f;
+modbus_cmnd_cnt=(modbus_rx_arg1)&0x0f;
 
+modbus_plazma3=modbus_cmnd;
+modbus_plazma2=modbus_cmnd_cnt;
+modbus_plazma1=modbus_self_cmnd_cnt;
 
 if(crc16_calculated==crc16_incapsulated)
 	{
-	
-
+	if(modbus_self_cmnd_cnt==33)modbus_self_cmnd_cnt=modbus_cmnd_cnt;
+	modbus_plazma=modbus_an_buffer[0];
 	if(modbus_an_buffer[0]==200)	 //ερλθ ηΰοπξρ ξς οσλόςΰ
-		{modbus_plazma++;
+		{
 		if(modbus_func==4)		//χςενθε οπξθηβξλόνξγξ κξλ-βΰ πεγθρςπξβ
 			{
 			modbus_for_pult_registers_transmit(7);
 			}
 		else if(modbus_func==6) 	//ηΰοθρό πεγθρςπΰ
 			{
-			if(modbus_rx_arg0==1)		//
+			//if(modbus_rx_arg0==1)		//
 				{
 				modbus_for_pult_registers_transmit(7);
-				tumbler_stat=(enum_tumbler_stat)modbus_rx_arg1;
+				tumbler_stat=(enum_tumbler_stat)(modbus_rx_arg1>>15);
 				if((tumbler_stat!=tumbler_stat_old))
 					{
 					if(tumbler_stat==tsU)
@@ -116,75 +126,81 @@ if(crc16_calculated==crc16_incapsulated)
 				tumbler_stat_old=tumbler_stat;
 				
 				}
-			 else if(modbus_rx_arg0==0)
+			 //else if(modbus_rx_arg0==0)
 			 	{
 				//modbus_plazma++;		
-				if(modbus_rx_arg1==61)
+				if((modbus_cmnd==61)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))
 					{
 					if(I_ug<1000)I_ug++;
 					else I_ug=((I_ug/10)+1)*10;
 					gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
 					I_ug_block_cnt=10;
 					//lc640_write_int(EE_I_UG,I_ug);
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					}
 				
-				else if(modbus_rx_arg1==62)
+				else if((modbus_cmnd==62)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))
 					{
 					if(I_ug<1000)I_ug--;
 					else I_ug=((I_ug/10)-1)*10;
 					gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
 					I_ug_block_cnt=10;
-					//lc640_write_int(EE_I_UG,I_ug);
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					}
-				else if(modbus_rx_arg1==63)
+				else if((modbus_cmnd==63)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))
 					{
 					if(I_ug<1000)I_ug=((I_ug/10)+1)*10;
 					else I_ug=((I_ug/10)+5)*10;
 					gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
 					I_ug_block_cnt=10;
-					//lc640_write_int(EE_I_UG,I_ug);
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					}
 				
-				else if(modbus_rx_arg1==64)
+				else if((modbus_cmnd==64)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))
 					{
 					if(I_ug<1000)I_ug=((I_ug/10)-1)*10;
 					else I_ug=((I_ug/10)-5)*10;
 					gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
 					I_ug_block_cnt=10;
-					//lc640_write_int(EE_I_UG,I_ug);
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					}
 				
-				else if(modbus_rx_arg1==71)
+				else if((modbus_cmnd==71)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))
 					{
 					U_up++;
 					gran(&U_up,U_MIN,U_MAX);
 					U_up_block_cnt=10;
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					}
 				
-				else if(modbus_rx_arg1==72)
+				else if((modbus_cmnd==72)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))
 					{
 					U_up--;
 					gran(&U_up,U_MIN,U_MAX);
 					U_up_block_cnt=10;
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 				
 					}
-				else if(modbus_rx_arg1==73)
+				else if((modbus_cmnd==73)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))
 					{
 					U_up=((U_up/10)+1)*10;
 					gran(&U_up,U_MIN,U_MAX);
 					U_up_block_cnt=10;
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					}
 				
-				else if(modbus_rx_arg1==74)
+				else if((modbus_cmnd==74)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))
 					{
 					U_up=((U_up/10)-1)*10;
 					gran(&U_up,U_MIN,U_MAX);
 					U_up_block_cnt=10;
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					}
 				
 				
-				else if(modbus_rx_arg1==51)	//βπεμÿ+
+				else if((modbus_cmnd==51)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))	//βπεμÿ+
 					{
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					if((main_menu_mode==mmmIT)&&(work_stat==wsOFF))
 						{
 						if(TIME_VISION_PULT)
@@ -268,8 +284,9 @@ if(crc16_calculated==crc16_incapsulated)
 							}			
 						}
 					}
-				else if(modbus_rx_arg1==53)	//βπεμÿ++
+				else if((modbus_cmnd==53)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))	//βπεμÿ++
 					{
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					if((main_menu_mode==mmmIT)&&(work_stat==wsOFF))
 						{
 						if(TIME_VISION_PULT)
@@ -354,8 +371,9 @@ if(crc16_calculated==crc16_incapsulated)
 						}
 					}
 				
-				else if(modbus_rx_arg1==52)	//βπεμÿ-
+				else if((modbus_cmnd==52)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))	//βπεμÿ-
 					{
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					if((main_menu_mode==mmmIT)&&(work_stat==wsOFF))
 						{
 						if(TIME_VISION_PULT)
@@ -441,8 +459,9 @@ if(crc16_calculated==crc16_incapsulated)
 							}			
 						}
 					}
-				else if(modbus_rx_arg1==54)	//βπεμÿ--
+				else if((modbus_cmnd==54)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))	//βπεμÿ--
 					{
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					if((main_menu_mode==mmmIT)&&(work_stat==wsOFF))
 						{
 						if(TIME_VISION_PULT)
@@ -529,8 +548,10 @@ if(crc16_calculated==crc16_incapsulated)
 					}
 				
 				
-				else if(modbus_rx_arg1==90)
+			//	else if((modbus_rx_arg1>>8)==90)
+			else if((modbus_cmnd==1)&&(modbus_cmnd_cnt!=modbus_self_cmnd_cnt))
 					{
+					modbus_self_cmnd_cnt=modbus_cmnd_cnt;
 					if(tumbler_stat==tsI)
 						{
 						if(work_stat!=wsGS)
@@ -948,7 +969,7 @@ if(crc16_calculated==crc16_incapsulated)
 			//modbus_hold_register_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0);
 
 
-			modbus_hold_register_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0);
+			modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0,1);
 
 
 			}
@@ -973,16 +994,27 @@ modbus_registers[2]=(char)(load_I/256);					//Πεγ2
 modbus_registers[3]=(char)(load_I%256);
 modbus_registers[4]=(char)((time_proc%60)/256);			//Πεγ3
 modbus_registers[5]=(char)((time_proc%60)%256);
-modbus_registers[6]=(char)((time_proc/60)/256);			//Πεγ4
-modbus_registers[7]=(char)((time_proc/60)%256);
+modbus_registers[6]=(char)(((time_proc/60)%60)/256);		//Πεγ4
+modbus_registers[7]=(char)(((time_proc/60)%60)%256);
 modbus_registers[8]=(char)((time_proc/3600)/256);			//Πεγ5
 modbus_registers[9]=(char)((time_proc/3600)%256);		 	
 modbus_registers[10]=(char)((time_proc_remain%60)/256);	//Πεγ6
 modbus_registers[11]=(char)((time_proc_remain%60)%256);
-modbus_registers[12]=(char)((time_proc_remain/60)/256);	//Πεγ7
-modbus_registers[13]=(char)((time_proc_remain/60)%256);
+modbus_registers[12]=(char)(((time_proc_remain/60)%60)/256);//Πεγ7
+modbus_registers[13]=(char)(((time_proc_remain/60)%60)%256);
 modbus_registers[14]=(char)((time_proc_remain/3600)/256);	//Πεγ8
 modbus_registers[15]=(char)((time_proc_remain/3600)%256);
+modbus_registers[16]=(char)((CAP_COUNTER)/256);			//Πεγ9
+modbus_registers[17]=(char)((CAP_COUNTER)%256);
+modbus_registers[18]=(char)((CAP_TIME_SEC)/256);			//Πεγ10
+modbus_registers[19]=(char)((CAP_TIME_SEC)%256);
+modbus_registers[20]=(char)((CAP_TIME_MIN)/256);			//Πεγ11
+modbus_registers[21]=(char)((CAP_TIME_MIN)%256);
+modbus_registers[22]=(char)((CAP_TIME_HOUR)/256);			//Πεγ12
+modbus_registers[23]=(char)((CAP_TIME_HOUR)%256);
+
+
+/*
 modbus_registers[16]=(char)(I_ug/256);					//Πεγ9
 modbus_registers[17]=(char)(I_ug%256);
 modbus_registers[18]=(char)(U_up/256);					//Πεγ10
@@ -1015,7 +1047,7 @@ if(REV_STAT==rsREW)modbus_registers[41]=1;
 modbus_registers[42]=0;								//Πεγ22
 modbus_registers[43]=0;
 if(AVT_REV_IS_ON)modbus_registers[42]=1;
-
+*/
 modbus_tx_buff[0]=adr;
 modbus_tx_buff[1]=func;
 modbus_tx_buff[2]=(char)(reg_quantity*2);
@@ -1047,6 +1079,8 @@ unsigned short crc_temp;
 char i;
 //char reg_quantity=4;
 
+//pult_time_set=0xffff;
+
 modbus_registers[0]=(char)(pult_u%256);
 modbus_registers[1]=(char)(pult_u/256);					//Πεγ1
 modbus_registers[2]=(char)(pult_i%256);
@@ -1063,7 +1097,7 @@ modbus_registers[12]=(char)(pult_i_set%256);
 modbus_registers[13]=(char)(pult_i_set/256);				//Πεγ7
 
 
-modbus_tx_buff[0]=200;
+modbus_tx_buff[0]=201;
 modbus_tx_buff[1]=4;
 modbus_tx_buff[2]=(char)(reg_quantity*2);
 
@@ -1082,6 +1116,7 @@ for (i=0;i<(5+(reg_quantity*2));i++)
 	{
 	putchar_sc16is700(modbus_tx_buff[i]);
 	}
+//modbus_plazma1++;
 }
 
 
@@ -1175,7 +1210,7 @@ for (i=0;i<8;i++)
 	}
 }
 
-
+/*
 //-----------------------------------------------
 void modbus_hold_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr)
 {
@@ -1274,14 +1309,7 @@ modbus_tx_buff[2]=(char)(reg_adr/256);
 modbus_tx_buff[3]=(char)(reg_adr%256);
 //modbus_tx_buff[4]=(char)(reg_quantity/256);
 //modbus_tx_buff[5]=(char)(reg_quantity%256);
-/*
-modbus_registers[0]=0x10;
-modbus_registers[1]=0x11;
-modbus_registers[2]=0x12;
-modbus_registers[3]=0x13;
-modbus_registers[4]=0x14;
-modbus_registers[5]=0x15;
-*/
+
 
 memcpy((char*)&modbus_tx_buff[4],(char*)&modbus_registers[(reg_adr-1)*2],2);
 
@@ -1294,121 +1322,83 @@ for (i=0;i<8;i++)
 	{
 	putchar0(modbus_tx_buff[i]);
 	}
-}
+}	*/
 
 
 //-----------------------------------------------
 void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity)
 {
-char modbus_registers[120];
-char modbus_tx_buff[100];
+char modbus_registers[110];
+char modbus_tx_buff[120];
 unsigned short crc_temp;
 char i;
 
-modbus_registers[0]=(char)(load_U/256);					//Πεγ1
-modbus_registers[1]=(char)(load_U%256);
-modbus_registers[2]=(char)(load_I/256);					//Πεγ2
-modbus_registers[3]=(char)(load_I%256);
-modbus_registers[4]=(char)((time_proc%60)/256);			//Πεγ3
-modbus_registers[5]=(char)((time_proc%60)%256);
-modbus_registers[6]=(char)((time_proc/60)/256);			//Πεγ4
-modbus_registers[7]=(char)((time_proc/60)%256);
-modbus_registers[8]=(char)((time_proc/3600)/256);			//Πεγ5
-modbus_registers[9]=(char)((time_proc/3600)%256);		 	
-modbus_registers[10]=(char)((time_proc_remain%60)/256);	//Πεγ6
-modbus_registers[11]=(char)((time_proc_remain%60)%256);
-modbus_registers[12]=(char)((time_proc_remain/60)/256);	//Πεγ7
-modbus_registers[13]=(char)((time_proc_remain/60)%256);
-modbus_registers[14]=(char)((time_proc_remain/3600)/256);	//Πεγ8
-modbus_registers[15]=(char)((time_proc_remain/3600)%256);
-modbus_registers[16]=(char)(I_ug/256);					//Πεγ9
-modbus_registers[17]=(char)(I_ug%256);
-modbus_registers[18]=(char)(U_up/256);					//Πεγ10
-modbus_registers[19]=(char)(U_up%256);
-modbus_registers[20]=(char)(U_maxg/256);				//Πεγ11
-modbus_registers[21]=(char)(U_maxg%256);
-modbus_registers[22]=(char)(I_maxp/256);				//Πεγ12
-modbus_registers[23]=(char)(I_maxp%256);
-modbus_registers[24]=(char)((T_PROC_GS%60)/256);			//Πεγ13
-modbus_registers[25]=(char)((T_PROC_GS%60)%256);
-modbus_registers[26]=(char)((T_PROC_GS/60)/256);			//Πεγ14
-modbus_registers[27]=(char)((T_PROC_GS/60)%256);
-modbus_registers[28]=(char)((T_PROC_GS/3600)/256);		//Πεγ15
-modbus_registers[29]=(char)((T_PROC_GS/3600)%256);
-modbus_registers[30]=(char)((T_PROC_PS%60)/256);			//Πεγ16
-modbus_registers[31]=(char)((T_PROC_PS%60)%256);
-modbus_registers[32]=(char)((T_PROC_PS/60)/256);			//Πεγ17
-modbus_registers[33]=(char)((T_PROC_PS/60)%256);
-modbus_registers[34]=(char)((T_PROC_PS/3600)/256);		//Πεγ18
-modbus_registers[35]=(char)((T_PROC_PS/3600)%256);
-modbus_registers[36]=0;								//Πεγ19
-modbus_registers[37]=0;
-if(work_stat==wsPS)modbus_registers[37]=1;
-modbus_registers[38]=0;								//Πεγ20
-modbus_registers[39]=0;
-if(work_stat==wsGS)modbus_registers[39]=1;
-modbus_registers[40]=0;								//Πεγ21
-modbus_registers[41]=0;
-if(REV_STAT==rsREW)modbus_registers[41]=1;
-modbus_registers[42]=0;								//Πεγ22
-modbus_registers[43]=0;
-if(AVT_REV_IS_ON)modbus_registers[43]=1;
-modbus_registers[44]=(char)((AVT_REV_TIME_FF)/256);		//Πεγ23
-modbus_registers[45]=(char)((AVT_REV_TIME_FF)%256);
-modbus_registers[46]=(char)((AVT_REV_TIME_REW)/256);		//Πεγ24
-modbus_registers[47]=(char)((AVT_REV_TIME_REW)%256);
-modbus_registers[48]=(char)((AVT_REV_TIME_PAUSE)/256);		//Πεγ25
-modbus_registers[49]=(char)((AVT_REV_TIME_PAUSE)%256);
-modbus_registers[50]=(char)((AVT_REV_I_NOM_FF)/256);		//Πεγ26
-modbus_registers[51]=(char)((AVT_REV_I_NOM_FF)%256);
-modbus_registers[52]=(char)((AVT_REV_I_NOM_REW)/256);		//Πεγ27
-modbus_registers[53]=(char)((AVT_REV_I_NOM_REW)%256);
-modbus_registers[54]=(char)((AVT_REV_U_NOM_FF)/256);		//Πεγ28
-modbus_registers[55]=(char)((AVT_REV_U_NOM_FF)%256);
-modbus_registers[56]=(char)((AVT_REV_U_NOM_REW)/256);		//Πεγ29
-modbus_registers[57]=(char)((AVT_REV_U_NOM_REW)%256);
+modbus_registers[0]=(char)(I_ug/256);					//Πεγ50
+modbus_registers[1]=(char)(I_ug%256);
+modbus_registers[2]=(char)(U_up/256);					//Πεγ51
+modbus_registers[3]=(char)(U_up%256);
+modbus_registers[4]=(char)(U_maxg/256);					//Πεγ52
+modbus_registers[5]=(char)(U_maxg%256);
+modbus_registers[6]=(char)(I_maxp/256);					//Πεγ53
+modbus_registers[7]=(char)(I_maxp%256);
+modbus_registers[8]=(char)((T_PROC_GS%60)/256);			//Πεγ54
+modbus_registers[9]=(char)((T_PROC_GS%60)%256);
+modbus_registers[10]=(char)(((T_PROC_GS/60)%60)/256);		//Πεγ55
+modbus_registers[11]=(char)(((T_PROC_GS/60)%60)%256);
+modbus_registers[12]=(char)((T_PROC_GS/3600)/256);		//Πεγ56
+modbus_registers[13]=(char)((T_PROC_GS/3600)%256);
+modbus_registers[14]=(char)((T_PROC_PS%60)/256);			//Πεγ57
+modbus_registers[15]=(char)((T_PROC_PS%60)%256);
+modbus_registers[16]=(char)(((T_PROC_PS/60)%60)/256);		//Πεγ58
+modbus_registers[17]=(char)(((T_PROC_PS/60)%60)%256);
+modbus_registers[18]=(char)((T_PROC_PS/3600)/256);		//Πεγ59
+modbus_registers[19]=(char)((T_PROC_PS/3600)%256);
+modbus_registers[20]=0;								//Πεγ60
+modbus_registers[21]=0;
+if(work_stat==wsPS)modbus_registers[21]=1;
+modbus_registers[22]=0;								//Πεγ61
+modbus_registers[23]=0;
+if(work_stat==wsGS)modbus_registers[23]=1;
+modbus_registers[24]=0;								//Πεγ62
+modbus_registers[25]=0;
+if(REV_STAT==rsREW)modbus_registers[25]=1;
+modbus_registers[26]=0;								//Πεγ63
+modbus_registers[27]=0;
+if(AVT_REV_IS_ON)modbus_registers[27]=1;
+modbus_registers[28]=(char)((AVT_REV_TIME_FF)/256);		//Πεγ64
+modbus_registers[29]=(char)((AVT_REV_TIME_FF)%256);
+modbus_registers[30]=(char)((AVT_REV_TIME_REW)/256);		//Πεγ65
+modbus_registers[31]=(char)((AVT_REV_TIME_REW)%256);
+modbus_registers[32]=(char)((AVT_REV_TIME_PAUSE)/256);		//Πεγ66
+modbus_registers[33]=(char)((AVT_REV_TIME_PAUSE)%256);
+modbus_registers[34]=(char)((AVT_REV_I_NOM_FF)/256);		//Πεγ67
+modbus_registers[35]=(char)((AVT_REV_I_NOM_FF)%256);
+modbus_registers[36]=(char)((AVT_REV_I_NOM_REW)/256);		//Πεγ68
+modbus_registers[37]=(char)((AVT_REV_I_NOM_REW)%256);
+modbus_registers[38]=(char)((AVT_REV_U_NOM_FF)/256);		//Πεγ69
+modbus_registers[39]=(char)((AVT_REV_U_NOM_FF)%256);
+modbus_registers[40]=(char)((AVT_REV_U_NOM_REW)/256);		//Πεγ70
+modbus_registers[41]=(char)((AVT_REV_U_NOM_REW)%256);
+modbus_registers[42]=(char)((CAP_ZAR_TIME)/256);			//Πεγ71
+modbus_registers[43]=(char)((CAP_ZAR_TIME)%256);
+modbus_registers[44]=(char)((CAP_PAUSE1_TIME)/256);		//Πεγ72
+modbus_registers[45]=(char)((CAP_PAUSE1_TIME)%256);
+modbus_registers[46]=(char)((CAP_RAZR_TIME)/256);			//Πεγ73
+modbus_registers[47]=(char)((CAP_RAZR_TIME)%256);
+modbus_registers[48]=(char)((CAP_PAUSE2_TIME)/256);		//Πεγ74
+modbus_registers[49]=(char)((CAP_PAUSE2_TIME)%256);
+modbus_registers[50]=(char)((CAP_MAX_VOLT)/256);			//Πεγ75
+modbus_registers[51]=(char)((CAP_MAX_VOLT)%256);
+modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			//Πεγ76
+modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
 
-modbus_registers[78]=(char)((CAP_ZAR_TIME)/256);			//Πεγ40
-modbus_registers[79]=(char)((CAP_ZAR_TIME)%256);
-modbus_registers[80]=(char)((CAP_PAUSE1_TIME)/256);			//Πεγ41
-modbus_registers[81]=(char)((CAP_PAUSE1_TIME)%256);
-modbus_registers[82]=(char)((CAP_RAZR_TIME)/256);			//Πεγ42
-modbus_registers[83]=(char)((CAP_RAZR_TIME)%256);
-modbus_registers[84]=(char)((CAP_PAUSE2_TIME)/256);		//Πεγ43
-modbus_registers[85]=(char)((CAP_PAUSE2_TIME)%256);
-modbus_registers[86]=(char)((CAP_MAX_VOLT)/256);			//Πεγ44
-modbus_registers[87]=(char)((CAP_MAX_VOLT)%256);
-modbus_registers[88]=(char)((CAP_WRK_CURR)/256);			//Πεγ45
-modbus_registers[89]=(char)((CAP_WRK_CURR)%256);
-modbus_registers[90]=(char)((CAP_COUNTER)/256);			//Πεγ46
-modbus_registers[91]=(char)((CAP_COUNTER)%256);
-modbus_registers[92]=(char)((CAP_TIME_SEC/10)/256);			//Πεγ47
-modbus_registers[93]=(char)((CAP_TIME_SEC/10)%256);
-modbus_registers[94]=(char)((CAP_TIME_MIN)/256);			//Πεγ48
-modbus_registers[95]=(char)((CAP_TIME_MIN)%256);
-modbus_registers[96]=(char)((CAP_TIME_HOUR)/256);			//Πεγ49
-modbus_registers[97]=(char)((CAP_TIME_HOUR)%256);
 
 modbus_tx_buff[0]=adr;
 modbus_tx_buff[1]=func;
-//modbus_tx_buff[2]=(char)(reg_adr/256);
-//modbus_tx_buff[3]=(char)(reg_adr%256);
-//modbus_tx_buff[4]=(char)(reg_quantity/256);
-//modbus_tx_buff[5]=(char)(reg_quantity%256);
 modbus_tx_buff[2]=(char)(reg_quantity*2);
-/*
-modbus_registers[0]=0x10;
-modbus_registers[1]=0x11;
-modbus_registers[2]=0x12;
-modbus_registers[3]=0x13;
-modbus_registers[4]=0x14;
-modbus_registers[5]=0x15;
-*/
 
-//if((reg_adr<17)&&(reg_quantity<10))
-	{
-	memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-1)*2],reg_quantity*2);
-	}
+memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-1)*2],reg_quantity*2);
+						   
 crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
 
 modbus_tx_buff[3+(reg_quantity*2)]=crc_temp%256;

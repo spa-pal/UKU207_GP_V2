@@ -213,6 +213,7 @@ if((tx_wr_index_sc16is700)&&(tx_wr_index_sc16is700!=tx_rd_index_sc16is700)) //Ес
 		sc16is700RecieveDisableFlag=1;
 		sc16is700_wr_buff(CS16IS7xx_THR, tx_wr_index_sc16is700);
 			//}
+		
 		tx_wr_index_sc16is700=0;
 		}
 	}
