@@ -90,9 +90,9 @@
 
 #define LCD_SIZE 200
 
-#define SNMP_COMMAND				8
-#define COMMAND_ANSWER					1
-#define COMMAND_PARAMETR					2
+#define COMMANDS				9
+#define SNMP_COMMAND					1
+//#define COMMAND_PARAMETR					2
 
 #define SYSPARAMS					10
 #define SYSPARAMSMAINPSU					20
@@ -140,11 +140,10 @@
 #define COMMAND_INVALID	0xeeee
 #define WRONG_PARAMETER	0xeeef
 
-#define SNMP_BPS_DISABLE		5
-#define SNMP_BPS_UNDISABLE	8
-#define SNMP_SPEC_VZ		3
-#define SNMP_SPEC_KE		4
-#define SNMP_SPEC_DISABLE	7
+#define SNMP_PS_START		3
+#define SNMP_GS_START		4
+#define SNMP_CAP_START		5
+#define SNMP_PROC_STOP		6
 
 
 #define DISPLAY_LOG					9

@@ -1985,8 +1985,8 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	//int2lcdyx(CRC16_2(modbus_an_buffer,6),0,5,0);
 /*	int2lcdyx(lc640_read_int(EE_CAN_RESET_CNT),0,11,0);*/
 	//int2lcdyx(modbusTimeoutInMills,0,16,0);			
-/*	int2lcdyx(modbus_plazma,0,19,0);
-	int2lcdyx(modbus_plazma1,0,14,0);
+/*	int2lcdyx(curr_off_start_cnt,0,19,0);
+	int2lcdyx(curr_off_stop_cnt,0,14,0);
 	int2lcdyx(modbus_plazma2,0,9,0);
 	int2lcdyx(modbus_plazma3,0,4,0);*/	
 

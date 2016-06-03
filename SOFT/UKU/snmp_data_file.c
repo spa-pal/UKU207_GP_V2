@@ -423,7 +423,7 @@ void snmp_max_time_of_process_write(int mode)
 {
 if(mode==MIB_WRITE)
 	{
-	lc640_write_int(EE_T_PROC_MAX,snmp_max_time_of_process*60);
+	lc640_write_long(EE_T_PROC_MAX,snmp_max_time_of_process*60);
 	}
 }
 
@@ -466,7 +466,7 @@ void snmp_restart_enabled_write(int mode)
 {
 if(mode==MIB_WRITE)
 	{
-	if(snmp_restart_enabled==1)lc640_write_int(EE_RESTART_ENABLED,reON);
+	if(snmp_restart_enabled!=reON)lc640_write_int(EE_RESTART_ENABLED,reON);
 	else lc640_write_int(EE_RESTART_ENABLED,reOFF);
 	}
 }
@@ -485,7 +485,7 @@ void snmp_modbus_baudrate_write(int mode)
 {
 if(mode==MIB_WRITE)
 	{
-	if((snmp_modbus_adress>=1200)&&(snmp_modbus_adress<=57600))lc640_write_int(EE_MODBUS_BAUDRATE,(signed short)snmp_modbus_baudrate/10);
+	if((snmp_modbus_baudrate>=1200)&&(snmp_modbus_baudrate<=57600))lc640_write_int(EE_MODBUS_BAUDRATE,(signed short)(snmp_modbus_baudrate/10));
 	}
 }
 
@@ -532,15 +532,25 @@ void snmp_time_p_write(int mode)
 {
 if(mode==MIB_WRITE)
 	{
-	if(snmp_time_p<=0)
+	if((snmp_time_p<30)||(snmp_time_p>T_PROC_MAX))
 		{
-		lc640_write_int(EE_T_PROC_PS_MODE,1);
-		lc640_write_int(EE_T_PROC_PS,0);
-		}
-	else 
-		{
-		if(snmp_time_p>T_PROC_MAX)snmp_time_p=T_PROC_MAX;
+		if(snmp_time_p<30)snmp_time_p=29;
+		else if(snmp_time_p>T_PROC_MAX)snmp_time_p=T_PROC_MAX+1;
 		lc640_write_int(EE_T_PROC_PS,snmp_time_p);
+		if(T_PROC_PS_MODE!=1)
+			{
+			T_PROC_PS_MODE=1;	
+			lc640_write_int(EE_T_PROC_PS_MODE,T_PROC_PS_MODE);
+			}
+		}
+	else if((snmp_time_p>=30)&&(snmp_time_p<=T_PROC_MAX))
+		{
+		lc640_write_int(EE_T_PROC_PS,snmp_time_p);
+		if(T_PROC_PS_MODE!=0)
+			{
+			T_PROC_PS_MODE=0;	
+			lc640_write_int(EE_T_PROC_PS_MODE,T_PROC_PS_MODE);
+			}
 		}
 	}
 }
@@ -549,15 +559,25 @@ void snmp_time_g_write(int mode)
 {
 if(mode==MIB_WRITE)
 	{
-	if(snmp_time_g<=0)
+	if((snmp_time_g<30)||(snmp_time_g>T_PROC_MAX))
 		{
-		lc640_write_int(EE_T_PROC_GS_MODE,1);
-		lc640_write_int(EE_T_PROC_GS,0);
-		}
-	else 
-		{
-		if(snmp_time_g>T_PROC_MAX)snmp_time_g=T_PROC_MAX;
+		if(snmp_time_g<30)snmp_time_g=29;
+		else if(snmp_time_g>T_PROC_MAX)snmp_time_g=T_PROC_MAX+1;
 		lc640_write_int(EE_T_PROC_GS,snmp_time_g);
+		if(T_PROC_GS_MODE!=1)
+			{
+			T_PROC_GS_MODE=1;	
+			lc640_write_int(EE_T_PROC_GS_MODE,T_PROC_GS_MODE);
+			}
+		}
+	else if((snmp_time_g>=30)&&(snmp_time_g<=T_PROC_MAX))
+		{
+		lc640_write_int(EE_T_PROC_GS,snmp_time_g);
+		if(T_PROC_GS_MODE!=0)
+			{
+			T_PROC_GS_MODE=0;	
+			lc640_write_int(EE_T_PROC_GS_MODE,T_PROC_GS_MODE);
+			}
 		}
 	}
 }
@@ -796,108 +816,40 @@ if(mode==MIB_WRITE)
 
 	switch (snmp_command)
 		{
-		case SNMP_BPS_DISABLE:
+		case SNMP_PS_START:
 			{
 			snmp_command=COMMAND_OK;
 
-		/*	switch (snmp_command_parametr)
-				{
-			
-				case 1: 
-				{
-				St_[0]|=0x20;
-				St_[1]&=0xdf;
-				St&=0xfb;
-				cnt_src[1]=10;
-				snmp_plazma++;
-				snmp_plazma++;
-				break;
-				}
-			
-				case 2:
-				{
-				St_[1]|=0x20;
-				St_[0]&=0xdf;
-				St&=0xfb;
-				cnt_src[0]=10;	
-				snmp_plazma++;
-				break;
-				}*/	
-			
-				//break;
-			//	}
-			if(snmp_command_parametr==1) 
-				{
-			//	St_[0]|=0x20;
-			//	St_[1]&=0xdf;
-			//	St&=0xfb;
-		//		cnt_src[1]=10;
-		//		snmp_plazma++;
-		//		snmp_plazma++;
-				}
-			
-			else if(snmp_command_parametr==2)
-				{
-			//	St_[1]|=0x20;
-			//	St_[0]&=0xdf;
-			//	St&=0xfb;
-		//		cnt_src[0]=10;	
-		//		snmp_plazma++;
-				}	
+			start_PS();
 			
 			break;
 			}
 
-		case SNMP_BPS_UNDISABLE:
+		case SNMP_GS_START:
 			{
 			snmp_command=COMMAND_OK;
-		//	St_[0]&=0xdf;
-		//	St_[1]&=0xdf;
+ 			
+			start_GS();
+
 			break;
 			}
 
-		case SNMP_SPEC_VZ:
+		case SNMP_CAP_START:
 			{
-			if((snmp_command_parametr>=1)&&(snmp_command_parametr<=24))
-				{
-			//	if(!(St&0x03)&&(NUMBAT))
-					{
-					snmp_command=COMMAND_OK;
-		//			spc_stat=spc_VZ;
-		//			cnt_vz_sec_=3600UL*snmp_command_parametr;
-					}
-			//	else
- 					{
-					snmp_command=COMAND_FAIL;	
- 					}
-				}
-			else 
-				{
-				snmp_command=WRONG_PARAMETER;
-				}
-			break;
-			}
-
-		case SNMP_SPEC_KE:
-			{
-	  	//	if(!(St&0x02)&&(NUMBAT))
-				{
-				//spc_stat=spc_KE;
-			//zar_cnt_ee_ke=0;
-			//	zar_cnt=0L;
-				snmp_command=COMMAND_OK;
-				}
-		//	else
-				{
-				snmp_command=COMAND_FAIL;	
-				}
-			break;
-			}
-
-		case SNMP_SPEC_DISABLE:
-			{
-		//	spc_stat=spc_OFF;
 			snmp_command=COMMAND_OK;
+		 	
+			start_CAP();
+
+			break;
+			}
+
+
+		case SNMP_PROC_STOP:
+			{
+			snmp_command=COMMAND_OK;
+			
+			stop_CAP();
+			stop_proc();
 			break;
 			}
 

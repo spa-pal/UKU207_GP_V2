@@ -882,7 +882,7 @@ if(work_stat==wsGS)
 		{
 		work_stat=wsOFF;
 		restart_off();
-		tree_up(iProcIsComplete,2,0,0);
+		tree_up(iProcIsComplete,0,0,0);
 		ret(0);
 		}
 	if((REV_IS_ON)&&(AVT_REV_IS_ON)){
@@ -934,7 +934,7 @@ if(work_stat==wsPS)
 		{
 		work_stat=wsOFF;
 		restart_off();
-		tree_up(iProcIsComplete,2,0,0);
+		tree_up(iProcIsComplete,0,0,0);
 		ret(0);
 		}
 	if((REV_IS_ON)&&(AVT_REV_IS_ON)){

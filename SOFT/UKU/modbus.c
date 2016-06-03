@@ -59,7 +59,7 @@ short crc16_calculated;		//вычисляемая из принятых данных CRC
 short crc16_incapsulated;	//встроеннная в посылку CRC
 unsigned short modbus_rx_arg0;		//встроенный в посылку первый аргумент
 unsigned short modbus_rx_arg1;		//встроенный в посылку второй аргумент
-unsigned short modbus_rx_arg2;		//встроенный в посылку третий аргумент
+//unsigned short modbus_rx_arg2;		//встроенный в посылку третий аргумент
 //unsigned short modbus_rx_arg3;		//встроенный в посылку четвертый аргумент
 unsigned char modbus_func;			//встроенный в посылку код функции
 
@@ -84,7 +84,7 @@ crc16_incapsulated = *((short*)&modbus_an_buffer[modbus_rx_counter-2]);
 modbus_func=modbus_an_buffer[1];
 modbus_rx_arg0=(((unsigned short)modbus_an_buffer[2])*((unsigned short)256))+((unsigned short)modbus_an_buffer[3]);
 modbus_rx_arg1=(((unsigned short)modbus_an_buffer[4])*((unsigned short)256))+((unsigned short)modbus_an_buffer[5]);
-modbus_rx_arg2=(((unsigned short)modbus_an_buffer[6])*((unsigned short)256))+((unsigned short)modbus_an_buffer[7]);
+//modbus_rx_arg2=(((unsigned short)modbus_an_buffer[6])*((unsigned short)256))+((unsigned short)modbus_an_buffer[7]);
 //modbus_rx_arg3=(((unsigned short)modbus_an_buffer[8])*((unsigned short)256))+((unsigned short)modbus_an_buffer[9]);
 modbus_cmnd=(modbus_rx_arg1>>8)&0x7f;
 modbus_cmnd_cnt=(modbus_rx_arg1)&0x0f;
@@ -594,7 +594,7 @@ if(crc16_calculated==crc16_incapsulated)
 		{
 		if(modbus_func==3)		//чтение произвольного кол-ва регистров
 			{
-			modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0,modbus_rx_arg1);
+			if((modbus_rx_arg0>=50)&&(modbus_rx_arg0<80)) modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0,modbus_rx_arg1);
 			}
 		else if(modbus_func==4)		//чтение произвольного кол-ва регистров	входов
 			{
@@ -603,26 +603,84 @@ if(crc16_calculated==crc16_incapsulated)
 
 		else if(modbus_func==6) 	//запись регистра
 			{
-			if(modbus_rx_arg0==18)		//Установка времени для ист.напр.часы
-				{
-				signed long sec,min,hour;
-				sec=T_PROC_PS%60L;
-				min=T_PROC_PS/60L;
-				hour=2;//(signed long)modbus_rx_arg1;
-				T_PROC_PS=(hour*3600L)+(min*60L)+sec;
-				lc640_write_long(EE_T_PROC_PS,T_PROC_PS);
-				}
-			if(modbus_rx_arg0==9)		//ток стабилизации для режима стабилизации тока
+			if(modbus_rx_arg0==50)		//ток стабилизации для режима стабилизации тока
 				{
 				I_ug=modbus_rx_arg1;
 				lc640_write_int(EE_I_UG,I_ug);
 				}
-			if(modbus_rx_arg0==10)		//напряжение стабилизации для режима стабилизации напряжения
+			if(modbus_rx_arg0==51)		//напряжение стабилизации для режима стабилизации напряжения
 				{
 				U_up=modbus_rx_arg1;
 				lc640_write_int(EE_U_UP,U_up);
 				}
-			if(modbus_rx_arg0==19)		//вкл/выкл источника напр.
+			if(modbus_rx_arg0==52)		//максимапльное напряжение для режима стабилизации тока
+				{
+				U_maxg=modbus_rx_arg1;
+				lc640_write_int(EE_U_MAX_G,U_maxg);
+				}
+			if(modbus_rx_arg0==53)		//максимальный ток для режима стабилизации напряжения
+				{
+				I_maxp=modbus_rx_arg1;
+				lc640_write_int(EE_I_MAX_P,I_maxp);
+				}								
+			if(modbus_rx_arg0==54)		//Установка времени для ист.тока.секунды
+				{
+				signed long sec,min,hour;
+				sec=(signed long)modbus_rx_arg1;
+				min=(T_PROC_GS/60L)%60L;
+				hour=T_PROC_GS/3600L;
+				T_PROC_GS=(hour*3600L)+(min*60L)+sec;
+				lc640_write_long(EE_T_PROC_GS,T_PROC_GS);
+				}
+			if(modbus_rx_arg0==55)		//Установка времени для ист.тока.минуты
+				{
+				signed long sec,min,hour;
+				sec=T_PROC_GS%60L;
+				min=(signed long)modbus_rx_arg1;
+				hour=T_PROC_GS/3600L;
+				T_PROC_GS=(hour*3600L)+(min*60L)+sec;
+				lc640_write_long(EE_T_PROC_GS,T_PROC_GS);
+				}
+			if(modbus_rx_arg0==56)		//Установка времени для ист.тока.часы
+				{
+				signed long sec,min,hour;
+				sec=T_PROC_GS%60L;
+				min=(T_PROC_GS/60L)%60L;
+				hour=(signed long)modbus_rx_arg1;
+				T_PROC_GS=(hour*3600L)+(min*60L)+sec;
+				lc640_write_long(EE_T_PROC_GS,T_PROC_GS);
+				}
+			if(modbus_rx_arg0==57)		//Установка времени для ист.напр.секунды
+				{
+				signed long sec,min,hour;
+				sec=(signed long)modbus_rx_arg1;
+				min=(T_PROC_PS/60L)%60L;
+				hour=T_PROC_PS/3600L;
+				T_PROC_PS=(hour*3600L)+(min*60L)+sec;
+				lc640_write_long(EE_T_PROC_PS,T_PROC_PS);
+				}
+
+			if(modbus_rx_arg0==58)		//Установка времени для ист.напр.минуты
+				{
+				signed long sec,min,hour;
+				sec=T_PROC_PS%60L;
+				min=(signed long)modbus_rx_arg1;
+				hour=T_PROC_PS/3600L;
+				T_PROC_PS=(hour*3600L)+(min*60L)+sec;
+				lc640_write_long(EE_T_PROC_PS,T_PROC_PS);
+				}
+
+			if(modbus_rx_arg0==59)		//Установка времени для ист.напр.часы
+				{
+				signed long sec,min,hour;
+				sec=T_PROC_PS%60L;
+				min=(T_PROC_PS/60L)%60L;
+				hour=(signed long)modbus_rx_arg1;
+				T_PROC_PS=(hour*3600L)+(min*60L)+sec;
+				lc640_write_long(EE_T_PROC_PS,T_PROC_PS);
+				}
+
+			if(modbus_rx_arg0==60)		//вкл/выкл источника напр.
 				{
 				if(modbus_rx_arg1==1)
 					{
@@ -644,7 +702,7 @@ if(crc16_calculated==crc16_incapsulated)
 						}
 					}
 				}
-			if(modbus_rx_arg0==20)		//вкл/выкл источника тока
+			if(modbus_rx_arg0==61)		//вкл/выкл источника тока
 				{
 				if(modbus_rx_arg1==1)
 					{
@@ -665,9 +723,9 @@ if(crc16_calculated==crc16_incapsulated)
 						}
 					}
 				}
-			if(modbus_rx_arg0==21)		//переключение реле реверса
+
+			if(modbus_rx_arg0==62)		//переключение реле реверса
 				{
-				//if(modbus_rx_arg1==1)
 					{
 					if(work_stat==wsOFF)
 						{
@@ -676,9 +734,8 @@ if(crc16_calculated==crc16_incapsulated)
 						}
 					}
 				}
-			if(modbus_rx_arg0==22)		//включение-выключение автореверса
+			if(modbus_rx_arg0==63)		//включение-выключение автореверса
 				{
-				//if(modbus_rx_arg1==1)
 					{
 					if((work_stat==wsOFF)&&(REV_IS_ON))
 						{
@@ -688,7 +745,7 @@ if(crc16_calculated==crc16_incapsulated)
 						}
 					}
 				}
-			if(modbus_rx_arg0==23)		//Автореверс, время работы прямое, сек
+			if(modbus_rx_arg0==64)		//Автореверс, время работы прямое, сек
 				{
 				if(work_stat==wsOFF)
 					{
@@ -697,7 +754,7 @@ if(crc16_calculated==crc16_incapsulated)
 					lc640_write_int(EE_AVT_REV_TIME_FF,AVT_REV_TIME_FF);	
 					}
 				}
-			if(modbus_rx_arg0==24)		//Автореверс, время работы обратное, сек
+			if(modbus_rx_arg0==65)		//Автореверс, время работы обратное, сек
 				{
 				if(work_stat==wsOFF)
 					{
@@ -706,7 +763,7 @@ if(crc16_calculated==crc16_incapsulated)
 					lc640_write_int(EE_AVT_REV_TIME_REW,AVT_REV_TIME_REW);	
 					}
 				}
-			if(modbus_rx_arg0==25)		//Автореверс, время паузы при переключении, сек
+			if(modbus_rx_arg0==66)		//Автореверс, время паузы при переключении, сек
 				{
 				if(work_stat==wsOFF)
 					{
@@ -716,7 +773,7 @@ if(crc16_calculated==crc16_incapsulated)
 					}
 				}
 
-			if(modbus_rx_arg0==26)		//Автореверс, ток стабилизации прямой, 0.1А
+			if(modbus_rx_arg0==67)		//Автореверс, ток стабилизации прямой, 0.1А
 				{
 				if(work_stat==wsOFF)
 					{
@@ -726,7 +783,7 @@ if(crc16_calculated==crc16_incapsulated)
 					}
 				}
 
-			if(modbus_rx_arg0==27)		//Автореверс, ток стабилизации обратный, 0.1А
+			if(modbus_rx_arg0==68)		//Автореверс, ток стабилизации обратный, 0.1А
 				{
 				if(work_stat==wsOFF)
 					{
@@ -735,7 +792,7 @@ if(crc16_calculated==crc16_incapsulated)
 					lc640_write_int(EE_AVT_REV_I_NOM_REW,AVT_REV_I_NOM_REW);	
 					}
 				}
-			if(modbus_rx_arg0==28)		//Автореверс, напряжение стабилизации прямое, 0.1В 
+			if(modbus_rx_arg0==69)		//Автореверс, напряжение стабилизации прямое, 0.1В 
 				{
 				if(work_stat==wsOFF)
 					{
@@ -745,7 +802,7 @@ if(crc16_calculated==crc16_incapsulated)
 					}
 				}
 
-			if(modbus_rx_arg0==29)		//Автореверс, напряжение стабилизации обратное, 0.1В
+			if(modbus_rx_arg0==70)		//Автореверс, напряжение стабилизации обратное, 0.1В
 				{
 				if(work_stat==wsOFF)
 					{
@@ -755,7 +812,7 @@ if(crc16_calculated==crc16_incapsulated)
 					}
 				}
 
-			if(modbus_rx_arg0==40)		//Время заряда испытательного цикла, 0.1С 
+			if(modbus_rx_arg0==71)		//Время заряда испытательного цикла, 0.1С 
 				{
 				if(work_stat==wsOFF)
 					{
@@ -764,7 +821,7 @@ if(crc16_calculated==crc16_incapsulated)
 					lc640_write_int(EE_CAP_ZAR_TIME,CAP_ZAR_TIME);					
 					}
 				}
-			if(modbus_rx_arg0==41)		//Время паузы1 испытательного цикла, 0.1С 
+			if(modbus_rx_arg0==72)		//Время паузы1 испытательного цикла, 0.1С 
 				{
 				if(work_stat==wsOFF)
 					{
@@ -773,7 +830,7 @@ if(crc16_calculated==crc16_incapsulated)
 					lc640_write_int(EE_CAP_PAUSE1_TIME,CAP_PAUSE1_TIME);					
 					}
 				}
-			if(modbus_rx_arg0==42)		//Время разряда испытательного цикла, 0.1С 
+			if(modbus_rx_arg0==73)		//Время разряда испытательного цикла, 0.1С 
 				{
 				if(work_stat==wsOFF)
 					{
@@ -782,7 +839,7 @@ if(crc16_calculated==crc16_incapsulated)
 					lc640_write_int(EE_CAP_RAZR_TIME,CAP_RAZR_TIME);					
 					}
 				}
-			if(modbus_rx_arg0==43)		//Время паузы2 испытательного цикла, 0.1С 
+			if(modbus_rx_arg0==74)		//Время паузы2 испытательного цикла, 0.1С 
 				{
 				if(work_stat==wsOFF)
 					{
@@ -792,7 +849,7 @@ if(crc16_calculated==crc16_incapsulated)
 					}
 				}
 
-			if(modbus_rx_arg0==44)		//Максимальное напряжение испытательного цикла, 1В  
+			if(modbus_rx_arg0==75)		//Максимальное напряжение испытательного цикла, 1В  
 				{
 				if(work_stat==wsOFF)
 					{
@@ -801,7 +858,7 @@ if(crc16_calculated==crc16_incapsulated)
 					lc640_write_int(EE_CAP_MAX_VOLT,CAP_MAX_VOLT);					
 					}
 				}
-			if(modbus_rx_arg0==45)		//Рабочий ток испытательного цикла, 1А 
+			if(modbus_rx_arg0==76)		//Рабочий ток испытательного цикла, 1А 
 				{
 				if(work_stat==wsOFF)
 					{
@@ -811,7 +868,7 @@ if(crc16_calculated==crc16_incapsulated)
 					}
 				}
 
-			if(modbus_rx_arg0==50)		//Регистр для записи команд 
+			if(modbus_rx_arg0==77)		//Регистр для записи команд 
 				{
 				if(modbus_rx_arg1==0x11)
 					{
@@ -945,31 +1002,40 @@ if(crc16_calculated==crc16_incapsulated)
 					}
 
 				}
-			if(modbus_rx_arg0==51)		//Время паузы2 испытательного цикла, 0.1С 
+
+			
+			if((T_PROC_GS>T_PROC_MAX)||(T_PROC_GS<30))
 				{
-				if(modbus_rx_arg2==0x23)
-					{
-					if(work_stat==wsOFF)
-						{
-						CAP_ZAR_TIME=modbus_rx_arg1;
-		    				gran(&CAP_ZAR_TIME,10,9999);
-						lc640_write_int(EE_CAP_ZAR_TIME,CAP_ZAR_TIME);					
-						}
-					}
-			/*	if(modbus_rx_arg1==0x22)
-					{
-					if(work_stat==wsOFF)
-						{
-						CAP_ZAR_TIME--;
-		    				gran(&CAP_ZAR_TIME,10,9999);
-						lc640_write_int(EE_CAP_ZAR_TIME,CAP_ZAR_TIME);					
-						}
-					}*/
+				if(T_PROC_GS>T_PROC_MAX)T_PROC_GS=T_PROC_MAX+1;
+				else if(T_PROC_GS<30)T_PROC_GS=29;
+				lc640_write_int(EE_T_PROC_GS,T_PROC_GS);
+				T_PROC_GS_MODE=1;	
+				lc640_write_int(EE_T_PROC_GS_MODE,T_PROC_GS_MODE);
 				}
-			//modbus_hold_register_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0);
+			if((T_PROC_GS<=T_PROC_MAX)&&(T_PROC_GS>=30))
+				{
+				T_PROC_GS_MODE=0;	
+				lc640_write_int(EE_T_PROC_GS_MODE,T_PROC_GS_MODE);
+				}
+			
+			if((T_PROC_PS>T_PROC_MAX)||(T_PROC_PS<30))
+				{
+				if(T_PROC_PS>T_PROC_MAX)T_PROC_PS=T_PROC_MAX+1;
+				else if(T_PROC_PS<30)T_PROC_PS=29;
+				lc640_write_int(EE_T_PROC_PS,T_PROC_PS);
+				T_PROC_PS_MODE=1;	
+				lc640_write_int(EE_T_PROC_PS_MODE,T_PROC_PS_MODE);
+				}
+			if((T_PROC_PS<=T_PROC_MAX)&&(T_PROC_PS>=30))
+				{
+				T_PROC_PS_MODE=0;	
+				lc640_write_int(EE_T_PROC_PS_MODE,T_PROC_PS_MODE);
+				}
+
+			modbus_hold_register_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0);
 
 
-			modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0,1);
+			//modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0,2);
 
 
 			}
@@ -1210,7 +1276,7 @@ for (i=0;i<8;i++)
 	}
 }
 
-/*
+
 //-----------------------------------------------
 void modbus_hold_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr)
 {
@@ -1219,89 +1285,64 @@ char modbus_tx_buff[100];
 unsigned short crc_temp;
 char i;
 
-modbus_registers[0]=(char)(load_U/256);					//Рег1
-modbus_registers[1]=(char)(load_U%256);
-modbus_registers[2]=(char)(load_I/256);					//Рег2
-modbus_registers[3]=(char)(load_I%256);
-modbus_registers[4]=(char)((time_proc%60)/256);			//Рег3
-modbus_registers[5]=(char)((time_proc%60)%256);
-modbus_registers[6]=(char)((time_proc/60)/256);			//Рег4
-modbus_registers[7]=(char)((time_proc/60)%256);
-modbus_registers[8]=(char)((time_proc/3600)/256);			//Рег5
-modbus_registers[9]=(char)((time_proc/3600)%256);		 	
-modbus_registers[10]=(char)((time_proc_remain%60)/256);	//Рег6
-modbus_registers[11]=(char)((time_proc_remain%60)%256);
-modbus_registers[12]=(char)((time_proc_remain/60)/256);	//Рег7
-modbus_registers[13]=(char)((time_proc_remain/60)%256);
-modbus_registers[14]=(char)((time_proc_remain/3600)/256);	//Рег8
-modbus_registers[15]=(char)((time_proc_remain/3600)%256);
-modbus_registers[16]=(char)(I_ug/256);					//Рег9
-modbus_registers[17]=(char)(I_ug%256);
-modbus_registers[18]=(char)(U_up/256);					//Рег10
-modbus_registers[19]=(char)(U_up%256);
-modbus_registers[20]=(char)(U_maxg/256);				//Рег11
-modbus_registers[21]=(char)(U_maxg%256);
-modbus_registers[22]=(char)(I_maxp/256);				//Рег12
-modbus_registers[23]=(char)(I_maxp%256);
-modbus_registers[24]=(char)((T_PROC_GS%60)/256);			//Рег13
-modbus_registers[25]=(char)((T_PROC_GS%60)%256);
-modbus_registers[26]=(char)((T_PROC_GS/60)/256);			//Рег14
-modbus_registers[27]=(char)((T_PROC_GS/60)%256);
-modbus_registers[28]=(char)((T_PROC_GS/3600)/256);		//Рег15
-modbus_registers[29]=(char)((T_PROC_GS/3600)%256);
-modbus_registers[30]=(char)((T_PROC_PS%60)/256);			//Рег16
-modbus_registers[31]=(char)((T_PROC_PS%60)%256);
-modbus_registers[32]=(char)((T_PROC_PS/60)/256);			//Рег17
-modbus_registers[33]=(char)((T_PROC_PS/60)%256);
-modbus_registers[34]=(char)((T_PROC_PS/3600)/256);		//Рег18
-modbus_registers[35]=(char)((T_PROC_PS/3600)%256);
-modbus_registers[36]=0;								//Рег19
-modbus_registers[37]=0;
-if(work_stat==wsPS)modbus_registers[37]=1;
-modbus_registers[38]=0;								//Рег20
-modbus_registers[39]=0;
-if(work_stat==wsGS)modbus_registers[39]=1;
-modbus_registers[40]=0;								//Рег21
-modbus_registers[41]=0;
-if(REV_STAT==rsREW)modbus_registers[41]=1;
-modbus_registers[42]=0;								//Рег22
-modbus_registers[43]=0;
-if(AVT_REV_IS_ON)modbus_registers[42]=1;
-modbus_registers[44]=(char)((AVT_REV_TIME_FF)/256);		//Рег23
-modbus_registers[45]=(char)((AVT_REV_TIME_FF)%256);
-modbus_registers[46]=(char)((AVT_REV_TIME_REW)/256);		//Рег24
-modbus_registers[47]=(char)((AVT_REV_TIME_REW)%256);
-modbus_registers[48]=(char)((AVT_REV_TIME_PAUSE)/256);		//Рег25
-modbus_registers[49]=(char)((AVT_REV_TIME_PAUSE)%256);
-modbus_registers[50]=(char)((AVT_REV_I_NOM_FF)/256);		//Рег26
-modbus_registers[51]=(char)((AVT_REV_I_NOM_FF)%256);
-modbus_registers[52]=(char)((AVT_REV_I_NOM_REW)/256);		//Рег27
-modbus_registers[53]=(char)((AVT_REV_I_NOM_REW)%256);
-modbus_registers[54]=(char)((AVT_REV_U_NOM_FF)/256);		//Рег28
-modbus_registers[55]=(char)((AVT_REV_U_NOM_FF)%256);
-modbus_registers[56]=(char)((AVT_REV_U_NOM_REW)/256);		//Рег29
-modbus_registers[57]=(char)((AVT_REV_U_NOM_REW)%256);
-
-modbus_registers[78]=(char)((CAP_ZAR_TIME)/256);			//Рег40
-modbus_registers[79]=(char)((CAP_ZAR_TIME)%256);
-modbus_registers[80]=(char)((CAP_PAUSE1_TIME)/256);			//Рег41
-modbus_registers[81]=(char)((CAP_PAUSE1_TIME)%256);
-modbus_registers[82]=(char)((CAP_RAZR_TIME)/256);			//Рег42
-modbus_registers[83]=(char)((CAP_RAZR_TIME)%256);
-modbus_registers[84]=(char)((CAP_PAUSE2_TIME)/256);			//Рег43
-modbus_registers[85]=(char)((CAP_PAUSE2_TIME)%256);
-modbus_registers[86]=(char)((CAP_MAX_VOLT)/256);			//Рег44
-modbus_registers[87]=(char)((CAP_MAX_VOLT)%256);
-modbus_registers[88]=(char)((CAP_WRK_CURR)/256);			//Рег45
-modbus_registers[89]=(char)((CAP_WRK_CURR)%256);
-modbus_registers[90]=(char)((CAP_COUNTER)/256);			//Рег46
-modbus_registers[91]=(char)((CAP_COUNTER)%256);
-modbus_registers[92]=(char)((CAP_TIME_SEC/10)/256);			//Рег47
-modbus_registers[93]=(char)((CAP_TIME_SEC/10)%256);
-modbus_registers[94]=(char)((CAP_TIME_MIN)/256);			//Рег48
-modbus_registers[95]=(char)((CAP_TIME_MIN)%256);
-modbus_registers[96]=(char)((CAP_TIME_HOUR)/256);			//Рег49
-modbus_registers[97]=(char)((CAP_TIME_HOUR)%256);
+modbus_registers[0]=(char)(I_ug/256);					//Рег50
+modbus_registers[1]=(char)(I_ug%256);
+modbus_registers[2]=(char)(U_up/256);					//Рег51
+modbus_registers[3]=(char)(U_up%256);
+modbus_registers[4]=(char)(U_maxg/256);					//Рег52
+modbus_registers[5]=(char)(U_maxg%256);
+modbus_registers[6]=(char)(I_maxp/256);					//Рег53
+modbus_registers[7]=(char)(I_maxp%256);
+modbus_registers[8]=(char)((T_PROC_GS%60)/256);			//Рег54
+modbus_registers[9]=(char)((T_PROC_GS%60)%256);
+modbus_registers[10]=(char)(((T_PROC_GS/60)%60)/256);		//Рег55
+modbus_registers[11]=(char)(((T_PROC_GS/60)%60)%256);
+modbus_registers[12]=(char)((T_PROC_GS/3600)/256);		//Рег56
+modbus_registers[13]=(char)((T_PROC_GS/3600)%256);
+modbus_registers[14]=(char)((T_PROC_PS%60)/256);			//Рег57
+modbus_registers[15]=(char)((T_PROC_PS%60)%256);
+modbus_registers[16]=(char)(((T_PROC_PS/60)%60)/256);		//Рег58
+modbus_registers[17]=(char)(((T_PROC_PS/60)%60)%256);
+modbus_registers[18]=(char)((T_PROC_PS/3600)/256);		//Рег59
+modbus_registers[19]=(char)((T_PROC_PS/3600)%256);
+modbus_registers[20]=0;								//Рег60
+modbus_registers[21]=0;
+if(work_stat==wsPS)modbus_registers[21]=1;
+modbus_registers[22]=0;								//Рег61
+modbus_registers[23]=0;
+if(work_stat==wsGS)modbus_registers[23]=1;
+modbus_registers[24]=0;								//Рег62
+modbus_registers[25]=0;
+if(REV_STAT==rsREW)modbus_registers[25]=1;
+modbus_registers[26]=0;								//Рег63
+modbus_registers[27]=0;
+if(AVT_REV_IS_ON)modbus_registers[27]=1;
+modbus_registers[28]=(char)((AVT_REV_TIME_FF)/256);		//Рег64
+modbus_registers[29]=(char)((AVT_REV_TIME_FF)%256);
+modbus_registers[30]=(char)((AVT_REV_TIME_REW)/256);		//Рег65
+modbus_registers[31]=(char)((AVT_REV_TIME_REW)%256);
+modbus_registers[32]=(char)((AVT_REV_TIME_PAUSE)/256);		//Рег66
+modbus_registers[33]=(char)((AVT_REV_TIME_PAUSE)%256);
+modbus_registers[34]=(char)((AVT_REV_I_NOM_FF)/256);		//Рег67
+modbus_registers[35]=(char)((AVT_REV_I_NOM_FF)%256);
+modbus_registers[36]=(char)((AVT_REV_I_NOM_REW)/256);		//Рег68
+modbus_registers[37]=(char)((AVT_REV_I_NOM_REW)%256);
+modbus_registers[38]=(char)((AVT_REV_U_NOM_FF)/256);		//Рег69
+modbus_registers[39]=(char)((AVT_REV_U_NOM_FF)%256);
+modbus_registers[40]=(char)((AVT_REV_U_NOM_REW)/256);		//Рег70
+modbus_registers[41]=(char)((AVT_REV_U_NOM_REW)%256);
+modbus_registers[42]=(char)((CAP_ZAR_TIME)/256);			//Рег71
+modbus_registers[43]=(char)((CAP_ZAR_TIME)%256);
+modbus_registers[44]=(char)((CAP_PAUSE1_TIME)/256);		//Рег72
+modbus_registers[45]=(char)((CAP_PAUSE1_TIME)%256);
+modbus_registers[46]=(char)((CAP_RAZR_TIME)/256);			//Рег73
+modbus_registers[47]=(char)((CAP_RAZR_TIME)%256);
+modbus_registers[48]=(char)((CAP_PAUSE2_TIME)/256);		//Рег74
+modbus_registers[49]=(char)((CAP_PAUSE2_TIME)%256);
+modbus_registers[50]=(char)((CAP_MAX_VOLT)/256);			//Рег75
+modbus_registers[51]=(char)((CAP_MAX_VOLT)%256);
+modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			//Рег76
+modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
 
 modbus_tx_buff[0]=adr;
 modbus_tx_buff[1]=func;
@@ -1322,7 +1363,11 @@ for (i=0;i<8;i++)
 	{
 	putchar0(modbus_tx_buff[i]);
 	}
-}	*/
+for (i=0;i<8;i++)
+	{
+	putchar_sc16is700(modbus_tx_buff[i]);
+	}
+}	
 
 
 //-----------------------------------------------
@@ -1397,7 +1442,7 @@ modbus_tx_buff[0]=adr;
 modbus_tx_buff[1]=func;
 modbus_tx_buff[2]=(char)(reg_quantity*2);
 
-memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-1)*2],reg_quantity*2);
+memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-50)*2],reg_quantity*2);
 						   
 crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
 
