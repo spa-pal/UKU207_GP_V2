@@ -802,8 +802,8 @@ for(page=0;page<=Max_page;page++)
 	lcd_set_col(0);
 	for(col=0;col<=Max_Col;col++)
          	{
-         	data1_wr(0x58);
-	    	data2_wr(0x7a);
+         	data1_wr(0x00);
+	    	data2_wr(0x00);
      	}
      }  
 }

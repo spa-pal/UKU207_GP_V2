@@ -1959,12 +1959,12 @@
 5957  0a52 5b06          	addw	sp,#6
 5959  0a54 204f          	jra	L7113
 5960  0a56               L3113:
-5961                     ; 1016 		else int2ind_slkuf1(ind_I_set/10,0,3,0,1,0,1);
+5961                     ; 1016 		else int2ind_slkuf1(ind_I_set/10,0,4,0,1,0,1);
 5963  0a56 4b01          	push	#1
 5964  0a58 4b00          	push	#0
 5965  0a5a 4b01          	push	#1
 5966  0a5c 4b00          	push	#0
-5967  0a5e 4b03          	push	#3
+5967  0a5e 4b04          	push	#4
 5968  0a60 4b00          	push	#0
 5969  0a62 be54          	ldw	x,_ind_I_set
 5970  0a64 a60a          	ld	a,#10
@@ -1989,12 +1989,12 @@
 5995  0a89 5b06          	addw	sp,#6
 5997  0a8b 2018          	jra	L7113
 5998  0a8d               L1213:
-5999                     ; 1022 		else int2ind_slkuf1(ind_I/10,0,3,0,1,0,0);
+5999                     ; 1022 		else int2ind_slkuf1(ind_I/10,0,4,0,1,0,0);
 6001  0a8d 4b00          	push	#0
 6002  0a8f 4b00          	push	#0
 6003  0a91 4b01          	push	#1
 6004  0a93 4b00          	push	#0
-6005  0a95 4b03          	push	#3
+6005  0a95 4b04          	push	#4
 6006  0a97 4b00          	push	#0
 6007  0a99 be58          	ldw	x,_ind_I
 6008  0a9b a60a          	ld	a,#10
@@ -2019,12 +2019,12 @@
 6032  0abe 5b06          	addw	sp,#6
 6034  0ac0 2018          	jra	L7213
 6035  0ac2               L5213:
-6036                     ; 1029 		int2ind_slkuf2(ind_U/10,0,3,0,1,0,0);
+6036                     ; 1029 		int2ind_slkuf2(ind_U/10,0,4,0,1,0,0);
 6038  0ac2 4b00          	push	#0
 6039  0ac4 4b00          	push	#0
 6040  0ac6 4b01          	push	#1
 6041  0ac8 4b00          	push	#0
-6042  0aca 4b03          	push	#3
+6042  0aca 4b04          	push	#4
 6043  0acc 4b00          	push	#0
 6044  0ace be5a          	ldw	x,_ind_U
 6045  0ad0 a60a          	ld	a,#10
@@ -2107,12 +2107,12 @@
 6141  0b69 5b06          	addw	sp,#6
 6143  0b6b 2018          	jra	L5413
 6144  0b6d               L3413:
-6145                     ; 1042 	else int2ind_slkuf1(ind_I/10,0,3,0,1,0,0);
+6145                     ; 1042 	else int2ind_slkuf1(ind_I/10,0,4,0,1,0,0);
 6147  0b6d 4b00          	push	#0
 6148  0b6f 4b00          	push	#0
 6149  0b71 4b01          	push	#1
 6150  0b73 4b00          	push	#0
-6151  0b75 4b03          	push	#3
+6151  0b75 4b04          	push	#4
 6152  0b77 4b00          	push	#0
 6153  0b79 be58          	ldw	x,_ind_I
 6154  0b7b a60a          	ld	a,#10
@@ -2143,12 +2143,12 @@
 6186  0ba6 5b06          	addw	sp,#6
 6188  0ba8 2018          	jra	L7513
 6189  0baa               L3513:
-6190                     ; 1050 			int2ind_slkuf2(ind_U/10,0,3,0,1,0,0);
+6190                     ; 1050 			int2ind_slkuf2(ind_U/10,0,4,0,1,0,0);
 6192  0baa 4b00          	push	#0
 6193  0bac 4b00          	push	#0
 6194  0bae 4b01          	push	#1
 6195  0bb0 4b00          	push	#0
-6196  0bb2 4b03          	push	#3
+6196  0bb2 4b04          	push	#4
 6197  0bb4 4b00          	push	#0
 6198  0bb6 be5a          	ldw	x,_ind_U
 6199  0bb8 a60a          	ld	a,#10
@@ -2197,12 +2197,12 @@
 6253  0c0d 5b06          	addw	sp,#6
 6255  0c0f 20b1          	jra	L7513
 6256  0c11               L1613:
-6257                     ; 1058 			int2ind_slkuf2(ind_U_set/10,0,3,0,1,0,1);
+6257                     ; 1058 			int2ind_slkuf2(ind_U_set/10,0,4,0,1,0,1);
 6259  0c11 4b01          	push	#1
 6260  0c13 4b00          	push	#0
 6261  0c15 4b01          	push	#1
 6262  0c17 4b00          	push	#0
-6263  0c19 4b03          	push	#3
+6263  0c19 4b04          	push	#4
 6264  0c1b 4b00          	push	#0
 6265  0c1d be56          	ldw	x,_ind_U_set
 6266  0c1f a60a          	ld	a,#10
@@ -2267,12 +2267,12 @@
 6340  0c90 5b06          	addw	sp,#6
 6342  0c92 204f          	jra	L5023
 6343  0c94               L1023:
-6344                     ; 1078 			else int2ind_slkuf1(ind_I_set/10,0,3,0,1,0,1);
+6344                     ; 1078 			else int2ind_slkuf1(ind_I_set/10,0,4,0,1,0,1);
 6346  0c94 4b01          	push	#1
 6347  0c96 4b00          	push	#0
 6348  0c98 4b01          	push	#1
 6349  0c9a 4b00          	push	#0
-6350  0c9c 4b03          	push	#3
+6350  0c9c 4b04          	push	#4
 6351  0c9e 4b00          	push	#0
 6352  0ca0 be54          	ldw	x,_ind_I_set
 6353  0ca2 a60a          	ld	a,#10
@@ -2297,12 +2297,12 @@
 6378  0cc7 5b06          	addw	sp,#6
 6380  0cc9 2018          	jra	L5023
 6381  0ccb               L7023:
-6382                     ; 1083 			else int2ind_slkuf1(ind_I_set/10,0,3,0,1,0,0);
+6382                     ; 1083 			else int2ind_slkuf1(ind_I_set/10,0,4,0,1,0,0);
 6384  0ccb 4b00          	push	#0
 6385  0ccd 4b00          	push	#0
 6386  0ccf 4b01          	push	#1
 6387  0cd1 4b00          	push	#0
-6388  0cd3 4b03          	push	#3
+6388  0cd3 4b04          	push	#4
 6389  0cd5 4b00          	push	#0
 6390  0cd7 be54          	ldw	x,_ind_I_set
 6391  0cd9 a60a          	ld	a,#10
@@ -2327,12 +2327,12 @@
 6415  0cfc 5b06          	addw	sp,#6
 6417  0cfe 2018          	jra	L5123
 6418  0d00               L3123:
-6419                     ; 1090 			int2ind_slkuf2(ind_U_set/10,0,3,0,1,0,0);
+6419                     ; 1090 			int2ind_slkuf2(ind_U_set/10,0,4,0,1,0,0);
 6421  0d00 4b00          	push	#0
 6422  0d02 4b00          	push	#0
 6423  0d04 4b01          	push	#1
 6424  0d06 4b00          	push	#0
-6425  0d08 4b03          	push	#3
+6425  0d08 4b04          	push	#4
 6426  0d0a 4b00          	push	#0
 6427  0d0c be56          	ldw	x,_ind_U_set
 6428  0d0e a60a          	ld	a,#10
@@ -2458,12 +2458,12 @@
 6584  0dfe 5b06          	addw	sp,#6
 6586  0e00 2018          	jra	L1423
 6587  0e02               L7323:
-6588                     ; 1131 		else int2ind_slkuf1(ind_I_set/10,0,3,0,1,0,0);
+6588                     ; 1131 		else int2ind_slkuf1(ind_I_set/10,0,4,0,1,0,0);
 6590  0e02 4b00          	push	#0
 6591  0e04 4b00          	push	#0
 6592  0e06 4b01          	push	#1
 6593  0e08 4b00          	push	#0
-6594  0e0a 4b03          	push	#3
+6594  0e0a 4b04          	push	#4
 6595  0e0c 4b00          	push	#0
 6596  0e0e be54          	ldw	x,_ind_I_set
 6597  0e10 a60a          	ld	a,#10
@@ -2494,12 +2494,12 @@
 6629  0e3b 5b06          	addw	sp,#6
 6631  0e3d 2018          	jra	L3523
 6632  0e3f               L7423:
-6633                     ; 1139 				int2ind_slkuf2(ind_U_set/10,0,3,0,1,0,0);
+6633                     ; 1139 				int2ind_slkuf2(ind_U_set/10,0,4,0,1,0,0);
 6635  0e3f 4b00          	push	#0
 6636  0e41 4b00          	push	#0
 6637  0e43 4b01          	push	#1
 6638  0e45 4b00          	push	#0
-6639  0e47 4b03          	push	#3
+6639  0e47 4b04          	push	#4
 6640  0e49 4b00          	push	#0
 6641  0e4b be56          	ldw	x,_ind_U_set
 6642  0e4d a60a          	ld	a,#10
@@ -2554,12 +2554,12 @@
 6709  0eac 5b06          	addw	sp,#6
 6711  0eae 20a7          	jra	L3523
 6712  0eb0               L5523:
-6713                     ; 1145 				int2ind_slkuf2(ind_U_set/10,0,3,0,1,0,1);
+6713                     ; 1145 				int2ind_slkuf2(ind_U_set/10,0,4,0,1,0,1);
 6715  0eb0 4b01          	push	#1
 6716  0eb2 4b00          	push	#0
 6717  0eb4 4b01          	push	#1
 6718  0eb6 4b00          	push	#0
-6719  0eb8 4b03          	push	#3
+6719  0eb8 4b04          	push	#4
 6720  0eba 4b00          	push	#0
 6721  0ebc be56          	ldw	x,_ind_U_set
 6722  0ebe a60a          	ld	a,#10

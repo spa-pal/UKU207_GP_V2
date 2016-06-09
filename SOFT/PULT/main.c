@@ -1013,20 +1013,20 @@ if(work_stat==wsGS)
 		{
 		//Установленный ток
 		if(ind_I_set<=999)int2ind_slkuf1(ind_I_set,0,3,1,1,0,1);
-		else int2ind_slkuf1(ind_I_set/10,0,3,0,1,0,1);
+		else int2ind_slkuf1(ind_I_set/10,0,4,0,1,0,1);
 		}
 	else
 		{
 		//Рабочий ток
 		if(ind_I<=999)int2ind_slkuf1(ind_I,0,3,1,1,0,0);
-		else int2ind_slkuf1(ind_I/10,0,3,0,1,0,0);
+		else int2ind_slkuf1(ind_I/10,0,4,0,1,0,0);
 		}
 
 	//Рабочее напряжение
 	if(ind_U<1000){
 		int2ind_slkuf2(ind_U,0,3,1,1,0,0);
 	} else {
-		int2ind_slkuf2(ind_U/10,0,3,0,1,0,0);
+		int2ind_slkuf2(ind_U/10,0,4,0,1,0,0);
 	}
 
 	//Время процесса
@@ -1039,7 +1039,7 @@ else if(work_stat==wsPS)
 	{
 	//Рабочий ток
 	if(ind_I<=999)int2ind_slkuf1(ind_I,0,3,1,1,0,0);
-	else int2ind_slkuf1(ind_I/10,0,3,0,1,0,0);
+	else int2ind_slkuf1(ind_I/10,0,4,0,1,0,0);
 
 	//Установенное напряжение
 	if((!ind_fad_cnt)||(but_state!=bsOFF)) {
@@ -1047,7 +1047,7 @@ else if(work_stat==wsPS)
 		if(ind_U<1000){
 			int2ind_slkuf2(ind_U,0,3,1,1,0,0);
 		} else {
-			int2ind_slkuf2(ind_U/10,0,3,0,1,0,0);
+			int2ind_slkuf2(ind_U/10,0,4,0,1,0,0);
 		}
 		
 	}	else {
@@ -1055,7 +1055,7 @@ else if(work_stat==wsPS)
 		if(ind_U_set<1000) {
 			int2ind_slkuf2(ind_U_set,0,3,1,1,0,1);
 		} else {
-			int2ind_slkuf2(ind_U_set/10,0,3,0,1,0,1);
+			int2ind_slkuf2(ind_U_set/10,0,4,0,1,0,1);
 		}
 	}
 	
@@ -1075,19 +1075,19 @@ else
 		if((ind_fad_cnt)&&(but_state==bsOFF))
 			{
 			if(ind_I_set<=999)int2ind_slkuf1(ind_I_set,0,3,1,1,0,1);
-			else int2ind_slkuf1(ind_I_set/10,0,3,0,1,0,1);
+			else int2ind_slkuf1(ind_I_set/10,0,4,0,1,0,1);
 			}
 		else
 			{
 			if(ind_I_set<=999)int2ind_slkuf1(ind_I_set,0,3,1,1,0,0);
-			else int2ind_slkuf1(ind_I_set/10,0,3,0,1,0,0);
+			else int2ind_slkuf1(ind_I_set/10,0,4,0,1,0,0);
 			}
 
 		//Максимальное напряжение
 		if(ind_U_set<1000) {
 			int2ind_slkuf2(ind_U_set,0,3,1,1,0,0);
 		} else {
-			int2ind_slkuf2(ind_U_set/10,0,3,0,1,0,0);
+			int2ind_slkuf2(ind_U_set/10,0,4,0,1,0,0);
 		}
 		
 		dig1_[3]&=0xdf;
@@ -1128,7 +1128,7 @@ else
 		{
 		//Максимальный ток
 		if(ind_I_set<=999)int2ind_slkuf1(ind_I_set,0,3,1,1,0,0);
-		else int2ind_slkuf1(ind_I_set/10,0,3,0,1,0,0);
+		else int2ind_slkuf1(ind_I_set/10,0,4,0,1,0,0);
 		
 
 		//Установенное напряжение
@@ -1136,13 +1136,13 @@ else
 			if(ind_U_set<1000) {
 				int2ind_slkuf2(ind_U_set,0,3,1,1,0,0);
 			} else {
-				int2ind_slkuf2(ind_U_set/10,0,3,0,1,0,0);
+				int2ind_slkuf2(ind_U_set/10,0,4,0,1,0,0);
 			}
 		}	else {
 			if(ind_U_set<1000) {
 				int2ind_slkuf2(ind_U_set,0,3,1,1,0,1);
 			} else {
-				int2ind_slkuf2(ind_U_set/10,0,3,0,1,0,1);
+				int2ind_slkuf2(ind_U_set/10,0,4,0,1,0,1);
 			}
 		}
 		dig2_[3]&=0xdf;
