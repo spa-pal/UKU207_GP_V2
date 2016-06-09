@@ -9664,7 +9664,7 @@ else if(ind==iVolt_contr_set)
 	     	{
 	     	temp_SS--;
 	     	}
-	    	gran(&temp_SS,1,500);
+	    	gran(&temp_SS,1,(U_MAX/10)+100);
 		lc640_write_int(EE_REL_VOLT_UMAX,temp_SS);					
 		speed=1;	
 					
@@ -9689,7 +9689,7 @@ else if(ind==iVolt_contr_set)
 	     	{
 	     	temp_SS--;
 	     	}
-	    	gran(&temp_SS,1,500);
+	    	gran(&temp_SS,1,(U_MAX/10)+100);
 		lc640_write_int(EE_REL_VOLT_UMIN,temp_SS);					
 		speed=1;	
 		}
