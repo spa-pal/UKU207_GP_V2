@@ -11220,6 +11220,8 @@ SystemInit();
 
 bTPS=1;
 
+
+
 SysTick->LOAD = (SystemFrequency / 2000) - 1;
 SysTick->CTRL = 0x07;
 

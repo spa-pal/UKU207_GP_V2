@@ -11,7 +11,7 @@
 
 #define _ACDC_
 
-
+//#define SystemFrequency 10000000UL
 
 #define BIN__N(x) (x) | x>>3 | x>>6 | x>>9
 #define BIN__B(x) (x) & 0xf | (x)>>12 & 0xf0
