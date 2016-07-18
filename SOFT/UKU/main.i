@@ -16230,29 +16230,45 @@ snmp_Community[8]=(char)lc640_read_int(2000+270+16);
 if((snmp_Community[8]==0)||(snmp_Community[8]==' '))snmp_Community[8]=0;
 snmp_Community[9]=0;  
 
-if((lc640_read_int(2000)==1)&&(lc640_read_int(2000+72)!=1))
+if(lc640_read_int(2000)==1)
 	{
 	bgnd_par(		"                    ",
      		"    Инициализация   ",
      		"      Ethernet      ",
      		"                    ");
-	lc640_write_int(2000+72,1);
-	
 	bitmap_hndl();
 	lcd_out(lcd_bitmap);
-	watchdog_enable();
 	init_TcpNet ();
 	lcd_out(lcd_bitmap);
 	init_ETH();
 	
 
-	delay();
-	delay();
-	delay();
-	delay();
-	delay();
-	lc640_write_int(2000+72,0);
-	} 
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 
 
@@ -16563,7 +16579,7 @@ while (1)
 		
 
 
-		can_reset_hndl();
+		
 
 		time_hndl();
 

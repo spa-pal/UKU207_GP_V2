@@ -11351,13 +11351,29 @@ snmp_Community[8]=(char)lc640_read_int(EE_COMMUNITY+16);
 if((snmp_Community[8]==0)||(snmp_Community[8]==' '))snmp_Community[8]=0;
 snmp_Community[9]=0; /**/
 
+if(lc640_read_int(EE_ETH_IS_ON)==1)
+	{
+	bgnd_par(		"                    ",
+     		"    Инициализация   ",
+     		"      Ethernet      ",
+     		"                    ");
+	bitmap_hndl();
+	lcd_out(lcd_bitmap);
+	init_TcpNet ();
+	lcd_out(lcd_bitmap);
+	init_ETH();
+	//mem_copy (&localm[NETIF_ETH], &ip_config, sizeof(ip_config));
+//	lcd_out(lcd_bitmap);
+	}
+
+/*
 if((lc640_read_int(EE_ETH_IS_ON)==1)&&(lc640_read_int(EE_ETH_IS_NOT)!=1))
 	{
 	bgnd_par(		"                    ",
      		"    Инициализация   ",
      		"      Ethernet      ",
      		"                    ");
-	lc640_write_int(EE_ETH_IS_NOT,1);
+	//lc640_write_int(EE_ETH_IS_NOT,1);
 	
 	bitmap_hndl();
 	lcd_out(lcd_bitmap);
@@ -11373,7 +11389,7 @@ if((lc640_read_int(EE_ETH_IS_ON)==1)&&(lc640_read_int(EE_ETH_IS_NOT)!=1))
 	delay();
 	delay();
 	lc640_write_int(EE_ETH_IS_NOT,0);
-	} 
+	}  */
 //event2snmp(2);
 
 //reload_hndl();
@@ -11684,7 +11700,7 @@ while (1)
 		//if(main_1Hz_cnt<200)main_1Hz_cnt++;
 
 
-		can_reset_hndl();
+		//can_reset_hndl();
 
 		time_hndl();
 

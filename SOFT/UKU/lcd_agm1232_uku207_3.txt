@@ -1058,83 +1058,61 @@
 ;;;569    
                           ENDP
 
-                  delay PROC
-;;;596    //-----------------------------------------------
-;;;597    void delay(void)
-00040e  f04f0000          MOV      r0,#0
-                  |L1.1042|
-;;;598    {
-;;;599    signed short i;
-;;;600    
-;;;601    for(i=0;i<100;i++)
-;;;602    	{
-;;;603    	__nop();
-000412  bf00              NOP      
-000414  1c40              ADDS     r0,r0,#1              ;601
-000416  b200              SXTH     r0,r0                 ;601
-000418  2864              CMP      r0,#0x64              ;601
-00041a  dbfa              BLT      |L1.1042|
-;;;604    	}
-;;;605    }
-00041c  4770              BX       lr
-;;;606    
-                          ENDP
-
                   lcd_clear PROC
 ;;;793    //-----------------------------------------------
 ;;;794    void lcd_clear(void)
-00041e  b530              PUSH     {r4,r5,lr}
+00040e  b530              PUSH     {r4,r5,lr}
 ;;;795    {
 ;;;796    char page,col/*,i*/;
 ;;;797    
 ;;;798    for(page=0;page<=Max_page;page++)
-000420  2400              MOVS     r4,#0
-                  |L1.1058|
+000410  2400              MOVS     r4,#0
+                  |L1.1042|
 ;;;799    
 ;;;800    	{
 ;;;801    	lcd_set_page(page);
-000422  4620              MOV      r0,r4
-000424  f7fffffe          BL       lcd_set_page
+000412  4620              MOV      r0,r4
+000414  f7fffffe          BL       lcd_set_page
 ;;;802    	lcd_set_col(0);
-000428  2000              MOVS     r0,#0
-00042a  f7fffffe          BL       lcd_set_col
+000418  2000              MOVS     r0,#0
+00041a  f7fffffe          BL       lcd_set_col
 ;;;803    	for(col=0;col<=Max_Col;col++)
-00042e  2500              MOVS     r5,#0
-                  |L1.1072|
+00041e  2500              MOVS     r5,#0
+                  |L1.1056|
 ;;;804             	{
 ;;;805             	data1_wr(0x00);
-000430  2000              MOVS     r0,#0
-000432  f7fffffe          BL       data1_wr
+000420  2000              MOVS     r0,#0
+000422  f7fffffe          BL       data1_wr
 ;;;806    	    	data2_wr(0x00);
-000436  2000              MOVS     r0,#0
-000438  f7fffffe          BL       data2_wr
-00043c  1c6d              ADDS     r5,r5,#1              ;803
-00043e  b2ed              UXTB     r5,r5                 ;803
-000440  2d3c              CMP      r5,#0x3c              ;803
-000442  d9f5              BLS      |L1.1072|
-000444  1c64              ADDS     r4,r4,#1              ;798
-000446  b2e4              UXTB     r4,r4                 ;798
-000448  2c03              CMP      r4,#3                 ;798
-00044a  d9ea              BLS      |L1.1058|
+000426  2000              MOVS     r0,#0
+000428  f7fffffe          BL       data2_wr
+00042c  1c6d              ADDS     r5,r5,#1              ;803
+00042e  b2ed              UXTB     r5,r5                 ;803
+000430  2d3c              CMP      r5,#0x3c              ;803
+000432  d9f5              BLS      |L1.1056|
+000434  1c64              ADDS     r4,r4,#1              ;798
+000436  b2e4              UXTB     r4,r4                 ;798
+000438  2c03              CMP      r4,#3                 ;798
+00043a  d9ea              BLS      |L1.1042|
 ;;;807         	}
 ;;;808         }  
 ;;;809    }
-00044c  bd30              POP      {r4,r5,pc}
+00043c  bd30              POP      {r4,r5,pc}
 ;;;810    
                           ENDP
 
                   lcd_on PROC
 ;;;815    //-----------------------------------------------
 ;;;816    void lcd_on(void) 
-00044e  b500              PUSH     {lr}
+00043e  b500              PUSH     {lr}
 ;;;817    {
 ;;;818    lcd1_wr(_DISPLAY_ON_);
-000450  20af              MOVS     r0,#0xaf
-000452  f7fffffe          BL       lcd1_wr
+000440  20af              MOVS     r0,#0xaf
+000442  f7fffffe          BL       lcd1_wr
 ;;;819    lcd2_wr(_DISPLAY_ON_);
-000456  20af              MOVS     r0,#0xaf
-000458  f85deb04          POP      {lr}
-00045c  e7fe              B        lcd2_wr
+000446  20af              MOVS     r0,#0xaf
+000448  f85deb04          POP      {lr}
+00044c  e7fe              B        lcd2_wr
 ;;;820    }
 ;;;821    
                           ENDP
@@ -1142,60 +1120,60 @@
                   lcd_out PROC
 ;;;829    //-----------------------------------------------
 ;;;830    void lcd_out(char* adr)
-00045e  b5f0              PUSH     {r4-r7,lr}
+00044e  b5f0              PUSH     {r4-r7,lr}
 ;;;831    {
-000460  4684              MOV      r12,r0
+000450  4684              MOV      r12,r0
 ;;;832    char* ptr0;
 ;;;833    char* ptr1;
 ;;;834    char i,n;
 ;;;835    ptr0=adr;
 ;;;836    ptr1=adr+61;
 ;;;837    lcd_set_raw(0);
-000462  2000              MOVS     r0,#0
-000464  f7fffffe          BL       lcd_set_raw
+000452  2000              MOVS     r0,#0
+000454  f7fffffe          BL       lcd_set_raw
 ;;;838    
 ;;;839    for(n=0;n<=3;n++)
-000468  f05f0600          MOVS.W   r6,#0
-                  |L1.1132|
+000458  f05f0600          MOVS.W   r6,#0
+                  |L1.1116|
 ;;;840    	{
 ;;;841    	ptr0=adr+(122*(unsigned)n);
-00046c  eb060046          ADD      r0,r6,r6,LSL #1
-000470  ebc01086          RSB      r0,r0,r6,LSL #6
-000474  eb0c0440          ADD      r4,r12,r0,LSL #1
+00045c  eb060046          ADD      r0,r6,r6,LSL #1
+000460  ebc01086          RSB      r0,r0,r6,LSL #6
+000464  eb0c0440          ADD      r4,r12,r0,LSL #1
 ;;;842    	ptr1=ptr0+61;
-000478  f104053d          ADD      r5,r4,#0x3d
+000468  f104053d          ADD      r5,r4,#0x3d
 ;;;843    	lcd_set_page(n);
-00047c  4630              MOV      r0,r6
-00047e  f7fffffe          BL       lcd_set_page
+00046c  4630              MOV      r0,r6
+00046e  f7fffffe          BL       lcd_set_page
 ;;;844    	lcd_set_col(0);
-000482  2000              MOVS     r0,#0
-000484  f7fffffe          BL       lcd_set_col
+000472  2000              MOVS     r0,#0
+000474  f7fffffe          BL       lcd_set_col
 ;;;845    	for(i=0;i<61;i++)
-000488  2700              MOVS     r7,#0
-                  |L1.1162|
+000478  2700              MOVS     r7,#0
+                  |L1.1146|
 ;;;846    		{
 ;;;847    		data1_wr(*ptr0);
-00048a  7820              LDRB     r0,[r4,#0]
-00048c  f7fffffe          BL       data1_wr
+00047a  7820              LDRB     r0,[r4,#0]
+00047c  f7fffffe          BL       data1_wr
 ;;;848    		data2_wr(*ptr1);
-000490  7828              LDRB     r0,[r5,#0]
-000492  f7fffffe          BL       data2_wr
-000496  1c7f              ADDS     r7,r7,#1              ;845
+000480  7828              LDRB     r0,[r5,#0]
+000482  f7fffffe          BL       data2_wr
+000486  1c7f              ADDS     r7,r7,#1              ;845
 ;;;849    		ptr0++;
-000498  1c64              ADDS     r4,r4,#1
+000488  1c64              ADDS     r4,r4,#1
 ;;;850    		ptr1++;
-00049a  1c6d              ADDS     r5,r5,#1
-00049c  b2ff              UXTB     r7,r7                 ;845
-00049e  2f3d              CMP      r7,#0x3d              ;845
-0004a0  d3f3              BCC      |L1.1162|
-0004a2  1c76              ADDS     r6,r6,#1              ;839
-0004a4  b2f6              UXTB     r6,r6                 ;839
-0004a6  2e03              CMP      r6,#3                 ;839
-0004a8  d9e0              BLS      |L1.1132|
+00048a  1c6d              ADDS     r5,r5,#1
+00048c  b2ff              UXTB     r7,r7                 ;845
+00048e  2f3d              CMP      r7,#0x3d              ;845
+000490  d3f3              BCC      |L1.1146|
+000492  1c76              ADDS     r6,r6,#1              ;839
+000494  b2f6              UXTB     r6,r6                 ;839
+000496  2e03              CMP      r6,#3                 ;839
+000498  d9e0              BLS      |L1.1116|
 ;;;851    	    	}
 ;;;852    	}
 ;;;853    }
-0004aa  bdf0              POP      {r4-r7,pc}
+00049a  bdf0              POP      {r4-r7,pc}
 ;;;854    
                           ENDP
 
@@ -1265,9 +1243,62 @@
                   |L2.40|
                           DCD      0x2009c000
 
-                          AREA ||area_number.3||, CODE, READONLY, ALIGN=2
+                          AREA ||area_number.3||, CODE, READONLY, ALIGN=1
 
                           EXPORTAS ||area_number.3||, ||.text||
+                  delay PROC
+;;;8      //-----------------------------------------------
+;;;9      void lcd1_chk(void)
+000000  f04f0000          MOV      r0,#0
+                  |L3.4|
+;;;10     {
+;;;11     LPC_GPIO1->FIODIR&=(~((1<<D0)|(1<<D1)|(1<<D2)|(1<<D3)|(1<<D4)|(1<<D5)|(1<<D6)|(1<<D7)));
+000004  bf00              NOP      
+000006  1c40              ADDS     r0,r0,#1
+000008  b200              SXTH     r0,r0
+;;;12     LPC_GPIO1->FIOSET|=(1<<RW);
+00000a  2864              CMP      r0,#0x64
+00000c  dbfa              BLT      |L3.4|
+00000e  4770              BX       lr
+;;;13     
+;;;14     __nop();
+;;;15     __nop();
+;;;16     __nop();
+;;;17     __nop();
+;;;18     __nop();
+;;;19     __nop();
+;;;20     __nop();
+;;;21     __nop();
+;;;22     __nop();
+;;;23     __nop();
+;;;24     
+;;;25     LPC_GPIO1->FIOCLR|=(1<<A0);
+;;;26     
+;;;27     __nop();
+;;;28     __nop();
+;;;29     __nop();
+;;;30     __nop();
+;;;31     __nop();
+;;;32     __nop();
+;;;33     __nop();
+;;;34     __nop();
+;;;35     __nop();
+;;;36     __nop();
+;;;37     
+;;;38     LPC_GPIO1->FIOSET|=(1<<E1);
+;;;39     
+;;;40     chk1:
+;;;41     
+;;;42     if(LPC_GPIO1->FIOPIN&(1<<D7)) goto chk1;
+;;;43     
+;;;44     }
+;;;45     
+                          ENDP
+
+
+                          AREA ||area_number.4||, CODE, READONLY, ALIGN=2
+
+                          EXPORTAS ||area_number.4||, ||.text||
                   ltstrobe PROC
 ;;;8      //-----------------------------------------------
 ;;;9      void lcd1_chk(void)
@@ -1276,7 +1307,7 @@
 ;;;11     LPC_GPIO1->FIODIR&=(~((1<<D0)|(1<<D1)|(1<<D2)|(1<<D3)|(1<<D4)|(1<<D5)|(1<<D6)|(1<<D7)));
 000002  4603              MOV      r3,r0
 000004  f7fffffe          BL       status
-000008  490b              LDR      r1,|L3.56|
+000008  490b              LDR      r1,|L4.56|
 ;;;12     LPC_GPIO1->FIOSET|=(1<<RW);
 00000a  f44f1000          MOV      r0,#0x200000
 00000e  6388              STR      r0,[r1,#0x38]
@@ -1333,16 +1364,16 @@
 ;;;45     
                           ENDP
 
-                  |L3.56|
+                  |L4.56|
                           DCD      0x2009c000
 
-                          AREA ||area_number.4||, CODE, READONLY, ALIGN=2
+                          AREA ||area_number.5||, CODE, READONLY, ALIGN=2
 
-                          EXPORTAS ||area_number.4||, ||.text||
+                          EXPORTAS ||area_number.5||, ||.text||
                   lcd_init_ PROC
 ;;;8      //-----------------------------------------------
 ;;;9      void lcd1_chk(void)
-000000  482d              LDR      r0,|L4.184|
+000000  482d              LDR      r0,|L5.184|
 ;;;10     {
 ;;;11     LPC_GPIO1->FIODIR&=(~((1<<D0)|(1<<D1)|(1<<D2)|(1<<D3)|(1<<D4)|(1<<D5)|(1<<D6)|(1<<D7)));
 000002  6841              LDR      r1,[r0,#4]
@@ -1417,54 +1448,54 @@
 000062  6841              LDR      r1,[r0,#4]
 000064  f0216140          BIC      r1,r1,#0xc000000
 000068  6041              STR      r1,[r0,#4]
-00006a  4814              LDR      r0,|L4.188|
+00006a  4814              LDR      r0,|L5.188|
 00006c  6a01              LDR      r1,[r0,#0x20]
-00006e  4a14              LDR      r2,|L4.192|
+00006e  4a14              LDR      r2,|L5.192|
 000070  4311              ORRS     r1,r1,r2
 000072  6201              STR      r1,[r0,#0x20]
 000074  6801              LDR      r1,[r0,#0]
 000076  f4411170          ORR      r1,r1,#0x3c0000
 00007a  6001              STR      r1,[r0,#0]
 00007c  2100              MOVS     r1,#0
-                  |L4.126|
+                  |L5.126|
 00007e  6bc2              LDR      r2,[r0,#0x3c]
 000080  f0424280          ORR      r2,r2,#0x40000000
 000084  63c2              STR      r2,[r0,#0x3c]
 000086  1c49              ADDS     r1,r1,#1
 000088  290a              CMP      r1,#0xa
-00008a  dbf8              BLT      |L4.126|
+00008a  dbf8              BLT      |L5.126|
 00008c  f04f0100          MOV      r1,#0
 000090  f44f72fa          MOV      r2,#0x1f4
-                  |L4.148|
+                  |L5.148|
 000094  bf00              NOP      
 000096  1c49              ADDS     r1,r1,#1
 000098  4291              CMP      r1,r2
-00009a  dbfb              BLT      |L4.148|
+00009a  dbfb              BLT      |L5.148|
 00009c  2100              MOVS     r1,#0
 00009e  f24c3250          MOV      r2,#0xc350
-                  |L4.162|
+                  |L5.162|
 0000a2  6b83              LDR      r3,[r0,#0x38]
 0000a4  f0434380          ORR      r3,r3,#0x40000000
 0000a8  6383              STR      r3,[r0,#0x38]
 0000aa  1c49              ADDS     r1,r1,#1
 0000ac  4291              CMP      r1,r2
-0000ae  dbf8              BLT      |L4.162|
+0000ae  dbf8              BLT      |L5.162|
 0000b0  20e2              MOVS     r0,#0xe2
 0000b2  f7ffbffe          B.W      ltstrobe
 ;;;45     
                           ENDP
 
 0000b6  0000              DCW      0x0000
-                  |L4.184|
+                  |L5.184|
                           DCD      0x4002c000
-                  |L4.188|
+                  |L5.188|
                           DCD      0x2009c000
-                  |L4.192|
+                  |L5.192|
                           DCD      0x7fc00000
 
-                          AREA ||area_number.5||, CODE, READONLY, ALIGN=1
+                          AREA ||area_number.6||, CODE, READONLY, ALIGN=1
 
-                          EXPORTAS ||area_number.5||, ||.text||
+                          EXPORTAS ||area_number.6||, ||.text||
                   lcd_off PROC
 ;;;8      //-----------------------------------------------
 ;;;9      void lcd1_chk(void)
