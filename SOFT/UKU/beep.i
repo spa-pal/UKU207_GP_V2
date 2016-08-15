@@ -808,41 +808,6 @@ extern signed short CUR_OFF_T_ON;
 
 
 
-typedef struct
-     {
-	char 		_cnt_to_block;
-	signed short	_Ub;
-     signed short	_Ubm;
-     signed short	_dUbm;
-	signed short	_Ib;
-	signed short	_Tb;
-	char 		_nd;
-	char 		_cnt_wrk;
-	char 		_wrk;
-	unsigned short _zar;
-	char 		_full_ver;
-	signed long 	_zar_cnt;
-	signed long 	_zar_cnt_ke;
-	unsigned short _Iintegr,_Iintegr_; 
-	signed short 	_u_old[8];
-	signed short	_u_old_cnt;
-	unsigned long 	_wrk_date[2];
-	char 		_rel_stat;
-	char			_av;
-	char			_time_cnt;
-	char 		_temper_stat;
-	
-	
-	signed short 	_sign_temper_cnt;
-	signed short 	_max_temper_cnt;
-	signed long 	_resurs_cnt;
-	signed short 	_cnt_as; 	
-     } BAT_STAT; 
-extern BAT_STAT bat[2];
-extern signed short		bat_u_old_cnt;
-
-
-
 
 
 typedef struct
@@ -888,7 +853,7 @@ typedef struct
      char _adr_ee;
 	char _last_avar;
      } BPS_STAT; 
-extern BPS_STAT bps[16];
+extern BPS_STAT bps[32];
 
 extern char first_inv_slot;
 
@@ -3320,25 +3285,6 @@ if(bcnt>9)bcnt=0;
 
 if(avar_ind_stat)beep_init(0x33333333,'R');
 
-
-else if ( (((bat[0]._Ub<(USIGN*10))&&(BAT_IS_ON[0]==bisON))||((bat[1]._Ub<(USIGN*10))&&(BAT_IS_ON[1]==bisON)))) 
-	{
-	if(!bSILENT)beep_init(0x01010101,'R');
-	
-	}
-
-else if ( (((bat[0]._Ib<(-IKB))&&(BAT_IS_ON[0]==bisON))||((bat[1]._Ib<(-IKB))&&(BAT_IS_ON[1]==bisON)))) 
-	{
-	if(!bSILENT)beep_init(0x00010001,'R');
-	
-	}
-
-else if ( ((bat[0]._temper_stat&0x03)||(bat[1]._temper_stat&0x03)) )
-	{
-	if(!bSILENT) beep_init(0x00000005,'R');
-	}
-
-
 else 
 	{
 	beep_init(0x00000000,'S');
@@ -3372,6 +3318,6 @@ else
 
 
 bU_BAT2REL_AV_BAT=0;
-#line 129 "beep.c"
+#line 110 "beep.c"
 
 }

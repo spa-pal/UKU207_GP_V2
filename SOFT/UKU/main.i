@@ -1094,41 +1094,6 @@ extern signed short CUR_OFF_T_ON;
 
 
 
-typedef struct
-     {
-	char 		_cnt_to_block;
-	signed short	_Ub;
-     signed short	_Ubm;
-     signed short	_dUbm;
-	signed short	_Ib;
-	signed short	_Tb;
-	char 		_nd;
-	char 		_cnt_wrk;
-	char 		_wrk;
-	unsigned short _zar;
-	char 		_full_ver;
-	signed long 	_zar_cnt;
-	signed long 	_zar_cnt_ke;
-	unsigned short _Iintegr,_Iintegr_; 
-	signed short 	_u_old[8];
-	signed short	_u_old_cnt;
-	unsigned long 	_wrk_date[2];
-	char 		_rel_stat;
-	char			_av;
-	char			_time_cnt;
-	char 		_temper_stat;
-	
-	
-	signed short 	_sign_temper_cnt;
-	signed short 	_max_temper_cnt;
-	signed long 	_resurs_cnt;
-	signed short 	_cnt_as; 	
-     } BAT_STAT; 
-extern BAT_STAT bat[2];
-extern signed short		bat_u_old_cnt;
-
-
-
 
 
 typedef struct
@@ -1174,7 +1139,7 @@ typedef struct
      char _adr_ee;
 	char _last_avar;
      } BPS_STAT; 
-extern BPS_STAT bps[16];
+extern BPS_STAT bps[32];
 
 extern char first_inv_slot;
 
@@ -3329,12 +3294,12 @@ signed short CUR_OFF_T_OFF;
 signed short CUR_OFF_T_ON;
 
 
-BAT_STAT bat[2];
-signed short		bat_u_old_cnt;
 
 
 
-BPS_STAT bps[16];
+
+
+BPS_STAT bps[32];
 
 
 
@@ -5749,9 +5714,9 @@ void net_drv(void)
 	DU=UMAX;
 	TZAS=3;
 
-if(++cnt_net_drv>=24) cnt_net_drv=0; 
+if(++cnt_net_drv>=35) cnt_net_drv=0; 
 
-if(cnt_net_drv<=15) 
+if(cnt_net_drv<=32) 
 	{ 
 	if(mess_find_unvol(33))
 		{
@@ -5771,7 +5736,7 @@ if(cnt_net_drv<=15)
 			   
 	if(!bCAN_OFF)mcp2515_transmit(cnt_net_drv,cnt_net_drv,0xED,bps[cnt_net_drv]._flags_tu,*((char*)(&bps[cnt_net_drv]._vol_u)),*((char*)((&bps[cnt_net_drv]._vol_u))+1),*((char*)(&bps[cnt_net_drv]._vol_i)),*((char*)((&bps[cnt_net_drv]._vol_i))+1));
      
-	if(cnt_net_drv<15)
+	if(cnt_net_drv<32)
 	     {
 	     if(bps[cnt_net_drv]._cnt<60)
    	 		{    
@@ -5785,58 +5750,18 @@ if(cnt_net_drv<=15)
 						
 		if((bps[cnt_net_drv]._cnt>=3)&&(bps[cnt_net_drv]._cnt_old<3))bps[cnt_net_drv]._cnt_more2++;
 		bps[cnt_net_drv]._cnt_old=bps[cnt_net_drv]._cnt;
-	     }
+	    }
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-else if(cnt_net_drv==17)
+else if(cnt_net_drv==33)
 	{
      if(!bCAN_OFF)mcp2515_transmit(0xff,0xff,0x62,*((char*)(&UMAX)),*((char*)((&UMAX))+1),*((char*)(&DU)),*((char*)((&DU))+1),0);
      } 
     
-else if(cnt_net_drv==18)
+else if(cnt_net_drv==34)
 	{
      if(!bCAN_OFF)mcp2515_transmit(0xff,0xff,0x29,*((char*)(&T_MAX)),*((char*)((&T_MAX))+1),*((char*)(&T_SIGN)),*((char*)((&T_SIGN))+1),((char)(I_MAX/10)));
      } 
-	
-
-
-
-
-
- 	
-	
-else if(cnt_net_drv==19)
-	{
-     
-
-     }
-
-
-
-
-
-
-
-
-
-
-
- 	 
+	 
 }
 
 
@@ -8049,100 +7974,7 @@ else if(a_ind . i==iK_max_param)
 	
 	}
 
-else if(a_ind . i==iK_bat_simple)
-	{
-	ptrs[0]=		" Uáàò =     @Â      ";
-	ptrs[1]=		" îòêàëèáğóéòå Uáàò  ";
-	ptrs[2]=		"  íàæàòèåì š èëè œ  ";
-     ptrs[3]=		" Iáàò =     #À      ";
-     if(phase==0)
-          {
-          ptrs[4]=	"   íàæìèòå ¤ äëÿ    ";
-          ptrs[5]=	"êàëèáğîâêè íóëÿ Iáàò";
-          }
-     else          
-          {
-          ptrs[4]=	" îòêàëèáğóéòå Iáàò  ";
-          ptrs[5]=	"  íàæàòèåì š èëè œ  ";
-          }
-     if(bat[a_ind . s_i1]._nd)
-     	{
-     	ptrs[6]=		" Äàò÷èê òåìïåğàòóğû ";
-     	ptrs[7]=		"     íåèñïğàâåí     ";
-     	ptrs[8]=		"  èëè íåïîäêëş÷åí.  ";
-     	}
-     else
-     	{	     
-     	ptrs[6]=		" táàò =    $°C      ";
-     	ptrs[7]=		" îòêàëèáğóéòå táàò  ";
-     	ptrs[8]=		"  íàæàòèåì š èëè œ  ";
-     	}
 
-     ptrs[9]=		" Âûõîä              ";
-     ptrs[10]=		"                    ";
-     ptrs[11]=		"                    ";
-
-	bgnd_par(		" ÊÀËÈÁĞÎÂÊÀ ÁÀÒ. N! ",
-				ptrs[a_ind . i_s],
-				ptrs[a_ind . i_s+1],
-				ptrs[a_ind . i_s+2]);
-     
-     if(a_ind . s_i==0)
-     	{
-     	mess_send(205,206,0xffff,10);
-     	mess_send(200,202,(1<<(1-a_ind . s_i1)),10);
-     	
-     	}
-     
-     if(a_ind . s_i==3)
-     	{
-     	if(phase==0)
-     		{
-			mess_send(205,208,0xffff,10);
-     		mess_send(210,100,1,10);
-			mess_send(200,202,(1<<a_ind . s_i1),10);
-     		
-     		}
-     	else if(phase==1)
-     		{
-			mess_send(205,206,0xffff,10);
-			mess_send(200,202,(1<<(1-a_ind . s_i1)),10);
-     		
-   			}
-     		
-     	}
-
-     if(a_ind . s_i==6)
-     	{
-   		
-    		
-     		
-     	}
-
-     if(a_ind . s_i==9)
-     	{
-     	mess_send(205,206,0xffff,10);
-     	mess_send(200,202,(1<<(1-a_ind . s_i1)),10);
-     	
-     	}
-	
-	if((a_ind . s_i==0)||(a_ind . s_i==1)||(a_ind . s_i==2))a_ind . i_s=0;
-	else if((a_ind . s_i==3)||(a_ind . s_i==4)||(a_ind . s_i==5))a_ind . i_s=3;
-	else if((a_ind . s_i==6)||(a_ind . s_i==7)||(a_ind . s_i==8))a_ind . i_s=6;
-	else a_ind . i_s=9;
-	
-
-
-	pointer_set(1);	
-	int2lcd(a_ind . s_i1+1,'!',0);
-	int2lcd(bat[a_ind . s_i1]._Ub,'@',1);
-	int2lcd_mmm(bat[a_ind . s_i1]._Ib,'#',2);
-	int2lcd_mmm(bat[a_ind . s_i1]._Tb,'$',0);
-
-	
-	
-	
-	}
 	
 
 else if(a_ind . i==iK_bps_sel)
@@ -8661,8 +8493,6 @@ if(a_ind . i==iDeb)
      	         "                    ");
 
 		int2lcdyx(main_10Hz_cnt,0,7,0);
-		int2lcdyx(bat[0]._av,0,10,0);
-		int2lcdyx(bat[1]._av,0,12,0);
 		
 
  		long2lcdhyx(avar_stat,1,7);
@@ -9275,12 +9105,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4378 "main.c"
+#line 4243 "main.c"
 
 
 
 
-#line 4400 "main.c"
+#line 4265 "main.c"
 
 
 
@@ -16202,7 +16032,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11327 "main.c"
+#line 11192 "main.c"
 
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);
@@ -16552,13 +16382,7 @@ while (1)
 			{
 			watchdog_reset();
 			}
-		
 
-		
-		
-		
-		ubat_old_drv();
-		
 		beep_hndl();
 				
 		plazma_plazma_plazma++;

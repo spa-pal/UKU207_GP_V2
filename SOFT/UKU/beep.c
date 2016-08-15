@@ -68,25 +68,6 @@ if(bcnt>9)bcnt=0;
 //bU_BAT2REL_AV_BAT=0;
 if(avar_ind_stat)beep_init(0x33333333,'R');
 
-
-else if ( (((bat[0]._Ub<(USIGN*10))&&(BAT_IS_ON[0]==bisON))||((bat[1]._Ub<(USIGN*10))&&(BAT_IS_ON[1]==bisON)))) 
-	{
-	if(!bSILENT)beep_init(0x01010101,'R');
-	//bU_BAT2REL_AV_BAT=1;
-	}
-
-else if ( (((bat[0]._Ib<(-IKB))&&(BAT_IS_ON[0]==bisON))||((bat[1]._Ib<(-IKB))&&(BAT_IS_ON[1]==bisON)))) 
-	{
-	if(!bSILENT)beep_init(0x00010001,'R');
-	//bU_BAT2REL_AV_BAT=1;
-	}
-
-else if ( ((bat[0]._temper_stat&0x03)||(bat[1]._temper_stat&0x03)) )
-	{
-	if(!bSILENT) beep_init(0x00000005,'R');
-	}
-
-
 else 
 	{
 	beep_init(0x00000000,'S');

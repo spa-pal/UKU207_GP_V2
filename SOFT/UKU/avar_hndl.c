@@ -63,11 +63,6 @@ char i;
 if(net_av)		SET_REG(avar_stat,1,0,1);
 else	   			SET_REG(avar_stat,0,0,1);
 
-for(i=0;i<2;i++)
-	{
-	if(bat[i]._av&1)	SET_REG(avar_stat,1,1+i,1);
-	else	   		SET_REG(avar_stat,0,1+i,1);
-	}
 
 for(i=0;i<12;i++)
 	{

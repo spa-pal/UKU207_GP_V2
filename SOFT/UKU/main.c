@@ -234,12 +234,12 @@ signed short CUR_OFF_T_OFF;
 signed short CUR_OFF_T_ON;
 //***********************************************
 //Состояние батарей
-BAT_STAT bat[2];
-signed short		bat_u_old_cnt;
+//BAT_STAT bat[2];
+//signed short		bat_u_old_cnt;
 
 //***********************************************
 //Состояние источников
-BPS_STAT bps[16];
+BPS_STAT bps[32];
 
 //***********************************************
 //Состояние инверторов
@@ -843,9 +843,9 @@ void net_drv(void)
 	DU=UMAX;
 	TZAS=3;
 
-if(++cnt_net_drv>=24) cnt_net_drv=0; //всего 16 посылок
+if(++cnt_net_drv>=35) cnt_net_drv=0; //всего 35 посылок
 
-if(cnt_net_drv<=15) // с 1 по 12 посылки адресные
+if(cnt_net_drv<=32) // с 1 по 32 посылки адресные
 	{ 
 	if(mess_find_unvol(MESS2NET_DRV))
 		{
@@ -865,7 +865,7 @@ if(cnt_net_drv<=15) // с 1 по 12 посылки адресные
 			   
 	if(!bCAN_OFF)can1_out(cnt_net_drv,cnt_net_drv,GETTM,bps[cnt_net_drv]._flags_tu,*((char*)(&bps[cnt_net_drv]._vol_u)),*((char*)((&bps[cnt_net_drv]._vol_u))+1),*((char*)(&bps[cnt_net_drv]._vol_i)),*((char*)((&bps[cnt_net_drv]._vol_i))+1));
      
-	if(cnt_net_drv<15)
+	if(cnt_net_drv<32)
 	     {
 	     if(bps[cnt_net_drv]._cnt<CNT_SRC_MAX)
    	 		{    
@@ -879,58 +879,18 @@ if(cnt_net_drv<=15) // с 1 по 12 посылки адресные
 						
 		if((bps[cnt_net_drv]._cnt>=3)&&(bps[cnt_net_drv]._cnt_old<3))bps[cnt_net_drv]._cnt_more2++;
 		bps[cnt_net_drv]._cnt_old=bps[cnt_net_drv]._cnt;
-	     }
+	    }
 	}
-/*
-else if(cnt_net_drv==15)
-	{
-     if(!bCAN_OFF)can1_out(cnt_net_drv,cnt_net_drv,*((char*)(&Uvv[0])),*((char*)((&Uvv[0]))+1),*((char*)(&Uvv[1])),*((char*)((&Uvv[1]))+1),0,bRESET_EXT);
-     }
-
-else if(cnt_net_drv==16)
-	{
-     if(!bCAN_OFF)can1_out(cnt_net_drv,cnt_net_drv,(char)main_vent_pos,*((char*)(&POWER_CNT_ADRESS)),*((char*)((&POWER_CNT_ADRESS))+1),0,0,0);
-     }
-
-else if(cnt_net_drv==10)
-	{
-     if(!bCAN_OFF)can1_out(cnt_net_drv,cnt_net_drv,0,0,0,0,0,0);
-     }
-*/
-else if(cnt_net_drv==17)
+else if(cnt_net_drv==33)
 	{
      if(!bCAN_OFF)can1_out(0xff,0xff,MEM_KF,*((char*)(&UMAX)),*((char*)((&UMAX))+1),*((char*)(&DU)),*((char*)((&DU))+1),0);
      } 
     
-else if(cnt_net_drv==18)
+else if(cnt_net_drv==34)
 	{
      if(!bCAN_OFF)can1_out(0xff,0xff,MEM_KF4,*((char*)(&T_MAX)),*((char*)((&T_MAX))+1),*((char*)(&T_SIGN)),*((char*)((&T_SIGN))+1),((char)(I_MAX/10)));
      } 
-	/*
-	can1_out(0xff,0xff,MEM_KF1,*((char*)(&TMAX)),*((char*)((&TMAX))+1),*((char*)(&TSIGN)),*((char*)((&TSIGN))+1),(char)TZAS);
-else if(cnt_net_drv==14)
-	{                 
-//	can2_out(0xff,0xff,MEM_KF2,*((char*)(&U_INV_MAX)),*((char*)((&U_INV_MAX))+1),*((char*)(&U_INV_MIN)),*((char*)((&U_INV_MIN))+1),(char)T_INV_MAX);
-     }
-*/	
-	
-else if(cnt_net_drv==19)
-	{
-     //if(!bCAN_OFF)can1_out(0xff,0xff,MEM_KF1,0,0,0,0,3);
-
-     }/*
-else if(cnt_net_drv==21)
-	{
-     if(!bCAN_OFF)can1_out(cnt_net_drv,cnt_net_drv,0,0,0,0,0,0);
-     } 
-else if(cnt_net_drv==22)
-	{
-     if(!bCAN_OFF)can1_out(cnt_net_drv,cnt_net_drv,0,0,0,0,0,0);
-     } 
-else if(cnt_net_drv==23)
-	{                 
-	if(!bCAN_OFF)can1_out(cnt_net_drv,cnt_net_drv,0,0,0,0,0,0);
-     } */	 
+	 
 }
 
 
@@ -3143,100 +3103,7 @@ else if(ind==iK_max_param)
 	
 	}
 
-else if(ind==iK_bat_simple)
-	{
-	ptrs[0]=		" Uбат =     @В      ";
-	ptrs[1]=		" откалибруйте Uбат  ";
-	ptrs[2]=		"  нажатием љ или њ  ";
-     ptrs[3]=		" Iбат =     #А      ";
-     if(phase==0)
-          {
-          ptrs[4]=	"   нажмите ¤ для    ";
-          ptrs[5]=	"калибровки нуля Iбат";
-          }
-     else          
-          {
-          ptrs[4]=	" откалибруйте Iбат  ";
-          ptrs[5]=	"  нажатием љ или њ  ";
-          }
-     if(bat[sub_ind1]._nd)
-     	{
-     	ptrs[6]=		" Датчик температуры ";
-     	ptrs[7]=		"     неисправен     ";
-     	ptrs[8]=		"  или неподключен.  ";
-     	}
-     else
-     	{	     
-     	ptrs[6]=		" tбат =    $°C      ";
-     	ptrs[7]=		" откалибруйте tбат  ";
-     	ptrs[8]=		"  нажатием љ или њ  ";
-     	}
 
-     ptrs[9]=		" Выход              ";
-     ptrs[10]=		"                    ";
-     ptrs[11]=		"                    ";
-
-	bgnd_par(		" КАЛИБРОВКА БАТ. N! ",
-				ptrs[index_set],
-				ptrs[index_set+1],
-				ptrs[index_set+2]);
-     
-     if(sub_ind==0)
-     	{
-     	mess_send(MESS2BPS_HNDL,PARAM_BPS_ALL_OFF_AFTER_2SEC,0xffff,10);
-     	mess_send(MESS2BAT_HNDL,PARAM_BAT_MASK_OFF_AFTER_2SEC,(1<<(1-sub_ind1)),10);
-     	//mess_send(MESS2BAT_HNDL1,PARAM_BAT_ON,(1<<sub_ind1),10);
-     	}
-     
-     if(sub_ind==3)
-     	{
-     	if(phase==0)
-     		{
-			mess_send(MESS2BPS_HNDL,PARAM_BPS_MASK_ON_OFF_AFTER_2SEC,0xffff,10);
-     		mess_send(MESS2RELE_HNDL,PARAM_RELE_SAMOKALIBR,1,10);
-			mess_send(MESS2BAT_HNDL,PARAM_BAT_MASK_OFF_AFTER_2SEC,(1<<sub_ind1),10);
-     		//mess_send(MESS2BAT_HNDL1,PARAM_BAT_ON,(1<<(1-sub_ind1)),10);
-     		}
-     	else if(phase==1)
-     		{
-			mess_send(MESS2BPS_HNDL,PARAM_BPS_ALL_OFF_AFTER_2SEC,0xffff,10);
-			mess_send(MESS2BAT_HNDL,PARAM_BAT_MASK_OFF_AFTER_2SEC,(1<<(1-sub_ind1)),10);
-     		//mess_send(MESS2BAT_HNDL1,PARAM_BAT_ON,(1<<sub_ind1),10);
-   			}
-     		
-     	}
-
-     if(sub_ind==6)
-     	{
-   		//mess_send(_MESS_BAT_MASK_ON,_MESS_BAT_MASK_ON,(0xffff),10);
-    		//mess_send(MESS_SRC_ON_OFF,_MESS_SRC_MASK_UNBLOK,0xffff,10);
-     		
-     	}
-
-     if(sub_ind==9)
-     	{
-     	mess_send(MESS2BPS_HNDL,PARAM_BPS_ALL_OFF_AFTER_2SEC,0xffff,10);
-     	mess_send(MESS2BAT_HNDL,PARAM_BAT_MASK_OFF_AFTER_2SEC,(1<<(1-sub_ind1)),10);
-     	//mess_send(MESS2BAT_HNDL1,PARAM_BAT_ON,(1<<sub_ind1),10);
-     	}
-	
-	if((sub_ind==0)||(sub_ind==1)||(sub_ind==2))index_set=0;
-	else if((sub_ind==3)||(sub_ind==4)||(sub_ind==5))index_set=3;
-	else if((sub_ind==6)||(sub_ind==7)||(sub_ind==8))index_set=6;
-	else index_set=9;
-	
-
-
-	pointer_set(1);	
-	int2lcd(sub_ind1+1,'!',0);
-	int2lcd(bat[sub_ind1]._Ub,'@',1);
-	int2lcd_mmm(bat[sub_ind1]._Ib,'#',2);
-	int2lcd_mmm(bat[sub_ind1]._Tb,'$',0);
-
-	//int2lcdyx(ad7705_buff_[0],0,6,0);
-	//int2lcdyx(adc_buff_[12],0,15,0);
-	
-	}
 	
 
 else if(ind==iK_bps_sel)
@@ -3580,14 +3447,14 @@ if(ind==iDeb)
 		int2lcdyx(bat[1]._dUbm,2,14,0);
 		int2lcdyx(bat[1]._cnt_as,3,14,0);*/
 
-		int2lcdyx(sub_ind1+1,1,0,0);
-		int2lcdyx(sub_ind1+2,2,0,0);
-		int2lcdyx(sub_ind1+3,3,0,0);
+		int2lcdyx(sub_ind1+1,1,1,0);
+		int2lcdyx(sub_ind1+2,2,1,0);
+		int2lcdyx(sub_ind1+3,3,1,0);
 		
 		
-		int2lcdyx(bps[sub_ind1  ]._cnt,1,2,0);
-		int2lcdyx(bps[sub_ind1+1]._cnt,2,2,0);
-		int2lcdyx(bps[sub_ind1+2]._cnt,3,2,0);		
+		int2lcdyx(bps[sub_ind1  ]._cnt,1,3,0);
+		int2lcdyx(bps[sub_ind1+1]._cnt,2,3,0);
+		int2lcdyx(bps[sub_ind1+2]._cnt,3,3,0);		
 		
 	/*	int2lcdyx(bps[sub_ind1  ]._ist_blok_cnt,1,5,0);
 		int2lcdyx(bps[sub_ind1+1]._ist_blok_cnt,2,5,0);
@@ -3755,8 +3622,6 @@ if(ind==iDeb)
      	         "                    ");
 
 		int2lcdyx(main_10Hz_cnt,0,7,0);
-		int2lcdyx(bat[0]._av,0,10,0);
-		int2lcdyx(bat[1]._av,0,12,0);
 		//char2lcdhyx(rele_stat,0,19);
 
  		long2lcdhyx(avar_stat,1,7);
@@ -4555,12 +4420,12 @@ else if(ind==iDeb)
 		if(but==butU)
 	     	{
 	     	sub_ind1--;
-	     	gran_char(&sub_ind1,0,7);
+	     	gran_char(&sub_ind1,0,31);
 	     	}
 		if(but==butD)
 	     	{
 	     	sub_ind1++;
-	     	gran_char(&sub_ind1,0,7);
+	     	gran_char(&sub_ind1,0,31);
 	     	}
 	     
 		if(but==butE)
@@ -7077,14 +6942,14 @@ else if(ind==iSet)
 	     if((but==butR)||(but==butR_))
 	     	{
 	     	NUMIST++;
-	     	gran(&NUMIST,1,12);
+	     	gran(&NUMIST,1,32);
 	     	lc640_write_int(EE_NUMIST,NUMIST);
 	     	}
 	     
 	     else if((but==butL)||(but==butL_))
 	     	{
 	     	NUMIST--;
-	     	gran(&NUMIST,1,12);
+	     	gran(&NUMIST,1,32);
 	     	lc640_write_int(EE_NUMIST,NUMIST);
 	     	}
           }
@@ -11030,7 +10895,7 @@ else if(ind==iCurr_off)
 				}
 			}
 		}
-	else if(!CURR_OFF_EN)
+	else /*if(!CURR_OFF_EN)*/
 		{
  		if(sub_ind==0)
 			{
@@ -11673,13 +11538,7 @@ while (1)
 			{
 			watchdog_reset();
 			}
-		//can1_out_adr((char*)&net_U,21);
 
-		//samokalibr_hndl();
-		
-		//zar_drv();
-		ubat_old_drv();
-		//kb_hndl();
 		beep_hndl();
 				
 		plazma_plazma_plazma++;

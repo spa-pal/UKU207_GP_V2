@@ -7,18 +7,18 @@
                   beep_drv PROC
 ;;;11     //-----------------------------------------------
 ;;;12     void beep_drv(void)
-000000  484c              LDR      r0,|L1.308|
+000000  482b              LDR      r0,|L1.176|
 ;;;13     {
 ;;;14     LPC_GPIO1->FIODIR|=(1UL<<31);
 000002  6a01              LDR      r1,[r0,#0x20]
 000004  f0414100          ORR      r1,r1,#0x80000000
 000008  6201              STR      r1,[r0,#0x20]
 ;;;15     if((beep_stat_temp&0x00000001UL)&&(ZV_ON))
-00000a  494b              LDR      r1,|L1.312|
+00000a  492a              LDR      r1,|L1.180|
 00000c  684a              LDR      r2,[r1,#4]  ; beep_stat_temp
 00000e  07d3              LSLS     r3,r2,#31
 000010  d009              BEQ      |L1.38|
-000012  4b4a              LDR      r3,|L1.316|
+000012  4b29              LDR      r3,|L1.184|
 000014  881b              LDRH     r3,[r3,#0]  ; ZV_ON
 000016  b133              CBZ      r3,|L1.38|
 ;;;16         	{
@@ -72,7 +72,7 @@
 ;;;36     if(fl=='O')
 ;;;37     	{
 ;;;38     	beep_stat_temp=zvuk;
-00004a  4a3b              LDR      r2,|L1.312|
+00004a  4a1a              LDR      r2,|L1.180|
 ;;;39     	beep_stat=0x0L;
 00004c  2300              MOVS     r3,#0
 ;;;40     	beep_stat_cnt=32;
@@ -127,11 +127,11 @@
                   beep_hndl PROC
 ;;;62     //-----------------------------------------------
 ;;;63     void beep_hndl(void) 
-000078  b5f0              PUSH     {r4-r7,lr}
+000078  b530              PUSH     {r4,r5,lr}
 ;;;64     { 
 ;;;65     static char bcnt;
 ;;;66     bcnt++; 
-00007a  4c2f              LDR      r4,|L1.312|
+00007a  4c0e              LDR      r4,|L1.180|
 ;;;67     if(bcnt>9)bcnt=0;
 00007c  2500              MOVS     r5,#0
 00007e  7820              LDRB     r0,[r4,#0]            ;66  ; bcnt
@@ -144,164 +144,77 @@
                   |L1.140|
 ;;;68     //bU_BAT2REL_AV_BAT=0;
 ;;;69     if(avar_ind_stat)beep_init(0x33333333,'R');
-00008c  482c              LDR      r0,|L1.320|
+00008c  480b              LDR      r0,|L1.188|
 00008e  6800              LDR      r0,[r0,#0]  ; avar_ind_stat
-000090  b118              CBZ      r0,|L1.154|
+000090  b128              CBZ      r0,|L1.158|
 000092  2152              MOVS     r1,#0x52
 000094  f04f3033          MOV      r0,#0x33333333
-000098  e041              B        |L1.286|
-                  |L1.154|
+000098  f7fffffe          BL       beep_init
+00009c  e005              B        |L1.170|
+                  |L1.158|
 ;;;70     
-;;;71     
-;;;72     else if ( (((bat[0]._Ub<(USIGN*10))&&(BAT_IS_ON[0]==bisON))||((bat[1]._Ub<(USIGN*10))&&(BAT_IS_ON[1]==bisON)))) 
-00009a  492b              LDR      r1,|L1.328|
-00009c  4829              LDR      r0,|L1.324|
-;;;73     	{
-;;;74     	if(!bSILENT)beep_init(0x01010101,'R');
-00009e  f8dfc0ac          LDR      r12,|L1.332|
-0000a2  f9b11000          LDRSH    r1,[r1,#0]            ;72  ; USIGN
-0000a6  4a2a              LDR      r2,|L1.336|
-0000a8  f9b03002          LDRSH    r3,[r0,#2]            ;72  ; bat
-0000ac  eb010681          ADD      r6,r1,r1,LSL #2       ;72
-0000b0  7812              LDRB     r2,[r2,#0]            ;72
-0000b2  f8dc1000          LDR      r1,[r12,#0]           ;72
-0000b6  ebb30f46          CMP      r3,r6,LSL #1          ;72
-0000ba  da01              BGE      |L1.192|
-0000bc  2a55              CMP      r2,#0x55              ;72
-0000be  d01d              BEQ      |L1.252|
-                  |L1.192|
-0000c0  4b23              LDR      r3,|L1.336|
-0000c2  f9b0704e          LDRSH    r7,[r0,#0x4e]         ;72  ; bat
-0000c6  785b              LDRB     r3,[r3,#1]            ;72
-0000c8  ebb70f46          CMP      r7,r6,LSL #1          ;72
-0000cc  da01              BGE      |L1.210|
-0000ce  2b55              CMP      r3,#0x55              ;72
-0000d0  d014              BEQ      |L1.252|
-                  |L1.210|
-;;;75     	//bU_BAT2REL_AV_BAT=1;
-;;;76     	}
+;;;71     else 
+;;;72     	{
+;;;73     	beep_init(0x00000000,'S');
+00009e  2153              MOVS     r1,#0x53
+0000a0  2000              MOVS     r0,#0
+0000a2  f7fffffe          BL       beep_init
+;;;74     	bSILENT=0;
+0000a6  4806              LDR      r0,|L1.192|
+0000a8  6005              STR      r5,[r0,#0]  ; bSILENT
+                  |L1.170|
+;;;75     	} 
+;;;76     
 ;;;77     
-;;;78     else if ( (((bat[0]._Ib<(-IKB))&&(BAT_IS_ON[0]==bisON))||((bat[1]._Ib<(-IKB))&&(BAT_IS_ON[1]==bisON)))) 
-0000d2  4e20              LDR      r6,|L1.340|
-0000d4  f9b07008          LDRSH    r7,[r0,#8]  ; bat
-0000d8  f9b66000          LDRSH    r6,[r6,#0]  ; IKB
-0000dc  4276              RSBS     r6,r6,#0
-0000de  42b7              CMP      r7,r6
-0000e0  da01              BGE      |L1.230|
-0000e2  2a55              CMP      r2,#0x55
-0000e4  d00f              BEQ      |L1.262|
-                  |L1.230|
-0000e6  f9b02054          LDRSH    r2,[r0,#0x54]  ; bat
-0000ea  42b2              CMP      r2,r6
-0000ec  da01              BGE      |L1.242|
-0000ee  2b55              CMP      r3,#0x55
-0000f0  d009              BEQ      |L1.262|
-                  |L1.242|
-;;;79     	{
-;;;80     	if(!bSILENT)beep_init(0x00010001,'R');
-;;;81     	//bU_BAT2REL_AV_BAT=1;
-;;;82     	}
-;;;83     
-;;;84     else if ( ((bat[0]._temper_stat&0x03)||(bat[1]._temper_stat&0x03)) )
-0000f2  f890203f          LDRB     r2,[r0,#0x3f]  ; bat
-0000f6  0792              LSLS     r2,r2,#30
-0000f8  d10e              BNE      |L1.280|
-0000fa  e009              B        |L1.272|
-                  |L1.252|
-0000fc  b9c1              CBNZ     r1,|L1.304|
-0000fe  2152              MOVS     r1,#0x52              ;74
-000100  f04f3001          MOV      r0,#0x1010101         ;74
-000104  e00b              B        |L1.286|
-                  |L1.262|
-000106  b999              CBNZ     r1,|L1.304|
-000108  2152              MOVS     r1,#0x52              ;80
-00010a  f04f1001          MOV      r0,#0x10001           ;80
-00010e  e006              B        |L1.286|
-                  |L1.272|
-000110  f890008b          LDRB     r0,[r0,#0x8b]  ; bat
-000114  0780              LSLS     r0,r0,#30
-000116  d005              BEQ      |L1.292|
-                  |L1.280|
-;;;85     	{
-;;;86     	if(!bSILENT) beep_init(0x00000005,'R');
-000118  b951              CBNZ     r1,|L1.304|
-00011a  2152              MOVS     r1,#0x52
-00011c  2005              MOVS     r0,#5
-                  |L1.286|
-00011e  f7fffffe          BL       beep_init
-000122  e005              B        |L1.304|
-                  |L1.292|
-;;;87     	}
+;;;78     //if(!avar_ind_stat)beep_init(0x00000000,'R');
+;;;79     
+;;;80     /*if(K[MNL]==ON)
+;;;81     	{ */
+;;;82     //if(((av_beep&0xffff)&&(ind!=iK)&&(ind!=iTst))
+;;;83     //	/*||((!T_EXT_ZVUK_EN[0])&&((tout_stat[0]==tMIN)||(tout_stat[0]==tMAX)))*/)beep_init(0x55555555,'R'); 
+;;;84     
+;;;85     //else if(bUrazr&&(!bUOFF))beep_init(0x00010001,'R');
+;;;86     
+;;;87     //else if(bIrazr&&(cnt_beep==0))beep_init(0x01010101,'R');
 ;;;88     
-;;;89     
-;;;90     else 
+;;;89     /*
+;;;90     else if(bTsi||bTsb)
 ;;;91     	{
-;;;92     	beep_init(0x00000000,'S');
-000124  2153              MOVS     r1,#0x53
-000126  2000              MOVS     r0,#0
-000128  f7fffffe          BL       beep_init
-;;;93     	bSILENT=0;
-00012c  f8cc5000          STR      r5,[r12,#0]  ; bSILENT
-                  |L1.304|
-;;;94     	} 
-;;;95     
-;;;96     
-;;;97     //if(!avar_ind_stat)beep_init(0x00000000,'R');
+;;;92     	if(!bcnt)beep_init(0x00000001,'O');
+;;;93          }
+;;;94     
+;;;95     else if(bIbr) beep_init(0x00000001,'R');
+;;;96     */
+;;;97     
 ;;;98     
-;;;99     /*if(K[MNL]==ON)
-;;;100    	{ */
-;;;101    //if(((av_beep&0xffff)&&(ind!=iK)&&(ind!=iTst))
-;;;102    //	/*||((!T_EXT_ZVUK_EN[0])&&((tout_stat[0]==tMIN)||(tout_stat[0]==tMAX)))*/)beep_init(0x55555555,'R'); 
-;;;103    
-;;;104    //else if(bUrazr&&(!bUOFF))beep_init(0x00010001,'R');
-;;;105    
-;;;106    //else if(bIrazr&&(cnt_beep==0))beep_init(0x01010101,'R');
-;;;107    
-;;;108    /*
-;;;109    else if(bTsi||bTsb)
-;;;110    	{
-;;;111    	if(!bcnt)beep_init(0x00000001,'O');
-;;;112         }
-;;;113    
-;;;114    else if(bIbr) beep_init(0x00000001,'R');
-;;;115    */
-;;;116    
-;;;117    
-;;;118    //else beep_init(0x00000000,'S');
-;;;119    
-;;;120    
-;;;121    
-;;;122    bU_BAT2REL_AV_BAT=0;
-000130  70e5              STRB     r5,[r4,#3]
-;;;123    #ifdef UKU206_220
-;;;124    if  (((bat[0]._Ub<(USIGN*10))&&(BAT_IS_ON[0]==bisON))) 
-;;;125    	{
-;;;126    	bU_BAT2REL_AV_BAT=1;
-;;;127    	}
-;;;128    #endif
-;;;129    
-;;;130    }
-000132  bdf0              POP      {r4-r7,pc}
+;;;99     //else beep_init(0x00000000,'S');
+;;;100    
+;;;101    
+;;;102    
+;;;103    bU_BAT2REL_AV_BAT=0;
+0000aa  70e5              STRB     r5,[r4,#3]
+;;;104    #ifdef UKU206_220
+;;;105    if  (((bat[0]._Ub<(USIGN*10))&&(BAT_IS_ON[0]==bisON))) 
+;;;106    	{
+;;;107    	bU_BAT2REL_AV_BAT=1;
+;;;108    	}
+;;;109    #endif
+;;;110    
+;;;111    }
+0000ac  bd30              POP      {r4,r5,pc}
                           ENDP
 
-                  |L1.308|
+0000ae  0000              DCW      0x0000
+                  |L1.176|
                           DCD      0x2009c000
-                  |L1.312|
+                  |L1.180|
                           DCD      ||.data||
-                  |L1.316|
+                  |L1.184|
                           DCD      ZV_ON
-                  |L1.320|
+                  |L1.188|
                           DCD      avar_ind_stat
-                  |L1.324|
-                          DCD      bat
-                  |L1.328|
-                          DCD      USIGN
-                  |L1.332|
+                  |L1.192|
                           DCD      bSILENT
-                  |L1.336|
-                          DCD      BAT_IS_ON
-                  |L1.340|
-                          DCD      IKB
 
                           AREA ||.data||, DATA, ALIGN=2
 

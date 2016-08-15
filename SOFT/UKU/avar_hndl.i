@@ -3051,41 +3051,6 @@ extern signed short CUR_OFF_T_ON;
 
 
 
-typedef struct
-     {
-	char 		_cnt_to_block;
-	signed short	_Ub;
-     signed short	_Ubm;
-     signed short	_dUbm;
-	signed short	_Ib;
-	signed short	_Tb;
-	char 		_nd;
-	char 		_cnt_wrk;
-	char 		_wrk;
-	unsigned short _zar;
-	char 		_full_ver;
-	signed long 	_zar_cnt;
-	signed long 	_zar_cnt_ke;
-	unsigned short _Iintegr,_Iintegr_; 
-	signed short 	_u_old[8];
-	signed short	_u_old_cnt;
-	unsigned long 	_wrk_date[2];
-	char 		_rel_stat;
-	char			_av;
-	char			_time_cnt;
-	char 		_temper_stat;
-	
-	
-	signed short 	_sign_temper_cnt;
-	signed short 	_max_temper_cnt;
-	signed long 	_resurs_cnt;
-	signed short 	_cnt_as; 	
-     } BAT_STAT; 
-extern BAT_STAT bat[2];
-extern signed short		bat_u_old_cnt;
-
-
-
 
 
 typedef struct
@@ -3131,7 +3096,7 @@ typedef struct
      char _adr_ee;
 	char _last_avar;
      } BPS_STAT; 
-extern BPS_STAT bps[16];
+extern BPS_STAT bps[32];
 
 extern char first_inv_slot;
 
@@ -3644,11 +3609,6 @@ char i;
 if(net_av)		avar_stat = ( (avar_stat & ~((0xffffffff>>(32-1))<<0)) | ((unsigned)1 << 0) );
 else	   			avar_stat = ( (avar_stat & ~((0xffffffff>>(32-1))<<0)) | ((unsigned)0 << 0) );
 
-for(i=0;i<2;i++)
-	{
-	if(bat[i]._av&1)	avar_stat = ( (avar_stat & ~((0xffffffff>>(32-1))<<1+i)) | ((unsigned)1 << 1+i) );
-	else	   		avar_stat = ( (avar_stat & ~((0xffffffff>>(32-1))<<1+i)) | ((unsigned)0 << 1+i) );
-	}
 
 for(i=0;i<12;i++)
 	{

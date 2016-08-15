@@ -258,7 +258,7 @@ if(samokalibr_cnt==1799U)
 }
 
 
-
+/*
 //-----------------------------------------------
 void ubat_old_drv(void)
 {        
@@ -267,7 +267,7 @@ gran_ring(&bat_u_old_cnt,0,8);
 
 bat[0]._u_old[bat_u_old_cnt]=bat[0]._Ub;
 bat[1]._u_old[bat_u_old_cnt]=bat[1]._Ub;
-}
+}*/
 
 //-----------------------------------------------
 void unet_drv(void)
@@ -326,7 +326,7 @@ if(I_LOAD_MODE==0)
 if(load_I<0)load_I=0;
 //load_I=333;
 
-for(i=0;i<12;i++)
+for(i=0;i<32;i++)
 	{
 	if(bps[i]._cnt<25)
 	     {

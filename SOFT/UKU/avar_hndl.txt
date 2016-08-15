@@ -14,9 +14,9 @@
 ;;;61     //unsigned avar_stat_new,avar_stat_offed;
 ;;;62     
 ;;;63     if(net_av)		SET_REG(avar_stat,1,0,1);
-000002  484f              LDR      r0,|L1.320|
+000002  4841              LDR      r0,|L1.264|
 000004  7802              LDRB     r2,[r0,#0]  ; net_av
-000006  484f              LDR      r0,|L1.324|
+000006  4841              LDR      r0,|L1.268|
 000008  6801              LDR      r1,[r0,#0]
 00000a  b112              CBZ      r2,|L1.18|
 00000c  f0410101          ORR      r1,r1,#1
@@ -26,210 +26,178 @@
 000012  f0210101          BIC      r1,r1,#1
                   |L1.22|
 ;;;65     
-;;;66     for(i=0;i<2;i++)
+;;;66     
+;;;67     for(i=0;i<12;i++)
 000016  6001              STR      r1,[r0,#0]  ; avar_stat
 000018  2100              MOVS     r1,#0
-;;;67     	{
-;;;68     	if(bat[i]._av&1)	SET_REG(avar_stat,1,1+i,1);
-00001a  4c4b              LDR      r4,|L1.328|
+;;;68     	{
+;;;69     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
+00001a  4c3d              LDR      r4,|L1.272|
 00001c  f05f0301          MOVS.W   r3,#1
                   |L1.32|
-000020  eb010241          ADD      r2,r1,r1,LSL #1
-000024  eb021201          ADD      r2,r2,r1,LSL #4
-000028  eb040282          ADD      r2,r4,r2,LSL #2
-00002c  f892203d          LDRB     r2,[r2,#0x3d]
-000030  07d2              LSLS     r2,r2,#31
-000032  d006              BEQ      |L1.66|
-000034  1c4d              ADDS     r5,r1,#1
-000036  fa03f205          LSL      r2,r3,r5
-00003a  6805              LDR      r5,[r0,#0]  ; avar_stat
-00003c  4395              BICS     r5,r5,r2
-00003e  4315              ORRS     r5,r5,r2
-000040  e004              B        |L1.76|
-                  |L1.66|
-;;;69     	else	   		SET_REG(avar_stat,0,1+i,1);
-000042  1c4a              ADDS     r2,r1,#1
-000044  6805              LDR      r5,[r0,#0]  ; avar_stat
-000046  fa03f202          LSL      r2,r3,r2
-00004a  4395              BICS     r5,r5,r2
-                  |L1.76|
-00004c  1c49              ADDS     r1,r1,#1              ;66
-00004e  b2c9              UXTB     r1,r1                 ;66
-000050  6005              STR      r5,[r0,#0]            ;66  ; avar_stat
-000052  2902              CMP      r1,#2                 ;66
-000054  d3e4              BCC      |L1.32|
-;;;70     	}
-;;;71     
-;;;72     for(i=0;i<12;i++)
-;;;73     	{
-;;;74     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
-000056  4c3d              LDR      r4,|L1.332|
-000058  2100              MOVS     r1,#0                 ;72
-00005a  bf00              NOP      
-                  |L1.92|
-00005c  eb010281          ADD      r2,r1,r1,LSL #2
-000060  eb041202          ADD      r2,r4,r2,LSL #4
-000064  7852              LDRB     r2,[r2,#1]
-000066  b132              CBZ      r2,|L1.118|
-000068  1ccd              ADDS     r5,r1,#3
-00006a  fa03f205          LSL      r2,r3,r5
-00006e  6805              LDR      r5,[r0,#0]  ; avar_stat
-000070  4395              BICS     r5,r5,r2
-000072  4315              ORRS     r5,r5,r2
-000074  e003              B        |L1.126|
-                  |L1.118|
-;;;75     	else	   		SET_REG(avar_stat,0,3+i,1);
-000076  1cca              ADDS     r2,r1,#3
-000078  fa03f202          LSL      r2,r3,r2
-00007c  4395              BICS     r5,r5,r2
-                  |L1.126|
-00007e  1c49              ADDS     r1,r1,#1              ;72
-000080  b2c9              UXTB     r1,r1                 ;72
-000082  6005              STR      r5,[r0,#0]            ;72  ; avar_stat
-000084  290c              CMP      r1,#0xc               ;72
-000086  d3e9              BCC      |L1.92|
-;;;76     	}
-;;;77     
-;;;78     for(i=0;i<6;i++)
-;;;79     	{
-;;;80     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
-;;;81     	else	   		SET_REG(avar_stat,0,15+i,1);
-000088  4629              MOV      r1,r5
-00008a  4d2e              LDR      r5,|L1.324|
-00008c  2200              MOVS     r2,#0                 ;78
-00008e  3514              ADDS     r5,r5,#0x14           ;80
-                  |L1.144|
-000090  5cac              LDRB     r4,[r5,r2]            ;80
-000092  b134              CBZ      r4,|L1.162|
-000094  f102060f          ADD      r6,r2,#0xf            ;80
-000098  fa03f406          LSL      r4,r3,r6              ;80
-00009c  43a1              BICS     r1,r1,r4              ;80
-00009e  4321              ORRS     r1,r1,r4              ;80
-0000a0  e004              B        |L1.172|
-                  |L1.162|
-0000a2  f102040f          ADD      r4,r2,#0xf
-0000a6  fa03f404          LSL      r4,r3,r4
-0000aa  43a1              BICS     r1,r1,r4
-                  |L1.172|
-0000ac  1c52              ADDS     r2,r2,#1              ;78
-0000ae  b2d2              UXTB     r2,r2                 ;78
-0000b0  2a06              CMP      r2,#6                 ;78
-0000b2  d3ed              BCC      |L1.144|
-;;;82     	}
-;;;83     
-;;;84     /*for(i=0;i<4;i++)
+000020  eb010281          ADD      r2,r1,r1,LSL #2
+000024  eb041202          ADD      r2,r4,r2,LSL #4
+000028  7852              LDRB     r2,[r2,#1]
+00002a  b132              CBZ      r2,|L1.58|
+00002c  1ccd              ADDS     r5,r1,#3
+00002e  fa03f205          LSL      r2,r3,r5
+000032  6805              LDR      r5,[r0,#0]  ; avar_stat
+000034  4395              BICS     r5,r5,r2
+000036  4315              ORRS     r5,r5,r2
+000038  e004              B        |L1.68|
+                  |L1.58|
+;;;70     	else	   		SET_REG(avar_stat,0,3+i,1);
+00003a  1cca              ADDS     r2,r1,#3
+00003c  6805              LDR      r5,[r0,#0]  ; avar_stat
+00003e  fa03f202          LSL      r2,r3,r2
+000042  4395              BICS     r5,r5,r2
+                  |L1.68|
+000044  1c49              ADDS     r1,r1,#1              ;67
+000046  b2c9              UXTB     r1,r1                 ;67
+000048  6005              STR      r5,[r0,#0]            ;67  ; avar_stat
+00004a  290c              CMP      r1,#0xc               ;67
+00004c  d3e8              BCC      |L1.32|
+;;;71     	}
+;;;72     
+;;;73     for(i=0;i<6;i++)
+;;;74     	{
+;;;75     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
+;;;76     	else	   		SET_REG(avar_stat,0,15+i,1);
+00004e  4629              MOV      r1,r5
+000050  4d2e              LDR      r5,|L1.268|
+000052  2200              MOVS     r2,#0                 ;73
+000054  3514              ADDS     r5,r5,#0x14           ;75
+                  |L1.86|
+000056  5cac              LDRB     r4,[r5,r2]            ;75
+000058  b134              CBZ      r4,|L1.104|
+00005a  f102060f          ADD      r6,r2,#0xf            ;75
+00005e  fa03f406          LSL      r4,r3,r6              ;75
+000062  43a1              BICS     r1,r1,r4              ;75
+000064  4321              ORRS     r1,r1,r4              ;75
+000066  e004              B        |L1.114|
+                  |L1.104|
+000068  f102040f          ADD      r4,r2,#0xf
+00006c  fa03f404          LSL      r4,r3,r4
+000070  43a1              BICS     r1,r1,r4
+                  |L1.114|
+000072  1c52              ADDS     r2,r2,#1              ;73
+000074  b2d2              UXTB     r2,r2                 ;73
+000076  2a06              CMP      r2,#6                 ;73
+000078  d3ed              BCC      |L1.86|
+;;;77     	}
+;;;78     
+;;;79     /*for(i=0;i<4;i++)
+;;;80     	{
+;;;81     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
+;;;82     	else	   		SET_REG(avar_stat,0,21+i,1);
+;;;83     	}  */
+;;;84     for(i=0;i<4;i++)
 ;;;85     	{
-;;;86     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
-;;;87     	else	   		SET_REG(avar_stat,0,21+i,1);
-;;;88     	}  */
-;;;89     for(i=0;i<4;i++)
-;;;90     	{
-;;;91     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
-0000b4  4d26              LDR      r5,|L1.336|
-0000b6  2200              MOVS     r2,#0                 ;89
-0000b8  6001              STR      r1,[r0,#0]  ; avar_stat
-                  |L1.186|
-0000ba  5cac              LDRB     r4,[r5,r2]
-0000bc  2c01              CMP      r4,#1
-0000be  d02f              BEQ      |L1.288|
-;;;92     	else	   		SET_REG(avar_stat,0,25+i,1);
-0000c0  f1020419          ADD      r4,r2,#0x19
-0000c4  fa03f404          LSL      r4,r3,r4
-0000c8  43a1              BICS     r1,r1,r4
-                  |L1.202|
-0000ca  1c52              ADDS     r2,r2,#1              ;89
-0000cc  b2d2              UXTB     r2,r2                 ;89
-0000ce  2a04              CMP      r2,#4                 ;89
-0000d0  d3f3              BCC      |L1.186|
-;;;93     	}
-;;;94     
-;;;95     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
-0000d2  6001              STR      r1,[r0,#0]  ; avar_stat
-0000d4  6883              LDR      r3,[r0,#8]  ; avar_stat_old
-0000d6  ea210203          BIC      r2,r1,r3
-;;;96     
-;;;97     avar_ind_stat|=avar_stat_new;
-0000da  60c2              STR      r2,[r0,#0xc]  ; avar_stat_new
-0000dc  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
-0000de  4314              ORRS     r4,r4,r2
+;;;86     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
+00007a  4d26              LDR      r5,|L1.276|
+00007c  2200              MOVS     r2,#0                 ;84
+00007e  6001              STR      r1,[r0,#0]  ; avar_stat
+                  |L1.128|
+000080  5cac              LDRB     r4,[r5,r2]
+000082  2c01              CMP      r4,#1
+000084  d02f              BEQ      |L1.230|
+;;;87     	else	   		SET_REG(avar_stat,0,25+i,1);
+000086  f1020419          ADD      r4,r2,#0x19
+00008a  fa03f404          LSL      r4,r3,r4
+00008e  43a1              BICS     r1,r1,r4
+                  |L1.144|
+000090  1c52              ADDS     r2,r2,#1              ;84
+000092  b2d2              UXTB     r2,r2                 ;84
+000094  2a04              CMP      r2,#4                 ;84
+000096  d3f3              BCC      |L1.128|
+;;;88     	}
+;;;89     
+;;;90     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
+000098  6001              STR      r1,[r0,#0]  ; avar_stat
+00009a  6883              LDR      r3,[r0,#8]  ; avar_stat_old
+00009c  ea210203          BIC      r2,r1,r3
+;;;91     
+;;;92     avar_ind_stat|=avar_stat_new;
+0000a0  60c2              STR      r2,[r0,#0xc]  ; avar_stat_new
+0000a2  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
+0000a4  4314              ORRS     r4,r4,r2
+;;;93     
+;;;94     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
+0000a6  4a1c              LDR      r2,|L1.280|
+0000a8  6044              STR      r4,[r0,#4]  ; avar_ind_stat
+0000aa  8815              LDRH     r5,[r2,#0]  ; SK_ZVUK_EN
+0000ac  b115              CBZ      r5,|L1.180|
+0000ae  f0247400          BIC      r4,r4,#0x2000000
+0000b2  6044              STR      r4,[r0,#4]  ; avar_ind_stat
+                  |L1.180|
+;;;95     if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
+0000b4  8854              LDRH     r4,[r2,#2]  ; SK_ZVUK_EN
+0000b6  b11c              CBZ      r4,|L1.192|
+0000b8  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
+0000ba  f0246480          BIC      r4,r4,#0x4000000
+0000be  6044              STR      r4,[r0,#4]  ; avar_ind_stat
+                  |L1.192|
+;;;96     if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
+0000c0  8894              LDRH     r4,[r2,#4]  ; SK_ZVUK_EN
+0000c2  b11c              CBZ      r4,|L1.204|
+0000c4  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
+0000c6  f0246400          BIC      r4,r4,#0x8000000
+0000ca  6044              STR      r4,[r0,#4]  ; avar_ind_stat
+                  |L1.204|
+;;;97     if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
+0000cc  88d2              LDRH     r2,[r2,#6]  ; SK_ZVUK_EN
+0000ce  b11a              CBZ      r2,|L1.216|
+0000d0  6842              LDR      r2,[r0,#4]  ; avar_ind_stat
+0000d2  f0225280          BIC      r2,r2,#0x10000000
+0000d6  6042              STR      r2,[r0,#4]  ; avar_ind_stat
+                  |L1.216|
 ;;;98     
-;;;99     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
-0000e0  4a1c              LDR      r2,|L1.340|
-0000e2  6044              STR      r4,[r0,#4]  ; avar_ind_stat
-0000e4  8815              LDRH     r5,[r2,#0]  ; SK_ZVUK_EN
-0000e6  b115              CBZ      r5,|L1.238|
-0000e8  f0247400          BIC      r4,r4,#0x2000000
-0000ec  6044              STR      r4,[r0,#4]  ; avar_ind_stat
-                  |L1.238|
-;;;100    if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
-0000ee  8854              LDRH     r4,[r2,#2]  ; SK_ZVUK_EN
-0000f0  b11c              CBZ      r4,|L1.250|
-0000f2  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
-0000f4  f0246480          BIC      r4,r4,#0x4000000
-0000f8  6044              STR      r4,[r0,#4]  ; avar_ind_stat
+;;;99     
+;;;100    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
+0000d8  438b              BICS     r3,r3,r1
+0000da  43da              MVNS     r2,r3
+;;;101    
+;;;102    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
+0000dc  4b0f              LDR      r3,|L1.284|
+0000de  6102              STR      r2,[r0,#0x10]  ; avar_stat_offed
+0000e0  881b              LDRH     r3,[r3,#0]  ; AV_OFF_AVT
+0000e2  b13b              CBZ      r3,|L1.244|
+0000e4  e009              B        |L1.250|
+                  |L1.230|
+0000e6  f1020619          ADD      r6,r2,#0x19           ;86
+0000ea  fa03f406          LSL      r4,r3,r6              ;86
+0000ee  43a1              BICS     r1,r1,r4              ;86
+0000f0  4321              ORRS     r1,r1,r4              ;86
+0000f2  e7cd              B        |L1.144|
+                  |L1.244|
+0000f4  f0620201          ORN      r2,r2,#1
+0000f8  6102              STR      r2,[r0,#0x10]  ; avar_stat_offed
                   |L1.250|
-;;;101    if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
-0000fa  8894              LDRH     r4,[r2,#4]  ; SK_ZVUK_EN
-0000fc  b11c              CBZ      r4,|L1.262|
-0000fe  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
-000100  f0246400          BIC      r4,r4,#0x8000000
-000104  6044              STR      r4,[r0,#4]  ; avar_ind_stat
-                  |L1.262|
-;;;102    if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
-000106  88d2              LDRH     r2,[r2,#6]  ; SK_ZVUK_EN
-000108  b11a              CBZ      r2,|L1.274|
-00010a  6842              LDR      r2,[r0,#4]  ; avar_ind_stat
-00010c  f0225280          BIC      r2,r2,#0x10000000
-000110  6042              STR      r2,[r0,#4]  ; avar_ind_stat
-                  |L1.274|
 ;;;103    
-;;;104    
-;;;105    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
-000112  438b              BICS     r3,r3,r1
-000114  43da              MVNS     r2,r3
-;;;106    
-;;;107    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
-000116  4b10              LDR      r3,|L1.344|
-000118  6102              STR      r2,[r0,#0x10]  ; avar_stat_offed
-00011a  881b              LDRH     r3,[r3,#0]  ; AV_OFF_AVT
-00011c  b13b              CBZ      r3,|L1.302|
-00011e  e009              B        |L1.308|
-                  |L1.288|
-000120  f1020619          ADD      r6,r2,#0x19           ;91
-000124  fa03f406          LSL      r4,r3,r6              ;91
-000128  43a1              BICS     r1,r1,r4              ;91
-00012a  4321              ORRS     r1,r1,r4              ;91
-00012c  e7cd              B        |L1.202|
-                  |L1.302|
-00012e  f0620201          ORN      r2,r2,#1
-000132  6102              STR      r2,[r0,#0x10]  ; avar_stat_offed
-                  |L1.308|
+;;;104    avar_ind_stat&=avar_stat_offed; 
+0000fa  6903              LDR      r3,[r0,#0x10]  ; avar_stat_offed
+0000fc  6842              LDR      r2,[r0,#4]  ; avar_ind_stat
+0000fe  401a              ANDS     r2,r2,r3
+000100  e9c02101          STRD     r2,r1,[r0,#4]
+;;;105    
+;;;106    avar_stat_old=avar_stat;
+;;;107    }
+000104  bd70              POP      {r4-r6,pc}
 ;;;108    
-;;;109    avar_ind_stat&=avar_stat_offed; 
-000134  6903              LDR      r3,[r0,#0x10]  ; avar_stat_offed
-000136  6842              LDR      r2,[r0,#4]  ; avar_ind_stat
-000138  401a              ANDS     r2,r2,r3
-00013a  e9c02101          STRD     r2,r1,[r0,#4]
-;;;110    
-;;;111    avar_stat_old=avar_stat;
-;;;112    }
-00013e  bd70              POP      {r4-r6,pc}
-;;;113    
                           ENDP
 
-                  |L1.320|
+000106  0000              DCW      0x0000
+                  |L1.264|
                           DCD      net_av
-                  |L1.324|
+                  |L1.268|
                           DCD      ||.data||
-                  |L1.328|
-                          DCD      bat
-                  |L1.332|
+                  |L1.272|
                           DCD      bps
-                  |L1.336|
+                  |L1.276|
                           DCD      sk_av_stat
-                  |L1.340|
+                  |L1.280|
                           DCD      SK_ZVUK_EN
-                  |L1.344|
+                  |L1.284|
                           DCD      AV_OFF_AVT
 
                           AREA ||area_number.2||, CODE, READONLY, ALIGN=2
@@ -256,11 +224,12 @@
 000012  2901              CMP      r1,#1
 000014  d004              BEQ      |L2.32|
 ;;;65     
-;;;66     for(i=0;i<2;i++)
+;;;66     
+;;;67     for(i=0;i<12;i++)
 000016  2902              CMP      r1,#2
 000018  d004              BEQ      |L2.36|
-;;;67     	{
-;;;68     	if(bat[i]._av&1)	SET_REG(avar_stat,1,1+i,1);
+;;;68     	{
+;;;69     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
 00001a  2903              CMP      r1,#3
 00001c  d004              BEQ      |L2.40|
 00001e  e004              B        |L2.42|
@@ -278,143 +247,137 @@
 000030  eb070387          ADD      r3,r7,r7,LSL #2
 000034  f04f0a00          MOV      r10,#0
 000038  eb001003          ADD      r0,r0,r3,LSL #4
+;;;70     	else	   		SET_REG(avar_stat,0,3+i,1);
 00003c  2a01              CMP      r2,#1
 00003e  d002              BEQ      |L2.70|
 000040  2a00              CMP      r2,#0
-;;;69     	else	   		SET_REG(avar_stat,0,1+i,1);
 000042  d07e              BEQ      |L2.322|
 000044  e103              B        |L2.590|
                   |L2.70|
 000046  b131              CBZ      r1,|L2.86|
-000048  2901              CMP      r1,#1
+000048  2901              CMP      r1,#1                 ;67
 00004a  d008              BEQ      |L2.94|
-00004c  2902              CMP      r1,#2                 ;66
+00004c  2902              CMP      r1,#2                 ;67
+;;;71     	}
+;;;72     
+;;;73     for(i=0;i<6;i++)
+;;;74     	{
+;;;75     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
+;;;76     	else	   		SET_REG(avar_stat,0,15+i,1);
 00004e  d00a              BEQ      |L2.102|
-000050  2903              CMP      r1,#3                 ;66
+000050  2903              CMP      r1,#3                 ;75
 000052  d00c              BEQ      |L2.110|
 000054  e00f              B        |L2.118|
                   |L2.86|
-;;;70     	}
-;;;71     
-;;;72     for(i=0;i<12;i++)
-;;;73     	{
-;;;74     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
-000056  7842              LDRB     r2,[r0,#1]
-000058  f0420201          ORR      r2,r2,#1              ;72
+000056  7842              LDRB     r2,[r0,#1]            ;75
+000058  f0420201          ORR      r2,r2,#1              ;75
 00005c  e00a              B        |L2.116|
                   |L2.94|
-00005e  7842              LDRB     r2,[r0,#1]
-000060  f0420202          ORR      r2,r2,#2
+00005e  7842              LDRB     r2,[r0,#1]            ;75
+000060  f0420202          ORR      r2,r2,#2              ;75
 000064  e006              B        |L2.116|
                   |L2.102|
-000066  7842              LDRB     r2,[r0,#1]
+000066  7842              LDRB     r2,[r0,#1]            ;75
 000068  f0420204          ORR      r2,r2,#4
 00006c  e002              B        |L2.116|
                   |L2.110|
 00006e  7842              LDRB     r2,[r0,#1]
 000070  f0420208          ORR      r2,r2,#8
                   |L2.116|
-000074  7042              STRB     r2,[r0,#1]
+000074  7042              STRB     r2,[r0,#1]            ;73
                   |L2.118|
-;;;75     	else	   		SET_REG(avar_stat,0,3+i,1);
-000076  f880104f          STRB     r1,[r0,#0x4f]
-00007a  2053              MOVS     r0,#0x53
-00007c  f88d0000          STRB     r0,[sp,#0]
-000080  f88d7001          STRB     r7,[sp,#1]            ;72
-000084  f88d6002          STRB     r6,[sp,#2]            ;72
-;;;76     	}
-;;;77     
-;;;78     for(i=0;i<6;i++)
-;;;79     	{
-;;;80     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
-;;;81     	else	   		SET_REG(avar_stat,0,15+i,1);
-000088  4655              MOV      r5,r10
-00008a  f88da003          STRB     r10,[sp,#3]           ;80
-00008e  4669              MOV      r1,sp                 ;80
-000090  4628              MOV      r0,r5                 ;80
-000092  f7fffffe          BL       lc640_write_long_ptr
-000096  4669              MOV      r1,sp                 ;80
-000098  2004              MOVS     r0,#4                 ;80
-00009a  9500              STR      r5,[sp,#0]            ;80
-00009c  f7fffffe          BL       lc640_write_long_ptr
-0000a0  f8b9003c          LDRH     r0,[r9,#0x3c]         ;80
-0000a4  f1090420          ADD      r4,r9,#0x20
-0000a8  f88d0000          STRB     r0,[sp,#0]
-0000ac  7e20              LDRB     r0,[r4,#0x18]         ;78
-0000ae  f88d0001          STRB     r0,[sp,#1]            ;78
-0000b2  7b20              LDRB     r0,[r4,#0xc]          ;78
-;;;82     	}
-;;;83     
-;;;84     /*for(i=0;i<4;i++)
+000076  f880104f          STRB     r1,[r0,#0x4f]         ;73
+;;;77     	}
+;;;78     
+;;;79     /*for(i=0;i<4;i++)
+;;;80     	{
+;;;81     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
+;;;82     	else	   		SET_REG(avar_stat,0,21+i,1);
+;;;83     	}  */
+;;;84     for(i=0;i<4;i++)
 ;;;85     	{
-;;;86     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
-;;;87     	else	   		SET_REG(avar_stat,0,21+i,1);
-;;;88     	}  */
-;;;89     for(i=0;i<4;i++)
-;;;90     	{
-;;;91     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
+;;;86     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
+00007a  2053              MOVS     r0,#0x53
+00007c  f88d0000          STRB     r0,[sp,#0]            ;84
+000080  f88d7001          STRB     r7,[sp,#1]
+000084  f88d6002          STRB     r6,[sp,#2]
+;;;87     	else	   		SET_REG(avar_stat,0,25+i,1);
+000088  4655              MOV      r5,r10
+00008a  f88da003          STRB     r10,[sp,#3]
+00008e  4669              MOV      r1,sp
+000090  4628              MOV      r0,r5                 ;84
+000092  f7fffffe          BL       lc640_write_long_ptr
+000096  4669              MOV      r1,sp                 ;84
+;;;88     	}
+;;;89     
+;;;90     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
+000098  2004              MOVS     r0,#4
+00009a  9500              STR      r5,[sp,#0]
+00009c  f7fffffe          BL       lc640_write_long_ptr
+;;;91     
+;;;92     avar_ind_stat|=avar_stat_new;
+0000a0  f8b9003c          LDRH     r0,[r9,#0x3c]
+0000a4  f1090420          ADD      r4,r9,#0x20
+;;;93     
+;;;94     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
+0000a8  f88d0000          STRB     r0,[sp,#0]
+0000ac  7e20              LDRB     r0,[r4,#0x18]
+0000ae  f88d0001          STRB     r0,[sp,#1]
+0000b2  7b20              LDRB     r0,[r4,#0xc]
+;;;95     if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
 0000b4  f88d0002          STRB     r0,[sp,#2]
 0000b8  f88d5003          STRB     r5,[sp,#3]
 0000bc  4669              MOV      r1,sp
 0000be  f04f0008          MOV      r0,#8
-;;;92     	else	   		SET_REG(avar_stat,0,25+i,1);
+;;;96     if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
 0000c2  f7fffffe          BL       lc640_write_long_ptr
 0000c6  7a20              LDRB     r0,[r4,#8]
 0000c8  f88d0000          STRB     r0,[sp,#0]
-0000cc  7920              LDRB     r0,[r4,#4]            ;89
-0000ce  f88d0001          STRB     r0,[sp,#1]            ;89
-;;;93     	}
-;;;94     
-;;;95     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
+;;;97     if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
+0000cc  7920              LDRB     r0,[r4,#4]
+0000ce  f88d0001          STRB     r0,[sp,#1]
 0000d2  7820              LDRB     r0,[r4,#0]
 0000d4  f88d0002          STRB     r0,[sp,#2]
+;;;98     
+;;;99     
+;;;100    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
 0000d8  f88d5003          STRB     r5,[sp,#3]
-;;;96     
-;;;97     avar_ind_stat|=avar_stat_new;
+;;;101    
+;;;102    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
 0000dc  4669              MOV      r1,sp
 0000de  200c              MOVS     r0,#0xc
-;;;98     
-;;;99     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
 0000e0  f7fffffe          BL       lc640_write_long_ptr
 0000e4  2441              MOVS     r4,#0x41
-0000e6  f88d4000          STRB     r4,[sp,#0]
-0000ea  f88d4001          STRB     r4,[sp,#1]
-;;;100    if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
-0000ee  f88d4002          STRB     r4,[sp,#2]
-0000f2  f88d4003          STRB     r4,[sp,#3]
+0000e6  f88d4000          STRB     r4,[sp,#0]            ;86
+0000ea  f88d4001          STRB     r4,[sp,#1]            ;86
+0000ee  f88d4002          STRB     r4,[sp,#2]            ;86
+0000f2  f88d4003          STRB     r4,[sp,#3]            ;86
 0000f6  4669              MOV      r1,sp
 0000f8  2010              MOVS     r0,#0x10
-;;;101    if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
+;;;103    
+;;;104    avar_ind_stat&=avar_stat_offed; 
 0000fa  f7fffffe          BL       lc640_write_long_ptr
 0000fe  f88d4000          STRB     r4,[sp,#0]
 000102  f88d4001          STRB     r4,[sp,#1]
-;;;102    if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
+;;;105    
+;;;106    avar_stat_old=avar_stat;
+;;;107    }
 000106  f88d4002          STRB     r4,[sp,#2]
 00010a  f88d4003          STRB     r4,[sp,#3]
 00010e  4669              MOV      r1,sp
 000110  2014              MOVS     r0,#0x14
-;;;103    
-;;;104    
-;;;105    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
 000112  f7fffffe          BL       lc640_write_long_ptr
-;;;106    
-;;;107    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
 000116  f88d4000          STRB     r4,[sp,#0]
 00011a  f88d4001          STRB     r4,[sp,#1]
 00011e  f88d4002          STRB     r4,[sp,#2]
-000122  f88d4003          STRB     r4,[sp,#3]            ;91
-000126  4669              MOV      r1,sp                 ;91
-000128  2018              MOVS     r0,#0x18              ;91
+000122  f88d4003          STRB     r4,[sp,#3]
+000126  4669              MOV      r1,sp
+000128  2018              MOVS     r0,#0x18
 00012a  f7fffffe          BL       lc640_write_long_ptr
 00012e  f88d4000          STRB     r4,[sp,#0]
 000132  f88d4001          STRB     r4,[sp,#1]
-;;;108    
-;;;109    avar_ind_stat&=avar_stat_offed; 
 000136  f88d4002          STRB     r4,[sp,#2]
 00013a  f88d4003          STRB     r4,[sp,#3]
-;;;110    
-;;;111    avar_stat_old=avar_stat;
-;;;112    }
 00013e  4669              MOV      r1,sp
 000140  e000              B        |L2.324|
                   |L2.322|
@@ -534,7 +497,7 @@
                   |L2.596|
 000254  243f              MOVS     r4,#0x3f
 000256  e78b              B        |L2.368|
-;;;113    
+;;;108    
                           ENDP
 
                   |L2.600|
@@ -557,54 +520,49 @@
 ;;;63     if(net_av)		SET_REG(avar_stat,1,0,1);
 ;;;64     else	   			SET_REG(avar_stat,0,0,1);
 ;;;65     
-;;;66     for(i=0;i<2;i++)
-;;;67     	{
-;;;68     	if(bat[i]._av&1)	SET_REG(avar_stat,1,1+i,1);
-;;;69     	else	   		SET_REG(avar_stat,0,1+i,1);
-;;;70     	}
-;;;71     
-;;;72     for(i=0;i<12;i++)
-;;;73     	{
-;;;74     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
-;;;75     	else	   		SET_REG(avar_stat,0,3+i,1);
-;;;76     	}
-;;;77     
-;;;78     for(i=0;i<6;i++)
-;;;79     	{
-;;;80     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
-;;;81     	else	   		SET_REG(avar_stat,0,15+i,1);
-;;;82     	}
-;;;83     
-;;;84     /*for(i=0;i<4;i++)
+;;;66     
+;;;67     for(i=0;i<12;i++)
+;;;68     	{
+;;;69     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
+;;;70     	else	   		SET_REG(avar_stat,0,3+i,1);
+;;;71     	}
+;;;72     
+;;;73     for(i=0;i<6;i++)
+;;;74     	{
+;;;75     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
+;;;76     	else	   		SET_REG(avar_stat,0,15+i,1);
+;;;77     	}
+;;;78     
+;;;79     /*for(i=0;i<4;i++)
+;;;80     	{
+;;;81     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
+;;;82     	else	   		SET_REG(avar_stat,0,21+i,1);
+;;;83     	}  */
+;;;84     for(i=0;i<4;i++)
 ;;;85     	{
-;;;86     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
-;;;87     	else	   		SET_REG(avar_stat,0,21+i,1);
-;;;88     	}  */
-;;;89     for(i=0;i<4;i++)
-;;;90     	{
-;;;91     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
-;;;92     	else	   		SET_REG(avar_stat,0,25+i,1);
-;;;93     	}
-;;;94     
-;;;95     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
-;;;96     
-;;;97     avar_ind_stat|=avar_stat_new;
+;;;86     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
+;;;87     	else	   		SET_REG(avar_stat,0,25+i,1);
+;;;88     	}
+;;;89     
+;;;90     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
+;;;91     
+;;;92     avar_ind_stat|=avar_stat_new;
+;;;93     
+;;;94     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
+;;;95     if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
+;;;96     if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
+;;;97     if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
 ;;;98     
-;;;99     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
-;;;100    if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
-;;;101    if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
-;;;102    if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
+;;;99     
+;;;100    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
+;;;101    
+;;;102    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
 ;;;103    
-;;;104    
-;;;105    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
-;;;106    
-;;;107    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
+;;;104    avar_ind_stat&=avar_stat_offed; 
+;;;105    
+;;;106    avar_stat_old=avar_stat;
+;;;107    }
 ;;;108    
-;;;109    avar_ind_stat&=avar_stat_offed; 
-;;;110    
-;;;111    avar_stat_old=avar_stat;
-;;;112    }
-;;;113    
                           ENDP
 
 
@@ -623,54 +581,49 @@
 ;;;63     if(net_av)		SET_REG(avar_stat,1,0,1);
 ;;;64     else	   			SET_REG(avar_stat,0,0,1);
 ;;;65     
-;;;66     for(i=0;i<2;i++)
-;;;67     	{
-;;;68     	if(bat[i]._av&1)	SET_REG(avar_stat,1,1+i,1);
-;;;69     	else	   		SET_REG(avar_stat,0,1+i,1);
-;;;70     	}
-;;;71     
-;;;72     for(i=0;i<12;i++)
-;;;73     	{
-;;;74     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
-;;;75     	else	   		SET_REG(avar_stat,0,3+i,1);
-;;;76     	}
-;;;77     
-;;;78     for(i=0;i<6;i++)
-;;;79     	{
-;;;80     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
-;;;81     	else	   		SET_REG(avar_stat,0,15+i,1);
-;;;82     	}
-;;;83     
-;;;84     /*for(i=0;i<4;i++)
+;;;66     
+;;;67     for(i=0;i<12;i++)
+;;;68     	{
+;;;69     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
+;;;70     	else	   		SET_REG(avar_stat,0,3+i,1);
+;;;71     	}
+;;;72     
+;;;73     for(i=0;i<6;i++)
+;;;74     	{
+;;;75     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
+;;;76     	else	   		SET_REG(avar_stat,0,15+i,1);
+;;;77     	}
+;;;78     
+;;;79     /*for(i=0;i<4;i++)
+;;;80     	{
+;;;81     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
+;;;82     	else	   		SET_REG(avar_stat,0,21+i,1);
+;;;83     	}  */
+;;;84     for(i=0;i<4;i++)
 ;;;85     	{
-;;;86     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
-;;;87     	else	   		SET_REG(avar_stat,0,21+i,1);
-;;;88     	}  */
-;;;89     for(i=0;i<4;i++)
-;;;90     	{
-;;;91     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
-;;;92     	else	   		SET_REG(avar_stat,0,25+i,1);
-;;;93     	}
-;;;94     
-;;;95     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
-;;;96     
-;;;97     avar_ind_stat|=avar_stat_new;
+;;;86     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
+;;;87     	else	   		SET_REG(avar_stat,0,25+i,1);
+;;;88     	}
+;;;89     
+;;;90     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
+;;;91     
+;;;92     avar_ind_stat|=avar_stat_new;
+;;;93     
+;;;94     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
+;;;95     if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
+;;;96     if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
+;;;97     if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
 ;;;98     
-;;;99     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
-;;;100    if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
-;;;101    if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
-;;;102    if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
+;;;99     
+;;;100    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
+;;;101    
+;;;102    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
 ;;;103    
-;;;104    
-;;;105    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
-;;;106    
-;;;107    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
+;;;104    avar_ind_stat&=avar_stat_offed; 
+;;;105    
+;;;106    avar_stat_old=avar_stat;
+;;;107    }
 ;;;108    
-;;;109    avar_ind_stat&=avar_stat_offed; 
-;;;110    
-;;;111    avar_stat_old=avar_stat;
-;;;112    }
-;;;113    
                           ENDP
 
 
@@ -689,54 +642,49 @@
 ;;;63     if(net_av)		SET_REG(avar_stat,1,0,1);
 ;;;64     else	   			SET_REG(avar_stat,0,0,1);
 ;;;65     
-;;;66     for(i=0;i<2;i++)
-;;;67     	{
-;;;68     	if(bat[i]._av&1)	SET_REG(avar_stat,1,1+i,1);
-;;;69     	else	   		SET_REG(avar_stat,0,1+i,1);
-;;;70     	}
-;;;71     
-;;;72     for(i=0;i<12;i++)
-;;;73     	{
-;;;74     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
-;;;75     	else	   		SET_REG(avar_stat,0,3+i,1);
-;;;76     	}
-;;;77     
-;;;78     for(i=0;i<6;i++)
-;;;79     	{
-;;;80     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
-;;;81     	else	   		SET_REG(avar_stat,0,15+i,1);
-;;;82     	}
-;;;83     
-;;;84     /*for(i=0;i<4;i++)
+;;;66     
+;;;67     for(i=0;i<12;i++)
+;;;68     	{
+;;;69     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
+;;;70     	else	   		SET_REG(avar_stat,0,3+i,1);
+;;;71     	}
+;;;72     
+;;;73     for(i=0;i<6;i++)
+;;;74     	{
+;;;75     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
+;;;76     	else	   		SET_REG(avar_stat,0,15+i,1);
+;;;77     	}
+;;;78     
+;;;79     /*for(i=0;i<4;i++)
+;;;80     	{
+;;;81     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
+;;;82     	else	   		SET_REG(avar_stat,0,21+i,1);
+;;;83     	}  */
+;;;84     for(i=0;i<4;i++)
 ;;;85     	{
-;;;86     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
-;;;87     	else	   		SET_REG(avar_stat,0,21+i,1);
-;;;88     	}  */
-;;;89     for(i=0;i<4;i++)
-;;;90     	{
-;;;91     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
-;;;92     	else	   		SET_REG(avar_stat,0,25+i,1);
-;;;93     	}
-;;;94     
-;;;95     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
-;;;96     
-;;;97     avar_ind_stat|=avar_stat_new;
+;;;86     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
+;;;87     	else	   		SET_REG(avar_stat,0,25+i,1);
+;;;88     	}
+;;;89     
+;;;90     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
+;;;91     
+;;;92     avar_ind_stat|=avar_stat_new;
+;;;93     
+;;;94     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
+;;;95     if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
+;;;96     if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
+;;;97     if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
 ;;;98     
-;;;99     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
-;;;100    if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
-;;;101    if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
-;;;102    if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
+;;;99     
+;;;100    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
+;;;101    
+;;;102    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
 ;;;103    
-;;;104    
-;;;105    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
-;;;106    
-;;;107    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
+;;;104    avar_ind_stat&=avar_stat_offed; 
+;;;105    
+;;;106    avar_stat_old=avar_stat;
+;;;107    }
 ;;;108    
-;;;109    avar_ind_stat&=avar_stat_offed; 
-;;;110    
-;;;111    avar_stat_old=avar_stat;
-;;;112    }
-;;;113    
                           ENDP
 
 
@@ -755,54 +703,49 @@
 ;;;63     if(net_av)		SET_REG(avar_stat,1,0,1);
 ;;;64     else	   			SET_REG(avar_stat,0,0,1);
 ;;;65     
-;;;66     for(i=0;i<2;i++)
-;;;67     	{
-;;;68     	if(bat[i]._av&1)	SET_REG(avar_stat,1,1+i,1);
-;;;69     	else	   		SET_REG(avar_stat,0,1+i,1);
-;;;70     	}
-;;;71     
-;;;72     for(i=0;i<12;i++)
-;;;73     	{
-;;;74     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
-;;;75     	else	   		SET_REG(avar_stat,0,3+i,1);
-;;;76     	}
-;;;77     
-;;;78     for(i=0;i<6;i++)
-;;;79     	{
-;;;80     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
-;;;81     	else	   		SET_REG(avar_stat,0,15+i,1);
-;;;82     	}
-;;;83     
-;;;84     /*for(i=0;i<4;i++)
+;;;66     
+;;;67     for(i=0;i<12;i++)
+;;;68     	{
+;;;69     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
+;;;70     	else	   		SET_REG(avar_stat,0,3+i,1);
+;;;71     	}
+;;;72     
+;;;73     for(i=0;i<6;i++)
+;;;74     	{
+;;;75     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
+;;;76     	else	   		SET_REG(avar_stat,0,15+i,1);
+;;;77     	}
+;;;78     
+;;;79     /*for(i=0;i<4;i++)
+;;;80     	{
+;;;81     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
+;;;82     	else	   		SET_REG(avar_stat,0,21+i,1);
+;;;83     	}  */
+;;;84     for(i=0;i<4;i++)
 ;;;85     	{
-;;;86     	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
-;;;87     	else	   		SET_REG(avar_stat,0,21+i,1);
-;;;88     	}  */
-;;;89     for(i=0;i<4;i++)
-;;;90     	{
-;;;91     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
-;;;92     	else	   		SET_REG(avar_stat,0,25+i,1);
-;;;93     	}
-;;;94     
-;;;95     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
-;;;96     
-;;;97     avar_ind_stat|=avar_stat_new;
+;;;86     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
+;;;87     	else	   		SET_REG(avar_stat,0,25+i,1);
+;;;88     	}
+;;;89     
+;;;90     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
+;;;91     
+;;;92     avar_ind_stat|=avar_stat_new;
+;;;93     
+;;;94     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
+;;;95     if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
+;;;96     if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
+;;;97     if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
 ;;;98     
-;;;99     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
-;;;100    if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
-;;;101    if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
-;;;102    if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
+;;;99     
+;;;100    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
+;;;101    
+;;;102    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
 ;;;103    
-;;;104    
-;;;105    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
-;;;106    
-;;;107    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
+;;;104    avar_ind_stat&=avar_stat_offed; 
+;;;105    
+;;;106    avar_stat_old=avar_stat;
+;;;107    }
 ;;;108    
-;;;109    avar_ind_stat&=avar_stat_offed; 
-;;;110    
-;;;111    avar_stat_old=avar_stat;
-;;;112    }
-;;;113    
                           ENDP
 
 
