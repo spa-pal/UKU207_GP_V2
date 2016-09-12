@@ -3109,17 +3109,37 @@ else if(ind==iK_max_param)
 else if(ind==iK_bps_sel)
 	{
 	ptrs[0]=						" ¡œ— N1             ";
-     ptrs[1]=						" ¡œ— N2             ";
-     ptrs[2]=						" ¡œ— N3             ";
+    ptrs[1]=						" ¡œ— N2             ";
+    ptrs[2]=						" ¡œ— N3             ";
 	ptrs[3]=						" ¡œ— N4             ";
-     ptrs[4]=						" ¡œ— N5             ";
-     ptrs[5]=						" ¡œ— N6             ";
+    ptrs[4]=						" ¡œ— N5             ";
+    ptrs[5]=						" ¡œ— N6             ";
 	ptrs[6]=						" ¡œ— N7             ";
-     ptrs[7]=						" ¡œ— N8             ";
-     ptrs[8]=						" ¡œ— N9             ";
+    ptrs[7]=						" ¡œ— N8             ";
+    ptrs[8]=						" ¡œ— N9             ";
 	ptrs[9]=						" ¡œ— N10            ";
-     ptrs[10]=						" ¡œ— N11            ";
-     ptrs[11]=						" ¡œ— N12            ";               
+    ptrs[10]=						" ¡œ— N11            ";
+    ptrs[11]=						" ¡œ— N12            "; 
+    ptrs[12]=						" ¡œ— N13            ";
+	ptrs[13]=						" ¡œ— N14            ";
+    ptrs[14]=						" ¡œ— N15            ";
+    ptrs[15]=						" ¡œ— N16            ";
+	ptrs[16]=						" ¡œ— N17            ";
+    ptrs[17]=						" ¡œ— N18            ";
+    ptrs[18]=						" ¡œ— N19            ";
+	ptrs[19]=						" ¡œ— N20            ";
+    ptrs[20]=						" ¡œ— N21            ";
+    ptrs[21]=						" ¡œ— N22            ";
+    ptrs[22]=						" ¡œ— N23            ";
+	ptrs[23]=						" ¡œ— N24            ";
+    ptrs[24]=						" ¡œ— N25            ";
+    ptrs[25]=						" ¡œ— N26            ";
+	ptrs[26]=						" ¡œ— N27            ";
+    ptrs[27]=						" ¡œ— N28            ";
+    ptrs[28]=						" ¡œ— N29            ";
+	ptrs[29]=						" ¡œ— N30            ";
+    ptrs[30]=						" ¡œ— N31            ";
+    ptrs[31]=						" ¡œ— N32            ";		              
 	ptrs[NUMIST]=					" ¬˚ıÓ‰              ";
 	ptrs[1+NUMIST]=				"                    ";
 	ptrs[2+NUMIST]=				"                    ";
@@ -7445,14 +7465,14 @@ else if(ind==iStr)
 	     if((but==butR)||(but==butR_))
 	     	{
 	     	NUMIST++;
-	     	gran(&NUMIST,0,12);
+	     	gran(&NUMIST,0,30);
 	     	lc640_write_int(EE_NUMIST,NUMIST);
 	     	}
 	     
 	     else if((but==butL)||(but==butL_))
 	     	{
 	     	NUMIST--;
-	     	gran(&NUMIST,0,12);
+	     	gran(&NUMIST,0,30);
 	     	lc640_write_int(EE_NUMIST,NUMIST);
 	     	}
           }	

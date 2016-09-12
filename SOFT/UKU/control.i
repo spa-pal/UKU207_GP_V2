@@ -3837,13 +3837,13 @@ load_U_=(signed short)temp_SL;
 temp_SL=(signed long)ad7705_buff_[0];
 temp_SL-=(signed long)Kiload0;
 temp_SL*=(signed long)Kiload1;
-temp_SL/=10000L;
+temp_SL/=5000L;
 load_I=(signed short)temp_SL;
 
 
 temp_SL-=(signed long)Kiload0;
 temp_SL*=(signed long)Kiload1;
-temp_SL/=10000L;
+temp_SL/=5000L;
 load_I_=(signed short)temp_SL;
 
 if(I_LOAD_MODE==0)

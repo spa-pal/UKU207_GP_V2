@@ -7980,17 +7980,37 @@ else if(a_ind . i==iK_max_param)
 else if(a_ind . i==iK_bps_sel)
 	{
 	ptrs[0]=						" ¡œ— N1             ";
-     ptrs[1]=						" ¡œ— N2             ";
-     ptrs[2]=						" ¡œ— N3             ";
+    ptrs[1]=						" ¡œ— N2             ";
+    ptrs[2]=						" ¡œ— N3             ";
 	ptrs[3]=						" ¡œ— N4             ";
-     ptrs[4]=						" ¡œ— N5             ";
-     ptrs[5]=						" ¡œ— N6             ";
+    ptrs[4]=						" ¡œ— N5             ";
+    ptrs[5]=						" ¡œ— N6             ";
 	ptrs[6]=						" ¡œ— N7             ";
-     ptrs[7]=						" ¡œ— N8             ";
-     ptrs[8]=						" ¡œ— N9             ";
+    ptrs[7]=						" ¡œ— N8             ";
+    ptrs[8]=						" ¡œ— N9             ";
 	ptrs[9]=						" ¡œ— N10            ";
-     ptrs[10]=						" ¡œ— N11            ";
-     ptrs[11]=						" ¡œ— N12            ";               
+    ptrs[10]=						" ¡œ— N11            ";
+    ptrs[11]=						" ¡œ— N12            "; 
+    ptrs[12]=						" ¡œ— N13            ";
+	ptrs[13]=						" ¡œ— N14            ";
+    ptrs[14]=						" ¡œ— N15            ";
+    ptrs[15]=						" ¡œ— N16            ";
+	ptrs[16]=						" ¡œ— N17            ";
+    ptrs[17]=						" ¡œ— N18            ";
+    ptrs[18]=						" ¡œ— N19            ";
+	ptrs[19]=						" ¡œ— N20            ";
+    ptrs[20]=						" ¡œ— N21            ";
+    ptrs[21]=						" ¡œ— N22            ";
+    ptrs[22]=						" ¡œ— N23            ";
+	ptrs[23]=						" ¡œ— N24            ";
+    ptrs[24]=						" ¡œ— N25            ";
+    ptrs[25]=						" ¡œ— N26            ";
+	ptrs[26]=						" ¡œ— N27            ";
+    ptrs[27]=						" ¡œ— N28            ";
+    ptrs[28]=						" ¡œ— N29            ";
+	ptrs[29]=						" ¡œ— N30            ";
+    ptrs[30]=						" ¡œ— N31            ";
+    ptrs[31]=						" ¡œ— N32            ";		              
 	ptrs[NUMIST]=					" ¬˚ıÓ‰              ";
 	ptrs[1+NUMIST]=				"                    ";
 	ptrs[2+NUMIST]=				"                    ";
@@ -8318,14 +8338,14 @@ if(a_ind . i==iDeb)
 
  
 
-		int2lcdyx(a_ind . s_i1+1,1,0,0);
-		int2lcdyx(a_ind . s_i1+2,2,0,0);
-		int2lcdyx(a_ind . s_i1+3,3,0,0);
+		int2lcdyx(a_ind . s_i1+1,1,1,0);
+		int2lcdyx(a_ind . s_i1+2,2,1,0);
+		int2lcdyx(a_ind . s_i1+3,3,1,0);
 		
 		
-		int2lcdyx(bps[a_ind . s_i1  ]._cnt,1,2,0);
-		int2lcdyx(bps[a_ind . s_i1+1]._cnt,2,2,0);
-		int2lcdyx(bps[a_ind . s_i1+2]._cnt,3,2,0);		
+		int2lcdyx(bps[a_ind . s_i1  ]._cnt,1,3,0);
+		int2lcdyx(bps[a_ind . s_i1+1]._cnt,2,3,0);
+		int2lcdyx(bps[a_ind . s_i1+2]._cnt,3,3,0);		
 		
 	
 
@@ -9105,12 +9125,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4243 "main.c"
+#line 4263 "main.c"
 
 
 
 
-#line 4265 "main.c"
+#line 4285 "main.c"
 
 
 
@@ -9269,12 +9289,12 @@ else if(a_ind . i==iDeb)
 		if(but==253)
 	     	{
 	     	a_ind . s_i1--;
-	     	gran_char(&a_ind . s_i1,0,7);
+	     	gran_char(&a_ind . s_i1,0,31);
 	     	}
 		if(but==251)
 	     	{
 	     	a_ind . s_i1++;
-	     	gran_char(&a_ind . s_i1,0,7);
+	     	gran_char(&a_ind . s_i1,0,31);
 	     	}
 	     
 		if(but==254)
@@ -11791,14 +11811,14 @@ else if(a_ind . i==iSet)
 	     if((but==239)||(but==111))
 	     	{
 	     	NUMIST++;
-	     	gran(&NUMIST,1,12);
+	     	gran(&NUMIST,1,32);
 	     	lc640_write_int(0x10+100+36,NUMIST);
 	     	}
 	     
 	     else if((but==247)||(but==119))
 	     	{
 	     	NUMIST--;
-	     	gran(&NUMIST,1,12);
+	     	gran(&NUMIST,1,32);
 	     	lc640_write_int(0x10+100+36,NUMIST);
 	     	}
           }
@@ -12294,14 +12314,14 @@ else if(a_ind . i==iStr)
 	     if((but==239)||(but==111))
 	     	{
 	     	NUMIST++;
-	     	gran(&NUMIST,0,12);
+	     	gran(&NUMIST,0,30);
 	     	lc640_write_int(0x10+100+36,NUMIST);
 	     	}
 	     
 	     else if((but==247)||(but==119))
 	     	{
 	     	NUMIST--;
-	     	gran(&NUMIST,0,12);
+	     	gran(&NUMIST,0,30);
 	     	lc640_write_int(0x10+100+36,NUMIST);
 	     	}
           }	
@@ -15744,7 +15764,7 @@ else if(a_ind . i==iCurr_off)
 				}
 			}
 		}
-	else if(!CURR_OFF_EN)
+	else  
 		{
  		if(a_ind . s_i==0)
 			{
@@ -16032,7 +16052,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11192 "main.c"
+#line 11212 "main.c"
 
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);

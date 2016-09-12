@@ -4671,7 +4671,7 @@ if((RXBUFF[0]==a_ind . s_i1)&&(RXBUFF[1]==0x91)&&(RXBUFF[2]==0xdd)&&(RXBUFF[3]==
 	}
 
 
-if((RXBUFF[1]==0xDA)&&((RXBUFF[0]&0x1f)>=0)&&((RXBUFF[0]&0x1f)<12))
+if((RXBUFF[1]==0xDA)&&((RXBUFF[0]&0x1f)>=0)&&((RXBUFF[0]&0x1f)<32))
      {
 	can_debug_plazma[1][2]++;
      slave_num=RXBUFF[0]&0x1f;
@@ -4694,7 +4694,7 @@ if((RXBUFF[1]==0xDA)&&((RXBUFF[0]&0x1f)>=0)&&((RXBUFF[0]&0x1f)<12))
 	can_reset_cnt=0;
      }
 
-if((RXBUFF[1]==0xDB)&&((RXBUFF[0]&0x1f)>=0)&&((RXBUFF[0]&0x1f)<12))
+if((RXBUFF[1]==0xDB)&&((RXBUFF[0]&0x1f)>=0)&&((RXBUFF[0]&0x1f)<32))
      {
      slave_num=RXBUFF[0]&0x1f;  
 
