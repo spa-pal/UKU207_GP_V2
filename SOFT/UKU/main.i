@@ -1834,34 +1834,34 @@ void ret_hndl(void);
 
 
 
-#line 37 "eeprom_map.h"
+#line 38 "eeprom_map.h"
 
-#line 132 "eeprom_map.h"
-
-
+#line 133 "eeprom_map.h"
 
 
 
-#line 151 "eeprom_map.h"
+
+
+#line 152 "eeprom_map.h"
 
 
 
-#line 163 "eeprom_map.h"
+#line 164 "eeprom_map.h"
 
 
-#line 174 "eeprom_map.h"
+#line 175 "eeprom_map.h"
 
 
-#line 183 "eeprom_map.h"
-
-
+#line 184 "eeprom_map.h"
 
 
 
 
 
 
-#line 229 "eeprom_map.h"
+
+
+#line 230 "eeprom_map.h"
 
 
 
@@ -5710,7 +5710,7 @@ void net_drv(void)
 
 	
 	
-	UMAX=(short)((((signed long)U_MAX)*11L)/10L);
+	
 	DU=UMAX;
 	TZAS=3;
 
@@ -7225,11 +7225,12 @@ else if(a_ind . i==iSet)
 	ptrs[29]=				" счетчику амперчасов";
 	ptrs[30]=				" Выключение по      ";
 	ptrs[31]=				" снижению тока      ";
-	ptrs[34-2]=		" Выход              ";
-	ptrs[34-1]=		" Калибровка         ";
-	ptrs[34]=		" Тест ШИМ           ";
-	ptrs[34+1]=		"                    ";
-	ptrs[34+2]=		"                    ";	        
+	ptrs[32]=				" Uавар           +B ";
+	ptrs[35-2]=		" Выход              ";
+	ptrs[35-1]=		" Калибровка         ";
+	ptrs[35]=		" Тест ШИМ           ";
+	ptrs[35+1]=		"                    ";
+	ptrs[35+2]=		"                    ";	        
 	
 	if((a_ind . s_i-a_ind . i_s)>2)a_ind . i_s=a_ind . s_i-2;
 	else if(a_ind . s_i<a_ind . i_s)a_ind . i_s=a_ind . s_i;
@@ -7282,6 +7283,8 @@ else if(a_ind . i==iSet)
 
 	if(CURR_FADE_IN==0) 	  	sub_bgnd("ВЫКЛ.",'(',0);
 	else 					int2lcd(CURR_FADE_IN,'(',0);
+
+	int2lcd(UMAX,'+',1);
 
 	
 	
@@ -9125,12 +9128,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4263 "main.c"
+#line 4266 "main.c"
 
 
 
 
-#line 4285 "main.c"
+#line 4288 "main.c"
 
 
 
@@ -11725,7 +11728,7 @@ else if(a_ind . i==iSet)
 			a_ind . i_s=29;
                }
 														
-		gran_char(&a_ind . s_i,0,34);
+		gran_char(&a_ind . s_i,0,35);
 		}
 	else if(but==253)
 		{
@@ -11799,11 +11802,11 @@ else if(a_ind . i==iSet)
 			a_ind . s_i=30;
 			a_ind . i_s=30;
                }
-		gran_char(&a_ind . s_i,0,34);
+		gran_char(&a_ind . s_i,0,35);
 		}
 	else if(but==123)
 		{
-		a_ind . s_i=34-2;
+		a_ind . s_i=35-2;
 		}
 
      else if(a_ind . s_i==0)
@@ -12073,7 +12076,31 @@ else if(a_ind . i==iSet)
 			tree_up(iCurr_off,0,0,0);
 			}
 	    	}
-	else if(a_ind . s_i==34-2)
+	else if(a_ind . s_i==32)
+		{
+		temp_SS=lc640_read_int(0x10+58);
+	     if(but==239)
+	     	{
+		    temp_SS=((temp_SS/10)+1)*10;
+	     	}
+	     else if(but==111)
+	     	{
+	     	temp_SS=((temp_SS/10)+10)*10;
+	     	}	
+	     else if(but==247)
+	     	{
+	     	temp_SS=((temp_SS/10)-1)*10;
+	     	}
+	     else if(but==119)
+	     	{
+	     	temp_SS=((temp_SS/10)-10)*10;
+	     	}
+	    gran(&temp_SS,(U_MAX*11)/10,(U_MAX*14)/10);
+		lc640_write_int(0x10+58,temp_SS);					
+		speed=1;	
+					
+		}
+	else if(a_ind . s_i==35-2)
 	    	{
 		if(but==254)
 			{
@@ -12081,7 +12108,7 @@ else if(a_ind . i==iSet)
 			a_ind . s_i=0;
 			}
 	    	}
-	else if(a_ind . s_i==34-1)
+	else if(a_ind . s_i==35-1)
 	    	{
 		if(but==254)
 			{
@@ -12089,7 +12116,7 @@ else if(a_ind . i==iSet)
 			parol_init();
 			}
 	    	}	
-	else if(a_ind . s_i==34)
+	else if(a_ind . s_i==35)
 	    {
 		if(but==254)
 			{
@@ -16050,9 +16077,10 @@ rtc_init();
 a_ind . i=iMn;
 
 
+
 memo_read();
 
-#line 11212 "main.c"
+#line 11240 "main.c"
 
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);

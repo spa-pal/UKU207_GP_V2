@@ -839,7 +839,7 @@ void net_drv(void)
 
 	//T_MAX=100;
 	//TSIGN=100;
-	UMAX=(short)((((signed long)U_MAX)*11L)/10L);
+	//UMAX=(short)((((signed long)U_MAX)*11L)/10L);
 	DU=UMAX;
 	TZAS=3;
 
@@ -2321,7 +2321,7 @@ else if((ind==iSet_prl)||(ind==iK_prl))
 	
 else if(ind==iSet)
 	{
-	#define SI_SET_MAX	34
+	#define SI_SET_MAX	35
     	ptrs[0]=				" Источников        !";
 	ptrs[1]=				" Максимальная длит- ";
     	ptrs[2]=				" сть процесса  0[:0]";
@@ -2354,6 +2354,7 @@ else if(ind==iSet)
 	ptrs[29]=				" счетчику амперчасов";
 	ptrs[30]=				" Выключение по      ";
 	ptrs[31]=				" снижению тока      ";
+	ptrs[32]=				" Uавар           +B ";
 	ptrs[SI_SET_MAX-2]=		" Выход              ";
 	ptrs[SI_SET_MAX-1]=		" Калибровка         ";
 	ptrs[SI_SET_MAX]=		" Тест ШИМ           ";
@@ -2411,6 +2412,8 @@ else if(ind==iSet)
 
 	if(CURR_FADE_IN==0) 	  	sub_bgnd("ВЫКЛ.",'(',0);
 	else 					int2lcd(CURR_FADE_IN,'(',0);
+
+	int2lcd(UMAX,'+',1);
 
 	//int2lcdyx(sub_ind,0,4,0);
 	//int2lcdyx(index_set,0,8,0);
@@ -7224,6 +7227,30 @@ else if(ind==iSet)
 			tree_up(iCurr_off,0,0,0);
 			}
 	    	}
+	else if(sub_ind==32)
+		{
+		temp_SS=lc640_read_int(EE_UMAX);
+	     if(but==butR)
+	     	{
+		    temp_SS=((temp_SS/10)+1)*10;
+	     	}
+	     else if(but==butR_)
+	     	{
+	     	temp_SS=((temp_SS/10)+10)*10;
+	     	}	
+	     else if(but==butL)
+	     	{
+	     	temp_SS=((temp_SS/10)-1)*10;
+	     	}
+	     else if(but==butL_)
+	     	{
+	     	temp_SS=((temp_SS/10)-10)*10;
+	     	}
+	    gran(&temp_SS,(U_MAX*11)/10,(U_MAX*14)/10);
+		lc640_write_int(EE_UMAX,temp_SS);					
+		speed=1;	
+					
+		}
 	else if(sub_ind==SI_SET_MAX-2)
 	    	{
 		if(but==butE)
@@ -11199,6 +11226,7 @@ lcd_clear();
 rtc_init();
 ///pwm_init();
 ind=iMn;
+//tree_up(iSet,31,0,0);
 //snmp_plazma=15;
 
 memo_read();

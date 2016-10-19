@@ -39,34 +39,34 @@ void memo_read (void);
 
 
 
-#line 37 "eeprom_map.h"
+#line 38 "eeprom_map.h"
 
-#line 132 "eeprom_map.h"
-
-
+#line 133 "eeprom_map.h"
 
 
 
-#line 151 "eeprom_map.h"
+
+
+#line 152 "eeprom_map.h"
 
 
 
-#line 163 "eeprom_map.h"
+#line 164 "eeprom_map.h"
 
 
-#line 174 "eeprom_map.h"
+#line 175 "eeprom_map.h"
 
 
-#line 183 "eeprom_map.h"
-
-
+#line 184 "eeprom_map.h"
 
 
 
 
 
 
-#line 229 "eeprom_map.h"
+
+
+#line 230 "eeprom_map.h"
 
 
 
@@ -1436,6 +1436,7 @@ CUR_OFF_LEVEL_ABSOLUT=lc640_read_int(0x10+100+194);
 CUR_OFF_T_OFF=lc640_read_int(0x10+100+196);
 CUR_OFF_T_ON=lc640_read_int(0x10+100+198);
 AMPERCHAS=lc640_read_int(0x10+100+200);
+UMAX=lc640_read_int(0x10+58);
 			
 
 
