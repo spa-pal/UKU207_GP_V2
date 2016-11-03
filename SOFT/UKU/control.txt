@@ -165,7 +165,7 @@
 000038  b5f0              PUSH     {r4-r7,lr}
 00003a  48ee              LDR      r0,|L4.1012|
 00003c  49ef              LDR      r1,|L4.1020|
-00003e  f44f722f          MOV      r2,#0x2bc
+00003e  f44f72fa          MOV      r2,#0x1f4
 ;;;252    	} 
 ;;;253    
 ;;;254    if(samokalibr_cnt==1799U)

@@ -3825,12 +3825,12 @@ char  i;
 
 temp_SL=(signed long)adc_buff_[0];
 temp_SL*=Kuload;
-temp_SL/=700L;
+temp_SL/=500L;
 load_U=(signed short)temp_SL;
 
 temp_SL=(signed long)adc_buff__[0];
 temp_SL*=Kuload;
-temp_SL/=700L;
+temp_SL/=500L;
 load_U_=(signed short)temp_SL;
 
 

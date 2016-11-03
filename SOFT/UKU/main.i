@@ -6147,7 +6147,7 @@ if(a_ind . i==iMn)
 		if(ACH_OFF_EN)
 		ptrs[2]=		" 0t:0T:0s      qА*ч ";
 		}
-	   	ptrs[3]=		" U     &B I       *A";
+	   	ptrs[3]=		" U     &B I       #A";
 		ptrs[4]=		" Iмax.ист.напр.   }A";
 	   	ptrs[5]=		" Выход              ";
 		ptrs[6]=		" Установки          ";
@@ -6199,8 +6199,8 @@ if(a_ind . i==iMn)
 			int2lcd(load_U/10,'&',0);
 		}
 		
-		if(load_I<1000)int2lcd(load_I,'*',1);
-		else int2lcd(load_I/10,'*',0);
+		if(load_I<1000)int2lcd(load_I,'#',1);
+		else int2lcd(load_I/10,'#',0);
 		
 
 	
@@ -6838,8 +6838,9 @@ if(a_ind . i==iMn)
 	
 		int2lcdyx(1,1,0,0);
 		
-		int2lcdyx(bps[0]._Uii,1,6,1);
-				
+		if(bps[0]._Uii<10000)int2lcdyx(bps[0]._Uii,1,6,1);
+		else int2lcdyx(bps[0]._Uii/10,1,6,0);	
+			
 		int2lcdyx(bps[0]._Ii,1,11,1);
 		
 		int2lcdyx(bps[0]._Ti,1,15,0);
@@ -6874,9 +6875,10 @@ if(a_ind . i==iMn)
 		
 			
 			
-		int2lcdyx(bps[a_ind . s_i  ]._Uii,1,6,1);
-		int2lcdyx(bps[a_ind . s_i+1]._Uii,2,6,1);
-		
+		if(bps[a_ind . s_i  ]._Uii<10000)	int2lcdyx(bps[a_ind . s_i  ]._Uii,1,6,1);
+		else							int2lcdyx(bps[a_ind . s_i  ]._Uii/10,1,6,0); 
+		if(bps[a_ind . s_i+1]._Uii<10000)	int2lcdyx(bps[a_ind . s_i+1]._Uii,2,6,1);
+		else 							int2lcdyx(bps[a_ind . s_i+1]._Uii/10,2,6,0);
 		
 		int2lcdyx(bps[a_ind . s_i  ]._Ii,1,11,1);
 		int2lcdyx(bps[a_ind . s_i+1]._Ii,2,11,1);
@@ -6893,7 +6895,8 @@ if(a_ind . i==iMn)
 		if((a_ind . s_i<(NUMIST-2))) {
 		if(a_ind . s_i>=6)int2lcdyx(a_ind . s_i+3,3,1,0);
 		else int2lcdyx(a_ind . s_i+3,3,0,0);
-		int2lcdyx(bps[a_ind . s_i+2]._Uii,3,6,1);
+		if(bps[a_ind . s_i+2]._Uii<10000)	int2lcdyx(bps[a_ind . s_i+2]._Uii,3,6,1);
+		else 							int2lcdyx(bps[a_ind . s_i+2]._Uii/10,3,6,0);
 		int2lcdyx(bps[a_ind . s_i+2]._Ii,3,11,1);
 		int2lcdyx(bps[a_ind . s_i+2]._Ti,3,15,0);
 		char2lcdhyx(bps[a_ind . s_i1+2]._flags_tm,3,19);
@@ -9128,12 +9131,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4266 "main.c"
+#line 4269 "main.c"
 
 
 
 
-#line 4288 "main.c"
+#line 4291 "main.c"
 
 
 
@@ -13639,7 +13642,7 @@ else if(a_ind . i==iK_load)
 	     	{
 	     	temp_SS-=2;
 	     	}
-	    gran(&temp_SS,100,10000);
+	    gran(&temp_SS,100,30000);
 		lc640_write_int(0x10+20,temp_SS);					
 		speed=1;	
 					
@@ -13723,7 +13726,7 @@ else if(a_ind . i==iK_max_param)
 	     	{
 	     	temp_SS=((temp_SS/10)-10)*10;
 	     	}
-	    gran(&temp_SS,50,15000);
+	    gran(&temp_SS,50,20000);
 		lc640_write_int(0x10+8,temp_SS);					
 		speed=1;	
 					
@@ -16080,7 +16083,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11240 "main.c"
+#line 11243 "main.c"
 
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);

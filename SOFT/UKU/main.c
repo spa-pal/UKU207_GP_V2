@@ -1276,7 +1276,7 @@ if(ind==iMn)
 		if(ACH_OFF_EN)
 		ptrs[2]=		" 0t:0T:0s      qА*ч ";
 		}
-	   	ptrs[3]=		" U     &B I       *A";
+	   	ptrs[3]=		" U     &B I       #A";
 		ptrs[4]=		" Iмax.ист.напр.   }A";
 	   	ptrs[5]=		" Выход              ";
 		ptrs[6]=		" Установки          ";
@@ -1328,8 +1328,8 @@ if(ind==iMn)
 			int2lcd(load_U/10,'&',0);
 		}
 		
-		if(load_I<1000)int2lcd(load_I,'*',1);
-		else int2lcd(load_I/10,'*',0);
+		if(load_I<1000)int2lcd(load_I,'#',1);
+		else int2lcd(load_I/10,'#',0);
 		//int2lcd(U_maxg,'<',1);
 
 	/*	if(U_maxg<1000) {
@@ -1967,8 +1967,9 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	
 		int2lcdyx(1,1,0,0);
 		
-		int2lcdyx(bps[0]._Uii,1,6,1);
-				
+		if(bps[0]._Uii<10000)int2lcdyx(bps[0]._Uii,1,6,1);
+		else int2lcdyx(bps[0]._Uii/10,1,6,0);	
+			
 		int2lcdyx(bps[0]._Ii,1,11,1);
 		
 		int2lcdyx(bps[0]._Ti,1,15,0);
@@ -2003,9 +2004,10 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 		
 			
 			
-		int2lcdyx(bps[sub_ind  ]._Uii,1,6,1);
-		int2lcdyx(bps[sub_ind+1]._Uii,2,6,1);
-		
+		if(bps[sub_ind  ]._Uii<10000)	int2lcdyx(bps[sub_ind  ]._Uii,1,6,1);
+		else							int2lcdyx(bps[sub_ind  ]._Uii/10,1,6,0); 
+		if(bps[sub_ind+1]._Uii<10000)	int2lcdyx(bps[sub_ind+1]._Uii,2,6,1);
+		else 							int2lcdyx(bps[sub_ind+1]._Uii/10,2,6,0);
 		
 		int2lcdyx(bps[sub_ind  ]._Ii,1,11,1);
 		int2lcdyx(bps[sub_ind+1]._Ii,2,11,1);
@@ -2022,7 +2024,8 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 		if((sub_ind<(NUMIST-2))) {
 		if(sub_ind>=6)int2lcdyx(sub_ind+3,3,1,0);
 		else int2lcdyx(sub_ind+3,3,0,0);
-		int2lcdyx(bps[sub_ind+2]._Uii,3,6,1);
+		if(bps[sub_ind+2]._Uii<10000)	int2lcdyx(bps[sub_ind+2]._Uii,3,6,1);
+		else 							int2lcdyx(bps[sub_ind+2]._Uii/10,3,6,0);
 		int2lcdyx(bps[sub_ind+2]._Ii,3,11,1);
 		int2lcdyx(bps[sub_ind+2]._Ti,3,15,0);
 		char2lcdhyx(bps[sub_ind1+2]._flags_tm,3,19);
@@ -8790,7 +8793,7 @@ else if(ind==iK_load)
 	     	{
 	     	temp_SS-=2;
 	     	}
-	    gran(&temp_SS,100,10000);
+	    gran(&temp_SS,100,30000);
 		lc640_write_int(EE_KULOAD,temp_SS);					
 		speed=1;	
 					
@@ -8874,7 +8877,7 @@ else if(ind==iK_max_param)
 	     	{
 	     	temp_SS=((temp_SS/10)-10)*10;
 	     	}
-	    gran(&temp_SS,50,15000);
+	    gran(&temp_SS,50,20000);
 		lc640_write_int(EE_U_MAX,temp_SS);					
 		speed=1;	
 					
