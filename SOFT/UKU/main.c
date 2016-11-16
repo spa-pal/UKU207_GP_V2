@@ -30,6 +30,7 @@
 #include "mcp2515.h"
 #include "sc16is7xx.h"
 #include "snmp_data_file.h" 
+#include "modbus_tcp.h"
 
 #ifdef UKU2071x
 //#define MCP2515_CAN
@@ -651,6 +652,8 @@ char  bOFF;
 char bRAZR;
 
 signed short RELE_FUNC[2];
+
+U8 socket_tcp;
 
 //-----------------------------------------------
 //Драйвер выключения по счетчику амперчасов
@@ -11395,7 +11398,14 @@ temp++;
 if(temp<0)temp=0;
 if(temp>1000)temp=0;
 lc640_write_int(RESET_CNT,temp);
-}	
+}
+
+socket_tcp = tcp_get_socket (TCP_TYPE_SERVER, 0, 10, tcp_callback);
+if (socket_tcp != 0) 
+	{
+    tcp_listen (socket_tcp, 502);
+  	}
+		
 while (1)  
 	{
 	bTPS=0; 

@@ -3174,6 +3174,8 @@ extern char bRAZR;
 
 extern signed short RELE_FUNC[2];
 
+extern U8 socket_tcp;
+
 
 
 extern signed long milliAmperSecunda;

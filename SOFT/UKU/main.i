@@ -1425,6 +1425,8 @@ extern char bRAZR;
 
 extern signed short RELE_FUNC[2];
 
+extern U8 socket_tcp;
+
 
 
 extern signed long milliAmperSecunda;
@@ -2787,18 +2789,20 @@ extern short modbus_plazma2;
 extern short modbus_plazma3;				
 extern char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt;
 
+extern char modbus_registers[200];
+
 
 unsigned short CRC16_2(char* buf, short len);
 
 void modbus_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
 
-void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
+void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short reg_quantity, char prot);
 
 void modbus_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr);
 
 void modbus_hold_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr);
 
-void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
+void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short reg_quantity, char prot);
 
 void modbus_for_pult_registers_transmit(unsigned short reg_quantity);
 
@@ -3090,6 +3094,22 @@ void snmp_data (void);
 
  
 #line 33 "main.c"
+#line 1 "modbus_tcp.h"
+
+extern char plazma_modbus_tcp[20];
+
+U16 tcp_callback (U8 soc, U8 evt, U8 *ptr, U16 par);
+
+extern char modbus_tcp_func;
+extern char modbus_tcp_unit;
+extern short modbus_tcp_rx_arg0;
+extern short modbus_tcp_rx_arg1;
+
+
+
+extern char* modbus_tcp_out_ptr;
+
+#line 34 "main.c"
 
 
 
@@ -5265,7 +5285,7 @@ typedef struct
  
 #line 1031 "C:\\Keil\\ARM\\INC\\NXP\\LPC17xx\\LPC17xx.H"
 
-#line 398 "main.c"
+#line 399 "main.c"
 
 
 
@@ -5522,6 +5542,8 @@ char  bOFF;
 char bRAZR;
 
 signed short RELE_FUNC[2];
+
+U8 socket_tcp;
 
 
 
@@ -9131,12 +9153,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4269 "main.c"
+#line 4272 "main.c"
 
 
 
 
-#line 4291 "main.c"
+#line 4294 "main.c"
 
 
 
@@ -16083,7 +16105,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11243 "main.c"
+#line 11246 "main.c"
 
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);
@@ -16239,7 +16261,14 @@ temp++;
 if(temp<0)temp=0;
 if(temp>1000)temp=0;
 lc640_write_int(0x08,temp);
-}	
+}
+
+socket_tcp = tcp_get_socket (0x01, 0, 10, tcp_callback);
+if (socket_tcp != 0) 
+	{
+    tcp_listen (socket_tcp, 502);
+  	}
+		
 while (1)  
 	{
 	bTPS=0; 

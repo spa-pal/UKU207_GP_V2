@@ -240,18 +240,20 @@ extern short modbus_plazma2;
 extern short modbus_plazma3;				
 extern char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt;
 
+extern char modbus_registers[200];
+
 
 unsigned short CRC16_2(char* buf, short len);
 
 void modbus_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
 
-void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
+void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short reg_quantity, char prot);
 
 void modbus_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr);
 
 void modbus_hold_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr);
 
-void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
+void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short reg_quantity, char prot);
 
 void modbus_for_pult_registers_transmit(unsigned short reg_quantity);
 
@@ -1389,6 +1391,8 @@ extern char  bOFF;
 extern char bRAZR;
 
 extern signed short RELE_FUNC[2];
+
+extern U8 socket_tcp;
 
 
 
@@ -2577,6 +2581,22 @@ void start_CAP(void);
 
 
 #line 12 "modbus.c"
+#line 1 "modbus_tcp.h"
+
+extern char plazma_modbus_tcp[20];
+
+U16 tcp_callback (U8 soc, U8 evt, U8 *ptr, U16 par);
+
+extern char modbus_tcp_func;
+extern char modbus_tcp_unit;
+extern short modbus_tcp_rx_arg0;
+extern short modbus_tcp_rx_arg1;
+
+
+
+extern char* modbus_tcp_out_ptr;
+
+#line 13 "modbus.c"
 	
 #line 1 "C:\\Keil\\ARM\\RV31\\INC\\string.h"
  
@@ -2998,7 +3018,7 @@ extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  ,
 
 
  
-#line 14 "modbus.c"
+#line 15 "modbus.c"
 
 unsigned char modbus_buf[20];
 short modbus_crc16;
@@ -3014,6 +3034,12 @@ short modbus_plazma1;
 short modbus_plazma2;				
 short modbus_plazma3;				
 char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt=33;
+
+char modbus_registers[200];
+
+
+
+extern int  mem_copy (void *dp, void *sp, int len);
 
 
 unsigned short CRC16_2(char* buf, short len)
@@ -3582,11 +3608,11 @@ if(crc16_calculated==crc16_incapsulated)
 		{
 		if(modbus_func==3)		
 			{
-			if((modbus_rx_arg0>=50)&&(modbus_rx_arg0<80)) modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0,modbus_rx_arg1);
+			if((modbus_rx_arg0>=50)&&(modbus_rx_arg0<80)) modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func, modbus_rx_arg0,modbus_rx_arg1, 0);
 			}
 		else if(modbus_func==4)		
 			{
-			modbus_input_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0,modbus_rx_arg1);
+			modbus_input_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0, modbus_rx_arg1, 0);
 			}
 
 		else if(modbus_func==6) 	
@@ -4035,10 +4061,10 @@ if(crc16_calculated==crc16_incapsulated)
 }
 
 
-void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity)
+void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short reg_quantity, char prot)
 {
-char modbus_registers[110];
-char modbus_tx_buff[120];
+
+char modbus_tx_buff[200];
 unsigned short crc_temp;
 char i;
 
@@ -4102,24 +4128,31 @@ modbus_registers[23]=(char)((CAP_TIME_HOUR)%256);
 
 
  
-modbus_tx_buff[0]=adr;
-modbus_tx_buff[1]=func;
-modbus_tx_buff[2]=(char)(reg_quantity*2);
-
-memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-1)*2],reg_quantity*2);
-
-crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
-
-modbus_tx_buff[3+(reg_quantity*2)]=crc_temp%256;
-modbus_tx_buff[4+(reg_quantity*2)]=crc_temp/256;
-
-for (i=0;i<(5+(reg_quantity*2));i++)
+if(prot==0)
 	{
-	putchar0(modbus_tx_buff[i]);
+	modbus_tx_buff[0]=adr;
+	modbus_tx_buff[1]=func;
+	modbus_tx_buff[2]=(char)(reg_quantity*2);
+	
+	memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-1)*2],reg_quantity*2);
+	
+	crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
+	
+	modbus_tx_buff[3+(reg_quantity*2)]=crc_temp%256;
+	modbus_tx_buff[4+(reg_quantity*2)]=crc_temp/256;
+	
+	for (i=0;i<(5+(reg_quantity*2));i++)
+		{
+		putchar0(modbus_tx_buff[i]);
+		}
+	for (i=0;i<(5+(reg_quantity*2));i++)
+		{
+		putchar_sc16is700(modbus_tx_buff[i]);
+		}
 	}
-for (i=0;i<(5+(reg_quantity*2));i++)
+else if(prot==1)
 	{
-	putchar_sc16is700(modbus_tx_buff[i]);
+	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-1)*2];
 	}
 }
 
@@ -4359,10 +4392,10 @@ for (i=0;i<8;i++)
 
 
 
-void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity)
+void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short reg_quantity, char prot)
 {
-char modbus_registers[110];
-char modbus_tx_buff[120];
+
+char modbus_tx_buff[200];
 unsigned short crc_temp;
 char i;
 
@@ -4425,25 +4458,31 @@ modbus_registers[51]=(char)((CAP_MAX_VOLT)%256);
 modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			
 modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
 
-
-modbus_tx_buff[0]=adr;
-modbus_tx_buff[1]=func;
-modbus_tx_buff[2]=(char)(reg_quantity*2);
-
-memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-50)*2],reg_quantity*2);
-						   
-crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
-
-modbus_tx_buff[3+(reg_quantity*2)]=crc_temp%256;
-modbus_tx_buff[4+(reg_quantity*2)]=crc_temp/256;
-
-for (i=0;i<(5+(reg_quantity*2));i++)
+if(prot==0)
 	{
-	putchar0(modbus_tx_buff[i]);
+	modbus_tx_buff[0]=adr;
+	modbus_tx_buff[1]=func;
+	modbus_tx_buff[2]=(char)(reg_quantity*2);
+	
+	memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-50)*2],reg_quantity*2);
+							   
+	crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
+	
+	modbus_tx_buff[3+(reg_quantity*2)]=crc_temp%256;
+	modbus_tx_buff[4+(reg_quantity*2)]=crc_temp/256;
+	
+	for (i=0;i<(5+(reg_quantity*2));i++)
+		{
+		putchar0(modbus_tx_buff[i]);
+		}
+	for (i=0;i<(5+(reg_quantity*2));i++)
+		{
+		putchar_sc16is700(modbus_tx_buff[i]);
+		}
 	}
-for (i=0;i<(5+(reg_quantity*2));i++)
+else if(prot==1)
 	{
-	putchar_sc16is700(modbus_tx_buff[i]);
+	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-1)*2];
 	}
 }
 

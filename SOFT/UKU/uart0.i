@@ -3221,6 +3221,8 @@ extern char bRAZR;
 
 extern signed short RELE_FUNC[2];
 
+extern U8 socket_tcp;
+
 
 
 extern signed long milliAmperSecunda;
@@ -3486,18 +3488,20 @@ extern short modbus_plazma2;
 extern short modbus_plazma3;				
 extern char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt;
 
+extern char modbus_registers[200];
+
 
 unsigned short CRC16_2(char* buf, short len);
 
 void modbus_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
 
-void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
+void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short reg_quantity, char prot);
 
 void modbus_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr);
 
 void modbus_hold_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr);
 
-void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
+void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short reg_quantity, char prot);
 
 void modbus_for_pult_registers_transmit(unsigned short reg_quantity);
 

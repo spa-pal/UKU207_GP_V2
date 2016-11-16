@@ -9,6 +9,7 @@
 #include "uart0.h"
 #include "sc16is7xx.h"
 #include "control.h"
+#include "modbus_tcp.h"
 	
 #include <string.h>
 
@@ -26,6 +27,12 @@ short modbus_plazma1;				//Отладка
 short modbus_plazma2;				//Отладка
 short modbus_plazma3;				//Отладка
 char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt=33;
+
+char modbus_registers[200];
+
+#define MODBUS_RTU_PROT	0
+
+extern int  mem_copy (void *dp, void *sp, int len);
 
 //-----------------------------------------------
 unsigned short CRC16_2(char* buf, short len)
@@ -594,11 +601,11 @@ if(crc16_calculated==crc16_incapsulated)
 		{
 		if(modbus_func==3)		//чтение произвольного кол-ва регистров
 			{
-			if((modbus_rx_arg0>=50)&&(modbus_rx_arg0<80)) modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0,modbus_rx_arg1);
+			if((modbus_rx_arg0>=50)&&(modbus_rx_arg0<80)) modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func, modbus_rx_arg0,modbus_rx_arg1, MODBUS_RTU_PROT);
 			}
 		else if(modbus_func==4)		//чтение произвольного кол-ва регистров	входов
 			{
-			modbus_input_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0,modbus_rx_arg1);
+			modbus_input_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0, modbus_rx_arg1, MODBUS_RTU_PROT);
 			}
 
 		else if(modbus_func==6) 	//запись регистра
@@ -1047,10 +1054,10 @@ if(crc16_calculated==crc16_incapsulated)
 }
 
 //-----------------------------------------------
-void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity)
+void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short reg_quantity, char prot)
 {
-char modbus_registers[110];
-char modbus_tx_buff[120];
+//char modbus_registers[110];
+char modbus_tx_buff[200];
 unsigned short crc_temp;
 char i;
 
@@ -1114,24 +1121,31 @@ modbus_registers[42]=0;								//Рег22
 modbus_registers[43]=0;
 if(AVT_REV_IS_ON)modbus_registers[42]=1;
 */
-modbus_tx_buff[0]=adr;
-modbus_tx_buff[1]=func;
-modbus_tx_buff[2]=(char)(reg_quantity*2);
-
-memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-1)*2],reg_quantity*2);
-
-crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
-
-modbus_tx_buff[3+(reg_quantity*2)]=crc_temp%256;
-modbus_tx_buff[4+(reg_quantity*2)]=crc_temp/256;
-
-for (i=0;i<(5+(reg_quantity*2));i++)
+if(prot==MODBUS_RTU_PROT)
 	{
-	putchar0(modbus_tx_buff[i]);
+	modbus_tx_buff[0]=adr;
+	modbus_tx_buff[1]=func;
+	modbus_tx_buff[2]=(char)(reg_quantity*2);
+	
+	memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-1)*2],reg_quantity*2);
+	
+	crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
+	
+	modbus_tx_buff[3+(reg_quantity*2)]=crc_temp%256;
+	modbus_tx_buff[4+(reg_quantity*2)]=crc_temp/256;
+	
+	for (i=0;i<(5+(reg_quantity*2));i++)
+		{
+		putchar0(modbus_tx_buff[i]);
+		}
+	for (i=0;i<(5+(reg_quantity*2));i++)
+		{
+		putchar_sc16is700(modbus_tx_buff[i]);
+		}
 	}
-for (i=0;i<(5+(reg_quantity*2));i++)
+else if(prot==MODBUS_TCP_PROT)
 	{
-	putchar_sc16is700(modbus_tx_buff[i]);
+	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-1)*2];
 	}
 }
 
@@ -1371,10 +1385,10 @@ for (i=0;i<8;i++)
 
 
 //-----------------------------------------------
-void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity)
+void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short reg_quantity, char prot)
 {
-char modbus_registers[110];
-char modbus_tx_buff[120];
+//char modbus_registers[110];
+char modbus_tx_buff[200];
 unsigned short crc_temp;
 char i;
 
@@ -1437,25 +1451,31 @@ modbus_registers[51]=(char)((CAP_MAX_VOLT)%256);
 modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			//Рег76
 modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
 
-
-modbus_tx_buff[0]=adr;
-modbus_tx_buff[1]=func;
-modbus_tx_buff[2]=(char)(reg_quantity*2);
-
-memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-50)*2],reg_quantity*2);
-						   
-crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
-
-modbus_tx_buff[3+(reg_quantity*2)]=crc_temp%256;
-modbus_tx_buff[4+(reg_quantity*2)]=crc_temp/256;
-
-for (i=0;i<(5+(reg_quantity*2));i++)
+if(prot==MODBUS_RTU_PROT)
 	{
-	putchar0(modbus_tx_buff[i]);
+	modbus_tx_buff[0]=adr;
+	modbus_tx_buff[1]=func;
+	modbus_tx_buff[2]=(char)(reg_quantity*2);
+	
+	memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-50)*2],reg_quantity*2);
+							   
+	crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
+	
+	modbus_tx_buff[3+(reg_quantity*2)]=crc_temp%256;
+	modbus_tx_buff[4+(reg_quantity*2)]=crc_temp/256;
+	
+	for (i=0;i<(5+(reg_quantity*2));i++)
+		{
+		putchar0(modbus_tx_buff[i]);
+		}
+	for (i=0;i<(5+(reg_quantity*2));i++)
+		{
+		putchar_sc16is700(modbus_tx_buff[i]);
+		}
 	}
-for (i=0;i<(5+(reg_quantity*2));i++)
+else if(prot==MODBUS_TCP_PROT)
 	{
-	putchar_sc16is700(modbus_tx_buff[i]);
+	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-1)*2];
 	}
 }
 
