@@ -60,8 +60,15 @@ extern signed short snmp_energy_pes_phase_b;
 extern signed short snmp_energy_pes_phase_c;
 
 
+extern signed short snmp_sk_number[4];
+extern signed short snmp_sk_state[4];
+
+
 extern signed long snmp_energy_total_energy;
 extern signed short snmp_energy_current_energy;
+
+
+extern signed short snmp_ips_state_flags;
 
 
 extern signed char snmp_avt_number[12];
@@ -603,42 +610,42 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 44 "main.h"
 
+#line 45 "main.h"
 
-#line 56 "main.h"
 
-#line 64 "main.h"
 
-#line 75 "main.h"
 
 
+#line 60 "main.h"
 
+#line 68 "main.h"
 
+#line 79 "main.h"
 
 
 
 
 
-#line 90 "main.h"
 
 
 
 
+#line 94 "main.h"
 
 
 
-#line 115 "main.h"
 
 
 
 
+#line 119 "main.h"
 
-#line 129 "main.h"
 
 
 
 
+#line 133 "main.h"
 
 
 
@@ -646,6 +653,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
+ 
 
 
 
@@ -696,7 +704,10 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 218 "main.h"
+
+
+
+#line 222 "main.h"
 
 
 
@@ -715,11 +726,9 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 254 "main.h"
+#line 258 "main.h"
 
-#line 270 "main.h"
-
-
+#line 274 "main.h"
 
 
 
@@ -739,9 +748,11 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 304 "main.h"
 
-#line 318 "main.h"
+
+#line 308 "main.h"
+
+#line 322 "main.h"
 
 
 
@@ -4531,9 +4542,16 @@ signed short snmp_energy_pes_phase_b;
 signed short snmp_energy_pes_phase_c;
 
 
+
+signed short snmp_sk_number[4];
+signed short snmp_sk_state[4];
+
+
 signed long snmp_energy_total_energy;
 signed short snmp_energy_current_energy;
 
+
+signed short snmp_ips_state_flags;
 
 
 signed short snmp_command;
@@ -4817,6 +4835,41 @@ for(i=0;i<12;i++)
 	if(avt_stat[i]==avtOFF)snmp_avt_stat[i]=0;
 	else snmp_avt_stat[i]=1;
 	}
+
+for(i=0;i<4;i++)
+	{
+	snmp_sk_number[i]=i+1;
+	snmp_sk_state[i]=0;
+	if(sk_in_drv_stat>0)snmp_sk_state[0]=1;
+	else snmp_sk_state[0]=0;
+	}
+
+
+snmp_ips_state_flags=0;
+
+if(work_stat==wsCAP) 
+	{
+	if(bRAZR) 			snmp_ips_state_flags&=~(1<<0);
+	else 				snmp_ips_state_flags|= (1<<0);
+	}
+else 
+	{
+	if(REV_STAT==rsREW)	snmp_ips_state_flags&=~(1<<0);
+	else 				snmp_ips_state_flags|= (1<<0);
+	}
+
+if(bCURRENT_STAB==0)	snmp_ips_state_flags&=~(1<<1);
+else 					snmp_ips_state_flags|= (1<<1);
+									
+if(bVOLT_IS_NORM==0)	snmp_ips_state_flags&=~(1<<2);
+else 					snmp_ips_state_flags|= (1<<2);
+
+if(bVOLT_IS_NOT_UP==0)	snmp_ips_state_flags&=~(1<<3);
+else 					snmp_ips_state_flags|= (1<<3);
+
+if(bVOLT_IS_NOT_DOWN==0)snmp_ips_state_flags&=~(1<<4);
+else 					snmp_ips_state_flags|= (1<<4);
+
 }
 
 

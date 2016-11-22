@@ -524,42 +524,42 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 44 "main.h"
 
+#line 45 "main.h"
 
-#line 56 "main.h"
 
-#line 64 "main.h"
 
-#line 75 "main.h"
 
 
+#line 60 "main.h"
 
+#line 68 "main.h"
 
+#line 79 "main.h"
 
 
 
 
 
-#line 90 "main.h"
 
 
 
 
+#line 94 "main.h"
 
 
 
-#line 115 "main.h"
 
 
 
 
+#line 119 "main.h"
 
-#line 129 "main.h"
 
 
 
 
+#line 133 "main.h"
 
 
 
@@ -567,6 +567,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
+ 
 
 
 
@@ -617,7 +618,10 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 218 "main.h"
+
+
+
+#line 222 "main.h"
 
 
 
@@ -636,11 +640,9 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 254 "main.h"
+#line 258 "main.h"
 
-#line 270 "main.h"
-
-
+#line 274 "main.h"
 
 
 
@@ -660,9 +662,11 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 304 "main.h"
 
-#line 318 "main.h"
+
+#line 308 "main.h"
+
+#line 322 "main.h"
 
 
 

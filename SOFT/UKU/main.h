@@ -34,6 +34,7 @@
 #define OUT_PARAMETERS				2
 #define OUT_VOLTAGE						1
 #define OUT_CURRENT						2
+#define OUT_FLAGS						3
 
 #define DISPLAY_PSU					3
 #define DISPLAY_PSU_ENTRY_NUMBER			1,1
@@ -42,6 +43,9 @@
 #define DISPLAY_PSU_ENTRY_TEMPERATURE		1,4
 #define DISPLAY_PSU_ENTRY_STATUS			1,5
 
+#define DISPLAY_SK					10
+#define DISPLAY_SK_ENTRY_NUMBER				1,1
+#define DISPLAY_SK_ENTRY_STAT				1,2
 
 #define SETTED_PARAMETERS			5
 #define NUM_OF_PSU						1
@@ -127,13 +131,13 @@
 #define DISPLAY_ENERGY_TOTAL_ENERGY		7
 #define DISPLAY_ENERGY_CURRENT_ENERGY		8
 
-
+/*
 #define DISPLAY_SK					15
 #define DISPLAY_SK_ENTRY_NUMBER			1,1
 #define DISPLAY_SK_AKTIVITY	 			1,2
 #define DISPLAY_SK_ALARM_AKTIVITY 			1,3
 #define DISPLAY_SK_ALARM 	 			1,4
-
+*/
 
 #define COMMAND_OK		0x5555
 #define COMAND_FAIL		0xaaaa

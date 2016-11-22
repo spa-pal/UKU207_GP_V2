@@ -77,8 +77,10 @@ char* aaa_="abc";
  */
 
 	//Параметры выхода
-/**/	{ MIB_INTEGER | MIB_ATR_RO,  	12, {OID_ENTERPRISE, OID_DEVICE, OUT_PARAMETERS, OUT_VOLTAGE, 0},  		MIB_INT(snmp_out_voltage),  		NULL},   					//выходное напряжение
-/**/	{ MIB_INTEGER | MIB_ATR_RO,  	12, {OID_ENTERPRISE, OID_DEVICE, OUT_PARAMETERS, OUT_CURRENT, 0},  		MIB_INT(snmp_out_current),  		NULL},   					//выходной ток
+	{ MIB_INTEGER | MIB_ATR_RO,  	12, {OID_ENTERPRISE, OID_DEVICE, OUT_PARAMETERS, OUT_VOLTAGE, 0},  		MIB_INT(snmp_out_voltage),  		NULL},   					//выходное напряжение
+	{ MIB_INTEGER | MIB_ATR_RO,  	12, {OID_ENTERPRISE, OID_DEVICE, OUT_PARAMETERS, OUT_CURRENT, 0},  		MIB_INT(snmp_out_current),  		NULL},   					//выходной ток
+	{ MIB_INTEGER | MIB_ATR_RO,  	12, {OID_ENTERPRISE, OID_DEVICE, OUT_PARAMETERS, OUT_FLAGS, 0},  		MIB_INT(snmp_ips_state_flags),  	NULL},   					//выходной ток
+
 
 	//Параметры из меню установок
 	//Количество выпрямителей в структуре
@@ -235,6 +237,17 @@ char* aaa_="abc";
 	{ MIB_INTEGER | MIB_ATR_RO,  	13, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_PSU, DISPLAY_PSU_ENTRY_STATUS, 14},  			MIB_INT(snmp_bps_stat[13]),  NULL},		//Состояние БПС14
 	{ MIB_INTEGER | MIB_ATR_RO,  	13, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_PSU, DISPLAY_PSU_ENTRY_STATUS, 15},  			MIB_INT(snmp_bps_stat[14]),  NULL},		//Состояние БПС15
 	{ MIB_INTEGER | MIB_ATR_RO,  	13, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_PSU, DISPLAY_PSU_ENTRY_STATUS, 16},  			MIB_INT(snmp_bps_stat[15]),  NULL},		//Состояние БПС16 */
+
+
+	{ MIB_INTEGER | MIB_ATR_RO,  	13, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_SK, DISPLAY_SK_ENTRY_NUMBER, 1},  				MIB_INT(snmp_sk_number[0]),  	NULL},	//Номер БПСа
+	{ MIB_INTEGER | MIB_ATR_RO,  	13, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_SK, DISPLAY_SK_ENTRY_NUMBER, 2},  				MIB_INT(snmp_sk_number[1]),  	NULL},	//Номер БПСа
+	{ MIB_INTEGER | MIB_ATR_RO,  	13, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_SK, DISPLAY_SK_ENTRY_NUMBER, 3},  				MIB_INT(snmp_sk_number[2]),  	NULL},	//Номер БПСа
+	{ MIB_INTEGER | MIB_ATR_RO,  	13, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_SK, DISPLAY_SK_ENTRY_NUMBER, 4},  				MIB_INT(snmp_sk_number[3]),  	NULL},	//Номер БПСа
+
+	{ MIB_INTEGER | MIB_ATR_RO,  	13, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_SK, DISPLAY_SK_ENTRY_STAT, 1},  				MIB_INT(snmp_sk_state[0]),  	NULL},	//Номер БПСа
+	{ MIB_INTEGER | MIB_ATR_RO,  	13, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_SK, DISPLAY_SK_ENTRY_STAT, 2},  				MIB_INT(snmp_sk_state[1]),  	NULL},	//Номер БПСа
+	{ MIB_INTEGER | MIB_ATR_RO,  	13, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_SK, DISPLAY_SK_ENTRY_STAT, 3},  				MIB_INT(snmp_sk_state[2]),  	NULL},	//Номер БПСа
+	{ MIB_INTEGER | MIB_ATR_RO,  	13, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_SK, DISPLAY_SK_ENTRY_STAT, 4},  				MIB_INT(snmp_sk_state[3]),  	NULL},	//Номер БПСа
 
 
 	{ MIB_INTEGER,  			12, {OID_ENTERPRISE, OID_DEVICE, COMMANDS, SNMP_COMMAND, 0},						MIB_INT(snmp_command),  	snmp_command_execute},		//номер первого бпса 

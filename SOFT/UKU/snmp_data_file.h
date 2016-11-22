@@ -57,9 +57,16 @@ extern signed short snmp_energy_pes_phase_a;
 extern signed short snmp_energy_pes_phase_b;
 extern signed short snmp_energy_pes_phase_c;
 
+//Состояние сухих контактов
+extern signed short snmp_sk_number[4];
+extern signed short snmp_sk_state[4];
+
 //Показания счетчика
 extern signed long snmp_energy_total_energy;
 extern signed short snmp_energy_current_energy;
+
+//Байт флагов ИПСа
+extern signed short snmp_ips_state_flags;
 
 //Состояние автоматов
 extern signed char snmp_avt_number[12];

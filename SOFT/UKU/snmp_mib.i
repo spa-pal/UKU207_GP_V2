@@ -2827,42 +2827,42 @@ typedef struct
 
 
 
-#line 44 "main.H"
 
+#line 45 "main.H"
 
-#line 56 "main.H"
 
-#line 64 "main.H"
 
-#line 75 "main.H"
 
 
+#line 60 "main.H"
 
+#line 68 "main.H"
 
+#line 79 "main.H"
 
 
 
 
 
-#line 90 "main.H"
 
 
 
 
+#line 94 "main.H"
 
 
 
-#line 115 "main.H"
 
 
 
 
+#line 119 "main.H"
 
-#line 129 "main.H"
 
 
 
 
+#line 133 "main.H"
 
 
 
@@ -2870,6 +2870,7 @@ typedef struct
 
 
 
+ 
 
 
 
@@ -2920,7 +2921,10 @@ typedef struct
 
 
 
-#line 218 "main.H"
+
+
+
+#line 222 "main.H"
 
 
 
@@ -2939,11 +2943,9 @@ typedef struct
 
 
 
-#line 254 "main.H"
+#line 258 "main.H"
 
-#line 270 "main.H"
-
-
+#line 274 "main.H"
 
 
 
@@ -2963,9 +2965,11 @@ typedef struct
 
 
 
-#line 304 "main.H"
 
-#line 318 "main.H"
+
+#line 308 "main.H"
+
+#line 322 "main.H"
 
 
 
@@ -3801,8 +3805,15 @@ extern signed short snmp_energy_pes_phase_b;
 extern signed short snmp_energy_pes_phase_c;
 
 
+extern signed short snmp_sk_number[4];
+extern signed short snmp_sk_state[4];
+
+
 extern signed long snmp_energy_total_energy;
 extern signed short snmp_energy_current_energy;
+
+
+extern signed short snmp_ips_state_flags;
 
 
 extern signed char snmp_avt_number[12];
@@ -3976,8 +3987,10 @@ char* aaa_="abc";
  
 
 	
- 	{ 0x02 | 0x80,  	12, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 2, 1, 0},  		sizeof(snmp_out_voltage), (void *)&snmp_out_voltage,  		((void *) 0)},   					
- 	{ 0x02 | 0x80,  	12, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 2, 2, 0},  		sizeof(snmp_out_current), (void *)&snmp_out_current,  		((void *) 0)},   					
+	{ 0x02 | 0x80,  	12, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 2, 1, 0},  		sizeof(snmp_out_voltage), (void *)&snmp_out_voltage,  		((void *) 0)},   					
+	{ 0x02 | 0x80,  	12, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 2, 2, 0},  		sizeof(snmp_out_current), (void *)&snmp_out_current,  		((void *) 0)},   					
+	{ 0x02 | 0x80,  	12, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 2, 3, 0},  		sizeof(snmp_ips_state_flags), (void *)&snmp_ips_state_flags,  	((void *) 0)},   					
+
 
 	
 	
@@ -4134,6 +4147,17 @@ char* aaa_="abc";
 
 
  
+
+
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 10, 1,1, 1},  				sizeof(snmp_sk_number[0]), (void *)&snmp_sk_number[0],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 10, 1,1, 2},  				sizeof(snmp_sk_number[1]), (void *)&snmp_sk_number[1],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 10, 1,1, 3},  				sizeof(snmp_sk_number[2]), (void *)&snmp_sk_number[2],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 10, 1,1, 4},  				sizeof(snmp_sk_number[3]), (void *)&snmp_sk_number[3],  	((void *) 0)},	
+
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 10, 1,2, 1},  				sizeof(snmp_sk_state[0]), (void *)&snmp_sk_state[0],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 10, 1,2, 2},  				sizeof(snmp_sk_state[1]), (void *)&snmp_sk_state[1],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 10, 1,2, 3},  				sizeof(snmp_sk_state[2]), (void *)&snmp_sk_state[2],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 10, 1,2, 4},  				sizeof(snmp_sk_state[3]), (void *)&snmp_sk_state[3],  	((void *) 0)},	
 
 
 	{ 0x02,  			12, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 9, 1, 0},						sizeof(snmp_command), (void *)&snmp_command,  	snmp_command_execute},		

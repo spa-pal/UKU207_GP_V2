@@ -6485,6 +6485,12 @@ else if(ind==iBps)
 		
 		}
 
+	else if(but==butL)
+		{
+	     tree_down(0,0);
+	     ret(0);
+		}
+
 	else if((but==butE)&&((sub_ind==(NUMIST-2)))||((NUMIST==1)&&(sub_ind==0)))
 		{
 	     tree_down(0,0);

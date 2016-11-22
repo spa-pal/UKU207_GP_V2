@@ -97,10 +97,17 @@ signed short snmp_energy_pes_phase_a;
 signed short snmp_energy_pes_phase_b;
 signed short snmp_energy_pes_phase_c;
 
+
+//Состояние сухих контактов
+signed short snmp_sk_number[4];
+signed short snmp_sk_state[4];
+
 //Показания счетчика
 signed long snmp_energy_total_energy;
 signed short snmp_energy_current_energy;
 
+//Байт флагов ИПСа
+signed short snmp_ips_state_flags;
 
 //Команды
 signed short snmp_command;
@@ -384,6 +391,41 @@ for(i=0;i<12;i++)
 	if(avt_stat[i]==avtOFF)snmp_avt_stat[i]=0;
 	else snmp_avt_stat[i]=1;
 	}
+
+for(i=0;i<4;i++)
+	{
+	snmp_sk_number[i]=i+1;
+	snmp_sk_state[i]=0;
+	if(sk_in_drv_stat>0)snmp_sk_state[0]=1;
+	else snmp_sk_state[0]=0;
+	}
+
+
+snmp_ips_state_flags=0;
+
+if(work_stat==wsCAP) 
+	{
+	if(bRAZR) 			snmp_ips_state_flags&=~(1<<0);
+	else 				snmp_ips_state_flags|= (1<<0);
+	}
+else 
+	{
+	if(REV_STAT==rsREW)	snmp_ips_state_flags&=~(1<<0);
+	else 				snmp_ips_state_flags|= (1<<0);
+	}
+
+if(bCURRENT_STAB==0)	snmp_ips_state_flags&=~(1<<1);
+else 					snmp_ips_state_flags|= (1<<1);
+									
+if(bVOLT_IS_NORM==0)	snmp_ips_state_flags&=~(1<<2);
+else 					snmp_ips_state_flags|= (1<<2);
+
+if(bVOLT_IS_NOT_UP==0)	snmp_ips_state_flags&=~(1<<3);
+else 					snmp_ips_state_flags|= (1<<3);
+
+if(bVOLT_IS_NOT_DOWN==0)snmp_ips_state_flags&=~(1<<4);
+else 					snmp_ips_state_flags|= (1<<4);
+
 }
 
 //-----------------------------------------------

@@ -683,42 +683,42 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
-#line 44 "main.h"
 
+#line 45 "main.h"
 
-#line 56 "main.h"
 
-#line 64 "main.h"
 
-#line 75 "main.h"
 
 
+#line 60 "main.h"
 
+#line 68 "main.h"
 
+#line 79 "main.h"
 
 
 
 
 
-#line 90 "main.h"
 
 
 
 
+#line 94 "main.h"
 
 
 
-#line 115 "main.h"
 
 
 
 
+#line 119 "main.h"
 
-#line 129 "main.h"
 
 
 
 
+#line 133 "main.h"
 
 
 
@@ -726,6 +726,7 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
+ 
 
 
 
@@ -776,7 +777,10 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
-#line 218 "main.h"
+
+
+
+#line 222 "main.h"
 
 
 
@@ -795,11 +799,9 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
-#line 254 "main.h"
+#line 258 "main.h"
 
-#line 270 "main.h"
-
-
+#line 274 "main.h"
 
 
 
@@ -819,9 +821,11 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
-#line 304 "main.h"
 
-#line 318 "main.h"
+
+#line 308 "main.h"
+
+#line 322 "main.h"
 
 
 
@@ -2982,8 +2986,15 @@ extern signed short snmp_energy_pes_phase_b;
 extern signed short snmp_energy_pes_phase_c;
 
 
+extern signed short snmp_sk_number[4];
+extern signed short snmp_sk_state[4];
+
+
 extern signed long snmp_energy_total_energy;
 extern signed short snmp_energy_current_energy;
+
+
+extern signed short snmp_ips_state_flags;
 
 
 extern signed char snmp_avt_number[12];
@@ -11353,6 +11364,12 @@ else if(a_ind . i==iBps)
 		
 		}
 
+	else if(but==247)
+		{
+	     tree_down(0,0);
+	     ret(0);
+		}
+
 	else if((but==254)&&((a_ind . s_i==(NUMIST-2)))||((NUMIST==1)&&(a_ind . s_i==0)))
 		{
 	     tree_down(0,0);
@@ -16105,7 +16122,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11246 "main.c"
+#line 11252 "main.c"
 
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);
