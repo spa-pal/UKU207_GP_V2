@@ -10,7 +10,7 @@ extern char bps_all_off_cnt,bps_mask_off_cnt,bps_mask_on_off_cnt;
 extern char bps_hndl_2sec_cnt;
 extern unsigned short bps_on_mask,bps_off_mask;
 extern char num_necc_up,num_necc_down;
-extern unsigned char sh_cnt0,b1Hz_sh;
+extern unsigned char sh_cnt0,b1Hz_sh,sh_cnt1;
 
 
 extern short cntrl_stat_blok_cnt,cntrl_stat_blok_cnt_,cntrl_stat_blok_cnt_plus[2],cntrl_stat_blok_cnt_minus[2];
@@ -119,7 +119,7 @@ extern signed int i_avg_max,i_avg_min,i_avg_summ,i_avg;
 extern signed int avg;
 extern char bAVG;
 extern char bFAST_REG;
-extern char bU_VALID;
+extern char bU_VALID,bU_VALID_VALID;
 
 
 typedef enum {rsOFF,rsON} enum_rele_stat;

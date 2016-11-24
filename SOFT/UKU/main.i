@@ -6936,6 +6936,14 @@ if(a_ind . i==iMn)
 		} else {
 		lcd_buffer[60]=1;
 		}
+
+		int2lcdyx(bps[a_ind . s_i  ]._vol_i,1,19,0);
+		int2lcdyx(bps[a_ind . s_i+1]._vol_i,2,19,0);
+		int2lcdyx(bps[a_ind . s_i+2]._vol_i,3,19,0);
+		int2lcdyx(bps[a_ind . s_i  ]._vol_u,1,15,0);
+		int2lcdyx(bps[a_ind . s_i+1]._vol_u,2,15,0);
+		int2lcdyx(bps[a_ind . s_i+2]._vol_u,3,15,0);
+
 	}
 					
 
@@ -9164,12 +9172,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4272 "main.c"
+#line 4280 "main.c"
 
 
 
 
-#line 4294 "main.c"
+#line 4302 "main.c"
 
 
 
@@ -16122,7 +16130,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11252 "main.c"
+#line 11260 "main.c"
 
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);

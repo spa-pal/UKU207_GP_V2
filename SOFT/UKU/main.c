@@ -665,6 +665,18 @@ signed short curr_off_stop_cnt;
 signed short curr_off_start_cnt;
 signed short curr_off_temp;
 
+//***********************************************
+//Выравнивание токов
+short avg_main_cnt=20;
+signed int i_avg_max,i_avg_min,i_avg_summ,i_avg; 
+signed int avg;
+char bAVG;
+char avg_cnt;  
+char avg_num; 
+char num_of_dumm_src;
+char num_of_max_src;
+char bAVG_CNT;
+
 //-----------------------------------------------
 void rtc_init (void) 
 {
@@ -2035,6 +2047,14 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 		} else {
 		lcd_buffer[60]=1;
 		}
+
+		/*int2lcdyx(bps[sub_ind  ]._vol_i,1,19,0);
+		int2lcdyx(bps[sub_ind+1]._vol_i,2,19,0);
+		int2lcdyx(bps[sub_ind+2]._vol_i,3,19,0);
+		int2lcdyx(bps[sub_ind  ]._vol_u,1,15,0);
+		int2lcdyx(bps[sub_ind+1]._vol_u,2,15,0);
+		int2lcdyx(bps[sub_ind+2]._vol_u,3,15,0);*/
+
 	}
 					
 
@@ -3462,10 +3482,14 @@ if(ind==iDeb)
      	         "                    ",
      	         "                    ");
 
-		int2lcdyx(bAVG,0,0,0);
-		int2lcdyx(i_avg_max,0,5,0);
-		int2lcdyx(i_avg_min,0,13,0);
-		int2lcdyx(avg,0,19,0);
+		int2lcdyx(bAVG,0,0,0); 
+		//int2lcdyx(avg_main_cnt,0,2,0);
+		//int2lcdyx(avg_num,0,4,0);
+		int2lcdyx(i_avg_min,0,9,0);
+		int2lcdyx(i_avg_max,0,13,0);
+		int2lcdyx(avg,0,19,0);	
+		int2lcdyx(num_of_dumm_src,0,2,0);
+		int2lcdyx(num_of_max_src,0,4,0);
  /*         int2lcdyx(bat[0]._Ubm,1,7,0); 	int2lcdyx(bat[0]._av,1,10,0);
 		int2lcdyx(bat[0]._dUbm,2,7,0);
 		int2lcdyx(bat[0]._cnt_as,3,7,0);
@@ -3492,12 +3516,12 @@ if(ind==iDeb)
 	/*	char2lcdhyx(bps[sub_ind1  ]._flags_tu,1,8);
 		char2lcdhyx(bps[sub_ind1+1]._flags_tu,2,8);
 		char2lcdhyx(bps[sub_ind1+2]._flags_tu,3,8);
+	  */
+		int2lcdyx(bps[sub_ind1  ]._xu_+50,1,12,0);
+		int2lcdyx(bps[sub_ind1+1]._xu_+50,2,12,0);
+		int2lcdyx(bps[sub_ind1+2]._xu_+50,3,12,0);		
 
-		int2lcdyx(bps[sub_ind1  ]._vol_u,1,12,0);
-		int2lcdyx(bps[sub_ind1+1]._vol_u,2,12,0);
-		int2lcdyx(bps[sub_ind1+2]._vol_u,3,12,0);		
-
-
+	 /*
 		char2lcdhyx(bps[sub_ind1]._flags_tm,1,15);
 		char2lcdhyx(bps[sub_ind1+1]._flags_tm,2,15);
 		char2lcdhyx(bps[sub_ind1+2]._flags_tm,3,15);	
@@ -3511,9 +3535,9 @@ if(ind==iDeb)
 		char2lcdhyx(bps[sub_ind1+2]._rotor>>8,3,15);		
 		*/
 		
-		int2lcdyx(bps[sub_ind1]._rotor,1,19,0);
-		int2lcdyx(bps[sub_ind1+1]._rotor,2,19,0);
-		int2lcdyx(bps[sub_ind1+2]._rotor,3,19,0);
+		int2lcdyx(bps[sub_ind1]._state,1,19,0);
+		int2lcdyx(bps[sub_ind1+1]._state,2,19,0);
+		int2lcdyx(bps[sub_ind1+2]._state,3,19,0);
 
 
  		}
@@ -11499,15 +11523,15 @@ while (1)
 
 	if(b10Hz)
 		{
-//		char i;
+		char i;
 
      timer_tick ();
      tick = __TRUE;
 
 		b10Hz=0;
 				
-				
-		bps_drv(0);
+		for(i=0;i<NUMIST;i++)bps_drv(i);		
+		//bps_drv(0);
 		bps_hndl();
 
 						
@@ -11639,7 +11663,7 @@ while (1)
 		ach_off_hndl(); 	//драйвер функции выключения по амперчасам
 		curr_off_hndl();	//драйвер функции выключения по снижению тока
 
-		
+		avg_hndl();			// выравнивание токов
 		}
 	if(b1min)
 		{

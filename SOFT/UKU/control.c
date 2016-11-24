@@ -134,15 +134,6 @@ signed short samokalibr_cnt;
 
 
 
-//***********************************************
-//Выравнивание токов
-short avg_main_cnt=20;
-signed int i_avg_max,i_avg_min,i_avg_summ,i_avg; 
-signed int avg;
-char bAVG;
-char avg_cnt;  
-//char avg_num; 
-
 //**********************************************
 //Контроль наличия батарей
 signed short 	main_kb_cnt;
@@ -158,7 +149,7 @@ char bps_all_off_cnt,bps_mask_off_cnt,bps_mask_on_off_cnt;
 char bps_hndl_2sec_cnt;
 unsigned short bps_on_mask,bps_off_mask;
 char num_necc_up,num_necc_down;
-unsigned char sh_cnt0,b1Hz_sh;
+unsigned char sh_cnt0,b1Hz_sh,sh_cnt1;
 
 //***********************************************
 //Спецфункции
@@ -208,7 +199,8 @@ char plazma_bat;
 
 char bFAST_REG;
 char bU_VALID;
-
+char bU_VALID_VALID;
+char bPRECESSION_REG;
 
 
 signed short cnt_volt_contr;
@@ -511,6 +503,109 @@ else
 
 LPC_ADC->ADCR |=  (1<<24);
 
+}
+
+//-----------------------------------------------
+void avg_hndl(void)
+{ 
+char i;
+
+
+
+#define AVGCNTMAX	5
+if(avg_main_cnt)
+	{
+	avg_main_cnt--;
+	goto avg_hndl_end;
+	}                 
+
+avg_main_cnt=10;
+
+avg_num=0;
+num_of_dumm_src=100;
+num_of_max_src=100;
+
+for(i=0;i<NUMIST;i++)
+	{
+	if(/*(bps[i]._state==bsWRK)&&*/(bps[i]._cnt<20))avg_num++;
+	}
+
+/*if((K[NUMI]>=1)&&(bps_state[0]==ssWRK))	avg_num++;
+if((K[NUMI]>=2)&&(bps_state[1]==ssWRK))	avg_num++;
+if((K[NUMI]>=3)&&(bps_state[2]==ssWRK))	avg_num++;*/
+
+	
+if(avg_num<2)
+	{
+	goto avg_hndl_end;
+	
+	}
+	
+else if(bU_VALID_VALID)
+	{
+	i_avg_min=5000;
+	i_avg_max=0;
+	i_avg_summ=0;
+	for(i=0;i<NUMIST;i++)
+		{
+		if(bps[i]._state==bsWRK)
+			{
+			if(bps[i]._Ii>i_avg_max)
+				{
+				i_avg_max=bps[i]._Ii;
+				num_of_max_src=i;
+				}
+			if(bps[i]._Ii<i_avg_min)
+				{
+				i_avg_min=bps[i]._Ii;
+				num_of_dumm_src=i;
+				}
+			
+			i_avg_summ+=bps[i]._Ii;
+			}
+		}
+	i_avg=i_avg_summ/avg_num;	
+	
+	if(i_avg_min==0)i_avg_min=1;
+
+	
+
+	avg=i_avg_max;
+	avg*=100;
+	avg/=i_avg_min;
+	
+	if(avg>160) bAVG=1;
+	if(avg<120) bAVG=0;
+
+	if(bAVG==1)
+		{
+		//for(i=0;i<NUMIST;i++)
+			//{
+		//	if(bps[i]._state==bsWRK)
+				//{
+				//if(bps[i]._Ii>i_avg)bps[i]._xu_--;
+				/*if(bps[i]._Ii<i_avg)*/
+				if(bAVG_CNT==0)
+					{
+					bAVG_CNT=1;
+					if(num_of_dumm_src<NUMIST) bps[num_of_dumm_src]._xu_++;
+					}
+				else
+					{
+					bAVG_CNT=0;
+					if(num_of_max_src<NUMIST) bps[num_of_max_src]._xu_--;
+					}
+			
+				if(bps[i]._xu_<-50)bps[i]._xu_=-50;
+				if(bps[i]._xu_>50)bps[i]._xu_=50;	
+			//	}
+			//}		
+		}			
+	}   	 
+
+
+avg_hndl_end:
+__nop();  
 }
 
 //-----------------------------------------------
@@ -1044,6 +1139,7 @@ void start_GS(void) {
 	restart_on_GS();
 	bFAST_REG=1;
 	bU_VALID=0;
+	bU_VALID_VALID=0;
 	
 	if((REV_IS_ON)&&(AVT_REV_IS_ON)){
 		time_proc_phase=0;
@@ -1066,6 +1162,7 @@ void start_PS(void) {
 	restart_on_PS();
 	bFAST_REG=1;
 	bU_VALID=0;
+	bU_VALID_VALID=0;
 	
 	if((REV_IS_ON)&&(AVT_REV_IS_ON)){
 		time_proc_phase=0;
@@ -1293,6 +1390,13 @@ if(sh_cnt0<10) {
 	if(sh_cnt0>=10) {
 		sh_cnt0=0;
 		b1Hz_sh=1;
+		if(sh_cnt1<5) {
+			sh_cnt1++;
+			if(sh_cnt1>=5) {
+			 	sh_cnt1=0;
+				bPRECESSION_REG=1;
+			}
+		}
 	}
 }
 
@@ -1719,7 +1823,7 @@ else if(work_stat==wsGS)
 			bps[i]._vol_i=0;
 			bps[i]._flags_tu=1;
 		} else {
-			bps[i]._vol_u=(short)temp_SL_U + _xu_;
+			bps[i]._vol_u=(short)temp_SL_U + _xu_/*+bps[i]._xu_*/;
 			if(bps[i]._vol_u<0)bps[i]._vol_u=0;
 			if(bps[i]._vol_u>1022)bps[i]._vol_u=1022;
 			bps[i]._vol_i=((short)temp_SL_I + _x_);///NUMIST;
@@ -1733,17 +1837,32 @@ else if(work_stat==wsGS)
 else if(work_stat==wsPS)
 	{
 	signed long temp_SL_U,temp_SL_I;
-
-/*	U_up_d=U_up/100;
+	/*	U_up_d=U_up/100;
 	if(U_up_d<5) U_up_d=5;
 	*/
 	if(load_U_>5)bU_VALID=1;
 	else bU_VALID=0;
+
+	temp_SL_U=(long)U_up_temp/100L;
+	if(temp_SL_U<=0)temp_SL_U=1;
+	if((abs(load_U_-U_up_temp))<(signed short)temp_SL_U) bU_VALID_VALID=1;
+	else bU_VALID_VALID=0;
 /*	if( (load_U_>(U_up-U_up_d))&&(load_U_<(U_up+U_up_d)) )bFAST_REG=0;
 	else bFAST_REG=1;*/
 
 	bFAST_REG=0;
-	if((b1Hz_sh&&bU_VALID)||(bFAST_REG&&bU_VALID))
+
+	if(bU_VALID_VALID)
+		{
+		if(bPRECESSION_REG)
+			{
+			bPRECESSION_REG=0;
+			if(load_U_<U_up_temp)_xu_++;
+   			else if(load_U_>U_up_temp)_xu_--;
+			gran(&_xu_,-50,50);
+			}
+		}
+	else if((b1Hz_sh&&bU_VALID)||(bFAST_REG&&bU_VALID))
 		{
 	 	if(load_I<I_maxp)_x_++;
    		else if(load_I>I_maxp)_x_--;
@@ -1784,7 +1903,7 @@ else if(work_stat==wsPS)
 			bps[i]._vol_i=0;
 			bps[i]._flags_tu=1;
 		} else {
-			bps[i]._vol_u=(short)temp_SL_U + _xu_;
+			bps[i]._vol_u=(short)temp_SL_U + _xu_+bps[i]._xu_;
 			if(bps[i]._vol_u<0)bps[i]._vol_u=0;
 			if(bps[i]._vol_u>1022)bps[i]._vol_u=1022;
 			bps[i]._vol_i=((short)temp_SL_I + _x_);///NUMIST;
