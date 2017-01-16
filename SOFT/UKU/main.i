@@ -1141,7 +1141,8 @@ typedef struct
      signed _rotor;
      signed  short _x_; 
      char _adr_ee;
-	char _last_avar;
+	char _last_avar; 
+	signed short _xu_;
      } BPS_STAT; 
 extern BPS_STAT bps[32];
 
@@ -1440,6 +1441,18 @@ extern signed long milliAmperSecunda;
 extern signed short curr_off_stop_cnt;
 extern signed short curr_off_start_cnt;
 extern signed short curr_off_temp;
+
+
+
+extern short avg_main_cnt;
+extern signed int i_avg_max,i_avg_min,i_avg_summ,i_avg; 
+extern signed int avg;
+extern char bAVG;
+extern char avg_cnt;  
+extern char avg_num;
+extern char num_of_dumm_src; 
+extern char num_of_max_src;
+extern char bAVG_CNT;
 
 
 
@@ -1933,7 +1946,7 @@ extern char bps_all_off_cnt,bps_mask_off_cnt,bps_mask_on_off_cnt;
 extern char bps_hndl_2sec_cnt;
 extern unsigned short bps_on_mask,bps_off_mask;
 extern char num_necc_up,num_necc_down;
-extern unsigned char sh_cnt0,b1Hz_sh;
+extern unsigned char sh_cnt0,b1Hz_sh,sh_cnt1;
 
 
 extern short cntrl_stat_blok_cnt,cntrl_stat_blok_cnt_,cntrl_stat_blok_cnt_plus[2],cntrl_stat_blok_cnt_minus[2];
@@ -2042,7 +2055,7 @@ extern signed int i_avg_max,i_avg_min,i_avg_summ,i_avg;
 extern signed int avg;
 extern char bAVG;
 extern char bFAST_REG;
-extern char bU_VALID;
+extern char bU_VALID,bU_VALID_VALID;
 
 
 typedef enum {rsOFF,rsON} enum_rele_stat;
@@ -5567,6 +5580,18 @@ signed short curr_off_start_cnt;
 signed short curr_off_temp;
 
 
+
+short avg_main_cnt=20;
+signed int i_avg_max,i_avg_min,i_avg_summ,i_avg; 
+signed int avg;
+char bAVG;
+char avg_cnt;  
+char avg_num; 
+char num_of_dumm_src;
+char num_of_max_src;
+char bAVG_CNT;
+
+
 void rtc_init (void) 
 {
 ((LPC_RTC_TypeDef *) ((0x40000000UL) + 0x24000) )->CCR=0x11;
@@ -6937,12 +6962,12 @@ if(a_ind . i==iMn)
 		lcd_buffer[60]=1;
 		}
 
-		int2lcdyx(bps[a_ind . s_i  ]._vol_i,1,19,0);
-		int2lcdyx(bps[a_ind . s_i+1]._vol_i,2,19,0);
-		int2lcdyx(bps[a_ind . s_i+2]._vol_i,3,19,0);
-		int2lcdyx(bps[a_ind . s_i  ]._vol_u,1,15,0);
-		int2lcdyx(bps[a_ind . s_i+1]._vol_u,2,15,0);
-		int2lcdyx(bps[a_ind . s_i+2]._vol_u,3,15,0);
+		
+
+
+
+
+ 
 
 	}
 					
@@ -8371,10 +8396,14 @@ if(a_ind . i==iDeb)
      	         "                    ",
      	         "                    ");
 
-		int2lcdyx(bAVG,0,0,0);
-		int2lcdyx(i_avg_max,0,5,0);
-		int2lcdyx(i_avg_min,0,13,0);
-		int2lcdyx(avg,0,19,0);
+		int2lcdyx(bAVG,0,0,0); 
+		
+		
+		int2lcdyx(i_avg_min,0,9,0);
+		int2lcdyx(i_avg_max,0,13,0);
+		int2lcdyx(avg,0,19,0);	
+		int2lcdyx(num_of_dumm_src,0,2,0);
+		int2lcdyx(num_of_max_src,0,4,0);
  
 
 
@@ -8401,12 +8430,12 @@ if(a_ind . i==iDeb)
 	
 
 
+ 
+		int2lcdyx(bps[a_ind . s_i1  ]._xu_+50,1,12,0);
+		int2lcdyx(bps[a_ind . s_i1+1]._xu_+50,2,12,0);
+		int2lcdyx(bps[a_ind . s_i1+2]._xu_+50,3,12,0);		
 
-
-
-
-
-
+	 
 
 
 
@@ -8420,9 +8449,9 @@ if(a_ind . i==iDeb)
 
  
 		
-		int2lcdyx(bps[a_ind . s_i1]._rotor,1,19,0);
-		int2lcdyx(bps[a_ind . s_i1+1]._rotor,2,19,0);
-		int2lcdyx(bps[a_ind . s_i1+2]._rotor,3,19,0);
+		int2lcdyx(bps[a_ind . s_i1]._state,1,19,0);
+		int2lcdyx(bps[a_ind . s_i1+1]._state,2,19,0);
+		int2lcdyx(bps[a_ind . s_i1+2]._state,3,19,0);
 
 
  		}
@@ -9172,12 +9201,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4280 "main.c"
+#line 4296 "main.c"
 
 
 
 
-#line 4302 "main.c"
+#line 4318 "main.c"
 
 
 
@@ -16130,7 +16159,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11260 "main.c"
+#line 11276 "main.c"
 
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);
@@ -16381,15 +16410,15 @@ while (1)
 
 	if(b10Hz)
 		{
-
+		char i;
 
      timer_tick ();
      tick = 1;
 
 		b10Hz=0;
 				
-				
-		bps_drv(0);
+		for(i=0;i<NUMIST;i++)bps_drv(i);		
+		
 		bps_hndl();
 
 						
@@ -16521,7 +16550,7 @@ while (1)
 		ach_off_hndl(); 	
 		curr_off_hndl();	
 
-		
+		avg_hndl();			
 		}
 	if(b1min)
 		{

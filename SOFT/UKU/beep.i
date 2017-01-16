@@ -855,7 +855,8 @@ typedef struct
      signed _rotor;
      signed  short _x_; 
      char _adr_ee;
-	char _last_avar;
+	char _last_avar; 
+	signed short _xu_;
      } BPS_STAT; 
 extern BPS_STAT bps[32];
 
@@ -1154,6 +1155,18 @@ extern signed long milliAmperSecunda;
 extern signed short curr_off_stop_cnt;
 extern signed short curr_off_start_cnt;
 extern signed short curr_off_temp;
+
+
+
+extern short avg_main_cnt;
+extern signed int i_avg_max,i_avg_min,i_avg_summ,i_avg; 
+extern signed int avg;
+extern char bAVG;
+extern char avg_cnt;  
+extern char avg_num;
+extern char num_of_dumm_src; 
+extern char num_of_max_src;
+extern char bAVG_CNT;
 
 
 

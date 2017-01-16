@@ -14,9 +14,9 @@
 ;;;61     //unsigned avar_stat_new,avar_stat_offed;
 ;;;62     
 ;;;63     if(net_av)		SET_REG(avar_stat,1,0,1);
-000002  4841              LDR      r0,|L1.264|
+000002  483f              LDR      r0,|L1.256|
 000004  7802              LDRB     r2,[r0,#0]  ; net_av
-000006  4841              LDR      r0,|L1.268|
+000006  483f              LDR      r0,|L1.260|
 000008  6801              LDR      r1,[r0,#0]
 00000a  b112              CBZ      r2,|L1.18|
 00000c  f0410101          ORR      r1,r1,#1
@@ -32,58 +32,59 @@
 000018  2100              MOVS     r1,#0
 ;;;68     	{
 ;;;69     	if(bps[i]._av)	SET_REG(avar_stat,1,3+i,1);
-00001a  4c3d              LDR      r4,|L1.272|
+00001a  4c3b              LDR      r4,|L1.264|
 00001c  f05f0301          MOVS.W   r3,#1
                   |L1.32|
-000020  eb010281          ADD      r2,r1,r1,LSL #2
-000024  eb041202          ADD      r2,r4,r2,LSL #4
-000028  7852              LDRB     r2,[r2,#1]
-00002a  b132              CBZ      r2,|L1.58|
-00002c  1ccd              ADDS     r5,r1,#3
-00002e  fa03f205          LSL      r2,r3,r5
-000032  6805              LDR      r5,[r0,#0]  ; avar_stat
-000034  4395              BICS     r5,r5,r2
-000036  4315              ORRS     r5,r5,r2
-000038  e004              B        |L1.68|
-                  |L1.58|
+000020  ebc102c1          RSB      r2,r1,r1,LSL #3
+000024  eb020242          ADD      r2,r2,r2,LSL #1
+000028  eb040282          ADD      r2,r4,r2,LSL #2
+00002c  7852              LDRB     r2,[r2,#1]
+00002e  b132              CBZ      r2,|L1.62|
+000030  1ccd              ADDS     r5,r1,#3
+000032  fa03f205          LSL      r2,r3,r5
+000036  6805              LDR      r5,[r0,#0]  ; avar_stat
+000038  4395              BICS     r5,r5,r2
+00003a  4315              ORRS     r5,r5,r2
+00003c  e004              B        |L1.72|
+                  |L1.62|
 ;;;70     	else	   		SET_REG(avar_stat,0,3+i,1);
-00003a  1cca              ADDS     r2,r1,#3
-00003c  6805              LDR      r5,[r0,#0]  ; avar_stat
-00003e  fa03f202          LSL      r2,r3,r2
-000042  4395              BICS     r5,r5,r2
-                  |L1.68|
-000044  1c49              ADDS     r1,r1,#1              ;67
-000046  b2c9              UXTB     r1,r1                 ;67
-000048  6005              STR      r5,[r0,#0]            ;67  ; avar_stat
-00004a  290c              CMP      r1,#0xc               ;67
-00004c  d3e8              BCC      |L1.32|
+00003e  1cca              ADDS     r2,r1,#3
+000040  6805              LDR      r5,[r0,#0]  ; avar_stat
+000042  fa03f202          LSL      r2,r3,r2
+000046  4395              BICS     r5,r5,r2
+                  |L1.72|
+000048  1c49              ADDS     r1,r1,#1              ;67
+00004a  b2c9              UXTB     r1,r1                 ;67
+00004c  6005              STR      r5,[r0,#0]            ;67  ; avar_stat
+00004e  290c              CMP      r1,#0xc               ;67
+000050  d3e6              BCC      |L1.32|
 ;;;71     	}
 ;;;72     
 ;;;73     for(i=0;i<6;i++)
 ;;;74     	{
 ;;;75     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
 ;;;76     	else	   		SET_REG(avar_stat,0,15+i,1);
-00004e  4629              MOV      r1,r5
-000050  4d2e              LDR      r5,|L1.268|
-000052  2200              MOVS     r2,#0                 ;73
-000054  3514              ADDS     r5,r5,#0x14           ;75
-                  |L1.86|
-000056  5cac              LDRB     r4,[r5,r2]            ;75
-000058  b134              CBZ      r4,|L1.104|
-00005a  f102060f          ADD      r6,r2,#0xf            ;75
-00005e  fa03f406          LSL      r4,r3,r6              ;75
-000062  43a1              BICS     r1,r1,r4              ;75
-000064  4321              ORRS     r1,r1,r4              ;75
-000066  e004              B        |L1.114|
-                  |L1.104|
-000068  f102040f          ADD      r4,r2,#0xf
-00006c  fa03f404          LSL      r4,r3,r4
-000070  43a1              BICS     r1,r1,r4
-                  |L1.114|
-000072  1c52              ADDS     r2,r2,#1              ;73
-000074  b2d2              UXTB     r2,r2                 ;73
-000076  2a06              CMP      r2,#6                 ;73
-000078  d3ed              BCC      |L1.86|
+000052  4629              MOV      r1,r5
+000054  4d2b              LDR      r5,|L1.260|
+000056  2200              MOVS     r2,#0                 ;73
+000058  3514              ADDS     r5,r5,#0x14           ;75
+                  |L1.90|
+00005a  5cac              LDRB     r4,[r5,r2]            ;75
+00005c  b134              CBZ      r4,|L1.108|
+00005e  f102060f          ADD      r6,r2,#0xf            ;75
+000062  fa03f406          LSL      r4,r3,r6              ;75
+000066  43a1              BICS     r1,r1,r4              ;75
+000068  4321              ORRS     r1,r1,r4              ;75
+00006a  e004              B        |L1.118|
+                  |L1.108|
+00006c  f102040f          ADD      r4,r2,#0xf
+000070  fa03f404          LSL      r4,r3,r4
+000074  43a1              BICS     r1,r1,r4
+                  |L1.118|
+000076  1c52              ADDS     r2,r2,#1              ;73
+000078  b2d2              UXTB     r2,r2                 ;73
+00007a  2a06              CMP      r2,#6                 ;73
+00007c  d3ed              BCC      |L1.90|
 ;;;77     	}
 ;;;78     
 ;;;79     /*for(i=0;i<4;i++)
@@ -94,110 +95,103 @@
 ;;;84     for(i=0;i<4;i++)
 ;;;85     	{
 ;;;86     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
-00007a  4d26              LDR      r5,|L1.276|
-00007c  2200              MOVS     r2,#0                 ;84
-00007e  6001              STR      r1,[r0,#0]  ; avar_stat
-                  |L1.128|
-000080  5cac              LDRB     r4,[r5,r2]
-000082  2c01              CMP      r4,#1
-000084  d02f              BEQ      |L1.230|
+00007e  4d23              LDR      r5,|L1.268|
+000080  2200              MOVS     r2,#0                 ;84
+000082  6001              STR      r1,[r0,#0]  ; avar_stat
+                  |L1.132|
+000084  5cac              LDRB     r4,[r5,r2]
+000086  2c01              CMP      r4,#1
 ;;;87     	else	   		SET_REG(avar_stat,0,25+i,1);
-000086  f1020419          ADD      r4,r2,#0x19
-00008a  fa03f404          LSL      r4,r3,r4
-00008e  43a1              BICS     r1,r1,r4
-                  |L1.144|
-000090  1c52              ADDS     r2,r2,#1              ;84
-000092  b2d2              UXTB     r2,r2                 ;84
-000094  2a04              CMP      r2,#4                 ;84
-000096  d3f3              BCC      |L1.128|
+000088  f1020419          ADD      r4,r2,#0x19
+00008c  fa03f404          LSL      r4,r3,r4
+000090  ea210104          BIC      r1,r1,r4
+000094  d100              BNE      |L1.152|
+000096  4321              ORRS     r1,r1,r4              ;86
+                  |L1.152|
+000098  1c52              ADDS     r2,r2,#1              ;84
+00009a  b2d2              UXTB     r2,r2                 ;84
+00009c  2a04              CMP      r2,#4                 ;84
+00009e  d3f1              BCC      |L1.132|
 ;;;88     	}
 ;;;89     
 ;;;90     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
-000098  6001              STR      r1,[r0,#0]  ; avar_stat
-00009a  6883              LDR      r3,[r0,#8]  ; avar_stat_old
-00009c  ea210203          BIC      r2,r1,r3
+0000a0  6001              STR      r1,[r0,#0]  ; avar_stat
+0000a2  6883              LDR      r3,[r0,#8]  ; avar_stat_old
+0000a4  ea210203          BIC      r2,r1,r3
 ;;;91     
 ;;;92     avar_ind_stat|=avar_stat_new;
-0000a0  60c2              STR      r2,[r0,#0xc]  ; avar_stat_new
-0000a2  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
-0000a4  4314              ORRS     r4,r4,r2
+0000a8  60c2              STR      r2,[r0,#0xc]  ; avar_stat_new
+0000aa  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
+0000ac  4314              ORRS     r4,r4,r2
 ;;;93     
 ;;;94     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
-0000a6  4a1c              LDR      r2,|L1.280|
-0000a8  6044              STR      r4,[r0,#4]  ; avar_ind_stat
-0000aa  8815              LDRH     r5,[r2,#0]  ; SK_ZVUK_EN
-0000ac  b115              CBZ      r5,|L1.180|
-0000ae  f0247400          BIC      r4,r4,#0x2000000
-0000b2  6044              STR      r4,[r0,#4]  ; avar_ind_stat
-                  |L1.180|
+0000ae  4a18              LDR      r2,|L1.272|
+0000b0  6044              STR      r4,[r0,#4]  ; avar_ind_stat
+0000b2  8815              LDRH     r5,[r2,#0]  ; SK_ZVUK_EN
+0000b4  b115              CBZ      r5,|L1.188|
+0000b6  f0247400          BIC      r4,r4,#0x2000000
+0000ba  6044              STR      r4,[r0,#4]  ; avar_ind_stat
+                  |L1.188|
 ;;;95     if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
-0000b4  8854              LDRH     r4,[r2,#2]  ; SK_ZVUK_EN
-0000b6  b11c              CBZ      r4,|L1.192|
-0000b8  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
-0000ba  f0246480          BIC      r4,r4,#0x4000000
-0000be  6044              STR      r4,[r0,#4]  ; avar_ind_stat
-                  |L1.192|
+0000bc  8854              LDRH     r4,[r2,#2]  ; SK_ZVUK_EN
+0000be  b11c              CBZ      r4,|L1.200|
+0000c0  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
+0000c2  f0246480          BIC      r4,r4,#0x4000000
+0000c6  6044              STR      r4,[r0,#4]  ; avar_ind_stat
+                  |L1.200|
 ;;;96     if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
-0000c0  8894              LDRH     r4,[r2,#4]  ; SK_ZVUK_EN
-0000c2  b11c              CBZ      r4,|L1.204|
-0000c4  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
-0000c6  f0246400          BIC      r4,r4,#0x8000000
-0000ca  6044              STR      r4,[r0,#4]  ; avar_ind_stat
-                  |L1.204|
+0000c8  8894              LDRH     r4,[r2,#4]  ; SK_ZVUK_EN
+0000ca  b11c              CBZ      r4,|L1.212|
+0000cc  6844              LDR      r4,[r0,#4]  ; avar_ind_stat
+0000ce  f0246400          BIC      r4,r4,#0x8000000
+0000d2  6044              STR      r4,[r0,#4]  ; avar_ind_stat
+                  |L1.212|
 ;;;97     if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
-0000cc  88d2              LDRH     r2,[r2,#6]  ; SK_ZVUK_EN
-0000ce  b11a              CBZ      r2,|L1.216|
-0000d0  6842              LDR      r2,[r0,#4]  ; avar_ind_stat
-0000d2  f0225280          BIC      r2,r2,#0x10000000
-0000d6  6042              STR      r2,[r0,#4]  ; avar_ind_stat
-                  |L1.216|
+0000d4  88d2              LDRH     r2,[r2,#6]  ; SK_ZVUK_EN
+0000d6  b11a              CBZ      r2,|L1.224|
+0000d8  6842              LDR      r2,[r0,#4]  ; avar_ind_stat
+0000da  f0225280          BIC      r2,r2,#0x10000000
+0000de  6042              STR      r2,[r0,#4]  ; avar_ind_stat
+                  |L1.224|
 ;;;98     
 ;;;99     
 ;;;100    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
-0000d8  438b              BICS     r3,r3,r1
-0000da  43da              MVNS     r2,r3
+0000e0  438b              BICS     r3,r3,r1
+0000e2  43da              MVNS     r2,r3
 ;;;101    
 ;;;102    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
-0000dc  4b0f              LDR      r3,|L1.284|
-0000de  6102              STR      r2,[r0,#0x10]  ; avar_stat_offed
-0000e0  881b              LDRH     r3,[r3,#0]  ; AV_OFF_AVT
-0000e2  b13b              CBZ      r3,|L1.244|
-0000e4  e009              B        |L1.250|
-                  |L1.230|
-0000e6  f1020619          ADD      r6,r2,#0x19           ;86
-0000ea  fa03f406          LSL      r4,r3,r6              ;86
-0000ee  43a1              BICS     r1,r1,r4              ;86
-0000f0  4321              ORRS     r1,r1,r4              ;86
-0000f2  e7cd              B        |L1.144|
-                  |L1.244|
-0000f4  f0620201          ORN      r2,r2,#1
-0000f8  6102              STR      r2,[r0,#0x10]  ; avar_stat_offed
-                  |L1.250|
+0000e4  4b0b              LDR      r3,|L1.276|
+0000e6  6102              STR      r2,[r0,#0x10]  ; avar_stat_offed
+0000e8  881b              LDRH     r3,[r3,#0]  ; AV_OFF_AVT
+0000ea  b913              CBNZ     r3,|L1.242|
+0000ec  f0620201          ORN      r2,r2,#1
+0000f0  6102              STR      r2,[r0,#0x10]  ; avar_stat_offed
+                  |L1.242|
 ;;;103    
 ;;;104    avar_ind_stat&=avar_stat_offed; 
-0000fa  6903              LDR      r3,[r0,#0x10]  ; avar_stat_offed
-0000fc  6842              LDR      r2,[r0,#4]  ; avar_ind_stat
-0000fe  401a              ANDS     r2,r2,r3
-000100  e9c02101          STRD     r2,r1,[r0,#4]
+0000f2  6903              LDR      r3,[r0,#0x10]  ; avar_stat_offed
+0000f4  6842              LDR      r2,[r0,#4]  ; avar_ind_stat
+0000f6  401a              ANDS     r2,r2,r3
+0000f8  e9c02101          STRD     r2,r1,[r0,#4]
 ;;;105    
 ;;;106    avar_stat_old=avar_stat;
 ;;;107    }
-000104  bd70              POP      {r4-r6,pc}
+0000fc  bd70              POP      {r4-r6,pc}
 ;;;108    
                           ENDP
 
-000106  0000              DCW      0x0000
-                  |L1.264|
+0000fe  0000              DCW      0x0000
+                  |L1.256|
                           DCD      net_av
-                  |L1.268|
+                  |L1.260|
                           DCD      ||.data||
-                  |L1.272|
+                  |L1.264|
                           DCD      bps
-                  |L1.276|
+                  |L1.268|
                           DCD      sk_av_stat
-                  |L1.280|
+                  |L1.272|
                           DCD      SK_ZVUK_EN
-                  |L1.284|
+                  |L1.276|
                           DCD      AV_OFF_AVT
 
                           AREA ||area_number.2||, CODE, READONLY, ALIGN=2
@@ -242,51 +236,52 @@
                   |L2.40|
 000028  264c              MOVS     r6,#0x4c
                   |L2.42|
-00002a  488c              LDR      r0,|L2.604|
-00002c  f8df9228          LDR      r9,|L2.600|
-000030  eb070387          ADD      r3,r7,r7,LSL #2
-000034  f04f0a00          MOV      r10,#0
-000038  eb001003          ADD      r0,r0,r3,LSL #4
+00002a  488d              LDR      r0,|L2.608|
+00002c  ebc703c7          RSB      r3,r7,r7,LSL #3
+000030  f8df9228          LDR      r9,|L2.604|
+000034  eb030343          ADD      r3,r3,r3,LSL #1
+000038  f04f0a00          MOV      r10,#0
+00003c  eb000083          ADD      r0,r0,r3,LSL #2
 ;;;70     	else	   		SET_REG(avar_stat,0,3+i,1);
-00003c  2a01              CMP      r2,#1
-00003e  d002              BEQ      |L2.70|
-000040  2a00              CMP      r2,#0
-000042  d07e              BEQ      |L2.322|
-000044  e103              B        |L2.590|
-                  |L2.70|
-000046  b131              CBZ      r1,|L2.86|
-000048  2901              CMP      r1,#1                 ;67
-00004a  d008              BEQ      |L2.94|
-00004c  2902              CMP      r1,#2                 ;67
+000040  2a01              CMP      r2,#1
+000042  d002              BEQ      |L2.74|
+000044  2a00              CMP      r2,#0
+000046  d07e              BEQ      |L2.326|
+000048  e103              B        |L2.594|
+                  |L2.74|
+00004a  b131              CBZ      r1,|L2.90|
+00004c  2901              CMP      r1,#1                 ;67
+00004e  d008              BEQ      |L2.98|
+000050  2902              CMP      r1,#2                 ;67
 ;;;71     	}
 ;;;72     
 ;;;73     for(i=0;i<6;i++)
 ;;;74     	{
 ;;;75     	if(av_inv[i])	SET_REG(avar_stat,1,15+i,1);
 ;;;76     	else	   		SET_REG(avar_stat,0,15+i,1);
-00004e  d00a              BEQ      |L2.102|
-000050  2903              CMP      r1,#3                 ;75
-000052  d00c              BEQ      |L2.110|
-000054  e00f              B        |L2.118|
-                  |L2.86|
-000056  7842              LDRB     r2,[r0,#1]            ;75
-000058  f0420201          ORR      r2,r2,#1              ;75
-00005c  e00a              B        |L2.116|
-                  |L2.94|
-00005e  7842              LDRB     r2,[r0,#1]            ;75
-000060  f0420202          ORR      r2,r2,#2              ;75
-000064  e006              B        |L2.116|
-                  |L2.102|
-000066  7842              LDRB     r2,[r0,#1]            ;75
-000068  f0420204          ORR      r2,r2,#4
-00006c  e002              B        |L2.116|
-                  |L2.110|
-00006e  7842              LDRB     r2,[r0,#1]
-000070  f0420208          ORR      r2,r2,#8
-                  |L2.116|
-000074  7042              STRB     r2,[r0,#1]            ;73
-                  |L2.118|
-000076  f880104f          STRB     r1,[r0,#0x4f]         ;73
+000052  d00a              BEQ      |L2.106|
+000054  2903              CMP      r1,#3                 ;75
+000056  d00c              BEQ      |L2.114|
+000058  e00f              B        |L2.122|
+                  |L2.90|
+00005a  7842              LDRB     r2,[r0,#1]            ;75
+00005c  f0420201          ORR      r2,r2,#1              ;75
+000060  e00a              B        |L2.120|
+                  |L2.98|
+000062  7842              LDRB     r2,[r0,#1]            ;75
+000064  f0420202          ORR      r2,r2,#2              ;75
+000068  e006              B        |L2.120|
+                  |L2.106|
+00006a  7842              LDRB     r2,[r0,#1]            ;75
+00006c  f0420204          ORR      r2,r2,#4
+000070  e002              B        |L2.120|
+                  |L2.114|
+000072  7842              LDRB     r2,[r0,#1]
+000074  f0420208          ORR      r2,r2,#8
+                  |L2.120|
+000078  7042              STRB     r2,[r0,#1]            ;73
+                  |L2.122|
+00007a  f880104f          STRB     r1,[r0,#0x4f]         ;73
 ;;;77     	}
 ;;;78     
 ;;;79     /*for(i=0;i<4;i++)
@@ -297,212 +292,212 @@
 ;;;84     for(i=0;i<4;i++)
 ;;;85     	{
 ;;;86     	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
-00007a  2053              MOVS     r0,#0x53
-00007c  f88d0000          STRB     r0,[sp,#0]            ;84
-000080  f88d7001          STRB     r7,[sp,#1]
-000084  f88d6002          STRB     r6,[sp,#2]
+00007e  2053              MOVS     r0,#0x53
+000080  f88d0000          STRB     r0,[sp,#0]            ;84
+000084  f88d7001          STRB     r7,[sp,#1]
 ;;;87     	else	   		SET_REG(avar_stat,0,25+i,1);
-000088  4655              MOV      r5,r10
-00008a  f88da003          STRB     r10,[sp,#3]
-00008e  4669              MOV      r1,sp
-000090  4628              MOV      r0,r5                 ;84
-000092  f7fffffe          BL       lc640_write_long_ptr
-000096  4669              MOV      r1,sp                 ;84
+000088  f88d6002          STRB     r6,[sp,#2]
+00008c  4655              MOV      r5,r10
+00008e  f88da003          STRB     r10,[sp,#3]
+000092  4669              MOV      r1,sp
+000094  4628              MOV      r0,r5                 ;86
+000096  f7fffffe          BL       lc640_write_long_ptr
+00009a  4669              MOV      r1,sp                 ;84
+00009c  2004              MOVS     r0,#4                 ;84
+00009e  9500              STR      r5,[sp,#0]            ;84
 ;;;88     	}
 ;;;89     
 ;;;90     avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
-000098  2004              MOVS     r0,#4
-00009a  9500              STR      r5,[sp,#0]
-00009c  f7fffffe          BL       lc640_write_long_ptr
+0000a0  f7fffffe          BL       lc640_write_long_ptr
+0000a4  f8b9003c          LDRH     r0,[r9,#0x3c]
 ;;;91     
 ;;;92     avar_ind_stat|=avar_stat_new;
-0000a0  f8b9003c          LDRH     r0,[r9,#0x3c]
-0000a4  f1090420          ADD      r4,r9,#0x20
+0000a8  f1090420          ADD      r4,r9,#0x20
+0000ac  f88d0000          STRB     r0,[sp,#0]
 ;;;93     
 ;;;94     if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
-0000a8  f88d0000          STRB     r0,[sp,#0]
-0000ac  7e20              LDRB     r0,[r4,#0x18]
-0000ae  f88d0001          STRB     r0,[sp,#1]
-0000b2  7b20              LDRB     r0,[r4,#0xc]
+0000b0  7e20              LDRB     r0,[r4,#0x18]
+0000b2  f88d0001          STRB     r0,[sp,#1]
+0000b6  7b20              LDRB     r0,[r4,#0xc]
+0000b8  f88d0002          STRB     r0,[sp,#2]
 ;;;95     if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
-0000b4  f88d0002          STRB     r0,[sp,#2]
-0000b8  f88d5003          STRB     r5,[sp,#3]
-0000bc  4669              MOV      r1,sp
-0000be  f04f0008          MOV      r0,#8
+0000bc  f88d5003          STRB     r5,[sp,#3]
+0000c0  4669              MOV      r1,sp
+0000c2  f04f0008          MOV      r0,#8
+0000c6  f7fffffe          BL       lc640_write_long_ptr
 ;;;96     if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
-0000c2  f7fffffe          BL       lc640_write_long_ptr
-0000c6  7a20              LDRB     r0,[r4,#8]
-0000c8  f88d0000          STRB     r0,[sp,#0]
+0000ca  7a20              LDRB     r0,[r4,#8]
+0000cc  f88d0000          STRB     r0,[sp,#0]
+0000d0  7920              LDRB     r0,[r4,#4]
+0000d2  f88d0001          STRB     r0,[sp,#1]
 ;;;97     if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
-0000cc  7920              LDRB     r0,[r4,#4]
-0000ce  f88d0001          STRB     r0,[sp,#1]
-0000d2  7820              LDRB     r0,[r4,#0]
-0000d4  f88d0002          STRB     r0,[sp,#2]
+0000d6  7820              LDRB     r0,[r4,#0]
+0000d8  f88d0002          STRB     r0,[sp,#2]
+0000dc  f88d5003          STRB     r5,[sp,#3]
 ;;;98     
 ;;;99     
 ;;;100    avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
-0000d8  f88d5003          STRB     r5,[sp,#3]
+0000e0  4669              MOV      r1,sp
+0000e2  200c              MOVS     r0,#0xc
 ;;;101    
 ;;;102    if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
-0000dc  4669              MOV      r1,sp
-0000de  200c              MOVS     r0,#0xc
-0000e0  f7fffffe          BL       lc640_write_long_ptr
-0000e4  2441              MOVS     r4,#0x41
-0000e6  f88d4000          STRB     r4,[sp,#0]            ;86
-0000ea  f88d4001          STRB     r4,[sp,#1]            ;86
-0000ee  f88d4002          STRB     r4,[sp,#2]            ;86
-0000f2  f88d4003          STRB     r4,[sp,#3]            ;86
-0000f6  4669              MOV      r1,sp
-0000f8  2010              MOVS     r0,#0x10
+0000e4  f7fffffe          BL       lc640_write_long_ptr
+0000e8  2441              MOVS     r4,#0x41
+0000ea  f88d4000          STRB     r4,[sp,#0]
+0000ee  f88d4001          STRB     r4,[sp,#1]
 ;;;103    
 ;;;104    avar_ind_stat&=avar_stat_offed; 
-0000fa  f7fffffe          BL       lc640_write_long_ptr
-0000fe  f88d4000          STRB     r4,[sp,#0]
-000102  f88d4001          STRB     r4,[sp,#1]
+0000f2  f88d4002          STRB     r4,[sp,#2]
+0000f6  f88d4003          STRB     r4,[sp,#3]
+0000fa  4669              MOV      r1,sp
 ;;;105    
 ;;;106    avar_stat_old=avar_stat;
 ;;;107    }
-000106  f88d4002          STRB     r4,[sp,#2]
-00010a  f88d4003          STRB     r4,[sp,#3]
-00010e  4669              MOV      r1,sp
-000110  2014              MOVS     r0,#0x14
-000112  f7fffffe          BL       lc640_write_long_ptr
-000116  f88d4000          STRB     r4,[sp,#0]
-00011a  f88d4001          STRB     r4,[sp,#1]
-00011e  f88d4002          STRB     r4,[sp,#2]
-000122  f88d4003          STRB     r4,[sp,#3]
-000126  4669              MOV      r1,sp
-000128  2018              MOVS     r0,#0x18
-00012a  f7fffffe          BL       lc640_write_long_ptr
-00012e  f88d4000          STRB     r4,[sp,#0]
-000132  f88d4001          STRB     r4,[sp,#1]
-000136  f88d4002          STRB     r4,[sp,#2]
-00013a  f88d4003          STRB     r4,[sp,#3]
-00013e  4669              MOV      r1,sp
-000140  e000              B        |L2.324|
-                  |L2.322|
-000142  e001              B        |L2.328|
-                  |L2.324|
-000144  201c              MOVS     r0,#0x1c
-000146  e080              B        |L2.586|
+0000fc  2010              MOVS     r0,#0x10
+0000fe  f7fffffe          BL       lc640_write_long_ptr
+000102  f88d4000          STRB     r4,[sp,#0]
+000106  f88d4001          STRB     r4,[sp,#1]
+00010a  f88d4002          STRB     r4,[sp,#2]
+00010e  f88d4003          STRB     r4,[sp,#3]
+000112  4669              MOV      r1,sp
+000114  2014              MOVS     r0,#0x14
+000116  f7fffffe          BL       lc640_write_long_ptr
+00011a  f88d4000          STRB     r4,[sp,#0]
+00011e  f88d4001          STRB     r4,[sp,#1]
+000122  f88d4002          STRB     r4,[sp,#2]
+000126  f88d4003          STRB     r4,[sp,#3]
+00012a  4669              MOV      r1,sp
+00012c  2018              MOVS     r0,#0x18
+00012e  f7fffffe          BL       lc640_write_long_ptr
+000132  f88d4000          STRB     r4,[sp,#0]
+000136  f88d4001          STRB     r4,[sp,#1]
+00013a  f88d4002          STRB     r4,[sp,#2]
+00013e  f88d4003          STRB     r4,[sp,#3]
+000142  4669              MOV      r1,sp
+000144  e000              B        |L2.328|
+                  |L2.326|
+000146  e001              B        |L2.332|
                   |L2.328|
-000148  b131              CBZ      r1,|L2.344|
-00014a  2901              CMP      r1,#1
-00014c  d008              BEQ      |L2.352|
-00014e  2902              CMP      r1,#2
-000150  d013              BEQ      |L2.378|
-000152  2903              CMP      r1,#3
-000154  d015              BEQ      |L2.386|
-000156  e007              B        |L2.360|
-                  |L2.344|
-000158  7841              LDRB     r1,[r0,#1]
-00015a  f0210101          BIC      r1,r1,#1
-00015e  e002              B        |L2.358|
-                  |L2.352|
-000160  7841              LDRB     r1,[r0,#1]
-000162  f0210102          BIC      r1,r1,#2
-                  |L2.358|
-000166  7041              STRB     r1,[r0,#1]
-                  |L2.360|
-000168  f1050010          ADD      r0,r5,#0x10
-00016c  ea4f0b00          MOV.W    r11,r0
-                  |L2.368|
-000170  f89d0000          LDRB     r0,[sp,#0]
-000174  2853              CMP      r0,#0x53
-000176  d118              BNE      |L2.426|
-000178  e007              B        |L2.394|
-                  |L2.378|
-00017a  7841              LDRB     r1,[r0,#1]
-00017c  f0210104          BIC      r1,r1,#4
-000180  e7f1              B        |L2.358|
-                  |L2.386|
-000182  7841              LDRB     r1,[r0,#1]
-000184  f0210108          BIC      r1,r1,#8
-000188  e7ed              B        |L2.358|
-                  |L2.394|
-00018a  f89d0001          LDRB     r0,[sp,#1]
-00018e  42b8              CMP      r0,r7
-000190  d10b              BNE      |L2.426|
-000192  f89d0002          LDRB     r0,[sp,#2]
-000196  42b0              CMP      r0,r6
-000198  d107              BNE      |L2.426|
-00019a  4669              MOV      r1,sp
-00019c  4658              MOV      r0,r11
-00019e  f7fffffe          BL       lc640_read_long_ptr
-0001a2  f89d0000          LDRB     r0,[sp,#0]
-0001a6  2841              CMP      r0,#0x41
-0001a8  d005              BEQ      |L2.438|
-                  |L2.426|
-0001aa  b3f4              CBZ      r4,|L2.554|
-0001ac  1e64              SUBS     r4,r4,#1
-0001ae  b2a4              UXTH     r4,r4
-0001b0  4544              CMP      r4,r8
-0001b2  d1dd              BNE      |L2.368|
-0001b4  e04b              B        |L2.590|
-                  |L2.438|
-0001b6  f89d0001          LDRB     r0,[sp,#1]
-0001ba  2841              CMP      r0,#0x41
-0001bc  d1f5              BNE      |L2.426|
-0001be  f89d0002          LDRB     r0,[sp,#2]
-0001c2  2841              CMP      r0,#0x41
-0001c4  d1f1              BNE      |L2.426|
-0001c6  f89d0003          LDRB     r0,[sp,#3]
-0001ca  2841              CMP      r0,#0x41
-0001cc  d1ed              BNE      |L2.426|
-0001ce  f8b9003c          LDRH     r0,[r9,#0x3c]
-0001d2  f1090420          ADD      r4,r9,#0x20
-0001d6  f88d0000          STRB     r0,[sp,#0]
-0001da  7e20              LDRB     r0,[r4,#0x18]
-0001dc  f88d0001          STRB     r0,[sp,#1]
-0001e0  7b20              LDRB     r0,[r4,#0xc]
-0001e2  f88d0002          STRB     r0,[sp,#2]
-0001e6  4656              MOV      r6,r10
-0001e8  f88da003          STRB     r10,[sp,#3]
-0001ec  4669              MOV      r1,sp
-0001ee  4658              MOV      r0,r11
-0001f0  f7fffffe          BL       lc640_write_long_ptr
-0001f4  7a20              LDRB     r0,[r4,#8]
-0001f6  f88d0000          STRB     r0,[sp,#0]
-0001fa  7920              LDRB     r0,[r4,#4]
-0001fc  f88d0001          STRB     r0,[sp,#1]
-000200  7820              LDRB     r0,[r4,#0]
-000202  f88d0002          STRB     r0,[sp,#2]
-000206  f88d6003          STRB     r6,[sp,#3]
-00020a  4669              MOV      r1,sp
-00020c  f1050014          ADD      r0,r5,#0x14
-000210  f7fffffe          BL       lc640_write_long_ptr
-000214  2442              MOVS     r4,#0x42
-000216  f88d4000          STRB     r4,[sp,#0]
-00021a  f88d4001          STRB     r4,[sp,#1]
-00021e  f88d4002          STRB     r4,[sp,#2]
-000222  f88d4003          STRB     r4,[sp,#3]
-000226  4669              MOV      r1,sp
-000228  e000              B        |L2.556|
-                  |L2.554|
-00022a  e013              B        |L2.596|
-                  |L2.556|
-00022c  f1050018          ADD      r0,r5,#0x18
-000230  f7fffffe          BL       lc640_write_long_ptr
-000234  f88d4000          STRB     r4,[sp,#0]
-000238  f88d4001          STRB     r4,[sp,#1]
-00023c  f88d4002          STRB     r4,[sp,#2]
-000240  f88d4003          STRB     r4,[sp,#3]
-000244  4669              MOV      r1,sp
-000246  f105001c          ADD      r0,r5,#0x1c
-                  |L2.586|
-00024a  f7fffffe          BL       lc640_write_long_ptr
+000148  201c              MOVS     r0,#0x1c
+00014a  e080              B        |L2.590|
+                  |L2.332|
+00014c  b131              CBZ      r1,|L2.348|
+00014e  2901              CMP      r1,#1
+000150  d008              BEQ      |L2.356|
+000152  2902              CMP      r1,#2
+000154  d013              BEQ      |L2.382|
+000156  2903              CMP      r1,#3
+000158  d015              BEQ      |L2.390|
+00015a  e007              B        |L2.364|
+                  |L2.348|
+00015c  7841              LDRB     r1,[r0,#1]
+00015e  f0210101          BIC      r1,r1,#1
+000162  e002              B        |L2.362|
+                  |L2.356|
+000164  7841              LDRB     r1,[r0,#1]
+000166  f0210102          BIC      r1,r1,#2
+                  |L2.362|
+00016a  7041              STRB     r1,[r0,#1]
+                  |L2.364|
+00016c  f1050010          ADD      r0,r5,#0x10
+000170  ea4f0b00          MOV.W    r11,r0
+                  |L2.372|
+000174  f89d0000          LDRB     r0,[sp,#0]
+000178  2853              CMP      r0,#0x53
+00017a  d118              BNE      |L2.430|
+00017c  e007              B        |L2.398|
+                  |L2.382|
+00017e  7841              LDRB     r1,[r0,#1]
+000180  f0210104          BIC      r1,r1,#4
+000184  e7f1              B        |L2.362|
+                  |L2.390|
+000186  7841              LDRB     r1,[r0,#1]
+000188  f0210108          BIC      r1,r1,#8
+00018c  e7ed              B        |L2.362|
+                  |L2.398|
+00018e  f89d0001          LDRB     r0,[sp,#1]
+000192  42b8              CMP      r0,r7
+000194  d10b              BNE      |L2.430|
+000196  f89d0002          LDRB     r0,[sp,#2]
+00019a  42b0              CMP      r0,r6
+00019c  d107              BNE      |L2.430|
+00019e  4669              MOV      r1,sp
+0001a0  4658              MOV      r0,r11
+0001a2  f7fffffe          BL       lc640_read_long_ptr
+0001a6  f89d0000          LDRB     r0,[sp,#0]
+0001aa  2841              CMP      r0,#0x41
+0001ac  d005              BEQ      |L2.442|
+                  |L2.430|
+0001ae  b3f4              CBZ      r4,|L2.558|
+0001b0  1e64              SUBS     r4,r4,#1
+0001b2  b2a4              UXTH     r4,r4
+0001b4  4544              CMP      r4,r8
+0001b6  d1dd              BNE      |L2.372|
+0001b8  e04b              B        |L2.594|
+                  |L2.442|
+0001ba  f89d0001          LDRB     r0,[sp,#1]
+0001be  2841              CMP      r0,#0x41
+0001c0  d1f5              BNE      |L2.430|
+0001c2  f89d0002          LDRB     r0,[sp,#2]
+0001c6  2841              CMP      r0,#0x41
+0001c8  d1f1              BNE      |L2.430|
+0001ca  f89d0003          LDRB     r0,[sp,#3]
+0001ce  2841              CMP      r0,#0x41
+0001d0  d1ed              BNE      |L2.430|
+0001d2  f8b9003c          LDRH     r0,[r9,#0x3c]
+0001d6  f1090420          ADD      r4,r9,#0x20
+0001da  f88d0000          STRB     r0,[sp,#0]
+0001de  7e20              LDRB     r0,[r4,#0x18]
+0001e0  f88d0001          STRB     r0,[sp,#1]
+0001e4  7b20              LDRB     r0,[r4,#0xc]
+0001e6  f88d0002          STRB     r0,[sp,#2]
+0001ea  4656              MOV      r6,r10
+0001ec  f88da003          STRB     r10,[sp,#3]
+0001f0  4669              MOV      r1,sp
+0001f2  4658              MOV      r0,r11
+0001f4  f7fffffe          BL       lc640_write_long_ptr
+0001f8  7a20              LDRB     r0,[r4,#8]
+0001fa  f88d0000          STRB     r0,[sp,#0]
+0001fe  7920              LDRB     r0,[r4,#4]
+000200  f88d0001          STRB     r0,[sp,#1]
+000204  7820              LDRB     r0,[r4,#0]
+000206  f88d0002          STRB     r0,[sp,#2]
+00020a  f88d6003          STRB     r6,[sp,#3]
+00020e  4669              MOV      r1,sp
+000210  f1050014          ADD      r0,r5,#0x14
+000214  f7fffffe          BL       lc640_write_long_ptr
+000218  2442              MOVS     r4,#0x42
+00021a  f88d4000          STRB     r4,[sp,#0]
+00021e  f88d4001          STRB     r4,[sp,#1]
+000222  f88d4002          STRB     r4,[sp,#2]
+000226  f88d4003          STRB     r4,[sp,#3]
+00022a  4669              MOV      r1,sp
+00022c  e000              B        |L2.560|
+                  |L2.558|
+00022e  e013              B        |L2.600|
+                  |L2.560|
+000230  f1050018          ADD      r0,r5,#0x18
+000234  f7fffffe          BL       lc640_write_long_ptr
+000238  f88d4000          STRB     r4,[sp,#0]
+00023c  f88d4001          STRB     r4,[sp,#1]
+000240  f88d4002          STRB     r4,[sp,#2]
+000244  f88d4003          STRB     r4,[sp,#3]
+000248  4669              MOV      r1,sp
+00024a  f105001c          ADD      r0,r5,#0x1c
                   |L2.590|
-00024e  bf00              NOP      
-000250  e8bd8ff8          POP      {r3-r11,pc}
-                  |L2.596|
-000254  243f              MOVS     r4,#0x3f
-000256  e78b              B        |L2.368|
+00024e  f7fffffe          BL       lc640_write_long_ptr
+                  |L2.594|
+000252  bf00              NOP      
+000254  e8bd8ff8          POP      {r3-r11,pc}
+                  |L2.600|
+000258  243f              MOVS     r4,#0x3f
+00025a  e78b              B        |L2.372|
 ;;;108    
                           ENDP
 
-                  |L2.600|
-                          DCD      0x40024000
                   |L2.604|
+                          DCD      0x40024000
+                  |L2.608|
                           DCD      bps
 
                           AREA ||area_number.3||, CODE, READONLY, ALIGN=1
