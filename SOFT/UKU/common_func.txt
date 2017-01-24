@@ -2,7 +2,7 @@
 ; commandline ArmCC [--list --debug -c --asm --interleave -o.\EXE\common_func.o --asm_dir=.\ --list_dir=.\ --depend=.\EXE\common_func.d --feedback=.\EXE\UKU2071x_GALV_IBv2.fed --cpu=Cortex-M3 --apcs=interwork -O3 -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\INC\NXP\LPC17xx -D__MICROLIB -DUKU2071x -DEXT_BOARD_V_2 --omf_browse=.\EXE\common_func.crf common_func.c]
                           THUMB
 
-                          AREA ||.text||, CODE, READONLY, ALIGN=1
+                          AREA ||.text||, CODE, READONLY, ALIGN=2
 
                   abs PROC
 ;;;11     //-----------------------------------------------
@@ -20,134 +20,134 @@
 ;;;17     
                           ENDP
 
-
-                          AREA ||area_number.2||, CODE, READONLY, ALIGN=2
-
-                          EXPORTAS ||area_number.2||, ||.text||
                   clr_scrn PROC
-;;;11     //-----------------------------------------------
-;;;12     signed short abs(signed short in)
-000000  2000              MOVS     r0,#0
-;;;13     {
-;;;14     if(in<0)in=-in;
-000002  2120              MOVS     r1,#0x20
-000004  4aff              LDR      r2,|L2.1028|
-                  |L2.6|
-000006  5411              STRB     r1,[r2,r0]
-;;;15     return in;
-;;;16     }
-000008  1c40              ADDS     r0,r0,#1
-00000a  b2c0              UXTB     r0,r0
-00000c  28c8              CMP      r0,#0xc8
-00000e  d3fa              BCC      |L2.6|
-000010  4770              BX       lr
-;;;17     
+;;;18     //-----------------------------------------------
+;;;19     void clr_scrn(void)
+00000a  2000              MOVS     r0,#0
+;;;20     {
+;;;21     char i;
+;;;22     for (i=0;i<LCD_SIZE;i++)
+;;;23     	{
+;;;24     	lcd_buffer[i]=' ';
+00000c  4aff              LDR      r2,|L1.1036|
+00000e  2120              MOVS     r1,#0x20
+                  |L1.16|
+000010  5411              STRB     r1,[r2,r0]
+000012  1c40              ADDS     r0,r0,#1              ;22
+000014  b2c0              UXTB     r0,r0                 ;22
+000016  28c8              CMP      r0,#0xc8              ;22
+000018  d3fa              BCC      |L1.16|
+;;;25     	}
+;;;26     }
+00001a  4770              BX       lr
+;;;27     
                           ENDP
 
                   find PROC
 ;;;28     //-----------------------------------------------
 ;;;29     char find(char xy)
-000012  4601              MOV      r1,r0
+00001c  4601              MOV      r1,r0
 ;;;30     {
 ;;;31     char i=0;
 ;;;32     do i++;
 ;;;33     while ((lcd_buffer[i]!=xy)&&(i<LCD_SIZE));
-000014  4afb              LDR      r2,|L2.1028|
-000016  2000              MOVS     r0,#0                 ;31
-                  |L2.24|
-000018  1c40              ADDS     r0,r0,#1              ;32
-00001a  b2c0              UXTB     r0,r0                 ;32
-00001c  5c13              LDRB     r3,[r2,r0]
-00001e  428b              CMP      r3,r1
-000020  d001              BEQ      |L2.38|
-000022  28c8              CMP      r0,#0xc8
-000024  d3f8              BCC      |L2.24|
-                  |L2.38|
+00001e  4afb              LDR      r2,|L1.1036|
+000020  2000              MOVS     r0,#0                 ;31
+                  |L1.34|
+000022  1c40              ADDS     r0,r0,#1              ;32
+000024  b2c0              UXTB     r0,r0                 ;32
+000026  5c13              LDRB     r3,[r2,r0]
+000028  428b              CMP      r3,r1
+00002a  d001              BEQ      |L1.48|
+00002c  28c8              CMP      r0,#0xc8
+00002e  d3f8              BCC      |L1.34|
+                  |L1.48|
 ;;;34     //if(i==(LCD_SIZE)) i++;
 ;;;35     return i;
 ;;;36     }
-000026  4770              BX       lr
+000030  4770              BX       lr
 ;;;37     
                           ENDP
 
                   bin2bcd_int PROC
 ;;;39     //-----------------------------------------------
 ;;;40     void bin2bcd_int(unsigned int in)
-000028  b510              PUSH     {r4,lr}
+000032  b510              PUSH     {r4,lr}
 ;;;41     {
 ;;;42     
 ;;;43     char i=5;
 ;;;44     for(i=0;i<5;i++)
-00002a  2100              MOVS     r1,#0
+000034  2100              MOVS     r1,#0
 ;;;45     	{
 ;;;46     	dig[i]=in%10;
-00002c  4cf6              LDR      r4,|L2.1032|
-00002e  220a              MOVS     r2,#0xa
-                  |L2.48|
-000030  fbb0f3f2          UDIV     r3,r0,r2
-000034  fb020013          MLS      r0,r2,r3,r0
-000038  5460              STRB     r0,[r4,r1]
-00003a  1c49              ADDS     r1,r1,#1              ;44
-00003c  b2c9              UXTB     r1,r1                 ;44
-00003e  4618              MOV      r0,r3
-000040  2905              CMP      r1,#5                 ;44
-000042  d3f5              BCC      |L2.48|
+000036  4cf6              LDR      r4,|L1.1040|
+000038  220a              MOVS     r2,#0xa
+00003a  bf00              NOP      
+                  |L1.60|
+00003c  fbb0f3f2          UDIV     r3,r0,r2
+000040  fb020013          MLS      r0,r2,r3,r0
+000044  5460              STRB     r0,[r4,r1]
+000046  1c49              ADDS     r1,r1,#1              ;44
+000048  b2c9              UXTB     r1,r1                 ;44
+00004a  4618              MOV      r0,r3
+00004c  2905              CMP      r1,#5                 ;44
+00004e  d3f5              BCC      |L1.60|
 ;;;47     	in/=10;
 ;;;48     	}   
 ;;;49     }
-000044  bd10              POP      {r4,pc}
+000050  bd10              POP      {r4,pc}
 ;;;50     //-----------------------------------------------
                           ENDP
 
                   bcd2lcd_zero PROC
 ;;;51     void bcd2lcd_zero(char sig)
-000046  b5f0              PUSH     {r4-r7,lr}
+000052  b5f0              PUSH     {r4-r7,lr}
 ;;;52     {
 ;;;53     char i;
 ;;;54     zero_on=1;
-000048  4bf0              LDR      r3,|L2.1036|
-00004a  2101              MOVS     r1,#1
+000054  4bef              LDR      r3,|L1.1044|
+000056  2101              MOVS     r1,#1
 ;;;55     for (i=5;i>0;i--)
 ;;;56     	{
 ;;;57     	if(zero_on&&(!dig[i-1])&&(i>sig))
 ;;;58     		{
 ;;;59     		dig[i-1]=0x20;
-00004c  2720              MOVS     r7,#0x20
-00004e  7019              STRB     r1,[r3,#0]            ;54
-000050  2105              MOVS     r1,#5                 ;55
-000052  4aed              LDR      r2,|L2.1032|
-000054  2600              MOVS     r6,#0                 ;54
-000056  e001              B        |L2.92|
-                  |L2.88|
-000058  781c              LDRB     r4,[r3,#0]            ;57  ; zero_on
-00005a  b144              CBZ      r4,|L2.110|
-                  |L2.92|
-00005c  1854              ADDS     r4,r2,r1              ;57
-00005e  f8145c01          LDRB     r5,[r4,#-1]           ;57
-000062  b925              CBNZ     r5,|L2.110|
-000064  4281              CMP      r1,r0                 ;57
-000066  d902              BLS      |L2.110|
-000068  f8047c01          STRB     r7,[r4,#-1]
-00006c  e005              B        |L2.122|
-                  |L2.110|
+000058  2720              MOVS     r7,#0x20
+00005a  7019              STRB     r1,[r3,#0]            ;54
+00005c  2105              MOVS     r1,#5                 ;55
+00005e  4aec              LDR      r2,|L1.1040|
+000060  2600              MOVS     r6,#0                 ;54
+000062  e001              B        |L1.104|
+                  |L1.100|
+000064  781c              LDRB     r4,[r3,#0]            ;57  ; zero_on
+000066  b144              CBZ      r4,|L1.122|
+                  |L1.104|
+000068  1854              ADDS     r4,r2,r1              ;57
+00006a  f8145c01          LDRB     r5,[r4,#-1]           ;57
+00006e  b925              CBNZ     r5,|L1.122|
+000070  4281              CMP      r1,r0                 ;57
+000072  d902              BLS      |L1.122|
+000074  f8047c01          STRB     r7,[r4,#-1]
+000078  e005              B        |L1.134|
+                  |L1.122|
 ;;;60     		}
 ;;;61     	else
 ;;;62     		{
 ;;;63     		dig[i-1]=dig[i-1]+0x30;
-00006e  1854              ADDS     r4,r2,r1
-000070  f8145d01          LDRB     r5,[r4,#-1]!
-000074  3530              ADDS     r5,r5,#0x30
-000076  7025              STRB     r5,[r4,#0]
+00007a  1854              ADDS     r4,r2,r1
+00007c  f8145d01          LDRB     r5,[r4,#-1]!
+000080  3530              ADDS     r5,r5,#0x30
+000082  7025              STRB     r5,[r4,#0]
 ;;;64     		zero_on=0;
-000078  701e              STRB     r6,[r3,#0]
-                  |L2.122|
-00007a  1e49              SUBS     r1,r1,#1              ;55
-00007c  f01101ff          ANDS     r1,r1,#0xff           ;55
-000080  d1ea              BNE      |L2.88|
+000084  701e              STRB     r6,[r3,#0]
+                  |L1.134|
+000086  1e49              SUBS     r1,r1,#1              ;55
+000088  f01101ff          ANDS     r1,r1,#0xff           ;55
+00008c  d1ea              BNE      |L1.100|
 ;;;65     		}	
 ;;;66     	}
 ;;;67     }             
-000082  bdf0              POP      {r4-r7,pc}
+00008e  bdf0              POP      {r4-r7,pc}
 ;;;68     
                           ENDP
 
@@ -206,332 +206,332 @@
 ;;;202         }
 ;;;203    	
 ;;;204    n=find(xy);
-000084  b5fe              PUSH     {r1-r7,lr}
-000086  232b              MOVS     r3,#0x2b
 ;;;205    for (i=0;i<simb_num;i++)
-000088  2800              CMP      r0,#0
 ;;;206    	{
 ;;;207         lcd_buffer[n-i]=s[i];
-00008a  da01              BGE      |L2.144|
-00008c  4240              RSBS     r0,r0,#0              ;205
-00008e  232d              MOVS     r3,#0x2d
-                  |L2.144|
-000090  2500              MOVS     r5,#0
-000092  260a              MOVS     r6,#0xa               ;205
-000094  466c              MOV      r4,sp
-                  |L2.150|
-000096  4607              MOV      r7,r0                 ;205
-000098  fb90f0f6          SDIV     r0,r0,r6              ;205
+000090  b5fe              PUSH     {r1-r7,lr}
+000092  232b              MOVS     r3,#0x2b              ;205
+000094  2800              CMP      r0,#0
+000096  da01              BGE      |L1.156|
+000098  4240              RSBS     r0,r0,#0              ;205
+00009a  232d              MOVS     r3,#0x2d              ;205
+                  |L1.156|
 ;;;208    	}
 ;;;209    }
-00009c  fb067710          MLS      r7,r6,r0,r7
-0000a0  5567              STRB     r7,[r4,r5]
-0000a2  1c6d              ADDS     r5,r5,#1
-0000a4  b26d              SXTB     r5,r5
-0000a6  2d0a              CMP      r5,#0xa
-0000a8  dbf5              BLT      |L2.150|
-0000aa  2601              MOVS     r6,#1
-0000ac  2500              MOVS     r5,#0
-0000ae  2009              MOVS     r0,#9
-0000b0  2720              MOVS     r7,#0x20
-0000b2  e000              B        |L2.182|
-                  |L2.180|
-0000b4  b146              CBZ      r6,|L2.200|
-                  |L2.182|
-0000b6  f814c000          LDRB     r12,[r4,r0]
-0000ba  f1bc0f00          CMP      r12,#0
-0000be  d103              BNE      |L2.200|
-0000c0  4290              CMP      r0,r2
-0000c2  dd01              BLE      |L2.200|
-0000c4  5427              STRB     r7,[r4,r0]
-0000c6  e005              B        |L2.212|
-                  |L2.200|
-0000c8  5c26              LDRB     r6,[r4,r0]
-0000ca  3630              ADDS     r6,r6,#0x30
-0000cc  5426              STRB     r6,[r4,r0]
-0000ce  2600              MOVS     r6,#0
-0000d0  1c6d              ADDS     r5,r5,#1
-0000d2  b2ed              UXTB     r5,r5
-                  |L2.212|
-0000d4  1e40              SUBS     r0,r0,#1
-0000d6  b240              SXTB     r0,r0
-0000d8  2800              CMP      r0,#0
-0000da  daeb              BGE      |L2.180|
-0000dc  2b2d              CMP      r3,#0x2d
-0000de  d102              BNE      |L2.230|
-0000e0  5563              STRB     r3,[r4,r5]
-0000e2  1c6d              ADDS     r5,r5,#1
-0000e4  b2ed              UXTB     r5,r5
-                  |L2.230|
-0000e6  b16a              CBZ      r2,|L2.260|
-0000e8  b268              SXTB     r0,r5
-0000ea  e005              B        |L2.248|
-                  |L2.236|
-0000ec  1823              ADDS     r3,r4,r0
-0000ee  f8133c01          LDRB     r3,[r3,#-1]
-0000f2  5423              STRB     r3,[r4,r0]
-0000f4  1e40              SUBS     r0,r0,#1
-0000f6  b240              SXTB     r0,r0
-                  |L2.248|
-0000f8  4290              CMP      r0,r2
-0000fa  dcf7              BGT      |L2.236|
-0000fc  202e              MOVS     r0,#0x2e
-0000fe  1c6d              ADDS     r5,r5,#1
-000100  54a0              STRB     r0,[r4,r2]
-000102  b2ed              UXTB     r5,r5
-                  |L2.260|
-000104  4608              MOV      r0,r1
-000106  f7fffffe          BL       find
-00010a  2100              MOVS     r1,#0
-00010c  4abd              LDR      r2,|L2.1028|
-00010e  e004              B        |L2.282|
-                  |L2.272|
-000110  5c63              LDRB     r3,[r4,r1]
-000112  1a46              SUBS     r6,r0,r1
-000114  1c49              ADDS     r1,r1,#1
-000116  5593              STRB     r3,[r2,r6]
-000118  b249              SXTB     r1,r1
-                  |L2.282|
-00011a  42a9              CMP      r1,r5
-00011c  dbf8              BLT      |L2.272|
-00011e  bdfe              POP      {r1-r7,pc}
+00009c  2500              MOVS     r5,#0
+00009e  260a              MOVS     r6,#0xa
+0000a0  466c              MOV      r4,sp
+                  |L1.162|
+0000a2  4607              MOV      r7,r0
+0000a4  fb90f0f6          SDIV     r0,r0,r6
+0000a8  fb067710          MLS      r7,r6,r0,r7
+0000ac  5567              STRB     r7,[r4,r5]
+0000ae  1c6d              ADDS     r5,r5,#1
+0000b0  b26d              SXTB     r5,r5
+0000b2  2d0a              CMP      r5,#0xa
+0000b4  dbf5              BLT      |L1.162|
+0000b6  2601              MOVS     r6,#1
+0000b8  2500              MOVS     r5,#0
+0000ba  2009              MOVS     r0,#9
+0000bc  2720              MOVS     r7,#0x20
+0000be  e000              B        |L1.194|
+                  |L1.192|
+0000c0  b146              CBZ      r6,|L1.212|
+                  |L1.194|
+0000c2  f814c000          LDRB     r12,[r4,r0]
+0000c6  f1bc0f00          CMP      r12,#0
+0000ca  d103              BNE      |L1.212|
+0000cc  4290              CMP      r0,r2
+0000ce  dd01              BLE      |L1.212|
+0000d0  5427              STRB     r7,[r4,r0]
+0000d2  e005              B        |L1.224|
+                  |L1.212|
+0000d4  5c26              LDRB     r6,[r4,r0]
+0000d6  3630              ADDS     r6,r6,#0x30
+0000d8  5426              STRB     r6,[r4,r0]
+0000da  2600              MOVS     r6,#0
+0000dc  1c6d              ADDS     r5,r5,#1
+0000de  b2ed              UXTB     r5,r5
+                  |L1.224|
+0000e0  1e40              SUBS     r0,r0,#1
+0000e2  b240              SXTB     r0,r0
+0000e4  2800              CMP      r0,#0
+0000e6  daeb              BGE      |L1.192|
+0000e8  2b2d              CMP      r3,#0x2d
+0000ea  d102              BNE      |L1.242|
+0000ec  5563              STRB     r3,[r4,r5]
+0000ee  1c6d              ADDS     r5,r5,#1
+0000f0  b2ed              UXTB     r5,r5
+                  |L1.242|
+0000f2  b16a              CBZ      r2,|L1.272|
+0000f4  b268              SXTB     r0,r5
+0000f6  e005              B        |L1.260|
+                  |L1.248|
+0000f8  1823              ADDS     r3,r4,r0
+0000fa  f8133c01          LDRB     r3,[r3,#-1]
+0000fe  5423              STRB     r3,[r4,r0]
+000100  1e40              SUBS     r0,r0,#1
+000102  b240              SXTB     r0,r0
+                  |L1.260|
+000104  4290              CMP      r0,r2
+000106  dcf7              BGT      |L1.248|
+000108  202e              MOVS     r0,#0x2e
+00010a  1c6d              ADDS     r5,r5,#1
+00010c  54a0              STRB     r0,[r4,r2]
+00010e  b2ed              UXTB     r5,r5
+                  |L1.272|
+000110  4608              MOV      r0,r1
+000112  f7fffffe          BL       find
+000116  2100              MOVS     r1,#0
+000118  4abc              LDR      r2,|L1.1036|
+00011a  e004              B        |L1.294|
+                  |L1.284|
+00011c  5c63              LDRB     r3,[r4,r1]
+00011e  1a46              SUBS     r6,r0,r1
+000120  1c49              ADDS     r1,r1,#1
+000122  5593              STRB     r3,[r2,r6]
+000124  b249              SXTB     r1,r1
+                  |L1.294|
+000126  42a9              CMP      r1,r5
+000128  dbf8              BLT      |L1.284|
+00012a  bdfe              POP      {r1-r7,pc}
 ;;;210    
                           ENDP
 
                   long2lcdyx_mmm PROC
 ;;;271    //-----------------------------------------------
 ;;;272    void long2lcdyx_mmm(signed long in,char y,char x,char des)
-000120  b5fe              PUSH     {r1-r7,lr}
+00012c  b5fe              PUSH     {r1-r7,lr}
 ;;;273    {
 ;;;274    signed char i;
 ;;;275    char n;
 ;;;276    char s[10];
 ;;;277    char minus='+';
-000122  262b              MOVS     r6,#0x2b
+00012e  262b              MOVS     r6,#0x2b
 ;;;278    char zero_on;
 ;;;279    char simb_num;
 ;;;280    
 ;;;281    if(in<0)
-000124  2800              CMP      r0,#0
-000126  da01              BGE      |L2.300|
+000130  2800              CMP      r0,#0
+000132  da01              BGE      |L1.312|
 ;;;282    	{
 ;;;283    	in=-in;
-000128  4240              RSBS     r0,r0,#0
+000134  4240              RSBS     r0,r0,#0
 ;;;284    	minus='-';
-00012a  262d              MOVS     r6,#0x2d
-                  |L2.300|
+000136  262d              MOVS     r6,#0x2d
+                  |L1.312|
 ;;;285    	}
 ;;;286    
 ;;;287    for(i=0;i<10;i++)
-00012c  2400              MOVS     r4,#0
+000138  2400              MOVS     r4,#0
 ;;;288    	{
 ;;;289    	s[i]=in%10;
-00012e  270a              MOVS     r7,#0xa
-000130  466d              MOV      r5,sp                 ;276
-                  |L2.306|
-000132  4684              MOV      r12,r0
-000134  fb90f0f7          SDIV     r0,r0,r7
-000138  fb07cc10          MLS      r12,r7,r0,r12
-00013c  f805c004          STRB     r12,[r5,r4]
-000140  1c64              ADDS     r4,r4,#1              ;287
-000142  b264              SXTB     r4,r4                 ;287
-000144  2c0a              CMP      r4,#0xa               ;287
-000146  dbf4              BLT      |L2.306|
+00013a  270a              MOVS     r7,#0xa
+00013c  466d              MOV      r5,sp                 ;276
+                  |L1.318|
+00013e  4684              MOV      r12,r0
+000140  fb90f0f7          SDIV     r0,r0,r7
+000144  fb07cc10          MLS      r12,r7,r0,r12
+000148  f805c004          STRB     r12,[r5,r4]
+00014c  1c64              ADDS     r4,r4,#1              ;287
+00014e  b264              SXTB     r4,r4                 ;287
+000150  2c0a              CMP      r4,#0xa               ;287
+000152  dbf4              BLT      |L1.318|
 ;;;290    	in/=10;
 ;;;291    	}   
 ;;;292    
 ;;;293    zero_on=1;
-000148  2701              MOVS     r7,#1
+000154  2701              MOVS     r7,#1
 ;;;294    simb_num=0;
-00014a  2000              MOVS     r0,#0
+000156  2000              MOVS     r0,#0
 ;;;295    
 ;;;296    for (i=9;i>=0;i--)
-00014c  2409              MOVS     r4,#9
+000158  2409              MOVS     r4,#9
 ;;;297    	{
 ;;;298    	if(zero_on&&(!s[i])&&(i>(des)))
 ;;;299    	     {
 ;;;300    	     s[i]=0x20;
-00014e  f04f0c20          MOV      r12,#0x20
-000152  e000              B        |L2.342|
-                  |L2.340|
-000154  b14f              CBZ      r7,|L2.362|
-                  |L2.342|
-000156  f815e004          LDRB     lr,[r5,r4]            ;298
-00015a  f1be0f00          CMP      lr,#0                 ;298
-00015e  d104              BNE      |L2.362|
-000160  429c              CMP      r4,r3                 ;298
-000162  dd02              BLE      |L2.362|
-000164  f805c004          STRB     r12,[r5,r4]
-000168  e005              B        |L2.374|
-                  |L2.362|
+00015a  f04f0c20          MOV      r12,#0x20
+00015e  e000              B        |L1.354|
+                  |L1.352|
+000160  b14f              CBZ      r7,|L1.374|
+                  |L1.354|
+000162  f815e004          LDRB     lr,[r5,r4]            ;298
+000166  f1be0f00          CMP      lr,#0                 ;298
+00016a  d104              BNE      |L1.374|
+00016c  429c              CMP      r4,r3                 ;298
+00016e  dd02              BLE      |L1.374|
+000170  f805c004          STRB     r12,[r5,r4]
+000174  e005              B        |L1.386|
+                  |L1.374|
 ;;;301    	     }
 ;;;302    	else 
 ;;;303    	     {
 ;;;304    	     s[i]=s[i]+0x30;
-00016a  5d2f              LDRB     r7,[r5,r4]
-00016c  3730              ADDS     r7,r7,#0x30
-00016e  552f              STRB     r7,[r5,r4]
+000176  5d2f              LDRB     r7,[r5,r4]
+000178  3730              ADDS     r7,r7,#0x30
+00017a  552f              STRB     r7,[r5,r4]
 ;;;305    	     zero_on=0;
-000170  2700              MOVS     r7,#0
+00017c  2700              MOVS     r7,#0
 ;;;306    	     simb_num++;
-000172  1c40              ADDS     r0,r0,#1
-000174  b2c0              UXTB     r0,r0
-                  |L2.374|
-000176  1e64              SUBS     r4,r4,#1              ;296
-000178  b264              SXTB     r4,r4                 ;296
-00017a  2c00              CMP      r4,#0                 ;296
-00017c  daea              BGE      |L2.340|
+00017e  1c40              ADDS     r0,r0,#1
+000180  b2c0              UXTB     r0,r0
+                  |L1.386|
+000182  1e64              SUBS     r4,r4,#1              ;296
+000184  b264              SXTB     r4,r4                 ;296
+000186  2c00              CMP      r4,#0                 ;296
+000188  daea              BGE      |L1.352|
 ;;;307    	     }
 ;;;308    	 }
 ;;;309    	          
 ;;;310    if(minus=='-')	
-00017e  2e2d              CMP      r6,#0x2d
-000180  d102              BNE      |L2.392|
+00018a  2e2d              CMP      r6,#0x2d
+00018c  d102              BNE      |L1.404|
 ;;;311         {
 ;;;312         s[simb_num++]=minus; 
-000182  542e              STRB     r6,[r5,r0]
-000184  1c40              ADDS     r0,r0,#1
-000186  b2c0              UXTB     r0,r0
-                  |L2.392|
+00018e  542e              STRB     r6,[r5,r0]
+000190  1c40              ADDS     r0,r0,#1
+000192  b2c0              UXTB     r0,r0
+                  |L1.404|
 ;;;313         }    
 ;;;314    if(des)
-000188  b16b              CBZ      r3,|L2.422|
+000194  b16b              CBZ      r3,|L1.434|
 ;;;315         {
 ;;;316         for(i=simb_num;i>des;i--)
-00018a  b244              SXTB     r4,r0
-00018c  e005              B        |L2.410|
-                  |L2.398|
+000196  b244              SXTB     r4,r0
+000198  e005              B        |L1.422|
+                  |L1.410|
 ;;;317              {
 ;;;318              s[i]=s[i-1];
-00018e  192e              ADDS     r6,r5,r4
-000190  f8166c01          LDRB     r6,[r6,#-1]
-000194  552e              STRB     r6,[r5,r4]
-000196  1e64              SUBS     r4,r4,#1              ;316
-000198  b264              SXTB     r4,r4                 ;316
-                  |L2.410|
-00019a  429c              CMP      r4,r3                 ;316
-00019c  dcf7              BGT      |L2.398|
+00019a  192e              ADDS     r6,r5,r4
+00019c  f8166c01          LDRB     r6,[r6,#-1]
+0001a0  552e              STRB     r6,[r5,r4]
+0001a2  1e64              SUBS     r4,r4,#1              ;316
+0001a4  b264              SXTB     r4,r4                 ;316
+                  |L1.422|
+0001a6  429c              CMP      r4,r3                 ;316
+0001a8  dcf7              BGT      |L1.410|
 ;;;319              }
 ;;;320         s[des]='.';
-00019e  242e              MOVS     r4,#0x2e
+0001aa  242e              MOVS     r4,#0x2e
 ;;;321         simb_num++;     
-0001a0  1c40              ADDS     r0,r0,#1
-0001a2  54ec              STRB     r4,[r5,r3]            ;320
-0001a4  b2c0              UXTB     r0,r0
-                  |L2.422|
+0001ac  1c40              ADDS     r0,r0,#1
+0001ae  54ec              STRB     r4,[r5,r3]            ;320
+0001b0  b2c0              UXTB     r0,r0
+                  |L1.434|
 ;;;322         }
 ;;;323    	
 ;;;324    n=(20*y)+x;
-0001a6  eb010181          ADD      r1,r1,r1,LSL #2
-0001aa  eb020181          ADD      r1,r2,r1,LSL #2
-0001ae  b2ca              UXTB     r2,r1
+0001b2  eb010181          ADD      r1,r1,r1,LSL #2
+0001b6  eb020181          ADD      r1,r2,r1,LSL #2
+0001ba  b2ca              UXTB     r2,r1
 ;;;325    for (i=0;i<simb_num;i++)
-0001b0  2100              MOVS     r1,#0
+0001bc  2100              MOVS     r1,#0
 ;;;326    	{
 ;;;327         lcd_buffer[n-i]=s[i];
-0001b2  4b94              LDR      r3,|L2.1028|
-0001b4  e004              B        |L2.448|
-                  |L2.438|
-0001b6  5c6c              LDRB     r4,[r5,r1]
-0001b8  1a56              SUBS     r6,r2,r1
-0001ba  1c49              ADDS     r1,r1,#1              ;325
-0001bc  559c              STRB     r4,[r3,r6]
-0001be  b249              SXTB     r1,r1                 ;325
-                  |L2.448|
-0001c0  4281              CMP      r1,r0                 ;325
-0001c2  dbf8              BLT      |L2.438|
+0001be  4b93              LDR      r3,|L1.1036|
+0001c0  e004              B        |L1.460|
+                  |L1.450|
+0001c2  5c6c              LDRB     r4,[r5,r1]
+0001c4  1a56              SUBS     r6,r2,r1
+0001c6  1c49              ADDS     r1,r1,#1              ;325
+0001c8  559c              STRB     r4,[r3,r6]
+0001ca  b249              SXTB     r1,r1                 ;325
+                  |L1.460|
+0001cc  4281              CMP      r1,r0                 ;325
+0001ce  dbf8              BLT      |L1.450|
 ;;;328    	}
 ;;;329    
 ;;;330    
 ;;;331    
 ;;;332    }
-0001c4  bdfe              POP      {r1-r7,pc}
+0001d0  bdfe              POP      {r1-r7,pc}
 ;;;333    
                           ENDP
 
                   int2lcdyx PROC
 ;;;334    //-----------------------------------------------
 ;;;335    void int2lcdyx(unsigned short in,char y,char x,char des)
-0001c6  b570              PUSH     {r4-r6,lr}
+0001d2  b570              PUSH     {r4-r6,lr}
 ;;;336    {
-0001c8  460d              MOV      r5,r1
-0001ca  4616              MOV      r6,r2
-0001cc  461c              MOV      r4,r3
+0001d4  460d              MOV      r5,r1
+0001d6  4616              MOV      r6,r2
+0001d8  461c              MOV      r4,r3
 ;;;337    char i;
 ;;;338    char n;
 ;;;339    bin2bcd_int(in);
-0001ce  f7fffffe          BL       bin2bcd_int
+0001da  f7fffffe          BL       bin2bcd_int
 ;;;340    bcd2lcd_zero(des+1);
-0001d2  1c60              ADDS     r0,r4,#1
-0001d4  b2c0              UXTB     r0,r0
-0001d6  f7fffffe          BL       bcd2lcd_zero
+0001de  1c60              ADDS     r0,r4,#1
+0001e0  b2c0              UXTB     r0,r0
+0001e2  f7fffffe          BL       bcd2lcd_zero
 ;;;341    i=(y*20)+x;
-0001da  eb050085          ADD      r0,r5,r5,LSL #2
-0001de  eb060080          ADD      r0,r6,r0,LSL #2
-0001e2  b2c1              UXTB     r1,r0
+0001e6  eb050085          ADD      r0,r5,r5,LSL #2
+0001ea  eb060080          ADD      r0,r6,r0,LSL #2
+0001ee  b2c1              UXTB     r1,r0
 ;;;342    for (n=0;n<5;n++)
 ;;;343    	{ 
 ;;;344    	if(n<des)
 ;;;345    		{
 ;;;346    		lcd_buffer[i]=dig[n];
-0001e4  4a88              LDR      r2,|L2.1032|
-0001e6  4b87              LDR      r3,|L2.1028|
-0001e8  2000              MOVS     r0,#0                 ;342
-                  |L2.490|
-0001ea  42a0              CMP      r0,r4                 ;344
-0001ec  d201              BCS      |L2.498|
-0001ee  5c15              LDRB     r5,[r2,r0]
-0001f0  545d              STRB     r5,[r3,r1]
-                  |L2.498|
+0001f0  4a87              LDR      r2,|L1.1040|
+0001f2  4b86              LDR      r3,|L1.1036|
+0001f4  2000              MOVS     r0,#0                 ;342
+                  |L1.502|
+0001f6  42a0              CMP      r0,r4                 ;344
+0001f8  d201              BCS      |L1.510|
+0001fa  5c15              LDRB     r5,[r2,r0]
+0001fc  545d              STRB     r5,[r3,r1]
+                  |L1.510|
 ;;;347    		}   
 ;;;348    	if((n>=des)&&(dig[n]!=0x20))
-0001f2  d306              BCC      |L2.514|
-0001f4  5c15              LDRB     r5,[r2,r0]
-0001f6  2d20              CMP      r5,#0x20
-0001f8  d003              BEQ      |L2.514|
+0001fe  d306              BCC      |L1.526|
+000200  5c15              LDRB     r5,[r2,r0]
+000202  2d20              CMP      r5,#0x20
+000204  d003              BEQ      |L1.526|
 ;;;349    		{
 ;;;350    		if(!des)lcd_buffer[i]=dig[n];	
-0001fa  b14c              CBZ      r4,|L2.528|
+000206  b14c              CBZ      r4,|L1.540|
 ;;;351    		else lcd_buffer[i-1]=dig[n];
-0001fc  185e              ADDS     r6,r3,r1
-0001fe  f8065c01          STRB     r5,[r6,#-1]
-                  |L2.514|
+000208  185e              ADDS     r6,r3,r1
+00020a  f8065c01          STRB     r5,[r6,#-1]
+                  |L1.526|
 ;;;352       		}   
 ;;;353    	i--;	
-000202  1e49              SUBS     r1,r1,#1
-000204  1c40              ADDS     r0,r0,#1              ;342
-000206  b2c0              UXTB     r0,r0                 ;342
-000208  b2c9              UXTB     r1,r1
-00020a  2805              CMP      r0,#5                 ;342
-00020c  d3ed              BCC      |L2.490|
+00020e  1e49              SUBS     r1,r1,#1
+000210  1c40              ADDS     r0,r0,#1              ;342
+000212  b2c0              UXTB     r0,r0                 ;342
+000214  b2c9              UXTB     r1,r1
+000216  2805              CMP      r0,#5                 ;342
+000218  d3ed              BCC      |L1.502|
 ;;;354    	}
 ;;;355    }
-00020e  bd70              POP      {r4-r6,pc}
-                  |L2.528|
-000210  545d              STRB     r5,[r3,r1]            ;350
-000212  e7f6              B        |L2.514|
+00021a  bd70              POP      {r4-r6,pc}
+                  |L1.540|
+00021c  545d              STRB     r5,[r3,r1]            ;350
+00021e  e7f6              B        |L1.526|
 ;;;356    
                           ENDP
 
                   community2lcd PROC
 ;;;364    //-----------------------------------------------
 ;;;365    void community2lcd(char* in,
-000214  b570              PUSH     {r4-r6,lr}
+000220  b570              PUSH     {r4-r6,lr}
 ;;;366    			char xy,
 ;;;367    			char flash_pos,
 ;;;368    			char flash_on)
 ;;;369    {
-000216  4604              MOV      r4,r0
-000218  4608              MOV      r0,r1
-00021a  4615              MOV      r5,r2
-00021c  461e              MOV      r6,r3
+000222  4604              MOV      r4,r0
+000224  4608              MOV      r0,r1
+000226  4615              MOV      r5,r2
+000228  461e              MOV      r6,r3
 ;;;370    char temp;
 ;;;371    char i;
 ;;;372    //char n;
 ;;;373    
 ;;;374    
 ;;;375    i=find(xy);
-00021e  f7fffffe          BL       find
+00022a  f7fffffe          BL       find
 ;;;376    
 ;;;377    //in1=192;
 ;;;378    
@@ -546,67 +546,67 @@
 ;;;387    while (*in)
 ;;;388    	{
 ;;;389    	lcd_buffer[temp]=*in++;
-000222  4b78              LDR      r3,|L2.1028|
-000224  4601              MOV      r1,r0                 ;375
-000226  28ff              CMP      r0,#0xff              ;386
-000228  d104              BNE      |L2.564|
-00022a  e006              B        |L2.570|
-                  |L2.556|
-00022c  541a              STRB     r2,[r3,r0]
-00022e  1c64              ADDS     r4,r4,#1
+00022e  4b77              LDR      r3,|L1.1036|
+000230  4601              MOV      r1,r0                 ;375
+000232  28ff              CMP      r0,#0xff              ;386
+000234  d104              BNE      |L1.576|
+000236  e006              B        |L1.582|
+                  |L1.568|
+000238  541a              STRB     r2,[r3,r0]
+00023a  1c64              ADDS     r4,r4,#1
 ;;;390    	temp++;
-000230  1c40              ADDS     r0,r0,#1
-000232  b2c0              UXTB     r0,r0
-                  |L2.564|
-000234  7822              LDRB     r2,[r4,#0]            ;387
-000236  2a00              CMP      r2,#0                 ;387
-000238  d1f8              BNE      |L2.556|
-                  |L2.570|
+00023c  1c40              ADDS     r0,r0,#1
+00023e  b2c0              UXTB     r0,r0
+                  |L1.576|
+000240  7822              LDRB     r2,[r4,#0]            ;387
+000242  2a00              CMP      r2,#0                 ;387
+000244  d1f8              BNE      |L1.568|
+                  |L1.582|
 ;;;391        	}
 ;;;392    
 ;;;393    
 ;;;394    
 ;;;395    if((bFL2)&&(flash_on))
-00023a  4875              LDR      r0,|L2.1040|
-00023c  7800              LDRB     r0,[r0,#0]  ; bFL2
-00023e  2800              CMP      r0,#0
-000240  d004              BEQ      |L2.588|
-000242  2e00              CMP      r6,#0
-000244  d002              BEQ      |L2.588|
+000246  4874              LDR      r0,|L1.1048|
+000248  7800              LDRB     r0,[r0,#0]  ; bFL2
+00024a  2800              CMP      r0,#0
+00024c  d004              BEQ      |L1.600|
+00024e  2e00              CMP      r6,#0
+000250  d002              BEQ      |L1.600|
 ;;;396    	{
 ;;;397    	lcd_buffer[i+flash_pos]=95;
-000246  4429              ADD      r1,r1,r5
-000248  205f              MOVS     r0,#0x5f
-00024a  5458              STRB     r0,[r3,r1]
-                  |L2.588|
+000252  4429              ADD      r1,r1,r5
+000254  205f              MOVS     r0,#0x5f
+000256  5458              STRB     r0,[r3,r1]
+                  |L1.600|
 ;;;398    	}
 ;;;399    
 ;;;400    }
-00024c  bd70              POP      {r4-r6,pc}
+000258  bd70              POP      {r4-r6,pc}
 ;;;401    
                           ENDP
 
                   ip2lcd PROC
 ;;;402    //-----------------------------------------------
 ;;;403    void ip2lcd(	short in1,
-00024e  e92d4fff          PUSH     {r0-r11,lr}
+00025a  e92d4fff          PUSH     {r0-r11,lr}
 ;;;404    			short in2,
 ;;;405    			short in3,
 ;;;406    			short in4,
 ;;;407    			char xy,
 ;;;408    			char flash_pos)
 ;;;409    {
-000252  4681              MOV      r9,r0
-000254  e9dd040d          LDRD     r0,r4,[sp,#0x34]
-000258  468a              MOV      r10,r1
-00025a  4693              MOV      r11,r2
+00025e  4681              MOV      r9,r0
+000260  e9dd040d          LDRD     r0,r4,[sp,#0x34]
+000264  468a              MOV      r10,r1
+000266  4693              MOV      r11,r2
 ;;;410    char i;
 ;;;411    //char n;
 ;;;412    
 ;;;413    //bin2bcd_int(in);
 ;;;414    //bcd2lcd_zero(des+1);
 ;;;415    i=find(xy);
-00025c  f7fffffe          BL       find
+000268  f7fffffe          BL       find
 ;;;416    
 ;;;417    //in1=192;
 ;;;418    
@@ -615,133 +615,133 @@
 ;;;421    if((flash_pos==1)&&(bFL2))
 ;;;422    	{
 ;;;423    	lcd_buffer[i-12]=' ';
-000260  2220              MOVS     r2,#0x20
-000262  f8df81ac          LDR      r8,|L2.1040|
-000266  4967              LDR      r1,|L2.1028|
+00026c  2220              MOVS     r2,#0x20
+00026e  f8df81a8          LDR      r8,|L1.1048|
+000272  4966              LDR      r1,|L1.1036|
 ;;;424    	lcd_buffer[i-13]=' ';
 ;;;425    	lcd_buffer[i-14]=' ';
 ;;;426    	}
 ;;;427    else 
 ;;;428    	{
 ;;;429    	lcd_buffer[i-12]=0x30+(in1%10);
-000268  230a              MOVS     r3,#0xa
+000274  230a              MOVS     r3,#0xa
 ;;;430    	lcd_buffer[i-13]=0x30+(in1/10)%10;
 ;;;431    	lcd_buffer[i-14]=0x30+(in1/100);
-00026a  f04f0c64          MOV      r12,#0x64
-00026e  2c01              CMP      r4,#1                 ;421
-000270  d109              BNE      |L2.646|
-000272  f8985000          LDRB     r5,[r8,#0]            ;421  ; bFL2
-000276  b135              CBZ      r5,|L2.646|
-000278  180d              ADDS     r5,r1,r0              ;423
-00027a  f1a5050e          SUB      r5,r5,#0xe            ;423
-00027e  70aa              STRB     r2,[r5,#2]            ;423
-000280  706a              STRB     r2,[r5,#1]            ;424
-000282  702a              STRB     r2,[r5,#0]            ;425
-000284  e020              B        |L2.712|
-                  |L2.646|
-000286  fb99f6f3          SDIV     r6,r9,r3              ;429
-00028a  fb039716          MLS      r7,r3,r6,r9           ;429
-00028e  180d              ADDS     r5,r1,r0              ;429
-000290  3730              ADDS     r7,r7,#0x30           ;429
-000292  f1a5050e          SUB      r5,r5,#0xe            ;429
+000276  f04f0c64          MOV      r12,#0x64
+00027a  2c01              CMP      r4,#1                 ;421
+00027c  d109              BNE      |L1.658|
+00027e  f8985000          LDRB     r5,[r8,#0]            ;421  ; bFL2
+000282  b135              CBZ      r5,|L1.658|
+000284  180d              ADDS     r5,r1,r0              ;423
+000286  f1a5050e          SUB      r5,r5,#0xe            ;423
+00028a  70aa              STRB     r2,[r5,#2]            ;423
+00028c  706a              STRB     r2,[r5,#1]            ;424
+00028e  702a              STRB     r2,[r5,#0]            ;425
+000290  e020              B        |L1.724|
+                  |L1.658|
+000292  fb99f6f3          SDIV     r6,r9,r3              ;429
+000296  fb039716          MLS      r7,r3,r6,r9           ;429
+00029a  180d              ADDS     r5,r1,r0              ;429
+00029c  3730              ADDS     r7,r7,#0x30           ;429
+00029e  f1a5050e          SUB      r5,r5,#0xe            ;429
 ;;;432    	}
 ;;;433    
 ;;;434    if((flash_pos==2)&&(bFL2))
-000296  2c02              CMP      r4,#2
-000298  70af              STRB     r7,[r5,#2]            ;429
-00029a  fb96f7f3          SDIV     r7,r6,r3              ;430
-00029e  fb036617          MLS      r6,r3,r7,r6           ;430
-0002a2  f1060630          ADD      r6,r6,#0x30           ;430
-0002a6  706e              STRB     r6,[r5,#1]            ;430
-0002a8  fb99f6fc          SDIV     r6,r9,r12             ;431
-0002ac  f1060630          ADD      r6,r6,#0x30           ;431
-0002b0  f8056b0e          STRB     r6,[r5],#0xe          ;431
-0002b4  d108              BNE      |L2.712|
-0002b6  f8986000          LDRB     r6,[r8,#0]  ; bFL2
-0002ba  b12e              CBZ      r6,|L2.712|
-0002bc  f1a5050a          SUB      r5,r5,#0xa
+0002a2  2c02              CMP      r4,#2
+0002a4  70af              STRB     r7,[r5,#2]            ;429
+0002a6  fb96f7f3          SDIV     r7,r6,r3              ;430
+0002aa  fb036617          MLS      r6,r3,r7,r6           ;430
+0002ae  f1060630          ADD      r6,r6,#0x30           ;430
+0002b2  706e              STRB     r6,[r5,#1]            ;430
+0002b4  fb99f6fc          SDIV     r6,r9,r12             ;431
+0002b8  f1060630          ADD      r6,r6,#0x30           ;431
+0002bc  f8056b0e          STRB     r6,[r5],#0xe          ;431
+0002c0  d108              BNE      |L1.724|
+0002c2  f8986000          LDRB     r6,[r8,#0]  ; bFL2
+0002c6  b12e              CBZ      r6,|L1.724|
+0002c8  f1a5050a          SUB      r5,r5,#0xa
 ;;;435    	{
 ;;;436    	lcd_buffer[i-8]=' ';
-0002c0  70aa              STRB     r2,[r5,#2]
+0002cc  70aa              STRB     r2,[r5,#2]
 ;;;437    	lcd_buffer[i-9]=' ';
-0002c2  706a              STRB     r2,[r5,#1]
+0002ce  706a              STRB     r2,[r5,#1]
 ;;;438    	lcd_buffer[i-10]=' ';
-0002c4  702a              STRB     r2,[r5,#0]
-0002c6  e021              B        |L2.780|
-                  |L2.712|
+0002d0  702a              STRB     r2,[r5,#0]
+0002d2  e021              B        |L1.792|
+                  |L1.724|
 ;;;439    	}
 ;;;440    else 
 ;;;441    	{
 ;;;442    	lcd_buffer[i-8]=0x30+(in2%10);
-0002c8  fb9af6f3          SDIV     r6,r10,r3
-0002cc  fb03a716          MLS      r7,r3,r6,r10
-0002d0  180d              ADDS     r5,r1,r0
-0002d2  3730              ADDS     r7,r7,#0x30
-0002d4  f1a5050a          SUB      r5,r5,#0xa
+0002d4  fb9af6f3          SDIV     r6,r10,r3
+0002d8  fb03a716          MLS      r7,r3,r6,r10
+0002dc  180d              ADDS     r5,r1,r0
+0002de  3730              ADDS     r7,r7,#0x30
+0002e0  f1a5050a          SUB      r5,r5,#0xa
 ;;;443    	lcd_buffer[i-9]=0x30+(in2/10)%10;
 ;;;444    	lcd_buffer[i-10]=0x30+(in2/100);
 ;;;445    	}
 ;;;446    
 ;;;447    if((flash_pos==3)&&(bFL2))
-0002d8  2c03              CMP      r4,#3
-0002da  70af              STRB     r7,[r5,#2]            ;442
-0002dc  fb96f7f3          SDIV     r7,r6,r3              ;443
-0002e0  fb036617          MLS      r6,r3,r7,r6           ;443
-0002e4  f1060630          ADD      r6,r6,#0x30           ;443
-0002e8  706e              STRB     r6,[r5,#1]            ;443
-0002ea  fb9af6fc          SDIV     r6,r10,r12            ;444
-0002ee  f1060630          ADD      r6,r6,#0x30           ;444
-0002f2  4667              MOV      r7,r12                ;444
-0002f4  f8056b0a          STRB     r6,[r5],#0xa          ;444
-0002f8  d108              BNE      |L2.780|
-0002fa  f8986000          LDRB     r6,[r8,#0]  ; bFL2
-0002fe  b12e              CBZ      r6,|L2.780|
-000300  f1a50506          SUB      r5,r5,#6
+0002e4  2c03              CMP      r4,#3
+0002e6  70af              STRB     r7,[r5,#2]            ;442
+0002e8  fb96f7f3          SDIV     r7,r6,r3              ;443
+0002ec  fb036617          MLS      r6,r3,r7,r6           ;443
+0002f0  f1060630          ADD      r6,r6,#0x30           ;443
+0002f4  706e              STRB     r6,[r5,#1]            ;443
+0002f6  fb9af6fc          SDIV     r6,r10,r12            ;444
+0002fa  f1060630          ADD      r6,r6,#0x30           ;444
+0002fe  4667              MOV      r7,r12                ;444
+000300  f8056b0a          STRB     r6,[r5],#0xa          ;444
+000304  d108              BNE      |L1.792|
+000306  f8986000          LDRB     r6,[r8,#0]  ; bFL2
+00030a  b12e              CBZ      r6,|L1.792|
+00030c  f1a50506          SUB      r5,r5,#6
 ;;;448    	{
 ;;;449    	lcd_buffer[i-4]=' ';
-000304  70aa              STRB     r2,[r5,#2]
+000310  70aa              STRB     r2,[r5,#2]
 ;;;450    	lcd_buffer[i-5]=' ';
-000306  706a              STRB     r2,[r5,#1]
+000312  706a              STRB     r2,[r5,#1]
 ;;;451    	lcd_buffer[i-6]=' ';
-000308  702a              STRB     r2,[r5,#0]
-00030a  e022              B        |L2.850|
-                  |L2.780|
+000314  702a              STRB     r2,[r5,#0]
+000316  e022              B        |L1.862|
+                  |L1.792|
 ;;;452    	}
 ;;;453    else 
 ;;;454    	{
 ;;;455    	lcd_buffer[i-4]=0x30+in3%10;
-00030c  fb9bf6f3          SDIV     r6,r11,r3
-000310  fb03b716          MLS      r7,r3,r6,r11
-000314  180d              ADDS     r5,r1,r0
-000316  3730              ADDS     r7,r7,#0x30
-000318  f1a50506          SUB      r5,r5,#6
+000318  fb9bf6f3          SDIV     r6,r11,r3
+00031c  fb03b716          MLS      r7,r3,r6,r11
+000320  180d              ADDS     r5,r1,r0
+000322  3730              ADDS     r7,r7,#0x30
+000324  f1a50506          SUB      r5,r5,#6
 ;;;456    	lcd_buffer[i-5]=0x30+(in3/10)%10;
 ;;;457    	lcd_buffer[i-6]=0x30+(in3/100);
 ;;;458    	}
 ;;;459    
 ;;;460    if((flash_pos==4)&&(bFL2))
-00031c  2c04              CMP      r4,#4
-00031e  70af              STRB     r7,[r5,#2]            ;455
-000320  fb96f7f3          SDIV     r7,r6,r3              ;456
-000324  fb036617          MLS      r6,r3,r7,r6           ;456
-000328  f1060630          ADD      r6,r6,#0x30           ;456
-00032c  706e              STRB     r6,[r5,#1]            ;456
-00032e  fb9bf6fc          SDIV     r6,r11,r12            ;457
-000332  f1060630          ADD      r6,r6,#0x30           ;457
-000336  4667              MOV      r7,r12                ;457
-000338  f8056b06          STRB     r6,[r5],#6            ;457
-00033c  d109              BNE      |L2.850|
-00033e  f8984000          LDRB     r4,[r8,#0]  ; bFL2
-000342  b134              CBZ      r4,|L2.850|
+000328  2c04              CMP      r4,#4
+00032a  70af              STRB     r7,[r5,#2]            ;455
+00032c  fb96f7f3          SDIV     r7,r6,r3              ;456
+000330  fb036617          MLS      r6,r3,r7,r6           ;456
+000334  f1060630          ADD      r6,r6,#0x30           ;456
+000338  706e              STRB     r6,[r5,#1]            ;456
+00033a  fb9bf6fc          SDIV     r6,r11,r12            ;457
+00033e  f1060630          ADD      r6,r6,#0x30           ;457
+000342  4667              MOV      r7,r12                ;457
+000344  f8056b06          STRB     r6,[r5],#6            ;457
+000348  d109              BNE      |L1.862|
+00034a  f8984000          LDRB     r4,[r8,#0]  ; bFL2
+00034e  b134              CBZ      r4,|L1.862|
 ;;;461    	{
 ;;;462    	lcd_buffer[i]=' ';
-000344  f1a50502          SUB      r5,r5,#2
-000348  540a              STRB     r2,[r1,r0]
+000350  f1a50502          SUB      r5,r5,#2
+000354  540a              STRB     r2,[r1,r0]
 ;;;463    	lcd_buffer[i-1]=' ';
-00034a  706a              STRB     r2,[r5,#1]
+000356  706a              STRB     r2,[r5,#1]
 ;;;464    	lcd_buffer[i-2]=' ';
-00034c  702a              STRB     r2,[r5,#0]
-                  |L2.846|
+000358  702a              STRB     r2,[r5,#0]
+                  |L1.858|
 ;;;465    	}
 ;;;466    else 
 ;;;467    	{
@@ -750,328 +750,328 @@
 ;;;470    	lcd_buffer[i-2]=0x30+(in4/100);
 ;;;471    	}
 ;;;472    }
-00034e  e8bd8fff          POP      {r0-r11,pc}
-                  |L2.850|
-000352  9c03              LDR      r4,[sp,#0xc]          ;468
-000354  fb94f2f3          SDIV     r2,r4,r3              ;468
-000358  fb034412          MLS      r4,r3,r2,r4           ;468
-00035c  3430              ADDS     r4,r4,#0x30           ;468
-00035e  540c              STRB     r4,[r1,r0]            ;468
-000360  fb92f4f3          SDIV     r4,r2,r3              ;469
-000364  fb032214          MLS      r2,r3,r4,r2           ;469
-000368  4408              ADD      r0,r0,r1              ;469
-00036a  f1a00002          SUB      r0,r0,#2              ;469
-00036e  3230              ADDS     r2,r2,#0x30           ;469
-000370  7042              STRB     r2,[r0,#1]            ;469
-000372  9903              LDR      r1,[sp,#0xc]          ;470
-000374  fb91f1f7          SDIV     r1,r1,r7              ;470
-000378  f1010130          ADD      r1,r1,#0x30           ;470
-00037c  7001              STRB     r1,[r0,#0]            ;470
-00037e  e7e6              B        |L2.846|
+00035a  e8bd8fff          POP      {r0-r11,pc}
+                  |L1.862|
+00035e  9c03              LDR      r4,[sp,#0xc]          ;468
+000360  fb94f2f3          SDIV     r2,r4,r3              ;468
+000364  fb034412          MLS      r4,r3,r2,r4           ;468
+000368  3430              ADDS     r4,r4,#0x30           ;468
+00036a  540c              STRB     r4,[r1,r0]            ;468
+00036c  fb92f4f3          SDIV     r4,r2,r3              ;469
+000370  fb032214          MLS      r2,r3,r4,r2           ;469
+000374  4408              ADD      r0,r0,r1              ;469
+000376  f1a00002          SUB      r0,r0,#2              ;469
+00037a  3230              ADDS     r2,r2,#0x30           ;469
+00037c  7042              STRB     r2,[r0,#1]            ;469
+00037e  9903              LDR      r1,[sp,#0xc]          ;470
+000380  fb91f1f7          SDIV     r1,r1,r7              ;470
+000384  f1010130          ADD      r1,r1,#0x30           ;470
+000388  7001              STRB     r1,[r0,#0]            ;470
+00038a  e7e6              B        |L1.858|
 ;;;473    
                           ENDP
 
                   int2lcd PROC
 ;;;474    //-----------------------------------------------
 ;;;475    void int2lcd(unsigned short in,char xy,char des)
-000380  b570              PUSH     {r4-r6,lr}
+00038c  b570              PUSH     {r4-r6,lr}
 ;;;476    {
-000382  460d              MOV      r5,r1
-000384  4614              MOV      r4,r2
+00038e  460d              MOV      r5,r1
+000390  4614              MOV      r4,r2
 ;;;477    char i;
 ;;;478    char n;
 ;;;479    
 ;;;480    bin2bcd_int(in);
-000386  f7fffffe          BL       bin2bcd_int
+000392  f7fffffe          BL       bin2bcd_int
 ;;;481    bcd2lcd_zero(des+1);
-00038a  1c60              ADDS     r0,r4,#1
-00038c  b2c0              UXTB     r0,r0
-00038e  f7fffffe          BL       bcd2lcd_zero
+000396  1c60              ADDS     r0,r4,#1
+000398  b2c0              UXTB     r0,r0
+00039a  f7fffffe          BL       bcd2lcd_zero
 ;;;482    i=find(xy);
-000392  4628              MOV      r0,r5
-000394  f7fffffe          BL       find
+00039e  4628              MOV      r0,r5
+0003a0  f7fffffe          BL       find
 ;;;483    for (n=0;n<5;n++)
 ;;;484    	{
 ;;;485       	if(!des&&(dig[n]!=' '))
-000398  4b1b              LDR      r3,|L2.1032|
+0003a4  4b1a              LDR      r3,|L1.1040|
 ;;;486       		{
 ;;;487       		lcd_buffer[i]=dig[n];	 
-00039a  4a1a              LDR      r2,|L2.1028|
-00039c  2100              MOVS     r1,#0                 ;483
-                  |L2.926|
-00039e  b924              CBNZ     r4,|L2.938|
-0003a0  5c5d              LDRB     r5,[r3,r1]            ;485
-0003a2  2d20              CMP      r5,#0x20              ;485
-0003a4  d001              BEQ      |L2.938|
-                  |L2.934|
-0003a6  5415              STRB     r5,[r2,r0]
-0003a8  e00f              B        |L2.970|
-                  |L2.938|
+0003a6  4a19              LDR      r2,|L1.1036|
+0003a8  2100              MOVS     r1,#0                 ;483
+                  |L1.938|
+0003aa  b924              CBNZ     r4,|L1.950|
+0003ac  5c5d              LDRB     r5,[r3,r1]            ;485
+0003ae  2d20              CMP      r5,#0x20              ;485
+0003b0  d001              BEQ      |L1.950|
+                  |L1.946|
+0003b2  5415              STRB     r5,[r2,r0]
+0003b4  e00f              B        |L1.982|
+                  |L1.950|
 ;;;488       		}
 ;;;489       	else 
 ;;;490       		{
 ;;;491       		if(n<des)lcd_buffer[i]=dig[n];
-0003aa  42a1              CMP      r1,r4
-0003ac  d201              BCS      |L2.946|
-0003ae  5c5d              LDRB     r5,[r3,r1]
-0003b0  e7f9              B        |L2.934|
-                  |L2.946|
+0003b6  42a1              CMP      r1,r4
+0003b8  d201              BCS      |L1.958|
+0003ba  5c5d              LDRB     r5,[r3,r1]
+0003bc  e7f9              B        |L1.946|
+                  |L1.958|
 ;;;492       		else if (n==des)
-0003b2  d104              BNE      |L2.958|
+0003be  d104              BNE      |L1.970|
 ;;;493       			{
 ;;;494       			lcd_buffer[i]='.';
-0003b4  f04f052e          MOV      r5,#0x2e
-0003b8  5415              STRB     r5,[r2,r0]
+0003c0  f04f052e          MOV      r5,#0x2e
+0003c4  5415              STRB     r5,[r2,r0]
 ;;;495       			lcd_buffer[i-1]=dig[n];
-0003ba  5c5d              LDRB     r5,[r3,r1]
-0003bc  e002              B        |L2.964|
-                  |L2.958|
+0003c6  5c5d              LDRB     r5,[r3,r1]
+0003c8  e002              B        |L1.976|
+                  |L1.970|
 ;;;496       			} 
 ;;;497       		else if ((n>des)&&(dig[n]!=' ')) lcd_buffer[i-1]=dig[n];   		
-0003be  5c5d              LDRB     r5,[r3,r1]
-0003c0  2d20              CMP      r5,#0x20
-0003c2  d002              BEQ      |L2.970|
-                  |L2.964|
-0003c4  1816              ADDS     r6,r2,r0
-0003c6  f8065c01          STRB     r5,[r6,#-1]
-                  |L2.970|
+0003ca  5c5d              LDRB     r5,[r3,r1]
+0003cc  2d20              CMP      r5,#0x20
+0003ce  d002              BEQ      |L1.982|
+                  |L1.976|
+0003d0  1816              ADDS     r6,r2,r0
+0003d2  f8065c01          STRB     r5,[r6,#-1]
+                  |L1.982|
 ;;;498       		}  
 ;;;499    		
 ;;;500    	i--;	
-0003ca  1e40              SUBS     r0,r0,#1
-0003cc  1c49              ADDS     r1,r1,#1              ;483
-0003ce  b2c9              UXTB     r1,r1                 ;483
-0003d0  b2c0              UXTB     r0,r0
-0003d2  2905              CMP      r1,#5                 ;483
-0003d4  d3e3              BCC      |L2.926|
+0003d6  1e40              SUBS     r0,r0,#1
+0003d8  1c49              ADDS     r1,r1,#1              ;483
+0003da  b2c9              UXTB     r1,r1                 ;483
+0003dc  b2c0              UXTB     r0,r0
+0003de  2905              CMP      r1,#5                 ;483
+0003e0  d3e3              BCC      |L1.938|
 ;;;501    	}
 ;;;502    }
-0003d6  bd70              POP      {r4-r6,pc}
+0003e2  bd70              POP      {r4-r6,pc}
 ;;;503    
                           ENDP
 
                   long2lcdhyx PROC
 ;;;504    //-----------------------------------------------
 ;;;505    void long2lcdhyx(unsigned long in,char y,char x)
-0003d8  b517              PUSH     {r0-r2,r4,lr}
+0003e4  b517              PUSH     {r0-r2,r4,lr}
 ;;;506    {
 ;;;507    char i;
 ;;;508    char n;
 ;;;509    
 ;;;510    i=(20*y)+x;
-0003da  eb010081          ADD      r0,r1,r1,LSL #2
-0003de  eb020080          ADD      r0,r2,r0,LSL #2
-0003e2  b2c2              UXTB     r2,r0
+0003e6  eb010081          ADD      r0,r1,r1,LSL #2
+0003ea  eb020080          ADD      r0,r2,r0,LSL #2
+0003ee  b2c2              UXTB     r2,r0
 ;;;511    
 ;;;512    n=*((char*)&in);
-0003e4  f89d3000          LDRB     r3,[sp,#0]
+0003f0  f89d3000          LDRB     r3,[sp,#0]
 ;;;513    lcd_buffer[i]=ABCDEF[n%16];
-0003e8  480a              LDR      r0,|L2.1044|
-0003ea  f003010f          AND      r1,r3,#0xf
+0003f4  4809              LDR      r0,|L1.1052|
+0003f6  f003010f          AND      r1,r3,#0xf
 ;;;514    i--;
 ;;;515    lcd_buffer[i]=ABCDEF[n/16];
-0003ee  eb001313          ADD      r3,r0,r3,LSR #4
-0003f2  5c44              LDRB     r4,[r0,r1]            ;513
-0003f4  4903              LDR      r1,|L2.1028|
-0003f6  548c              STRB     r4,[r1,r2]            ;513
-0003f8  1e52              SUBS     r2,r2,#1              ;514
-0003fa  b2d2              UXTB     r2,r2                 ;514
-0003fc  781b              LDRB     r3,[r3,#0]
-0003fe  548b              STRB     r3,[r1,r2]
-;;;516    i--;
-000400  1e52              SUBS     r2,r2,#1
-000402  e009              B        |L2.1048|
-                  |L2.1028|
+0003fa  eb001313          ADD      r3,r0,r3,LSR #4
+0003fe  5c44              LDRB     r4,[r0,r1]            ;513
+000400  4902              LDR      r1,|L1.1036|
+000402  548c              STRB     r4,[r1,r2]            ;513
+000404  1e52              SUBS     r2,r2,#1              ;514
+000406  b2d2              UXTB     r2,r2                 ;514
+000408  781b              LDRB     r3,[r3,#0]
+00040a  e009              B        |L1.1056|
+                  |L1.1036|
                           DCD      lcd_buffer
-                  |L2.1032|
+                  |L1.1040|
                           DCD      ||dig||
-                  |L2.1036|
+                  |L1.1044|
                           DCD      zero_on
-                  |L2.1040|
+                  |L1.1048|
                           DCD      bFL2
-                  |L2.1044|
+                  |L1.1052|
                           DCD      ABCDEF
-                  |L2.1048|
+                  |L1.1056|
+000420  548b              STRB     r3,[r1,r2]
+;;;516    i--;
 ;;;517    
 ;;;518    n=*(((char*)&in)+1);
-000418  f89d3001          LDRB     r3,[sp,#1]
-00041c  b2d2              UXTB     r2,r2
+000422  f89d3001          LDRB     r3,[sp,#1]
+000426  1e52              SUBS     r2,r2,#1              ;516
 ;;;519    lcd_buffer[i]=ABCDEF[n%16];
-00041e  f003040f          AND      r4,r3,#0xf
+000428  f003040f          AND      r4,r3,#0xf
+00042c  b2d2              UXTB     r2,r2                 ;516
+00042e  5d04              LDRB     r4,[r0,r4]
+000430  548c              STRB     r4,[r1,r2]
 ;;;520    i--;
+000432  1e52              SUBS     r2,r2,#1
 ;;;521    lcd_buffer[i]=ABCDEF[n/16];
-000422  eb001313          ADD      r3,r0,r3,LSR #4
-000426  5d04              LDRB     r4,[r0,r4]            ;519
-000428  548c              STRB     r4,[r1,r2]            ;519
-00042a  1e52              SUBS     r2,r2,#1              ;520
-00042c  b2d2              UXTB     r2,r2                 ;520
-00042e  781b              LDRB     r3,[r3,#0]
-000430  548b              STRB     r3,[r1,r2]
+000434  eb001313          ADD      r3,r0,r3,LSR #4
+000438  b2d2              UXTB     r2,r2                 ;520
+00043a  781b              LDRB     r3,[r3,#0]
+00043c  548b              STRB     r3,[r1,r2]
 ;;;522    i--;
 ;;;523    
 ;;;524    n=*(((char*)&in)+2);
-000432  f89d3002          LDRB     r3,[sp,#2]
-000436  1e52              SUBS     r2,r2,#1              ;522
+00043e  f89d3002          LDRB     r3,[sp,#2]
+000442  1e52              SUBS     r2,r2,#1              ;522
 ;;;525    lcd_buffer[i]=ABCDEF[n%16];
-000438  f003040f          AND      r4,r3,#0xf
-00043c  b2d2              UXTB     r2,r2                 ;522
-00043e  5d04              LDRB     r4,[r0,r4]
-000440  548c              STRB     r4,[r1,r2]
+000444  f003040f          AND      r4,r3,#0xf
+000448  b2d2              UXTB     r2,r2                 ;522
+00044a  5d04              LDRB     r4,[r0,r4]
+00044c  548c              STRB     r4,[r1,r2]
 ;;;526    i--;
-000442  1e52              SUBS     r2,r2,#1
+00044e  1e52              SUBS     r2,r2,#1
 ;;;527    lcd_buffer[i]=ABCDEF[n/16];
-000444  eb001313          ADD      r3,r0,r3,LSR #4
-000448  b2d2              UXTB     r2,r2                 ;526
-00044a  781b              LDRB     r3,[r3,#0]
-00044c  548b              STRB     r3,[r1,r2]
+000450  eb001313          ADD      r3,r0,r3,LSR #4
+000454  b2d2              UXTB     r2,r2                 ;526
+000456  781b              LDRB     r3,[r3,#0]
+000458  548b              STRB     r3,[r1,r2]
 ;;;528    i--;
 ;;;529    
 ;;;530    n=*(((char*)&in)+3);
-00044e  f89d3003          LDRB     r3,[sp,#3]
-000452  1e52              SUBS     r2,r2,#1              ;528
+00045a  f89d3003          LDRB     r3,[sp,#3]
+00045e  1e52              SUBS     r2,r2,#1              ;528
 ;;;531    lcd_buffer[i]=ABCDEF[n%16];
-000454  f003040f          AND      r4,r3,#0xf
-000458  b2d2              UXTB     r2,r2                 ;528
-00045a  5d04              LDRB     r4,[r0,r4]
-00045c  548c              STRB     r4,[r1,r2]
+000460  f003040f          AND      r4,r3,#0xf
+000464  b2d2              UXTB     r2,r2                 ;528
+000466  5d04              LDRB     r4,[r0,r4]
+000468  548c              STRB     r4,[r1,r2]
 ;;;532    i--;
-00045e  1e52              SUBS     r2,r2,#1
+00046a  1e52              SUBS     r2,r2,#1
 ;;;533    lcd_buffer[i]=ABCDEF[n/16];
-000460  eb001013          ADD      r0,r0,r3,LSR #4
-000464  b2d2              UXTB     r2,r2                 ;532
-000466  7800              LDRB     r0,[r0,#0]
-000468  5488              STRB     r0,[r1,r2]
+00046c  eb001013          ADD      r0,r0,r3,LSR #4
+000470  b2d2              UXTB     r2,r2                 ;532
+000472  7800              LDRB     r0,[r0,#0]
+000474  5488              STRB     r0,[r1,r2]
 ;;;534    i--;
 ;;;535    }
-00046a  bd1e              POP      {r1-r4,pc}
+000476  bd1e              POP      {r1-r4,pc}
 ;;;536    
                           ENDP
 
                   char2lcdhyx PROC
 ;;;550    //-----------------------------------------------
 ;;;551    void char2lcdhyx(char in,char y,char x)
-00046c  eb010181          ADD      r1,r1,r1,LSL #2
+000478  eb010181          ADD      r1,r1,r1,LSL #2
 ;;;552    {
 ;;;553    char i;
 ;;;554    
 ;;;555    i=(20*y)+x;
-000470  eb020181          ADD      r1,r2,r1,LSL #2
+00047c  eb020181          ADD      r1,r2,r1,LSL #2
 ;;;556    
 ;;;557    lcd_buffer[i]=ABCDEF[in%16];
-000474  4a82              LDR      r2,|L2.1664|
-000476  b510              PUSH     {r4,lr}               ;552
-000478  f000030f          AND      r3,r0,#0xf
-00047c  b2c9              UXTB     r1,r1                 ;555
-00047e  5cd4              LDRB     r4,[r2,r3]
-000480  4b80              LDR      r3,|L2.1668|
+000480  4a82              LDR      r2,|L1.1676|
+000482  b510              PUSH     {r4,lr}               ;552
+000484  f000030f          AND      r3,r0,#0xf
+000488  b2c9              UXTB     r1,r1                 ;555
+00048a  5cd4              LDRB     r4,[r2,r3]
+00048c  4b80              LDR      r3,|L1.1680|
 ;;;558    i--;
 ;;;559    lcd_buffer[i]=ABCDEF[in/16];
-000482  eb021010          ADD      r0,r2,r0,LSR #4
-000486  545c              STRB     r4,[r3,r1]            ;557
-000488  1e49              SUBS     r1,r1,#1              ;558
-00048a  b2c9              UXTB     r1,r1                 ;558
-00048c  7800              LDRB     r0,[r0,#0]
-00048e  5458              STRB     r0,[r3,r1]
+00048e  eb021010          ADD      r0,r2,r0,LSR #4
+000492  545c              STRB     r4,[r3,r1]            ;557
+000494  1e49              SUBS     r1,r1,#1              ;558
+000496  b2c9              UXTB     r1,r1                 ;558
+000498  7800              LDRB     r0,[r0,#0]
+00049a  5458              STRB     r0,[r3,r1]
 ;;;560    i--;
 ;;;561    }
-000490  bd10              POP      {r4,pc}
+00049c  bd10              POP      {r4,pc}
 ;;;562    
                           ENDP
 
                   char2lcdbyx PROC
 ;;;583    //-----------------------------------------------
 ;;;584    void char2lcdbyx(char in,char y,char x)
-000492  eb010181          ADD      r1,r1,r1,LSL #2
+00049e  eb010181          ADD      r1,r1,r1,LSL #2
 ;;;585    {
 ;;;586    char i;
 ;;;587    
 ;;;588    i=(20*y)+x;
-000496  eb020181          ADD      r1,r2,r1,LSL #2
-00049a  b2cb              UXTB     r3,r1
+0004a2  eb020181          ADD      r1,r2,r1,LSL #2
+0004a6  b2cb              UXTB     r3,r1
 ;;;589    
 ;;;590    lcd_buffer[i--]=ABCDEF[in%2];
-00049c  4978              LDR      r1,|L2.1664|
-00049e  b510              PUSH     {r4,lr}               ;585
-0004a0  f0000201          AND      r2,r0,#1
-0004a4  5c8c              LDRB     r4,[r1,r2]
-0004a6  4a77              LDR      r2,|L2.1668|
-0004a8  54d4              STRB     r4,[r2,r3]
+0004a8  4978              LDR      r1,|L1.1676|
+0004aa  b510              PUSH     {r4,lr}               ;585
+0004ac  f0000201          AND      r2,r0,#1
+0004b0  5c8c              LDRB     r4,[r1,r2]
+0004b2  4a77              LDR      r2,|L1.1680|
+0004b4  54d4              STRB     r4,[r2,r3]
 ;;;591    in/=2;
-0004aa  0844              LSRS     r4,r0,#1
-0004ac  1e5b              SUBS     r3,r3,#1              ;590
+0004b6  0844              LSRS     r4,r0,#1
+0004b8  1e5b              SUBS     r3,r3,#1              ;590
 ;;;592    lcd_buffer[i--]=ABCDEF[in%2];
-0004ae  f0040001          AND      r0,r4,#1
-0004b2  b2db              UXTB     r3,r3                 ;590
-0004b4  5c08              LDRB     r0,[r1,r0]
-0004b6  54d0              STRB     r0,[r2,r3]
-0004b8  1e5b              SUBS     r3,r3,#1
-0004ba  b2d8              UXTB     r0,r3
+0004ba  f0040001          AND      r0,r4,#1
+0004be  b2db              UXTB     r3,r3                 ;590
+0004c0  5c08              LDRB     r0,[r1,r0]
+0004c2  54d0              STRB     r0,[r2,r3]
+0004c4  1e5b              SUBS     r3,r3,#1
+0004c6  b2d8              UXTB     r0,r3
 ;;;593    in/=2;
-0004bc  0863              LSRS     r3,r4,#1
+0004c8  0863              LSRS     r3,r4,#1
 ;;;594    lcd_buffer[i--]=ABCDEF[in%2];
-0004be  f0030401          AND      r4,r3,#1
-;;;595    in/=2;
-0004c2  085b              LSRS     r3,r3,#1
-0004c4  5d0c              LDRB     r4,[r1,r4]            ;594
-0004c6  5414              STRB     r4,[r2,r0]            ;594
-0004c8  1e40              SUBS     r0,r0,#1              ;594
-;;;596    lcd_buffer[i--]=ABCDEF[in%2];
 0004ca  f0030401          AND      r4,r3,#1
-0004ce  b2c0              UXTB     r0,r0                 ;594
-0004d0  5d0c              LDRB     r4,[r1,r4]
-0004d2  5414              STRB     r4,[r2,r0]
+;;;595    in/=2;
+0004ce  085b              LSRS     r3,r3,#1
+0004d0  5d0c              LDRB     r4,[r1,r4]            ;594
+0004d2  5414              STRB     r4,[r2,r0]            ;594
+0004d4  1e40              SUBS     r0,r0,#1              ;594
+;;;596    lcd_buffer[i--]=ABCDEF[in%2];
+0004d6  f0030401          AND      r4,r3,#1
+0004da  b2c0              UXTB     r0,r0                 ;594
+0004dc  5d0c              LDRB     r4,[r1,r4]
+0004de  5414              STRB     r4,[r2,r0]
 ;;;597    in/=2;
-0004d4  085b              LSRS     r3,r3,#1
-0004d6  1e40              SUBS     r0,r0,#1              ;596
+0004e0  085b              LSRS     r3,r3,#1
+0004e2  1e40              SUBS     r0,r0,#1              ;596
 ;;;598    lcd_buffer[i--]=ABCDEF[in%2];
-0004d8  f0030401          AND      r4,r3,#1
-0004dc  b2c0              UXTB     r0,r0                 ;596
-0004de  5d0c              LDRB     r4,[r1,r4]
-0004e0  5414              STRB     r4,[r2,r0]
+0004e4  f0030401          AND      r4,r3,#1
+0004e8  b2c0              UXTB     r0,r0                 ;596
+0004ea  5d0c              LDRB     r4,[r1,r4]
+0004ec  5414              STRB     r4,[r2,r0]
 ;;;599    in/=2;
-0004e2  085b              LSRS     r3,r3,#1
-0004e4  1e40              SUBS     r0,r0,#1              ;598
+0004ee  085b              LSRS     r3,r3,#1
+0004f0  1e40              SUBS     r0,r0,#1              ;598
 ;;;600    lcd_buffer[i--]=ABCDEF[in%2];
-0004e6  f0030401          AND      r4,r3,#1
-0004ea  b2c0              UXTB     r0,r0                 ;598
-0004ec  5d0c              LDRB     r4,[r1,r4]
-0004ee  5414              STRB     r4,[r2,r0]
+0004f2  f0030401          AND      r4,r3,#1
+0004f6  b2c0              UXTB     r0,r0                 ;598
+0004f8  5d0c              LDRB     r4,[r1,r4]
+0004fa  5414              STRB     r4,[r2,r0]
 ;;;601    in/=2;
-0004f0  085b              LSRS     r3,r3,#1
-0004f2  1e40              SUBS     r0,r0,#1              ;600
+0004fc  085b              LSRS     r3,r3,#1
+0004fe  1e40              SUBS     r0,r0,#1              ;600
 ;;;602    lcd_buffer[i--]=ABCDEF[in%2];
-0004f4  f0030401          AND      r4,r3,#1
-0004f8  b2c0              UXTB     r0,r0                 ;600
-0004fa  5d0c              LDRB     r4,[r1,r4]
-0004fc  5414              STRB     r4,[r2,r0]
-0004fe  1e40              SUBS     r0,r0,#1
-000500  b2c4              UXTB     r4,r0
+000500  f0030401          AND      r4,r3,#1
+000504  b2c0              UXTB     r0,r0                 ;600
+000506  5d0c              LDRB     r4,[r1,r4]
+000508  5414              STRB     r4,[r2,r0]
+00050a  1e40              SUBS     r0,r0,#1
+00050c  b2c4              UXTB     r4,r0
 ;;;603    in/=2;
-000502  0858              LSRS     r0,r3,#1
+00050e  0858              LSRS     r0,r3,#1
 ;;;604    lcd_buffer[i--]=ABCDEF[in%2];
-000504  5c08              LDRB     r0,[r1,r0]
-000506  5510              STRB     r0,[r2,r4]
+000510  5c08              LDRB     r0,[r1,r0]
+000512  5510              STRB     r0,[r2,r4]
 ;;;605    in/=2;
 ;;;606    }
-000508  bd10              POP      {r4,pc}
+000514  bd10              POP      {r4,pc}
 ;;;607    
                           ENDP
 
                   pointer_set PROC
 ;;;608    //-----------------------------------------------
 ;;;609    void pointer_set(char num_of_first_row)
-00050a  b530              PUSH     {r4,r5,lr}
+000516  b530              PUSH     {r4,r5,lr}
 ;;;610    {
 ;;;611    if(sub_ind==index_set)lcd_buffer[num_of_first_row*20]=1;
-00050c  495e              LDR      r1,|L2.1672|
-00050e  2301              MOVS     r3,#1
-000510  4d5c              LDR      r5,|L2.1668|
-000512  f9912001          LDRSB    r2,[r1,#1]  ; a_ind
-000516  f9911004          LDRSB    r1,[r1,#4]  ; a_ind
-00051a  eb000480          ADD      r4,r0,r0,LSL #2
-00051e  428a              CMP      r2,r1
-000520  d102              BNE      |L2.1320|
-000522  f8053024          STRB     r3,[r5,r4,LSL #2]
+000518  495e              LDR      r1,|L1.1684|
+00051a  2301              MOVS     r3,#1
+00051c  4d5c              LDR      r5,|L1.1680|
+00051e  f9912001          LDRSB    r2,[r1,#1]  ; a_ind
+000522  f9911004          LDRSB    r1,[r1,#4]  ; a_ind
+000526  eb000480          ADD      r4,r0,r0,LSL #2
+00052a  428a              CMP      r2,r1
+00052c  d102              BNE      |L1.1332|
+00052e  f8053024          STRB     r3,[r5,r4,LSL #2]
 ;;;612    else if(sub_ind==(index_set+1))lcd_buffer[(num_of_first_row+1)*20]=1;
 ;;;613    else if(sub_ind==(index_set+2))lcd_buffer[(num_of_first_row+2)*20]=1;
 ;;;614    else if(sub_ind==(index_set+3))lcd_buffer[(num_of_first_row+3)*20]=1;
@@ -1080,265 +1080,265 @@
 ;;;617    else if(sub_ind==(index_set+6))lcd_buffer[(num_of_first_row+6)*20]=1;
 ;;;618    else if(sub_ind==(index_set+7))lcd_buffer[(num_of_first_row+7)*20]=1;
 ;;;619    }
-000526  bd30              POP      {r4,r5,pc}
-                  |L2.1320|
-000528  4d56              LDR      r5,|L2.1668|
-00052a  1c4c              ADDS     r4,r1,#1              ;612
-00052c  eb000080          ADD      r0,r0,r0,LSL #2       ;611
-000530  eb050080          ADD      r0,r5,r0,LSL #2       ;611
-000534  42a2              CMP      r2,r4                 ;612
-000536  d101              BNE      |L2.1340|
-000538  7503              STRB     r3,[r0,#0x14]         ;612
-00053a  bd30              POP      {r4,r5,pc}
-                  |L2.1340|
-00053c  1c8c              ADDS     r4,r1,#2              ;613
-00053e  42a2              CMP      r2,r4                 ;613
-000540  d102              BNE      |L2.1352|
-000542  f8803028          STRB     r3,[r0,#0x28]         ;613
+000532  bd30              POP      {r4,r5,pc}
+                  |L1.1332|
+000534  4d56              LDR      r5,|L1.1680|
+000536  1c4c              ADDS     r4,r1,#1              ;612
+000538  eb000080          ADD      r0,r0,r0,LSL #2       ;611
+00053c  eb050080          ADD      r0,r5,r0,LSL #2       ;611
+000540  42a2              CMP      r2,r4                 ;612
+000542  d101              BNE      |L1.1352|
+000544  7503              STRB     r3,[r0,#0x14]         ;612
 000546  bd30              POP      {r4,r5,pc}
-                  |L2.1352|
-000548  1ccc              ADDS     r4,r1,#3              ;614
-00054a  42a2              CMP      r2,r4                 ;614
-00054c  d102              BNE      |L2.1364|
-00054e  f880303c          STRB     r3,[r0,#0x3c]         ;614
+                  |L1.1352|
+000548  1c8c              ADDS     r4,r1,#2              ;613
+00054a  42a2              CMP      r2,r4                 ;613
+00054c  d102              BNE      |L1.1364|
+00054e  f8803028          STRB     r3,[r0,#0x28]         ;613
 000552  bd30              POP      {r4,r5,pc}
-                  |L2.1364|
-000554  1d0c              ADDS     r4,r1,#4              ;615
-000556  42a2              CMP      r2,r4                 ;615
-000558  d102              BNE      |L2.1376|
-00055a  f8803050          STRB     r3,[r0,#0x50]         ;615
+                  |L1.1364|
+000554  1ccc              ADDS     r4,r1,#3              ;614
+000556  42a2              CMP      r2,r4                 ;614
+000558  d102              BNE      |L1.1376|
+00055a  f880303c          STRB     r3,[r0,#0x3c]         ;614
 00055e  bd30              POP      {r4,r5,pc}
-                  |L2.1376|
-000560  1d4c              ADDS     r4,r1,#5              ;616
-000562  42a2              CMP      r2,r4                 ;616
-000564  d102              BNE      |L2.1388|
-000566  f8803064          STRB     r3,[r0,#0x64]         ;616
+                  |L1.1376|
+000560  1d0c              ADDS     r4,r1,#4              ;615
+000562  42a2              CMP      r2,r4                 ;615
+000564  d102              BNE      |L1.1388|
+000566  f8803050          STRB     r3,[r0,#0x50]         ;615
 00056a  bd30              POP      {r4,r5,pc}
-                  |L2.1388|
-00056c  1d8c              ADDS     r4,r1,#6              ;617
-00056e  42a2              CMP      r2,r4                 ;617
-000570  d102              BNE      |L2.1400|
-000572  f8803078          STRB     r3,[r0,#0x78]         ;617
-                  |L2.1398|
+                  |L1.1388|
+00056c  1d4c              ADDS     r4,r1,#5              ;616
+00056e  42a2              CMP      r2,r4                 ;616
+000570  d102              BNE      |L1.1400|
+000572  f8803064          STRB     r3,[r0,#0x64]         ;616
 000576  bd30              POP      {r4,r5,pc}
-                  |L2.1400|
-000578  1dc9              ADDS     r1,r1,#7              ;618
-00057a  428a              CMP      r2,r1                 ;618
-00057c  d1fb              BNE      |L2.1398|
-00057e  f880308c          STRB     r3,[r0,#0x8c]         ;618
+                  |L1.1400|
+000578  1d8c              ADDS     r4,r1,#6              ;617
+00057a  42a2              CMP      r2,r4                 ;617
+00057c  d102              BNE      |L1.1412|
+00057e  f8803078          STRB     r3,[r0,#0x78]         ;617
+                  |L1.1410|
 000582  bd30              POP      {r4,r5,pc}
+                  |L1.1412|
+000584  1dc9              ADDS     r1,r1,#7              ;618
+000586  428a              CMP      r2,r1                 ;618
+000588  d1fb              BNE      |L1.1410|
+00058a  f880308c          STRB     r3,[r0,#0x8c]         ;618
+00058e  bd30              POP      {r4,r5,pc}
 ;;;620    
                           ENDP
 
                   tree_down PROC
 ;;;622    //-----------------------------------------------
 ;;;623    void tree_down(signed char offset_ind,signed char offset_sub_ind)
-000584  4b41              LDR      r3,|L2.1676|
+000590  4b41              LDR      r3,|L1.1688|
 ;;;624    {
 ;;;625    ind_pointer--;
-000586  881a              LDRH     r2,[r3,#0]  ; ind_pointer
-000588  1e52              SUBS     r2,r2,#1
+000592  881a              LDRH     r2,[r3,#0]  ; ind_pointer
+000594  1e52              SUBS     r2,r2,#1
 ;;;626    ind_pointer+=offset_ind;
-00058a  4410              ADD      r0,r0,r2
-00058c  b200              SXTH     r0,r0
-00058e  8018              STRH     r0,[r3,#0]
+000596  4410              ADD      r0,r0,r2
+000598  b200              SXTH     r0,r0
+00059a  8018              STRH     r0,[r3,#0]
 ;;;627    a_ind=b_ind[ind_pointer];
-000590  4a3f              LDR      r2,|L2.1680|
-000592  eb000080          ADD      r0,r0,r0,LSL #2
-000596  4402              ADD      r2,r2,r0
-000598  483b              LDR      r0,|L2.1672|
-00059a  6813              LDR      r3,[r2,#0]
-00059c  6003              STR      r3,[r0,#0]  ; a_ind
-00059e  7912              LDRB     r2,[r2,#4]
-0005a0  7102              STRB     r2,[r0,#4]
+00059c  4a3f              LDR      r2,|L1.1692|
+00059e  eb000080          ADD      r0,r0,r0,LSL #2
+0005a2  4402              ADD      r2,r2,r0
+0005a4  483b              LDR      r0,|L1.1684|
+0005a6  6813              LDR      r3,[r2,#0]
+0005a8  6003              STR      r3,[r0,#0]  ; a_ind
+0005aa  7912              LDRB     r2,[r2,#4]
+0005ac  7102              STRB     r2,[r0,#4]
 ;;;628    
 ;;;629    sub_ind+=offset_sub_ind;
-0005a2  7842              LDRB     r2,[r0,#1]  ; a_ind
-0005a4  4411              ADD      r1,r1,r2
-0005a6  7041              STRB     r1,[r0,#1]
+0005ae  7842              LDRB     r2,[r0,#1]  ; a_ind
+0005b0  4411              ADD      r1,r1,r2
+0005b2  7041              STRB     r1,[r0,#1]
 ;;;630    }
-0005a8  4770              BX       lr
+0005b4  4770              BX       lr
 ;;;631    
                           ENDP
 
                   tree_up PROC
 ;;;632    //-----------------------------------------------
 ;;;633    void tree_up(char tind, char tsub_ind, char tindex_set, char tsub_ind1)
-0005aa  b5f0              PUSH     {r4-r7,lr}
+0005b6  b5f0              PUSH     {r4-r7,lr}
 ;;;634    {
 ;;;635    b_ind[ind_pointer++]=a_ind;
-0005ac  4d37              LDR      r5,|L2.1676|
-0005ae  4f38              LDR      r7,|L2.1680|
-0005b0  f9b54000          LDRSH    r4,[r5,#0]  ; ind_pointer
-0005b4  eb040684          ADD      r6,r4,r4,LSL #2
-0005b8  1c64              ADDS     r4,r4,#1
-0005ba  802c              STRH     r4,[r5,#0]
-0005bc  4c32              LDR      r4,|L2.1672|
-0005be  443e              ADD      r6,r6,r7
-0005c0  6825              LDR      r5,[r4,#0]  ; a_ind
-0005c2  6035              STR      r5,[r6,#0]
-0005c4  7925              LDRB     r5,[r4,#4]  ; a_ind
-0005c6  7135              STRB     r5,[r6,#4]
+0005b8  4d37              LDR      r5,|L1.1688|
+0005ba  4f38              LDR      r7,|L1.1692|
+0005bc  f9b54000          LDRSH    r4,[r5,#0]  ; ind_pointer
+0005c0  eb040684          ADD      r6,r4,r4,LSL #2
+0005c4  1c64              ADDS     r4,r4,#1
+0005c6  802c              STRH     r4,[r5,#0]
+0005c8  4c32              LDR      r4,|L1.1684|
+0005ca  443e              ADD      r6,r6,r7
+0005cc  6825              LDR      r5,[r4,#0]  ; a_ind
+0005ce  6035              STR      r5,[r6,#0]
+0005d0  7925              LDRB     r5,[r4,#4]  ; a_ind
+0005d2  7135              STRB     r5,[r6,#4]
 ;;;636    ind=(i_enum)tind;
-0005c8  7020              STRB     r0,[r4,#0]
+0005d4  7020              STRB     r0,[r4,#0]
 ;;;637    sub_ind=tsub_ind;
-0005ca  7061              STRB     r1,[r4,#1]
+0005d6  7061              STRB     r1,[r4,#1]
 ;;;638    index_set=tindex_set;
-0005cc  7122              STRB     r2,[r4,#4]
+0005d8  7122              STRB     r2,[r4,#4]
 ;;;639    sub_ind1=tsub_ind1;
-0005ce  70a3              STRB     r3,[r4,#2]
+0005da  70a3              STRB     r3,[r4,#2]
 ;;;640    }
-0005d0  bdf0              POP      {r4-r7,pc}
+0005dc  bdf0              POP      {r4-r7,pc}
 ;;;641    
                           ENDP
 
                   bgnd_par PROC
 ;;;642    //-----------------------------------------------
 ;;;643    void bgnd_par(char const *ptr0,char const *ptr1,char const *ptr2,char const *ptr3)
-0005d2  b5f0              PUSH     {r4-r7,lr}
+0005de  b5f0              PUSH     {r4-r7,lr}
 ;;;644    {
-0005d4  4605              MOV      r5,r0
-0005d6  460e              MOV      r6,r1
-0005d8  4617              MOV      r7,r2
+0005e0  4605              MOV      r5,r0
+0005e2  460e              MOV      r6,r1
+0005e4  4617              MOV      r7,r2
 ;;;645    char i,*ptr_ram;
 ;;;646    clr_scrn();
-0005da  f7fffffe          BL       clr_scrn
+0005e6  f7fffffe          BL       clr_scrn
 ;;;647    
 ;;;648    ptr_ram=lcd_buffer;
-0005de  4c29              LDR      r4,|L2.1668|
+0005ea  4c29              LDR      r4,|L1.1680|
 ;;;649    for(i=0;i<20;i++)
-0005e0  f05f0000          MOVS.W   r0,#0
-                  |L2.1508|
-0005e4  1c40              ADDS     r0,r0,#1
+0005ec  f05f0000          MOVS.W   r0,#0
+                  |L1.1520|
+0005f0  1c40              ADDS     r0,r0,#1
 ;;;650    	{
 ;;;651    	*ptr_ram++=*ptr0++;
-0005e6  f8151b01          LDRB     r1,[r5],#1
-0005ea  b2c0              UXTB     r0,r0                 ;649
-0005ec  f8041b01          STRB     r1,[r4],#1
-0005f0  2814              CMP      r0,#0x14              ;649
-0005f2  d3f7              BCC      |L2.1508|
+0005f2  f8151b01          LDRB     r1,[r5],#1
+0005f6  b2c0              UXTB     r0,r0                 ;649
+0005f8  f8041b01          STRB     r1,[r4],#1
+0005fc  2814              CMP      r0,#0x14              ;649
+0005fe  d3f7              BCC      |L1.1520|
 ;;;652    	}
 ;;;653    for(i=0;i<20;i++)
-0005f4  f05f0000          MOVS.W   r0,#0
-                  |L2.1528|
-0005f8  1c40              ADDS     r0,r0,#1
+000600  f05f0000          MOVS.W   r0,#0
+                  |L1.1540|
+000604  1c40              ADDS     r0,r0,#1
 ;;;654    	{
 ;;;655    	*ptr_ram++=*ptr1++;
-0005fa  f8161b01          LDRB     r1,[r6],#1
-0005fe  b2c0              UXTB     r0,r0                 ;653
-000600  f8041b01          STRB     r1,[r4],#1
-000604  2814              CMP      r0,#0x14              ;653
-000606  d3f7              BCC      |L2.1528|
+000606  f8161b01          LDRB     r1,[r6],#1
+00060a  b2c0              UXTB     r0,r0                 ;653
+00060c  f8041b01          STRB     r1,[r4],#1
+000610  2814              CMP      r0,#0x14              ;653
+000612  d3f7              BCC      |L1.1540|
 ;;;656    	}
 ;;;657    for(i=0;i<20;i++)
-000608  f05f0000          MOVS.W   r0,#0
-                  |L2.1548|
-00060c  1c40              ADDS     r0,r0,#1
+000614  f05f0000          MOVS.W   r0,#0
+                  |L1.1560|
+000618  1c40              ADDS     r0,r0,#1
 ;;;658    	{
 ;;;659    	*ptr_ram++=*ptr2++;
-00060e  f8171b01          LDRB     r1,[r7],#1
-000612  b2c0              UXTB     r0,r0                 ;657
-000614  f8041b01          STRB     r1,[r4],#1
-000618  2814              CMP      r0,#0x14              ;657
-00061a  d3f7              BCC      |L2.1548|
+00061a  f8171b01          LDRB     r1,[r7],#1
+00061e  b2c0              UXTB     r0,r0                 ;657
+000620  f8041b01          STRB     r1,[r4],#1
+000624  2814              CMP      r0,#0x14              ;657
+000626  d3f7              BCC      |L1.1560|
 ;;;660    	}
 ;;;661    for(i=0;i<20;i++)
-00061c  f05f0000          MOVS.W   r0,#0
-                  |L2.1568|
-000620  1c40              ADDS     r0,r0,#1
+000628  f05f0000          MOVS.W   r0,#0
+                  |L1.1580|
+00062c  1c40              ADDS     r0,r0,#1
 ;;;662    	{
 ;;;663    	*ptr_ram++=*ptr3++;
-000622  f8131b01          LDRB     r1,[r3],#1
-000626  b2c0              UXTB     r0,r0                 ;661
-000628  f8041b01          STRB     r1,[r4],#1
-00062c  2814              CMP      r0,#0x14              ;661
-00062e  d3f7              BCC      |L2.1568|
+00062e  f8131b01          LDRB     r1,[r3],#1
+000632  b2c0              UXTB     r0,r0                 ;661
+000634  f8041b01          STRB     r1,[r4],#1
+000638  2814              CMP      r0,#0x14              ;661
+00063a  d3f7              BCC      |L1.1580|
 ;;;664    	}
 ;;;665    
 ;;;666    
 ;;;667    }
-000630  bdf0              POP      {r4-r7,pc}
+00063c  bdf0              POP      {r4-r7,pc}
 ;;;668    
                           ENDP
 
                   sub_bgnd PROC
 ;;;669    //-----------------------------------------------
 ;;;670    void sub_bgnd(char const *adr,char xy,signed char offset)
-000632  b530              PUSH     {r4,r5,lr}
+00063e  b530              PUSH     {r4,r5,lr}
 ;;;671    {
-000634  4604              MOV      r4,r0
-000636  4608              MOV      r0,r1
-000638  4615              MOV      r5,r2
+000640  4604              MOV      r4,r0
+000642  4608              MOV      r0,r1
+000644  4615              MOV      r5,r2
 ;;;672    char temp;
 ;;;673    temp=find(xy);
-00063a  f7fffffe          BL       find
+000646  f7fffffe          BL       find
 ;;;674    
 ;;;675    //ptr_ram=&lcd_buffer[find(xy)];
 ;;;676    if(temp!=255)
-00063e  28ff              CMP      r0,#0xff
-000640  d009              BEQ      |L2.1622|
+00064a  28ff              CMP      r0,#0xff
+00064c  d009              BEQ      |L1.1634|
 ;;;677    while (*adr)
 ;;;678    	{
 ;;;679    	lcd_buffer[temp+offset]=*adr++;
-000642  4a10              LDR      r2,|L2.1668|
-                  |L2.1604|
-000644  7821              LDRB     r1,[r4,#0]            ;677
-000646  2900              CMP      r1,#0                 ;677
-000648  d005              BEQ      |L2.1622|
-00064a  1943              ADDS     r3,r0,r5
-00064c  1c64              ADDS     r4,r4,#1
+00064e  4a10              LDR      r2,|L1.1680|
+                  |L1.1616|
+000650  7821              LDRB     r1,[r4,#0]            ;677
+000652  2900              CMP      r1,#0                 ;677
+000654  d005              BEQ      |L1.1634|
+000656  1943              ADDS     r3,r0,r5
+000658  1c64              ADDS     r4,r4,#1
 ;;;680    	temp++;
-00064e  1c40              ADDS     r0,r0,#1
-000650  54d1              STRB     r1,[r2,r3]            ;679
-000652  b2c0              UXTB     r0,r0
-000654  e7f6              B        |L2.1604|
-                  |L2.1622|
+00065a  1c40              ADDS     r0,r0,#1
+00065c  54d1              STRB     r1,[r2,r3]            ;679
+00065e  b2c0              UXTB     r0,r0
+000660  e7f6              B        |L1.1616|
+                  |L1.1634|
 ;;;681        	}
 ;;;682    }
-000656  bd30              POP      {r4,r5,pc}
+000662  bd30              POP      {r4,r5,pc}
 ;;;683    
                           ENDP
 
                   show_mess PROC
 ;;;684    //-----------------------------------------------
 ;;;685    void show_mess(char* p1, char* p2, char* p3, char* p4,int m_sec)
-000658  b510              PUSH     {r4,lr}
+000664  b510              PUSH     {r4,lr}
 ;;;686    {
 ;;;687    bgnd_par(p1,p2,p3,p4);
-00065a  9c02              LDR      r4,[sp,#8]
-00065c  f7fffffe          BL       bgnd_par
+000666  9c02              LDR      r4,[sp,#8]
+000668  f7fffffe          BL       bgnd_par
 ;;;688    tree_up(iSM,sub_ind,sub_ind1,sub_ind2);
-000660  4809              LDR      r0,|L2.1672|
-000662  78c3              LDRB     r3,[r0,#3]  ; a_ind
-000664  7882              LDRB     r2,[r0,#2]  ; a_ind
-000666  7841              LDRB     r1,[r0,#1]  ; a_ind
-000668  2064              MOVS     r0,#0x64
-00066a  f7fffffe          BL       tree_up
+00066c  4809              LDR      r0,|L1.1684|
+00066e  78c3              LDRB     r3,[r0,#3]  ; a_ind
+000670  7882              LDRB     r2,[r0,#2]  ; a_ind
+000672  7841              LDRB     r1,[r0,#1]  ; a_ind
+000674  2064              MOVS     r0,#0x64
+000676  f7fffffe          BL       tree_up
 ;;;689    ret((char)(m_sec/100));
-00066e  2064              MOVS     r0,#0x64
-000670  fb94f0f0          SDIV     r0,r4,r0
-000674  e8bd4010          POP      {r4,lr}
-000678  b2c0              UXTB     r0,r0
-00067a  f7ffbffe          B.W      ||ret||
+00067a  2064              MOVS     r0,#0x64
+00067c  fb94f0f0          SDIV     r0,r4,r0
+000680  e8bd4010          POP      {r4,lr}
+000684  b2c0              UXTB     r0,r0
+000686  f7ffbffe          B.W      ||ret||
 ;;;690    }
 ;;;691    
                           ENDP
 
-00067e  0000              DCW      0x0000
-                  |L2.1664|
+00068a  0000              DCW      0x0000
+                  |L1.1676|
                           DCD      ABCDEF
-                  |L2.1668|
+                  |L1.1680|
                           DCD      lcd_buffer
-                  |L2.1672|
+                  |L1.1684|
                           DCD      a_ind
-                  |L2.1676|
+                  |L1.1688|
                           DCD      ind_pointer
-                  |L2.1680|
+                  |L1.1692|
                           DCD      b_ind
 
-                          AREA ||area_number.3||, CODE, READONLY, ALIGN=2
+                          AREA ||area_number.2||, CODE, READONLY, ALIGN=2
 
-                          EXPORTAS ||area_number.3||, ||.text||
+                          EXPORTAS ||area_number.2||, ||.text||
                   int2lcd_m PROC
 ;;;692    //-----------------------------------------------
 ;;;693    char ptr_carry(signed int in,unsigned char modul,signed int carry)
@@ -1352,13 +1352,13 @@
 000004  4614              MOV      r4,r2
 000006  2800              CMP      r0,#0
 ;;;699    else if(tempSI>=modul)tempSI-=modul;
-000008  da02              BGE      |L3.16|
+000008  da02              BGE      |L2.16|
 00000a  43c0              MVNS     r0,r0
 00000c  1c40              ADDS     r0,r0,#1
 ;;;700    
 ;;;701    return (char)tempSI;
 00000e  b200              SXTH     r0,r0
-                  |L3.16|
+                  |L2.16|
 ;;;702    }
 000010  f7fffffe          BL       bin2bcd_int
 000014  1c60              ADDS     r0,r4,#1
@@ -1367,52 +1367,52 @@
 00001c  4628              MOV      r0,r5
 00001e  f7fffffe          BL       find
 000022  28ff              CMP      r0,#0xff
-000024  d019              BEQ      |L3.90|
-000026  4a0e              LDR      r2,|L3.96|
-000028  4b0e              LDR      r3,|L3.100|
+000024  d019              BEQ      |L2.90|
+000026  4a0e              LDR      r2,|L2.96|
+000028  4b0e              LDR      r3,|L2.100|
 00002a  2100              MOVS     r1,#0
-                  |L3.44|
+                  |L2.44|
 00002c  42a1              CMP      r1,r4
-00002e  d201              BCS      |L3.52|
+00002e  d201              BCS      |L2.52|
 000030  5c55              LDRB     r5,[r2,r1]
-000032  e013              B        |L3.92|
-                  |L3.52|
-000034  d104              BNE      |L3.64|
+000032  e013              B        |L2.92|
+                  |L2.52|
+000034  d104              BNE      |L2.64|
 000036  f04f052e          MOV      r5,#0x2e
 00003a  541d              STRB     r5,[r3,r0]
 00003c  5c55              LDRB     r5,[r2,r1]
-00003e  e003              B        |L3.72|
-                  |L3.64|
+00003e  e003              B        |L2.72|
+                  |L2.64|
 000040  5c55              LDRB     r5,[r2,r1]
 000042  2d20              CMP      r5,#0x20
-000044  d003              BEQ      |L3.78|
-000046  b14c              CBZ      r4,|L3.92|
-                  |L3.72|
+000044  d003              BEQ      |L2.78|
+000046  b14c              CBZ      r4,|L2.92|
+                  |L2.72|
 000048  181e              ADDS     r6,r3,r0
 00004a  f8065c01          STRB     r5,[r6,#-1]
-                  |L3.78|
+                  |L2.78|
 00004e  1e40              SUBS     r0,r0,#1
 000050  1c49              ADDS     r1,r1,#1
 000052  b2c9              UXTB     r1,r1
 000054  b2c0              UXTB     r0,r0
 000056  2905              CMP      r1,#5
-000058  d3e8              BCC      |L3.44|
-                  |L3.90|
+000058  d3e8              BCC      |L2.44|
+                  |L2.90|
 00005a  bd70              POP      {r4-r6,pc}
-                  |L3.92|
+                  |L2.92|
 00005c  541d              STRB     r5,[r3,r0]
-00005e  e7f6              B        |L3.78|
+00005e  e7f6              B        |L2.78|
 ;;;703    
                           ENDP
 
-                  |L3.96|
+                  |L2.96|
                           DCD      ||dig||
-                  |L3.100|
+                  |L2.100|
                           DCD      lcd_buffer
 
-                          AREA ||area_number.4||, CODE, READONLY, ALIGN=2
+                          AREA ||area_number.3||, CODE, READONLY, ALIGN=2
 
-                          EXPORTAS ||area_number.4||, ||.text||
+                          EXPORTAS ||area_number.3||, ||.text||
                   int2lcd_mm PROC
 ;;;692    //-----------------------------------------------
 ;;;693    char ptr_carry(signed int in,unsigned char modul,signed int carry)
@@ -1426,10 +1426,10 @@
 000004  4614              MOV      r4,r2
 000006  2800              CMP      r0,#0
 ;;;699    else if(tempSI>=modul)tempSI-=modul;
-000008  da01              BGE      |L4.14|
+000008  da01              BGE      |L3.14|
 00000a  4240              RSBS     r0,r0,#0
 00000c  b200              SXTH     r0,r0
-                  |L4.14|
+                  |L3.14|
 ;;;700    
 ;;;701    return (char)tempSI;
 00000e  f7fffffe          BL       bin2bcd_int
@@ -1439,61 +1439,61 @@
 000016  f7fffffe          BL       bcd2lcd_zero
 00001a  4628              MOV      r0,r5
 00001c  f7fffffe          BL       find
-000020  4a13              LDR      r2,|L4.112|
-000022  4b14              LDR      r3,|L4.116|
+000020  4a13              LDR      r2,|L3.112|
+000022  4b14              LDR      r3,|L3.116|
 000024  2100              MOVS     r1,#0
-                  |L4.38|
-000026  b964              CBNZ     r4,|L4.66|
+                  |L3.38|
+000026  b964              CBNZ     r4,|L3.66|
 000028  5c55              LDRB     r5,[r2,r1]
 00002a  2d20              CMP      r5,#0x20
-00002c  d009              BEQ      |L4.66|
+00002c  d009              BEQ      |L3.66|
 00002e  1856              ADDS     r6,r2,r1
 000030  7876              LDRB     r6,[r6,#1]
 000032  2e20              CMP      r6,#0x20
-000034  d103              BNE      |L4.62|
+000034  d103              BNE      |L3.62|
 000036  262d              MOVS     r6,#0x2d
 000038  181f              ADDS     r7,r3,r0
 00003a  f8076c01          STRB     r6,[r7,#-1]
-                  |L4.62|
+                  |L3.62|
 00003e  541d              STRB     r5,[r3,r0]
-000040  e00f              B        |L4.98|
-                  |L4.66|
+000040  e00f              B        |L3.98|
+                  |L3.66|
 000042  42a1              CMP      r1,r4
-000044  d201              BCS      |L4.74|
+000044  d201              BCS      |L3.74|
 000046  5c55              LDRB     r5,[r2,r1]
-000048  e7f9              B        |L4.62|
-                  |L4.74|
-00004a  d104              BNE      |L4.86|
+000048  e7f9              B        |L3.62|
+                  |L3.74|
+00004a  d104              BNE      |L3.86|
 00004c  f04f052e          MOV      r5,#0x2e
 000050  541d              STRB     r5,[r3,r0]
 000052  5c55              LDRB     r5,[r2,r1]
-000054  e002              B        |L4.92|
-                  |L4.86|
+000054  e002              B        |L3.92|
+                  |L3.86|
 000056  5c55              LDRB     r5,[r2,r1]
 000058  2d20              CMP      r5,#0x20
-00005a  d002              BEQ      |L4.98|
-                  |L4.92|
+00005a  d002              BEQ      |L3.98|
+                  |L3.92|
 00005c  181e              ADDS     r6,r3,r0
 00005e  f8065c01          STRB     r5,[r6,#-1]
-                  |L4.98|
+                  |L3.98|
 000062  1e40              SUBS     r0,r0,#1
 000064  1c49              ADDS     r1,r1,#1
 000066  b2c9              UXTB     r1,r1
 000068  b2c0              UXTB     r0,r0
 00006a  2905              CMP      r1,#5
-00006c  d3db              BCC      |L4.38|
+00006c  d3db              BCC      |L3.38|
 00006e  bdf0              POP      {r4-r7,pc}
 ;;;703    
                           ENDP
 
-                  |L4.112|
+                  |L3.112|
                           DCD      ||dig||
-                  |L4.116|
+                  |L3.116|
                           DCD      lcd_buffer
 
-                          AREA ||area_number.5||, CODE, READONLY, ALIGN=2
+                          AREA ||area_number.4||, CODE, READONLY, ALIGN=2
 
-                          EXPORTAS ||area_number.5||, ||.text||
+                          EXPORTAS ||area_number.4||, ||.text||
                   int2lcd_mmm PROC
 ;;;692    //-----------------------------------------------
 ;;;693    char ptr_carry(signed int in,unsigned char modul,signed int carry)
@@ -1505,19 +1505,19 @@
 ;;;698    if(tempSI<0)tempSI+=modul;
 000002  232b              MOVS     r3,#0x2b
 000004  2800              CMP      r0,#0
-000006  da02              BGE      |L5.14|
+000006  da02              BGE      |L4.14|
 ;;;699    else if(tempSI>=modul)tempSI-=modul;
 000008  4240              RSBS     r0,r0,#0
 00000a  b200              SXTH     r0,r0
 00000c  232d              MOVS     r3,#0x2d
-                  |L5.14|
+                  |L4.14|
 ;;;700    
 ;;;701    return (char)tempSI;
 00000e  2500              MOVS     r5,#0
 ;;;702    }
 000010  260a              MOVS     r6,#0xa
 000012  466c              MOV      r4,sp
-                  |L5.20|
+                  |L4.20|
 000014  fb90f7f6          SDIV     r7,r0,r6
 000018  fb060017          MLS      r0,r6,r7,r0
 00001c  5560              STRB     r0,[r4,r5]
@@ -1525,82 +1525,82 @@
 000020  b26d              SXTB     r5,r5
 000022  b238              SXTH     r0,r7
 000024  2d0a              CMP      r5,#0xa
-000026  dbf5              BLT      |L5.20|
+000026  dbf5              BLT      |L4.20|
 000028  2601              MOVS     r6,#1
 00002a  2500              MOVS     r5,#0
 00002c  2009              MOVS     r0,#9
 00002e  2720              MOVS     r7,#0x20
-000030  e000              B        |L5.52|
-                  |L5.50|
-000032  b146              CBZ      r6,|L5.70|
-                  |L5.52|
+000030  e000              B        |L4.52|
+                  |L4.50|
+000032  b146              CBZ      r6,|L4.70|
+                  |L4.52|
 000034  f814c000          LDRB     r12,[r4,r0]
 000038  f1bc0f00          CMP      r12,#0
-00003c  d103              BNE      |L5.70|
+00003c  d103              BNE      |L4.70|
 00003e  4290              CMP      r0,r2
-000040  dd01              BLE      |L5.70|
+000040  dd01              BLE      |L4.70|
 000042  5427              STRB     r7,[r4,r0]
-000044  e005              B        |L5.82|
-                  |L5.70|
+000044  e005              B        |L4.82|
+                  |L4.70|
 000046  5c26              LDRB     r6,[r4,r0]
 000048  3630              ADDS     r6,r6,#0x30
 00004a  5426              STRB     r6,[r4,r0]
 00004c  2600              MOVS     r6,#0
 00004e  1c6d              ADDS     r5,r5,#1
 000050  b2ed              UXTB     r5,r5
-                  |L5.82|
+                  |L4.82|
 000052  1e40              SUBS     r0,r0,#1
 000054  b240              SXTB     r0,r0
 000056  2800              CMP      r0,#0
-000058  daeb              BGE      |L5.50|
+000058  daeb              BGE      |L4.50|
 00005a  2b2d              CMP      r3,#0x2d
-00005c  d102              BNE      |L5.100|
+00005c  d102              BNE      |L4.100|
 00005e  5563              STRB     r3,[r4,r5]
 000060  1c6d              ADDS     r5,r5,#1
 000062  b2ed              UXTB     r5,r5
-                  |L5.100|
-000064  b16a              CBZ      r2,|L5.130|
+                  |L4.100|
+000064  b16a              CBZ      r2,|L4.130|
 000066  b268              SXTB     r0,r5
-000068  e005              B        |L5.118|
-                  |L5.106|
+000068  e005              B        |L4.118|
+                  |L4.106|
 00006a  1823              ADDS     r3,r4,r0
 00006c  f8133c01          LDRB     r3,[r3,#-1]
 000070  5423              STRB     r3,[r4,r0]
 000072  1e40              SUBS     r0,r0,#1
 000074  b240              SXTB     r0,r0
-                  |L5.118|
+                  |L4.118|
 000076  4290              CMP      r0,r2
-000078  dcf7              BGT      |L5.106|
+000078  dcf7              BGT      |L4.106|
 00007a  202e              MOVS     r0,#0x2e
 00007c  1c6d              ADDS     r5,r5,#1
 00007e  54a0              STRB     r0,[r4,r2]
 000080  b2ed              UXTB     r5,r5
-                  |L5.130|
+                  |L4.130|
 000082  4608              MOV      r0,r1
 000084  f7fffffe          BL       find
 000088  2100              MOVS     r1,#0
-00008a  4a05              LDR      r2,|L5.160|
-00008c  e004              B        |L5.152|
-                  |L5.142|
+00008a  4a05              LDR      r2,|L4.160|
+00008c  e004              B        |L4.152|
+                  |L4.142|
 00008e  5c63              LDRB     r3,[r4,r1]
 000090  1a46              SUBS     r6,r0,r1
 000092  1c49              ADDS     r1,r1,#1
 000094  5593              STRB     r3,[r2,r6]
 000096  b249              SXTB     r1,r1
-                  |L5.152|
+                  |L4.152|
 000098  42a9              CMP      r1,r5
-00009a  dbf8              BLT      |L5.142|
+00009a  dbf8              BLT      |L4.142|
 00009c  bdfe              POP      {r1-r7,pc}
 ;;;703    
                           ENDP
 
 00009e  0000              DCW      0x0000
-                  |L5.160|
+                  |L4.160|
                           DCD      lcd_buffer
 
-                          AREA ||area_number.6||, CODE, READONLY, ALIGN=1
+                          AREA ||area_number.5||, CODE, READONLY, ALIGN=1
 
-                          EXPORTAS ||area_number.6||, ||.text||
+                          EXPORTAS ||area_number.5||, ||.text||
                   event2ind PROC
 ;;;692    //-----------------------------------------------
 ;;;693    char ptr_carry(signed int in,unsigned char modul,signed int carry)
@@ -1618,9 +1618,9 @@
                           ENDP
 
 
-                          AREA ||area_number.7||, CODE, READONLY, ALIGN=2
+                          AREA ||area_number.6||, CODE, READONLY, ALIGN=2
 
-                          EXPORTAS ||area_number.7||, ||.text||
+                          EXPORTAS ||area_number.6||, ||.text||
                   char2lcdh PROC
 ;;;692    //-----------------------------------------------
 ;;;693    char ptr_carry(signed int in,unsigned char modul,signed int carry)
@@ -1634,13 +1634,13 @@
 000004  4608              MOV      r0,r1
 000006  f7fffffe          BL       find
 ;;;699    else if(tempSI>=modul)tempSI-=modul;
-00000a  4906              LDR      r1,|L7.36|
+00000a  4906              LDR      r1,|L6.36|
 00000c  f004020f          AND      r2,r4,#0xf
 ;;;700    
 ;;;701    return (char)tempSI;
 ;;;702    }
 000010  5c8b              LDRB     r3,[r1,r2]
-000012  4a05              LDR      r2,|L7.40|
+000012  4a05              LDR      r2,|L6.40|
 000014  eb011114          ADD      r1,r1,r4,LSR #4
 000018  5413              STRB     r3,[r2,r0]
 00001a  1e40              SUBS     r0,r0,#1
@@ -1651,14 +1651,14 @@
 ;;;703    
                           ENDP
 
-                  |L7.36|
+                  |L6.36|
                           DCD      ABCDEF
-                  |L7.40|
+                  |L6.40|
                           DCD      lcd_buffer
 
-                          AREA ||area_number.8||, CODE, READONLY, ALIGN=2
+                          AREA ||area_number.7||, CODE, READONLY, ALIGN=2
 
-                          EXPORTAS ||area_number.8||, ||.text||
+                          EXPORTAS ||area_number.7||, ||.text||
                   int2lcdhyx PROC
 ;;;692    //-----------------------------------------------
 ;;;693    char ptr_carry(signed int in,unsigned char modul,signed int carry)
@@ -1671,14 +1671,14 @@
 000004  eb020181          ADD      r1,r2,r1,LSL #2
 ;;;699    else if(tempSI>=modul)tempSI-=modul;
 000008  b2cb              UXTB     r3,r1
-00000a  490d              LDR      r1,|L8.64|
+00000a  490d              LDR      r1,|L7.64|
 00000c  b510              PUSH     {r4,lr}
 ;;;700    
 ;;;701    return (char)tempSI;
 00000e  f000020f          AND      r2,r0,#0xf
 ;;;702    }
 000012  5c8c              LDRB     r4,[r1,r2]
-000014  4a0b              LDR      r2,|L8.68|
+000014  4a0b              LDR      r2,|L7.68|
 000016  54d4              STRB     r4,[r2,r3]
 000018  0904              LSRS     r4,r0,#4
 00001a  1e5b              SUBS     r3,r3,#1
@@ -1701,14 +1701,14 @@
 ;;;703    
                           ENDP
 
-                  |L8.64|
+                  |L7.64|
                           DCD      ABCDEF
-                  |L8.68|
+                  |L7.68|
                           DCD      lcd_buffer
 
-                          AREA ||area_number.9||, CODE, READONLY, ALIGN=1
+                          AREA ||area_number.8||, CODE, READONLY, ALIGN=1
 
-                          EXPORTAS ||area_number.9||, ||.text||
+                          EXPORTAS ||area_number.8||, ||.text||
                   ptr_carry PROC
 ;;;692    //-----------------------------------------------
 ;;;693    char ptr_carry(signed int in,unsigned char modul,signed int carry)
@@ -1718,15 +1718,15 @@
 ;;;696    tempSI=in;                                                             
 ;;;697    tempSI+=carry;
 ;;;698    if(tempSI<0)tempSI+=modul;
-000002  d501              BPL      |L9.8|
+000002  d501              BPL      |L8.8|
 000004  4408              ADD      r0,r0,r1
-000006  e002              B        |L9.14|
-                  |L9.8|
+000006  e002              B        |L8.14|
+                  |L8.8|
 ;;;699    else if(tempSI>=modul)tempSI-=modul;
 000008  4288              CMP      r0,r1
-00000a  db00              BLT      |L9.14|
+00000a  db00              BLT      |L8.14|
 00000c  1a40              SUBS     r0,r0,r1
-                  |L9.14|
+                  |L8.14|
 ;;;700    
 ;;;701    return (char)tempSI;
 00000e  b2c0              UXTB     r0,r0
@@ -1736,9 +1736,9 @@
                           ENDP
 
 
-                          AREA ||area_number.10||, CODE, READONLY, ALIGN=2
+                          AREA ||area_number.9||, CODE, READONLY, ALIGN=2
 
-                          EXPORTAS ||area_number.10||, ||.text||
+                          EXPORTAS ||area_number.9||, ||.text||
                   event_data2ind PROC
 ;;;692    //-----------------------------------------------
 ;;;693    char ptr_carry(signed int in,unsigned char modul,signed int carry)
@@ -1765,7 +1765,7 @@
 000020  f7fffffe          BL       lc640_read_long_ptr
 000024  4628              MOV      r0,r5
 000026  f7fffffe          BL       find
-00002a  4c32              LDR      r4,|L10.244|
+00002a  4c32              LDR      r4,|L9.244|
 00002c  2520              MOVS     r5,#0x20
 00002e  f04f0930          MOV      r9,#0x30
 000032  5425              STRB     r5,[r4,r0]
@@ -1807,12 +1807,12 @@
 000088  f89d0001          LDRB     r0,[sp,#1]
 00008c  1e40              SUBS     r0,r0,#1
 00008e  280c              CMP      r0,#0xc
-000090  d302              BCC      |L10.152|
+000090  d302              BCC      |L9.152|
 000092  2001              MOVS     r0,#1
 000094  f88d0001          STRB     r0,[sp,#1]
-                  |L10.152|
+                  |L9.152|
 000098  f89d0001          LDRB     r0,[sp,#1]
-00009c  4916              LDR      r1,|L10.248|
+00009c  4916              LDR      r1,|L9.248|
 00009e  2200              MOVS     r2,#0
 0000a0  eb010080          ADD      r0,r1,r0,LSL #2
 0000a4  2140              MOVS     r1,#0x40
@@ -1849,7 +1849,7 @@
 ;;;703    
                           ENDP
 
-                  |L10.244|
+                  |L9.244|
                           DCD      lcd_buffer
-                  |L10.248|
+                  |L9.248|
                           DCD      sm_mont

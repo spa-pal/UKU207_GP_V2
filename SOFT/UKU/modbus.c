@@ -1060,6 +1060,14 @@ void modbus_input_registers_transmit(unsigned char adr,unsigned char func,unsign
 char modbus_tx_buff[200];
 unsigned short crc_temp;
 char i;
+/*
+load_U=1234;
+load_I=5678;
+time_proc=361233UL;//1357;
+time_proc_remain=722444UL;//1357;
+
+bVOLT_IS_NOT_DOWN=0;
+bVOLT_IS_NOT_UP=1;	*/
 
 modbus_registers[0]=(char)(load_U/256);					//Πεγ1
 modbus_registers[1]=(char)(load_U%256);
@@ -1085,8 +1093,13 @@ modbus_registers[20]=(char)((CAP_TIME_MIN)/256);			//Πεγ11
 modbus_registers[21]=(char)((CAP_TIME_MIN)%256);
 modbus_registers[22]=(char)((CAP_TIME_HOUR)/256);			//Πεγ12
 modbus_registers[23]=(char)((CAP_TIME_HOUR)%256);
-
-
+modbus_registers[24]=0;
+modbus_registers[25]=0;										//Πεγ13
+if(bVOLT_IS_NOT_DOWN)	modbus_registers[25]=1;
+modbus_registers[26]=0;
+modbus_registers[27]=0;										//Πεγ14
+if(bVOLT_IS_NOT_UP)	modbus_registers[27]=1;
+								
 /*
 modbus_registers[16]=(char)(I_ug/256);					//Πεγ9
 modbus_registers[17]=(char)(I_ug%256);
@@ -1200,7 +1213,7 @@ for (i=0;i<(5+(reg_quantity*2));i++)
 }
 
 
-
+/*
 //-----------------------------------------------
 void modbus_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr)
 {
@@ -1264,14 +1277,7 @@ modbus_tx_buff[2]=(char)(reg_adr/256);
 modbus_tx_buff[3]=(char)(reg_adr%256);
 //modbus_tx_buff[4]=(char)(reg_quantity/256);
 //modbus_tx_buff[5]=(char)(reg_quantity%256);
-/*
-modbus_registers[0]=0x10;
-modbus_registers[1]=0x11;
-modbus_registers[2]=0x12;
-modbus_registers[3]=0x13;
-modbus_registers[4]=0x14;
-modbus_registers[5]=0x15;
-*/
+
 
 memcpy((char*)&modbus_tx_buff[4],(char*)&modbus_registers[(reg_adr-1)*2],2);
 
@@ -1288,7 +1294,7 @@ for (i=0;i<8;i++)
 	{
 	putchar_sc16is700(modbus_tx_buff[i]);
 	}
-}
+}  */
 
 
 //-----------------------------------------------
@@ -1392,6 +1398,9 @@ char modbus_tx_buff[200];
 unsigned short crc_temp;
 char i;
 
+//I_ug=1234;
+//U_up=5678;
+
 modbus_registers[0]=(char)(I_ug/256);					//Πεγ50
 modbus_registers[1]=(char)(I_ug%256);
 modbus_registers[2]=(char)(U_up/256);					//Πεγ51
@@ -1475,7 +1484,7 @@ if(prot==MODBUS_RTU_PROT)
 	}
 else if(prot==MODBUS_TCP_PROT)
 	{
-	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-1)*2];
+	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-50)*2];
 	}
 }
 

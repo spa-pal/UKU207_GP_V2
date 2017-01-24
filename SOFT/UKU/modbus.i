@@ -2601,6 +2601,7 @@ void start_CAP(void);
 #line 1 "modbus_tcp.h"
 
 extern char plazma_modbus_tcp[20];
+extern short modbus_tcp_plazma[10];
 
 U16 tcp_callback (U8 soc, U8 evt, U8 *ptr, U16 par);
 
@@ -4085,6 +4086,14 @@ char modbus_tx_buff[200];
 unsigned short crc_temp;
 char i;
 
+
+
+
+
+
+
+ 
+
 modbus_registers[0]=(char)(load_U/256);					
 modbus_registers[1]=(char)(load_U%256);
 modbus_registers[2]=(char)(load_I/256);					
@@ -4109,8 +4118,13 @@ modbus_registers[20]=(char)((CAP_TIME_MIN)/256);
 modbus_registers[21]=(char)((CAP_TIME_MIN)%256);
 modbus_registers[22]=(char)((CAP_TIME_HOUR)/256);			
 modbus_registers[23]=(char)((CAP_TIME_HOUR)%256);
-
-
+modbus_registers[24]=0;
+modbus_registers[25]=0;										
+if(bVOLT_IS_NOT_DOWN)	modbus_registers[25]=1;
+modbus_registers[26]=0;
+modbus_registers[27]=0;										
+if(bVOLT_IS_NOT_UP)	modbus_registers[27]=1;
+								
 
 
 
@@ -4226,66 +4240,76 @@ for (i=0;i<(5+(reg_quantity*2));i++)
 
 
 
-void modbus_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr)
-{
-char modbus_registers[120];
-char modbus_tx_buff[100];
-unsigned short crc_temp;
-char i;
 
-modbus_registers[0]=(char)(load_U/256);					
-modbus_registers[1]=(char)(load_U%256);
-modbus_registers[2]=(char)(load_I/256);					
-modbus_registers[3]=(char)(load_I%256);
-modbus_registers[4]=(char)((time_proc%60)/256);			
-modbus_registers[5]=(char)((time_proc%60)%256);
-modbus_registers[6]=(char)((time_proc/60)/256);			
-modbus_registers[7]=(char)((time_proc/60)%256);
-modbus_registers[8]=(char)((time_proc/3600)/256);			
-modbus_registers[9]=(char)((time_proc/3600)%256);		 	
-modbus_registers[10]=(char)((time_proc_remain%60)/256);	
-modbus_registers[11]=(char)((time_proc_remain%60)%256);
-modbus_registers[12]=(char)((time_proc_remain/60)/256);	
-modbus_registers[13]=(char)((time_proc_remain/60)%256);
-modbus_registers[14]=(char)((time_proc_remain/3600)/256);	
-modbus_registers[15]=(char)((time_proc_remain/3600)%256);
-modbus_registers[16]=(char)(I_ug/256);					
-modbus_registers[17]=(char)(I_ug%256);
-modbus_registers[18]=(char)(U_up/256);					
-modbus_registers[19]=(char)(U_up%256);
-modbus_registers[20]=(char)(U_maxg/256);				
-modbus_registers[21]=(char)(U_maxg%256);
-modbus_registers[22]=(char)(I_maxp/256);				
-modbus_registers[23]=(char)(I_maxp%256);
-modbus_registers[24]=(char)((T_PROC_GS%60)/256);			
-modbus_registers[25]=(char)((T_PROC_GS%60)%256);
-modbus_registers[26]=(char)((T_PROC_GS/60)/256);			
-modbus_registers[27]=(char)((T_PROC_GS/60)%256);
-modbus_registers[28]=(char)((T_PROC_GS/3600)/256);		
-modbus_registers[29]=(char)((T_PROC_GS/3600)%256);
-modbus_registers[30]=(char)((T_PROC_PS%60)/256);			
-modbus_registers[31]=(char)((T_PROC_PS%60)%256);
-modbus_registers[32]=(char)((T_PROC_PS/60)/256);			
-modbus_registers[33]=(char)((T_PROC_PS/60)%256);
-modbus_registers[34]=(char)((T_PROC_PS/3600)/256);		
-modbus_registers[35]=(char)((T_PROC_PS/3600)%256);
-modbus_registers[36]=0;								
-modbus_registers[37]=0;
-if(work_stat==wsPS)modbus_registers[37]=1;
-modbus_registers[38]=0;								
-modbus_registers[39]=0;
-if(work_stat==wsGS)modbus_registers[39]=1;
-modbus_registers[40]=0;								
-modbus_registers[41]=0;
-if(REV_STAT==rsREW)modbus_registers[41]=1;
-modbus_registers[42]=0;								
-modbus_registers[43]=0;
-if(AVT_REV_IS_ON)modbus_registers[42]=1;
 
-modbus_tx_buff[0]=adr;
-modbus_tx_buff[1]=func;
-modbus_tx_buff[2]=(char)(reg_adr/256);
-modbus_tx_buff[3]=(char)(reg_adr%256);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4296,23 +4320,6 @@ modbus_tx_buff[3]=(char)(reg_adr%256);
 
 
  
-
-memcpy((char*)&modbus_tx_buff[4],(char*)&modbus_registers[(reg_adr-1)*2],2);
-
-crc_temp=CRC16_2(modbus_tx_buff,6);
-
-modbus_tx_buff[6]=crc_temp%256;
-modbus_tx_buff[7]=crc_temp/256;
-
-for (i=0;i<8;i++)
-	{
-	putchar0(modbus_tx_buff[i]);
-	}
-for (i=0;i<8;i++)
-	{
-	putchar_sc16is700(modbus_tx_buff[i]);
-	}
-}
 
 
 
@@ -4416,6 +4423,9 @@ char modbus_tx_buff[200];
 unsigned short crc_temp;
 char i;
 
+
+
+
 modbus_registers[0]=(char)(I_ug/256);					
 modbus_registers[1]=(char)(I_ug%256);
 modbus_registers[2]=(char)(U_up/256);					
@@ -4499,7 +4509,7 @@ if(prot==0)
 	}
 else if(prot==1)
 	{
-	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-1)*2];
+	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-50)*2];
 	}
 }
 

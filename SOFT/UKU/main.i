@@ -3121,6 +3121,7 @@ void snmp_data (void);
 #line 1 "modbus_tcp.h"
 
 extern char plazma_modbus_tcp[20];
+extern short modbus_tcp_plazma[10];
 
 U16 tcp_callback (U8 soc, U8 evt, U8 *ptr, U16 par);
 
@@ -8270,6 +8271,16 @@ if(a_ind . i==iDeb)
 	
 	
 	int2lcdyx(lc640_read_int(0x08),0,19,0);
+
+	int2lcdyx(modbus_tcp_plazma[0],2,2,0);
+	int2lcdyx(modbus_tcp_plazma[1],2,8,0);
+	int2lcdyx(modbus_tcp_plazma[2],3,2,0);
+	int2lcdyx(modbus_tcp_plazma[3],3,8,0);
+
+	int2lcdyx(plazma_modbus_tcp[9],2,14,0);
+	int2lcdyx(plazma_modbus_tcp[10],2,19,0);
+	int2lcdyx(plazma_modbus_tcp[11],3,14,0);
+	int2lcdyx(plazma_modbus_tcp[12],3,19,0);
 	
 	
 	
@@ -9201,12 +9212,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4296 "main.c"
+#line 4306 "main.c"
 
 
 
 
-#line 4318 "main.c"
+#line 4328 "main.c"
 
 
 
@@ -16159,7 +16170,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11276 "main.c"
+#line 11286 "main.c"
 
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);
@@ -16422,7 +16433,7 @@ while (1)
 		bps_hndl();
 
 						
-		unet_drv();
+		
 
 		
 		

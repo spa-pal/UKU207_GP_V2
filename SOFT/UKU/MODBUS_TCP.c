@@ -10,6 +10,7 @@
 #include "control.h"
 
 char plazma_modbus_tcp[20];
+short modbus_tcp_plazma[10];
 
 char modbus_tcp_func;
 char modbus_tcp_unit;
@@ -51,6 +52,7 @@ switch (evt)
 	plazma_modbus_tcp[9]=ptr[8];
 	plazma_modbus_tcp[10]=ptr[9];
 	plazma_modbus_tcp[11]=ptr[10];
+	plazma_modbus_tcp[12]=ptr[11];
 	  //plazma_modbus_tcp[4]=ptr[3];
 	  //plazma_modbus_tcp[5]=par;
 	  //plazma_modbus_tcp[6]=ptr[5];
@@ -61,6 +63,11 @@ switch (evt)
 
 	modbus_tcp_rx_arg0=(((unsigned short)ptr[8])*((unsigned short)256))+((unsigned short)ptr[9]);
 	modbus_tcp_rx_arg1=(((unsigned short)ptr[10])*((unsigned short)256))+((unsigned short)ptr[11]);
+
+			modbus_tcp_plazma[0]++;
+			modbus_tcp_plazma[1]=modbus_tcp_func;
+			modbus_tcp_plazma[2]=modbus_tcp_rx_arg0;
+			modbus_tcp_plazma[3]=modbus_tcp_rx_arg1;
 
 	if(modbus_tcp_unit==MODBUS_ADRESS)
 		{
@@ -99,7 +106,8 @@ switch (evt)
 			//modbus_tcp_tx_buff[10]=3;
 			//tcp_send (socket_tcp, modbus_tcp_tx_buff, 11);
 
-
+			//modbus_tcp_plazma[0]++;
+			//modbus_tcp_plazma[1]=3;
 			}
 
 		if(modbus_tcp_func==4)		//чтение произвольного кол-ва регистров	входов
@@ -133,6 +141,8 @@ switch (evt)
 			//modbus_tcp_tx_buff[9]=2;
 			//modbus_tcp_tx_buff[10]=3;
 			//tcp_send (socket_tcp, modbus_tcp_tx_buff, 11);
+			//modbus_tcp_plazma[0]++;
+			//modbus_tcp_plazma[1]=4;
 			}
 
 		else if(modbus_tcp_func==6) 	//запись регистров хранения

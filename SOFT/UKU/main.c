@@ -3356,6 +3356,16 @@ if(ind==iDeb)
 	
 	
 	int2lcdyx(lc640_read_int(RESET_CNT),0,19,0);
+
+	int2lcdyx(modbus_tcp_plazma[0],2,2,0);
+	int2lcdyx(modbus_tcp_plazma[1],2,8,0);
+	int2lcdyx(modbus_tcp_plazma[2],3,2,0);
+	int2lcdyx(modbus_tcp_plazma[3],3,8,0);
+
+	int2lcdyx(plazma_modbus_tcp[9],2,14,0);
+	int2lcdyx(plazma_modbus_tcp[10],2,19,0);
+	int2lcdyx(plazma_modbus_tcp[11],3,14,0);
+	int2lcdyx(plazma_modbus_tcp[12],3,19,0);
 	//int2lcdyx(can_reset_cnt,1,19,0);
 	//int2lcdyx(lc640_read_int(EE_CAN_RESET_CNT),0,11,0);
 	
@@ -11535,7 +11545,7 @@ while (1)
 		bps_hndl();
 
 						
-		unet_drv();
+		//unet_drv();
 
 		
 		
