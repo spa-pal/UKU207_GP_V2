@@ -3790,11 +3790,11 @@ extern signed short snmp_out_current;
 
 
 
-extern signed short snmp_bps_number[16];
-extern signed short snmp_bps_voltage[16];
-extern signed short snmp_bps_current[16];
-extern signed short snmp_bps_temperature[16];
-extern signed short snmp_bps_stat[16];
+extern signed short snmp_bps_number[30];
+extern signed short snmp_bps_voltage[30];
+extern signed short snmp_bps_current[30];
+extern signed short snmp_bps_temperature[30];
+extern signed short snmp_bps_stat[30];
 
 
 
@@ -4088,10 +4088,24 @@ char* aaa_="abc";
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 10},  			sizeof(snmp_bps_number[9]), (void *)&snmp_bps_number[9],  	((void *) 0)},	
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 11},  			sizeof(snmp_bps_number[10]), (void *)&snmp_bps_number[10],  	((void *) 0)},	
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 12},  			sizeof(snmp_bps_number[11]), (void *)&snmp_bps_number[11],  	((void *) 0)},	
-
-
-
- 
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 13},  			sizeof(snmp_bps_number[12]), (void *)&snmp_bps_number[12],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 14},  			sizeof(snmp_bps_number[13]), (void *)&snmp_bps_number[13],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 15},  			sizeof(snmp_bps_number[14]), (void *)&snmp_bps_number[14],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 16},  			sizeof(snmp_bps_number[15]), (void *)&snmp_bps_number[15],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 17},  			sizeof(snmp_bps_number[16]), (void *)&snmp_bps_number[16],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 18},  			sizeof(snmp_bps_number[17]), (void *)&snmp_bps_number[17],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 19},  			sizeof(snmp_bps_number[18]), (void *)&snmp_bps_number[18],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 20},  			sizeof(snmp_bps_number[19]), (void *)&snmp_bps_number[19],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 21},  			sizeof(snmp_bps_number[20]), (void *)&snmp_bps_number[20],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 22},  			sizeof(snmp_bps_number[21]), (void *)&snmp_bps_number[21],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 23},  			sizeof(snmp_bps_number[22]), (void *)&snmp_bps_number[22],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 24},  			sizeof(snmp_bps_number[23]), (void *)&snmp_bps_number[23],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 25},  			sizeof(snmp_bps_number[24]), (void *)&snmp_bps_number[24],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 26},  			sizeof(snmp_bps_number[25]), (void *)&snmp_bps_number[25],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 27},  			sizeof(snmp_bps_number[26]), (void *)&snmp_bps_number[26],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 28},  			sizeof(snmp_bps_number[27]), (void *)&snmp_bps_number[27],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 29},  			sizeof(snmp_bps_number[28]), (void *)&snmp_bps_number[28],  	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,1, 30},  			sizeof(snmp_bps_number[29]), (void *)&snmp_bps_number[29],  	((void *) 0)},	
 
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 1},  			sizeof(snmp_bps_voltage[0]), (void *)&snmp_bps_voltage[0],  	((void *) 0)},	
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 2},  			sizeof(snmp_bps_voltage[1]), (void *)&snmp_bps_voltage[1],  	((void *) 0)},	
@@ -4103,12 +4117,26 @@ char* aaa_="abc";
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 8},  			sizeof(snmp_bps_voltage[7]), (void *)&snmp_bps_voltage[7],  	((void *) 0)},	
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 9},  			sizeof(snmp_bps_voltage[8]), (void *)&snmp_bps_voltage[8],  	((void *) 0)},	
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 10},  			sizeof(snmp_bps_voltage[9]), (void *)&snmp_bps_voltage[9],  	((void *) 0)},	
-	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 11},  			sizeof(snmp_bps_voltage[10]), (void *)&snmp_bps_voltage[10],  	((void *) 0)},	
-	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 12},  			sizeof(snmp_bps_voltage[11]), (void *)&snmp_bps_voltage[11],  	((void *) 0)},	
-
-
-
- 
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 11},  			sizeof(snmp_bps_voltage[10]), (void *)&snmp_bps_voltage[10],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 12},  			sizeof(snmp_bps_voltage[11]), (void *)&snmp_bps_voltage[11],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 13},  			sizeof(snmp_bps_voltage[12]), (void *)&snmp_bps_voltage[12], 	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 14},  			sizeof(snmp_bps_voltage[13]), (void *)&snmp_bps_voltage[13],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 15},  			sizeof(snmp_bps_voltage[14]), (void *)&snmp_bps_voltage[14],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 16},  			sizeof(snmp_bps_voltage[15]), (void *)&snmp_bps_voltage[15],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 17},  			sizeof(snmp_bps_voltage[16]), (void *)&snmp_bps_voltage[16],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 18},  			sizeof(snmp_bps_voltage[17]), (void *)&snmp_bps_voltage[17],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 19},  			sizeof(snmp_bps_voltage[18]), (void *)&snmp_bps_voltage[18],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 20},  			sizeof(snmp_bps_voltage[19]), (void *)&snmp_bps_voltage[19],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 21},  			sizeof(snmp_bps_voltage[20]), (void *)&snmp_bps_voltage[20],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 22},  			sizeof(snmp_bps_voltage[21]), (void *)&snmp_bps_voltage[21],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 23},  			sizeof(snmp_bps_voltage[22]), (void *)&snmp_bps_voltage[22], 	((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 24},  			sizeof(snmp_bps_voltage[23]), (void *)&snmp_bps_voltage[23],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 25},  			sizeof(snmp_bps_voltage[24]), (void *)&snmp_bps_voltage[24],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 26},  			sizeof(snmp_bps_voltage[25]), (void *)&snmp_bps_voltage[25],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 27},  			sizeof(snmp_bps_voltage[26]), (void *)&snmp_bps_voltage[26],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 28},  			sizeof(snmp_bps_voltage[27]), (void *)&snmp_bps_voltage[27],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 29},  			sizeof(snmp_bps_voltage[28]), (void *)&snmp_bps_voltage[28],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,2, 30},  			sizeof(snmp_bps_voltage[29]), (void *)&snmp_bps_voltage[29],  ((void *) 0)},	
 
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 1},  			sizeof(snmp_bps_current[0]), (void *)&snmp_bps_current[0],  	((void *) 0)},	
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 2},  			sizeof(snmp_bps_current[1]), (void *)&snmp_bps_current[1],  	((void *) 0)},	
@@ -4120,12 +4148,26 @@ char* aaa_="abc";
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 8},  			sizeof(snmp_bps_current[7]), (void *)&snmp_bps_current[7],  	((void *) 0)},	
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 9},  			sizeof(snmp_bps_current[8]), (void *)&snmp_bps_current[8],  	((void *) 0)},	
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 10},  			sizeof(snmp_bps_current[9]), (void *)&snmp_bps_current[9],  	((void *) 0)},	
-	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 11},  			sizeof(snmp_bps_current[10]), (void *)&snmp_bps_current[10],  	((void *) 0)},	
-	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 12},  			sizeof(snmp_bps_current[11]), (void *)&snmp_bps_current[11],  	((void *) 0)},	
-
-
-
- 
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 11},  			sizeof(snmp_bps_current[10]), (void *)&snmp_bps_current[10],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 12},  			sizeof(snmp_bps_current[11]), (void *)&snmp_bps_current[11],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 13},  			sizeof(snmp_bps_current[12]), (void *)&snmp_bps_current[12],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 14},  			sizeof(snmp_bps_current[13]), (void *)&snmp_bps_current[13],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 15},  			sizeof(snmp_bps_current[14]), (void *)&snmp_bps_current[14],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 16},  			sizeof(snmp_bps_current[15]), (void *)&snmp_bps_current[15],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 17},  			sizeof(snmp_bps_current[16]), (void *)&snmp_bps_current[16],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 18},  			sizeof(snmp_bps_current[17]), (void *)&snmp_bps_current[17],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 19},  			sizeof(snmp_bps_current[18]), (void *)&snmp_bps_current[18],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 20},  			sizeof(snmp_bps_current[19]), (void *)&snmp_bps_current[19],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 21},  			sizeof(snmp_bps_current[20]), (void *)&snmp_bps_current[20],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 22},  			sizeof(snmp_bps_current[21]), (void *)&snmp_bps_current[21],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 23},  			sizeof(snmp_bps_current[22]), (void *)&snmp_bps_current[22],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 24},  			sizeof(snmp_bps_current[23]), (void *)&snmp_bps_current[23],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 25},  			sizeof(snmp_bps_current[24]), (void *)&snmp_bps_current[24],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 26},  			sizeof(snmp_bps_current[25]), (void *)&snmp_bps_current[25],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 27},  			sizeof(snmp_bps_current[26]), (void *)&snmp_bps_current[26],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 28},  			sizeof(snmp_bps_current[27]), (void *)&snmp_bps_current[27],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 29},  			sizeof(snmp_bps_current[28]), (void *)&snmp_bps_current[28],  ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,3, 30},  			sizeof(snmp_bps_current[29]), (void *)&snmp_bps_current[29],  ((void *) 0)},	
 
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 1},  		sizeof(snmp_bps_temperature[0]), (void *)&snmp_bps_temperature[0],  ((void *) 0)},	
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 2},  		sizeof(snmp_bps_temperature[1]), (void *)&snmp_bps_temperature[1],  ((void *) 0)},	
@@ -4137,12 +4179,26 @@ char* aaa_="abc";
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 8},  		sizeof(snmp_bps_temperature[7]), (void *)&snmp_bps_temperature[7],  ((void *) 0)},	
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 9},  		sizeof(snmp_bps_temperature[8]), (void *)&snmp_bps_temperature[8],  ((void *) 0)},	
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 10},  		sizeof(snmp_bps_temperature[9]), (void *)&snmp_bps_temperature[9],  ((void *) 0)},	
-	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 11},  		sizeof(snmp_bps_temperature[10]), (void *)&snmp_bps_temperature[10],  ((void *) 0)},	
-	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 12},  		sizeof(snmp_bps_temperature[11]), (void *)&snmp_bps_temperature[11],  ((void *) 0)},	
-
-
-
- 
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 11},  		sizeof(snmp_bps_temperature[10]), (void *)&snmp_bps_temperature[10], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 12},  		sizeof(snmp_bps_temperature[11]), (void *)&snmp_bps_temperature[11], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 13},  		sizeof(snmp_bps_temperature[12]), (void *)&snmp_bps_temperature[12], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 14},  		sizeof(snmp_bps_temperature[13]), (void *)&snmp_bps_temperature[13], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 15},  		sizeof(snmp_bps_temperature[14]), (void *)&snmp_bps_temperature[14], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 16},  		sizeof(snmp_bps_temperature[15]), (void *)&snmp_bps_temperature[15], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 17},  		sizeof(snmp_bps_temperature[16]), (void *)&snmp_bps_temperature[16], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 18},  		sizeof(snmp_bps_temperature[17]), (void *)&snmp_bps_temperature[17], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 19},  		sizeof(snmp_bps_temperature[18]), (void *)&snmp_bps_temperature[18], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 20},  		sizeof(snmp_bps_temperature[19]), (void *)&snmp_bps_temperature[19], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 21},  		sizeof(snmp_bps_temperature[20]), (void *)&snmp_bps_temperature[20], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 22},  		sizeof(snmp_bps_temperature[21]), (void *)&snmp_bps_temperature[21], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 23},  		sizeof(snmp_bps_temperature[22]), (void *)&snmp_bps_temperature[22], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 24},  		sizeof(snmp_bps_temperature[23]), (void *)&snmp_bps_temperature[23], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 25},  		sizeof(snmp_bps_temperature[24]), (void *)&snmp_bps_temperature[24], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 26},  		sizeof(snmp_bps_temperature[25]), (void *)&snmp_bps_temperature[25], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 27},  		sizeof(snmp_bps_temperature[26]), (void *)&snmp_bps_temperature[26], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 28},  		sizeof(snmp_bps_temperature[27]), (void *)&snmp_bps_temperature[27], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 29},  		sizeof(snmp_bps_temperature[28]), (void *)&snmp_bps_temperature[28], ((void *) 0)},	
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,4, 30},  		sizeof(snmp_bps_temperature[29]), (void *)&snmp_bps_temperature[29], ((void *) 0)},	
 
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 1},  			sizeof(snmp_bps_stat[0]), (void *)&snmp_bps_stat[0],  ((void *) 0)},			
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 2},  			sizeof(snmp_bps_stat[1]), (void *)&snmp_bps_stat[1],  ((void *) 0)},			
@@ -4154,12 +4210,26 @@ char* aaa_="abc";
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 8},  			sizeof(snmp_bps_stat[7]), (void *)&snmp_bps_stat[7],  ((void *) 0)},			
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 9},  			sizeof(snmp_bps_stat[8]), (void *)&snmp_bps_stat[8],  ((void *) 0)},			
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 10},  			sizeof(snmp_bps_stat[9]), (void *)&snmp_bps_stat[9],  ((void *) 0)},			
-	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 11},  			sizeof(snmp_bps_stat[10]), (void *)&snmp_bps_stat[10],  ((void *) 0)},		
-	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 12},  			sizeof(snmp_bps_stat[11]), (void *)&snmp_bps_stat[11],  ((void *) 0)},		
-
-
-
- 
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 11},  			sizeof(snmp_bps_stat[10]), (void *)&snmp_bps_stat[10], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 12},  			sizeof(snmp_bps_stat[11]), (void *)&snmp_bps_stat[11], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 13},  			sizeof(snmp_bps_stat[12]), (void *)&snmp_bps_stat[12], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 14},  			sizeof(snmp_bps_stat[13]), (void *)&snmp_bps_stat[13], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 15},  			sizeof(snmp_bps_stat[14]), (void *)&snmp_bps_stat[14], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 16},  			sizeof(snmp_bps_stat[15]), (void *)&snmp_bps_stat[15], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 17},  			sizeof(snmp_bps_stat[16]), (void *)&snmp_bps_stat[16], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 18},  			sizeof(snmp_bps_stat[17]), (void *)&snmp_bps_stat[17], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 19},  			sizeof(snmp_bps_stat[18]), (void *)&snmp_bps_stat[18], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 20},  			sizeof(snmp_bps_stat[19]), (void *)&snmp_bps_stat[19], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 21},  			sizeof(snmp_bps_stat[20]), (void *)&snmp_bps_stat[20], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 22},  			sizeof(snmp_bps_stat[21]), (void *)&snmp_bps_stat[21], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 23},  			sizeof(snmp_bps_stat[22]), (void *)&snmp_bps_stat[22], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 24},  			sizeof(snmp_bps_stat[23]), (void *)&snmp_bps_stat[23], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 25},  			sizeof(snmp_bps_stat[24]), (void *)&snmp_bps_stat[24], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 26},  			sizeof(snmp_bps_stat[25]), (void *)&snmp_bps_stat[25], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 27},  			sizeof(snmp_bps_stat[26]), (void *)&snmp_bps_stat[26], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 28},  			sizeof(snmp_bps_stat[27]), (void *)&snmp_bps_stat[27], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 29},  			sizeof(snmp_bps_stat[28]), (void *)&snmp_bps_stat[28], ((void *) 0)},			
+	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 3, 1,5, 30},  			sizeof(snmp_bps_stat[29]), (void *)&snmp_bps_stat[29], ((void *) 0)},			
 
 
 	{ 0x02 | 0x80,  	13, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 10, 1,1, 1},  				sizeof(snmp_sk_number[0]), (void *)&snmp_sk_number[0],  	((void *) 0)},	

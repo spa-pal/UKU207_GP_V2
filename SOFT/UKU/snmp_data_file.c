@@ -65,11 +65,11 @@ signed short snmp_out_voltage;
 signed short snmp_out_current;
 
 //Состояние БПСов
-signed short snmp_bps_number[16];
-signed short snmp_bps_voltage[16];
-signed short snmp_bps_current[16];
-signed short snmp_bps_temperature[16];
-signed short snmp_bps_stat[16];
+signed short snmp_bps_number[30];
+signed short snmp_bps_voltage[30];
+signed short snmp_bps_current[30];
+signed short snmp_bps_temperature[30];
+signed short snmp_bps_stat[30];
 
 //Состояние инверторов
 //signed short snmp_inv_number[3];
@@ -246,7 +246,7 @@ snmp_energy_current_energy=power_current;
 {
 char i;
 
-for(i=0;i<16;i++)
+for(i=0;i<30;i++)
 	{
 	snmp_bps_number[i]=i+1;
 	snmp_bps_voltage[i]=bps[i]._Uii;

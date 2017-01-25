@@ -2971,11 +2971,11 @@ extern signed short snmp_out_current;
 
 
 
-extern signed short snmp_bps_number[16];
-extern signed short snmp_bps_voltage[16];
-extern signed short snmp_bps_current[16];
-extern signed short snmp_bps_temperature[16];
-extern signed short snmp_bps_stat[16];
+extern signed short snmp_bps_number[30];
+extern signed short snmp_bps_voltage[30];
+extern signed short snmp_bps_current[30];
+extern signed short snmp_bps_temperature[30];
+extern signed short snmp_bps_stat[30];
 
 
 
