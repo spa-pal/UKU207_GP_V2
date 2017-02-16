@@ -736,10 +736,11 @@
 ;;;1398   unsigned short crc_temp;
 ;;;1399   char i;
 ;;;1400   
-;;;1401   //I_ug=1234;
-;;;1402   //U_up=5678;
-;;;1403   
-;;;1404   modbus_registers[0]=(char)(I_ug/256);					//Πεγ50
+;;;1401   //reg_adr=45;
+;;;1402   //I_ug=reg_adr;
+;;;1403   //U_up=5678;
+;;;1404   
+;;;1405   modbus_registers[0]=(char)(I_ug/256);					//Πεγ50
 00050a  48fb              LDR      r0,|L1.2296|
 00050c  468e              MOV      lr,r1                 ;1395
 00050e  4692              MOV      r10,r2                ;1395
@@ -752,65 +753,65 @@
 000520  1213              ASRS     r3,r2,#8
 000522  f8ddc0f0          LDR      r12,[sp,#0xf0]
 000526  7003              STRB     r3,[r0,#0]
-;;;1405   modbus_registers[1]=(char)(I_ug%256);
+;;;1406   modbus_registers[1]=(char)(I_ug%256);
 000528  7041              STRB     r1,[r0,#1]
-;;;1406   modbus_registers[2]=(char)(U_up/256);					//Πεγ51
+;;;1407   modbus_registers[2]=(char)(U_up/256);					//Πεγ51
 00052a  49f5              LDR      r1,|L1.2304|
-;;;1407   modbus_registers[3]=(char)(U_up%256);
-;;;1408   modbus_registers[4]=(char)(U_maxg/256);					//Πεγ52
-;;;1409   modbus_registers[5]=(char)(U_maxg%256);
-;;;1410   modbus_registers[6]=(char)(I_maxp/256);					//Πεγ53
-;;;1411   modbus_registers[7]=(char)(I_maxp%256);
-;;;1412   modbus_registers[8]=(char)((T_PROC_GS%60)/256);			//Πεγ54
-;;;1413   modbus_registers[9]=(char)((T_PROC_GS%60)%256);
-;;;1414   modbus_registers[10]=(char)(((T_PROC_GS/60)%60)/256);		//Πεγ55
-;;;1415   modbus_registers[11]=(char)(((T_PROC_GS/60)%60)%256);
-;;;1416   modbus_registers[12]=(char)((T_PROC_GS/3600)/256);		//Πεγ56
+;;;1408   modbus_registers[3]=(char)(U_up%256);
+;;;1409   modbus_registers[4]=(char)(U_maxg/256);					//Πεγ52
+;;;1410   modbus_registers[5]=(char)(U_maxg%256);
+;;;1411   modbus_registers[6]=(char)(I_maxp/256);					//Πεγ53
+;;;1412   modbus_registers[7]=(char)(I_maxp%256);
+;;;1413   modbus_registers[8]=(char)((T_PROC_GS%60)/256);			//Πεγ54
+;;;1414   modbus_registers[9]=(char)((T_PROC_GS%60)%256);
+;;;1415   modbus_registers[10]=(char)(((T_PROC_GS/60)%60)/256);		//Πεγ55
+;;;1416   modbus_registers[11]=(char)(((T_PROC_GS/60)%60)%256);
+;;;1417   modbus_registers[12]=(char)((T_PROC_GS/3600)/256);		//Πεγ56
 00052c  f44f2961          MOV      r9,#0xe1000
-;;;1417   modbus_registers[13]=(char)((T_PROC_GS/3600)%256);
+;;;1418   modbus_registers[13]=(char)((T_PROC_GS/3600)%256);
 000530  f44f6861          MOV      r8,#0xe10
-000534  f9b11000          LDRSH    r1,[r1,#0]            ;1406  ; U_up
-000538  17ca              ASRS     r2,r1,#31             ;1406
-00053a  eb016212          ADD      r2,r1,r2,LSR #24      ;1406
-00053e  1213              ASRS     r3,r2,#8              ;1406
-000540  7083              STRB     r3,[r0,#2]            ;1406
-000542  70c1              STRB     r1,[r0,#3]            ;1407
+000534  f9b11000          LDRSH    r1,[r1,#0]            ;1407  ; U_up
+000538  17ca              ASRS     r2,r1,#31             ;1407
+00053a  eb016212          ADD      r2,r1,r2,LSR #24      ;1407
+00053e  1213              ASRS     r3,r2,#8              ;1407
+000540  7083              STRB     r3,[r0,#2]            ;1407
+000542  70c1              STRB     r1,[r0,#3]            ;1408
 000544  49ef              LDR      r1,|L1.2308|
-000546  f9b11000          LDRSH    r1,[r1,#0]            ;1408  ; U_maxg
-00054a  17ca              ASRS     r2,r1,#31             ;1408
-00054c  eb016212          ADD      r2,r1,r2,LSR #24      ;1408
-000550  1213              ASRS     r3,r2,#8              ;1408
-000552  7103              STRB     r3,[r0,#4]            ;1408
-000554  7141              STRB     r1,[r0,#5]            ;1409
+000546  f9b11000          LDRSH    r1,[r1,#0]            ;1409  ; U_maxg
+00054a  17ca              ASRS     r2,r1,#31             ;1409
+00054c  eb016212          ADD      r2,r1,r2,LSR #24      ;1409
+000550  1213              ASRS     r3,r2,#8              ;1409
+000552  7103              STRB     r3,[r0,#4]            ;1409
+000554  7141              STRB     r1,[r0,#5]            ;1410
 000556  49ec              LDR      r1,|L1.2312|
-000558  f9b11000          LDRSH    r1,[r1,#0]            ;1410  ; I_maxp
-00055c  17ca              ASRS     r2,r1,#31             ;1410
-00055e  eb016212          ADD      r2,r1,r2,LSR #24      ;1410
-000562  1213              ASRS     r3,r2,#8              ;1410
-000564  7183              STRB     r3,[r0,#6]            ;1410
-000566  71c1              STRB     r1,[r0,#7]            ;1411
+000558  f9b11000          LDRSH    r1,[r1,#0]            ;1411  ; I_maxp
+00055c  17ca              ASRS     r2,r1,#31             ;1411
+00055e  eb016212          ADD      r2,r1,r2,LSR #24      ;1411
+000562  1213              ASRS     r3,r2,#8              ;1411
+000564  7183              STRB     r3,[r0,#6]            ;1411
+000566  71c1              STRB     r1,[r0,#7]            ;1412
 000568  49e8              LDR      r1,|L1.2316|
-00056a  223c              MOVS     r2,#0x3c              ;1412
-00056c  680b              LDR      r3,[r1,#0]            ;1412  ; T_PROC_GS
-00056e  fb93f7f2          SDIV     r7,r3,r2              ;1412
-000572  fb023117          MLS      r1,r2,r7,r3           ;1412
-000576  17cd              ASRS     r5,r1,#31             ;1412
-000578  eb016515          ADD      r5,r1,r5,LSR #24      ;1412
-00057c  122e              ASRS     r6,r5,#8              ;1412
-00057e  7206              STRB     r6,[r0,#8]            ;1412
-000580  7241              STRB     r1,[r0,#9]            ;1413
-000582  fb97f1f2          SDIV     r1,r7,r2              ;1414
-000586  fb027111          MLS      r1,r2,r1,r7           ;1414
-00058a  17cd              ASRS     r5,r1,#31             ;1414
-00058c  eb016515          ADD      r5,r1,r5,LSR #24      ;1414
-000590  122e              ASRS     r6,r5,#8              ;1414
-000592  7286              STRB     r6,[r0,#0xa]          ;1414
-000594  72c1              STRB     r1,[r0,#0xb]          ;1415
-000596  fb93f1f9          SDIV     r1,r3,r9              ;1416
-00059a  7301              STRB     r1,[r0,#0xc]          ;1416
+00056a  223c              MOVS     r2,#0x3c              ;1413
+00056c  680b              LDR      r3,[r1,#0]            ;1413  ; T_PROC_GS
+00056e  fb93f7f2          SDIV     r7,r3,r2              ;1413
+000572  fb023117          MLS      r1,r2,r7,r3           ;1413
+000576  17cd              ASRS     r5,r1,#31             ;1413
+000578  eb016515          ADD      r5,r1,r5,LSR #24      ;1413
+00057c  122e              ASRS     r6,r5,#8              ;1413
+00057e  7206              STRB     r6,[r0,#8]            ;1413
+000580  7241              STRB     r1,[r0,#9]            ;1414
+000582  fb97f1f2          SDIV     r1,r7,r2              ;1415
+000586  fb027111          MLS      r1,r2,r1,r7           ;1415
+00058a  17cd              ASRS     r5,r1,#31             ;1415
+00058c  eb016515          ADD      r5,r1,r5,LSR #24      ;1415
+000590  122e              ASRS     r6,r5,#8              ;1415
+000592  7286              STRB     r6,[r0,#0xa]          ;1415
+000594  72c1              STRB     r1,[r0,#0xb]          ;1416
+000596  fb93f1f9          SDIV     r1,r3,r9              ;1417
+00059a  7301              STRB     r1,[r0,#0xc]          ;1417
 00059c  fb93f1f8          SDIV     r1,r3,r8
 0005a0  7341              STRB     r1,[r0,#0xd]
-;;;1418   modbus_registers[14]=(char)((T_PROC_PS%60)/256);			//Πεγ57
+;;;1419   modbus_registers[14]=(char)((T_PROC_PS%60)/256);			//Πεγ57
 0005a2  49db              LDR      r1,|L1.2320|
 0005a4  680b              LDR      r3,[r1,#0]  ; T_PROC_PS
 0005a6  fb93f7f2          SDIV     r7,r3,r2
@@ -819,262 +820,264 @@
 0005b0  eb016515          ADD      r5,r1,r5,LSR #24
 0005b4  122e              ASRS     r6,r5,#8
 0005b6  7386              STRB     r6,[r0,#0xe]
-;;;1419   modbus_registers[15]=(char)((T_PROC_PS%60)%256);
+;;;1420   modbus_registers[15]=(char)((T_PROC_PS%60)%256);
 0005b8  73c1              STRB     r1,[r0,#0xf]
-;;;1420   modbus_registers[16]=(char)(((T_PROC_PS/60)%60)/256);		//Πεγ58
+;;;1421   modbus_registers[16]=(char)(((T_PROC_PS/60)%60)/256);		//Πεγ58
 0005ba  fb97f1f2          SDIV     r1,r7,r2
 0005be  fb027111          MLS      r1,r2,r1,r7
 0005c2  17ca              ASRS     r2,r1,#31
 0005c4  eb016212          ADD      r2,r1,r2,LSR #24
 0005c8  1215              ASRS     r5,r2,#8
 0005ca  7405              STRB     r5,[r0,#0x10]
-;;;1421   modbus_registers[17]=(char)(((T_PROC_PS/60)%60)%256);
+;;;1422   modbus_registers[17]=(char)(((T_PROC_PS/60)%60)%256);
 0005cc  7441              STRB     r1,[r0,#0x11]
-;;;1422   modbus_registers[18]=(char)((T_PROC_PS/3600)/256);		//Πεγ59
+;;;1423   modbus_registers[18]=(char)((T_PROC_PS/3600)/256);		//Πεγ59
 0005ce  fb93f1f9          SDIV     r1,r3,r9
 0005d2  7481              STRB     r1,[r0,#0x12]
-;;;1423   modbus_registers[19]=(char)((T_PROC_PS/3600)%256);
+;;;1424   modbus_registers[19]=(char)((T_PROC_PS/3600)%256);
 0005d4  fb93f1f8          SDIV     r1,r3,r8
 0005d8  74c1              STRB     r1,[r0,#0x13]
-;;;1424   modbus_registers[20]=0;								//Πεγ60
+;;;1425   modbus_registers[20]=0;								//Πεγ60
 0005da  2100              MOVS     r1,#0
-;;;1425   modbus_registers[21]=0;
-;;;1426   if(work_stat==wsPS)modbus_registers[21]=1;
+;;;1426   modbus_registers[21]=0;
+;;;1427   if(work_stat==wsPS)modbus_registers[21]=1;
 0005dc  4acd              LDR      r2,|L1.2324|
-0005de  7501              STRB     r1,[r0,#0x14]         ;1424
-0005e0  7541              STRB     r1,[r0,#0x15]         ;1425
+0005de  7501              STRB     r1,[r0,#0x14]         ;1425
+0005e0  7541              STRB     r1,[r0,#0x15]         ;1426
 0005e2  7813              LDRB     r3,[r2,#0]  ; work_stat
 0005e4  2201              MOVS     r2,#1
 0005e6  2b02              CMP      r3,#2
 0005e8  d100              BNE      |L1.1516|
 0005ea  7542              STRB     r2,[r0,#0x15]
                   |L1.1516|
-;;;1427   modbus_registers[22]=0;								//Πεγ61
+;;;1428   modbus_registers[22]=0;								//Πεγ61
 0005ec  7581              STRB     r1,[r0,#0x16]
-;;;1428   modbus_registers[23]=0;
+;;;1429   modbus_registers[23]=0;
 0005ee  75c1              STRB     r1,[r0,#0x17]
-;;;1429   if(work_stat==wsGS)modbus_registers[23]=1;
+;;;1430   if(work_stat==wsGS)modbus_registers[23]=1;
 0005f0  2b01              CMP      r3,#1
 0005f2  d100              BNE      |L1.1526|
 0005f4  75c2              STRB     r2,[r0,#0x17]
                   |L1.1526|
-;;;1430   modbus_registers[24]=0;								//Πεγ62
-;;;1431   modbus_registers[25]=0;
-;;;1432   if(REV_STAT==rsREW)modbus_registers[25]=1;
+;;;1431   modbus_registers[24]=0;								//Πεγ62
+;;;1432   modbus_registers[25]=0;
+;;;1433   if(REV_STAT==rsREW)modbus_registers[25]=1;
 0005f6  4bc8              LDR      r3,|L1.2328|
-0005f8  7601              STRB     r1,[r0,#0x18]         ;1430
-0005fa  7641              STRB     r1,[r0,#0x19]         ;1431
+0005f8  7601              STRB     r1,[r0,#0x18]         ;1431
+0005fa  7641              STRB     r1,[r0,#0x19]         ;1432
 0005fc  781b              LDRB     r3,[r3,#0]  ; REV_STAT
 0005fe  b903              CBNZ     r3,|L1.1538|
 000600  7642              STRB     r2,[r0,#0x19]
                   |L1.1538|
-;;;1433   modbus_registers[26]=0;								//Πεγ63
+;;;1434   modbus_registers[26]=0;								//Πεγ63
 000602  7681              STRB     r1,[r0,#0x1a]
-;;;1434   modbus_registers[27]=0;
+;;;1435   modbus_registers[27]=0;
 000604  76c1              STRB     r1,[r0,#0x1b]
-;;;1435   if(AVT_REV_IS_ON)modbus_registers[27]=1;
+;;;1436   if(AVT_REV_IS_ON)modbus_registers[27]=1;
 000606  49c5              LDR      r1,|L1.2332|
 000608  8809              LDRH     r1,[r1,#0]  ; AVT_REV_IS_ON
 00060a  b101              CBZ      r1,|L1.1550|
 00060c  76c2              STRB     r2,[r0,#0x1b]
                   |L1.1550|
-;;;1436   modbus_registers[28]=(char)((AVT_REV_TIME_FF)/256);		//Πεγ64
+;;;1437   modbus_registers[28]=(char)((AVT_REV_TIME_FF)/256);		//Πεγ64
 00060e  49c4              LDR      r1,|L1.2336|
 000610  f9b11000          LDRSH    r1,[r1,#0]  ; AVT_REV_TIME_FF
 000614  17ca              ASRS     r2,r1,#31
 000616  eb016212          ADD      r2,r1,r2,LSR #24
 00061a  1213              ASRS     r3,r2,#8
 00061c  f8003f1c          STRB     r3,[r0,#0x1c]!
-;;;1437   modbus_registers[29]=(char)((AVT_REV_TIME_FF)%256);
+;;;1438   modbus_registers[29]=(char)((AVT_REV_TIME_FF)%256);
 000620  7041              STRB     r1,[r0,#1]
-;;;1438   modbus_registers[30]=(char)((AVT_REV_TIME_REW)/256);		//Πεγ65
+;;;1439   modbus_registers[30]=(char)((AVT_REV_TIME_REW)/256);		//Πεγ65
 000622  49c0              LDR      r1,|L1.2340|
 000624  f9b11000          LDRSH    r1,[r1,#0]  ; AVT_REV_TIME_REW
 000628  17ca              ASRS     r2,r1,#31
 00062a  eb016212          ADD      r2,r1,r2,LSR #24
 00062e  1213              ASRS     r3,r2,#8
 000630  7083              STRB     r3,[r0,#2]
-;;;1439   modbus_registers[31]=(char)((AVT_REV_TIME_REW)%256);
+;;;1440   modbus_registers[31]=(char)((AVT_REV_TIME_REW)%256);
 000632  70c1              STRB     r1,[r0,#3]
-;;;1440   modbus_registers[32]=(char)((AVT_REV_TIME_PAUSE)/256);		//Πεγ66
+;;;1441   modbus_registers[32]=(char)((AVT_REV_TIME_PAUSE)/256);		//Πεγ66
 000634  49bc              LDR      r1,|L1.2344|
 000636  f9b11000          LDRSH    r1,[r1,#0]  ; AVT_REV_TIME_PAUSE
 00063a  17ca              ASRS     r2,r1,#31
 00063c  eb016212          ADD      r2,r1,r2,LSR #24
 000640  1213              ASRS     r3,r2,#8
 000642  7103              STRB     r3,[r0,#4]
-;;;1441   modbus_registers[33]=(char)((AVT_REV_TIME_PAUSE)%256);
+;;;1442   modbus_registers[33]=(char)((AVT_REV_TIME_PAUSE)%256);
 000644  7141              STRB     r1,[r0,#5]
-;;;1442   modbus_registers[34]=(char)((AVT_REV_I_NOM_FF)/256);		//Πεγ67
+;;;1443   modbus_registers[34]=(char)((AVT_REV_I_NOM_FF)/256);		//Πεγ67
 000646  49b9              LDR      r1,|L1.2348|
 000648  f9b11000          LDRSH    r1,[r1,#0]  ; AVT_REV_I_NOM_FF
 00064c  17ca              ASRS     r2,r1,#31
 00064e  eb016212          ADD      r2,r1,r2,LSR #24
 000652  1213              ASRS     r3,r2,#8
 000654  7183              STRB     r3,[r0,#6]
-;;;1443   modbus_registers[35]=(char)((AVT_REV_I_NOM_FF)%256);
+;;;1444   modbus_registers[35]=(char)((AVT_REV_I_NOM_FF)%256);
 000656  71c1              STRB     r1,[r0,#7]
-;;;1444   modbus_registers[36]=(char)((AVT_REV_I_NOM_REW)/256);		//Πεγ68
+;;;1445   modbus_registers[36]=(char)((AVT_REV_I_NOM_REW)/256);		//Πεγ68
 000658  49b5              LDR      r1,|L1.2352|
 00065a  f9b11000          LDRSH    r1,[r1,#0]  ; AVT_REV_I_NOM_REW
 00065e  17ca              ASRS     r2,r1,#31
 000660  eb016212          ADD      r2,r1,r2,LSR #24
 000664  1213              ASRS     r3,r2,#8
 000666  7203              STRB     r3,[r0,#8]
-;;;1445   modbus_registers[37]=(char)((AVT_REV_I_NOM_REW)%256);
+;;;1446   modbus_registers[37]=(char)((AVT_REV_I_NOM_REW)%256);
 000668  7241              STRB     r1,[r0,#9]
-;;;1446   modbus_registers[38]=(char)((AVT_REV_U_NOM_FF)/256);		//Πεγ69
+;;;1447   modbus_registers[38]=(char)((AVT_REV_U_NOM_FF)/256);		//Πεγ69
 00066a  49b2              LDR      r1,|L1.2356|
 00066c  f9b11000          LDRSH    r1,[r1,#0]  ; AVT_REV_U_NOM_FF
 000670  17ca              ASRS     r2,r1,#31
 000672  eb016212          ADD      r2,r1,r2,LSR #24
 000676  1213              ASRS     r3,r2,#8
 000678  7283              STRB     r3,[r0,#0xa]
-;;;1447   modbus_registers[39]=(char)((AVT_REV_U_NOM_FF)%256);
+;;;1448   modbus_registers[39]=(char)((AVT_REV_U_NOM_FF)%256);
 00067a  72c1              STRB     r1,[r0,#0xb]
-;;;1448   modbus_registers[40]=(char)((AVT_REV_U_NOM_REW)/256);		//Πεγ70
+;;;1449   modbus_registers[40]=(char)((AVT_REV_U_NOM_REW)/256);		//Πεγ70
 00067c  49ae              LDR      r1,|L1.2360|
 00067e  f9b11000          LDRSH    r1,[r1,#0]  ; AVT_REV_U_NOM_REW
 000682  17ca              ASRS     r2,r1,#31
 000684  eb016212          ADD      r2,r1,r2,LSR #24
 000688  1213              ASRS     r3,r2,#8
 00068a  7303              STRB     r3,[r0,#0xc]
-;;;1449   modbus_registers[41]=(char)((AVT_REV_U_NOM_REW)%256);
+;;;1450   modbus_registers[41]=(char)((AVT_REV_U_NOM_REW)%256);
 00068c  7341              STRB     r1,[r0,#0xd]
-;;;1450   modbus_registers[42]=(char)((CAP_ZAR_TIME)/256);			//Πεγ71
+;;;1451   modbus_registers[42]=(char)((CAP_ZAR_TIME)/256);			//Πεγ71
 00068e  49ab              LDR      r1,|L1.2364|
 000690  f9b11000          LDRSH    r1,[r1,#0]  ; CAP_ZAR_TIME
 000694  17ca              ASRS     r2,r1,#31
 000696  eb016212          ADD      r2,r1,r2,LSR #24
 00069a  1213              ASRS     r3,r2,#8
 00069c  7383              STRB     r3,[r0,#0xe]
-;;;1451   modbus_registers[43]=(char)((CAP_ZAR_TIME)%256);
+;;;1452   modbus_registers[43]=(char)((CAP_ZAR_TIME)%256);
 00069e  73c1              STRB     r1,[r0,#0xf]
-;;;1452   modbus_registers[44]=(char)((CAP_PAUSE1_TIME)/256);		//Πεγ72
+;;;1453   modbus_registers[44]=(char)((CAP_PAUSE1_TIME)/256);		//Πεγ72
 0006a0  49a7              LDR      r1,|L1.2368|
 0006a2  f9b11000          LDRSH    r1,[r1,#0]  ; CAP_PAUSE1_TIME
 0006a6  17ca              ASRS     r2,r1,#31
 0006a8  eb016212          ADD      r2,r1,r2,LSR #24
 0006ac  1213              ASRS     r3,r2,#8
 0006ae  7403              STRB     r3,[r0,#0x10]
-;;;1453   modbus_registers[45]=(char)((CAP_PAUSE1_TIME)%256);
+;;;1454   modbus_registers[45]=(char)((CAP_PAUSE1_TIME)%256);
 0006b0  7441              STRB     r1,[r0,#0x11]
-;;;1454   modbus_registers[46]=(char)((CAP_RAZR_TIME)/256);			//Πεγ73
+;;;1455   modbus_registers[46]=(char)((CAP_RAZR_TIME)/256);			//Πεγ73
 0006b2  49a4              LDR      r1,|L1.2372|
 0006b4  f9b11000          LDRSH    r1,[r1,#0]  ; CAP_RAZR_TIME
 0006b8  17ca              ASRS     r2,r1,#31
 0006ba  eb016212          ADD      r2,r1,r2,LSR #24
 0006be  1213              ASRS     r3,r2,#8
 0006c0  7483              STRB     r3,[r0,#0x12]
-;;;1455   modbus_registers[47]=(char)((CAP_RAZR_TIME)%256);
+;;;1456   modbus_registers[47]=(char)((CAP_RAZR_TIME)%256);
 0006c2  74c1              STRB     r1,[r0,#0x13]
-;;;1456   modbus_registers[48]=(char)((CAP_PAUSE2_TIME)/256);		//Πεγ74
+;;;1457   modbus_registers[48]=(char)((CAP_PAUSE2_TIME)/256);		//Πεγ74
 0006c4  49a0              LDR      r1,|L1.2376|
 0006c6  f9b11000          LDRSH    r1,[r1,#0]  ; CAP_PAUSE2_TIME
 0006ca  17ca              ASRS     r2,r1,#31
 0006cc  eb016212          ADD      r2,r1,r2,LSR #24
 0006d0  1213              ASRS     r3,r2,#8
 0006d2  7503              STRB     r3,[r0,#0x14]
-;;;1457   modbus_registers[49]=(char)((CAP_PAUSE2_TIME)%256);
+;;;1458   modbus_registers[49]=(char)((CAP_PAUSE2_TIME)%256);
 0006d4  7541              STRB     r1,[r0,#0x15]
-;;;1458   modbus_registers[50]=(char)((CAP_MAX_VOLT)/256);			//Πεγ75
+;;;1459   modbus_registers[50]=(char)((CAP_MAX_VOLT)/256);			//Πεγ75
 0006d6  499d              LDR      r1,|L1.2380|
 0006d8  f9b11000          LDRSH    r1,[r1,#0]  ; CAP_MAX_VOLT
 0006dc  17ca              ASRS     r2,r1,#31
 0006de  eb016212          ADD      r2,r1,r2,LSR #24
 0006e2  1213              ASRS     r3,r2,#8
 0006e4  7583              STRB     r3,[r0,#0x16]
-;;;1459   modbus_registers[51]=(char)((CAP_MAX_VOLT)%256);
+;;;1460   modbus_registers[51]=(char)((CAP_MAX_VOLT)%256);
 0006e6  75c1              STRB     r1,[r0,#0x17]
-;;;1460   modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			//Πεγ76
+;;;1461   modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			//Πεγ76
 0006e8  4999              LDR      r1,|L1.2384|
 0006ea  f9b11000          LDRSH    r1,[r1,#0]  ; CAP_WRK_CURR
 0006ee  17ca              ASRS     r2,r1,#31
 0006f0  eb016212          ADD      r2,r1,r2,LSR #24
 0006f4  1213              ASRS     r3,r2,#8
 0006f6  7603              STRB     r3,[r0,#0x18]
-;;;1461   modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
+;;;1462   modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
 0006f8  7641              STRB     r1,[r0,#0x19]
 0006fa  4980              LDR      r1,|L1.2300|
-;;;1462   
-;;;1463   if(prot==MODBUS_RTU_PROT)
-;;;1464   	{
-;;;1465   	modbus_tx_buff[0]=adr;
-;;;1466   	modbus_tx_buff[1]=func;
-;;;1467   	modbus_tx_buff[2]=(char)(reg_quantity*2);
-;;;1468   	
-;;;1469   	memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-50)*2],reg_quantity*2);
+;;;1463   
+;;;1464   if(prot==MODBUS_RTU_PROT)
+;;;1465   	{
+;;;1466   	modbus_tx_buff[0]=adr;
+;;;1467   	modbus_tx_buff[1]=func;
+;;;1468   	modbus_tx_buff[2]=(char)(reg_quantity*2);
+;;;1469   	
+;;;1470   	memcpy((char*)&modbus_tx_buff[3],(char*)&modbus_registers[(reg_adr-50)*2],reg_quantity*2);
 0006fc  eb01014a          ADD      r1,r1,r10,LSL #1
 000700  3964              SUBS     r1,r1,#0x64
-000702  f1bc0f00          CMP      r12,#0                ;1463
+000702  f1bc0f00          CMP      r12,#0                ;1464
 000706  d005              BEQ      |L1.1812|
-;;;1470   							   
-;;;1471   	crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
-;;;1472   	
-;;;1473   	modbus_tx_buff[3+(reg_quantity*2)]=crc_temp%256;
-;;;1474   	modbus_tx_buff[4+(reg_quantity*2)]=crc_temp/256;
-;;;1475   	
-;;;1476   	for (i=0;i<(5+(reg_quantity*2));i++)
-;;;1477   		{
-;;;1478   		putchar0(modbus_tx_buff[i]);
-;;;1479   		}
-;;;1480   	for (i=0;i<(5+(reg_quantity*2));i++)
-;;;1481   		{
-;;;1482   		putchar_sc16is700(modbus_tx_buff[i]);
-;;;1483   		}
-;;;1484   	}
-;;;1485   else if(prot==MODBUS_TCP_PROT)
+;;;1471   							   
+;;;1472   	crc_temp=CRC16_2(modbus_tx_buff,(reg_quantity*2)+3);
+;;;1473   	
+;;;1474   	modbus_tx_buff[3+(reg_quantity*2)]=crc_temp%256;
+;;;1475   	modbus_tx_buff[4+(reg_quantity*2)]=crc_temp/256;
+;;;1476   	
+;;;1477   	for (i=0;i<(5+(reg_quantity*2));i++)
+;;;1478   		{
+;;;1479   		putchar0(modbus_tx_buff[i]);
+;;;1480   		}
+;;;1481   	for (i=0;i<(5+(reg_quantity*2));i++)
+;;;1482   		{
+;;;1483   		putchar_sc16is700(modbus_tx_buff[i]);
+;;;1484   		}
+;;;1485   	}
+;;;1486   else if(prot==MODBUS_TCP_PROT)
 000708  f1bc0f01          CMP      r12,#1
 00070c  d101              BNE      |L1.1810|
-;;;1486   	{
-;;;1487   	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-50)*2];
+;;;1487   	{
+;;;1488   	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-50)*2];
 00070e  4891              LDR      r0,|L1.2388|
 000710  6001              STR      r1,[r0,#0]  ; modbus_tcp_out_ptr
                   |L1.1810|
-;;;1488   	}
-;;;1489   }
+;;;1489   	}
+;;;1490   // modbus_tcp_out_ptr=(char*)(&modbus_registers[0]);
+;;;1491   //modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-50)*2];
+;;;1492   }
 000712  e681              B        |L1.1048|
                   |L1.1812|
-000714  f88db000          STRB     r11,[sp,#0]           ;1465
-000718  f88de001          STRB     lr,[sp,#1]            ;1466
-00071c  0062              LSLS     r2,r4,#1              ;1467
-00071e  466d              MOV      r5,sp                 ;1469
-000720  f88d2002          STRB     r2,[sp,#2]            ;1467
-000724  1ce8              ADDS     r0,r5,#3              ;1469
+000714  f88db000          STRB     r11,[sp,#0]           ;1466
+000718  f88de001          STRB     lr,[sp,#1]            ;1467
+00071c  0062              LSLS     r2,r4,#1              ;1468
+00071e  466d              MOV      r5,sp                 ;1470
+000720  f88d2002          STRB     r2,[sp,#2]            ;1468
+000724  1ce8              ADDS     r0,r5,#3              ;1470
 000726  f7fffffe          BL       __aeabi_memcpy
-00072a  2003              MOVS     r0,#3                 ;1471
-00072c  eb000044          ADD      r0,r0,r4,LSL #1       ;1471
-000730  b201              SXTH     r1,r0                 ;1471
-000732  4668              MOV      r0,sp                 ;1471
+00072a  2003              MOVS     r0,#3                 ;1472
+00072c  eb000044          ADD      r0,r0,r4,LSL #1       ;1472
+000730  b201              SXTH     r1,r0                 ;1472
+000732  4668              MOV      r0,sp                 ;1472
 000734  f7fffffe          BL       CRC16_2
-000738  eb050144          ADD      r1,r5,r4,LSL #1       ;1473
-00073c  2600              MOVS     r6,#0                 ;1476
-00073e  70c8              STRB     r0,[r1,#3]            ;1473
-000740  0a00              LSRS     r0,r0,#8              ;1474
-000742  7108              STRB     r0,[r1,#4]            ;1474
-000744  2005              MOVS     r0,#5                 ;1476
-000746  eb000744          ADD      r7,r0,r4,LSL #1       ;1476
+000738  eb050144          ADD      r1,r5,r4,LSL #1       ;1474
+00073c  2600              MOVS     r6,#0                 ;1477
+00073e  70c8              STRB     r0,[r1,#3]            ;1474
+000740  0a00              LSRS     r0,r0,#8              ;1475
+000742  7108              STRB     r0,[r1,#4]            ;1475
+000744  2005              MOVS     r0,#5                 ;1477
+000746  eb000744          ADD      r7,r0,r4,LSL #1       ;1477
 00074a  e004              B        |L1.1878|
                   |L1.1868|
-00074c  5da8              LDRB     r0,[r5,r6]            ;1478
+00074c  5da8              LDRB     r0,[r5,r6]            ;1479
 00074e  f7fffffe          BL       putchar0
-000752  1c76              ADDS     r6,r6,#1              ;1476
-000754  b2f6              UXTB     r6,r6                 ;1476
+000752  1c76              ADDS     r6,r6,#1              ;1477
+000754  b2f6              UXTB     r6,r6                 ;1477
                   |L1.1878|
-000756  42b7              CMP      r7,r6                 ;1476
+000756  42b7              CMP      r7,r6                 ;1477
 000758  d8f8              BHI      |L1.1868|
-00075a  2400              MOVS     r4,#0                 ;1480
+00075a  2400              MOVS     r4,#0                 ;1481
 00075c  e004              B        |L1.1896|
                   |L1.1886|
-00075e  5d28              LDRB     r0,[r5,r4]            ;1482
+00075e  5d28              LDRB     r0,[r5,r4]            ;1483
 000760  f7fffffe          BL       putchar_sc16is700
-000764  1c64              ADDS     r4,r4,#1              ;1480
-000766  b2e4              UXTB     r4,r4                 ;1480
+000764  1c64              ADDS     r4,r4,#1              ;1481
+000766  b2e4              UXTB     r4,r4                 ;1481
                   |L1.1896|
-000768  42a7              CMP      r7,r4                 ;1480
+000768  42a7              CMP      r7,r4                 ;1481
 00076a  d8f8              BHI      |L1.1886|
 00076c  e654              B        |L1.1048|
-;;;1490   
+;;;1493   
                           ENDP
 
                   modbus_for_pult_registers_transmit PROC

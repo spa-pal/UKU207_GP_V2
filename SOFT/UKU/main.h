@@ -587,6 +587,7 @@ extern signed short CUR_OFF_LEVEL_RELATIV;
 extern signed short CUR_OFF_LEVEL_ABSOLUT;
 extern signed short CUR_OFF_T_OFF;
 extern signed short CUR_OFF_T_ON;
+extern signed short EE_WRITE_CNT;
 
 
 //***********************************************
@@ -946,6 +947,8 @@ extern char avg_num;
 extern char num_of_dumm_src; 
 extern char num_of_max_src;
 extern char bAVG_CNT;
+
+extern short pvlk;
 
 /*----------------------------------------------------------------------------
  * end of file

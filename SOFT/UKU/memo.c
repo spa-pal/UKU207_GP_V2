@@ -66,6 +66,7 @@ CUR_OFF_T_OFF=lc640_read_int(EE_CUR_OFF_T_OFF);
 CUR_OFF_T_ON=lc640_read_int(EE_CUR_OFF_T_ON);
 AMPERCHAS=lc640_read_int(EE_AMPERCHAS);
 UMAX=lc640_read_int(EE_UMAX);
+EE_WRITE_CNT=lc640_read_int(EE_EE_WRITE_CNT);
 			
 /*
 Kubat[0]=lc640_read_int(EE_KUBAT1);

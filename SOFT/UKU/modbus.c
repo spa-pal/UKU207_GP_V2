@@ -1398,7 +1398,8 @@ char modbus_tx_buff[200];
 unsigned short crc_temp;
 char i;
 
-//I_ug=1234;
+//reg_adr=45;
+//I_ug=reg_adr;
 //U_up=5678;
 
 modbus_registers[0]=(char)(I_ug/256);					//Πεγ50
@@ -1486,6 +1487,8 @@ else if(prot==MODBUS_TCP_PROT)
 	{
 	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-50)*2];
 	}
+// modbus_tcp_out_ptr=(char*)(&modbus_registers[0]);
+//modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-50)*2];
 }
 
 

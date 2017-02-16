@@ -39,34 +39,34 @@ void memo_read (void);
 
 
 
-#line 38 "eeprom_map.h"
+#line 39 "eeprom_map.h"
 
-#line 133 "eeprom_map.h"
-
-
+#line 134 "eeprom_map.h"
 
 
 
-#line 152 "eeprom_map.h"
+
+
+#line 153 "eeprom_map.h"
 
 
 
-#line 164 "eeprom_map.h"
+#line 165 "eeprom_map.h"
 
 
-#line 175 "eeprom_map.h"
+#line 176 "eeprom_map.h"
 
 
-#line 184 "eeprom_map.h"
-
-
+#line 185 "eeprom_map.h"
 
 
 
 
 
 
-#line 230 "eeprom_map.h"
+
+
+#line 231 "eeprom_map.h"
 
 
 
@@ -874,6 +874,7 @@ extern signed short CUR_OFF_LEVEL_RELATIV;
 extern signed short CUR_OFF_LEVEL_ABSOLUT;
 extern signed short CUR_OFF_T_OFF;
 extern signed short CUR_OFF_T_ON;
+extern signed short EE_WRITE_CNT;
 
 
 
@@ -1234,6 +1235,8 @@ extern char num_of_dumm_src;
 extern char num_of_max_src;
 extern char bAVG_CNT;
 
+extern short pvlk;
+
 
 
  
@@ -1456,6 +1459,7 @@ CUR_OFF_T_OFF=lc640_read_int(0x10+100+196);
 CUR_OFF_T_ON=lc640_read_int(0x10+100+198);
 AMPERCHAS=lc640_read_int(0x10+100+200);
 UMAX=lc640_read_int(0x10+58);
+EE_WRITE_CNT=lc640_read_int(0x10+60);
 			
 
 

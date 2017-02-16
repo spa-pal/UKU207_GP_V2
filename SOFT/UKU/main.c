@@ -233,6 +233,8 @@ signed short CUR_OFF_LEVEL_RELATIV;
 signed short CUR_OFF_LEVEL_ABSOLUT;
 signed short CUR_OFF_T_OFF;
 signed short CUR_OFF_T_ON;
+
+signed short EE_WRITE_CNT;
 //***********************************************
 //Состояние батарей
 //BAT_STAT bat[2];
@@ -676,6 +678,8 @@ char avg_num;
 char num_of_dumm_src;
 char num_of_max_src;
 char bAVG_CNT;
+
+short pvlk;
 
 //-----------------------------------------------
 void rtc_init (void) 
@@ -3487,69 +3491,13 @@ if(ind==iDeb)
 
     	else if(sub_ind==1) 
      	{
-     	bgnd_par("Б                   ",
-     	         "                    ",
+     	bgnd_par(" EEPROM_CNT         ",
+     	         " TCP_STATE          ",
      	         "                    ",
      	         "                    ");
 
-		int2lcdyx(bAVG,0,0,0); 
-		//int2lcdyx(avg_main_cnt,0,2,0);
-		//int2lcdyx(avg_num,0,4,0);
-		int2lcdyx(i_avg_min,0,9,0);
-		int2lcdyx(i_avg_max,0,13,0);
-		int2lcdyx(avg,0,19,0);	
-		int2lcdyx(num_of_dumm_src,0,2,0);
-		int2lcdyx(num_of_max_src,0,4,0);
- /*         int2lcdyx(bat[0]._Ubm,1,7,0); 	int2lcdyx(bat[0]._av,1,10,0);
-		int2lcdyx(bat[0]._dUbm,2,7,0);
-		int2lcdyx(bat[0]._cnt_as,3,7,0);
-		
- 
-		int2lcdyx(bat[1]._Ub,0,14,0);
-          int2lcdyx(bat[1]._Ubm,1,14,0);	int2lcdyx(bat[1]._av,1,17,0);
-		int2lcdyx(bat[1]._dUbm,2,14,0);
-		int2lcdyx(bat[1]._cnt_as,3,14,0);*/
-
-		int2lcdyx(sub_ind1+1,1,1,0);
-		int2lcdyx(sub_ind1+2,2,1,0);
-		int2lcdyx(sub_ind1+3,3,1,0);
-		
-		
-		int2lcdyx(bps[sub_ind1  ]._cnt,1,3,0);
-		int2lcdyx(bps[sub_ind1+1]._cnt,2,3,0);
-		int2lcdyx(bps[sub_ind1+2]._cnt,3,3,0);		
-		
-	/*	int2lcdyx(bps[sub_ind1  ]._ist_blok_cnt,1,5,0);
-		int2lcdyx(bps[sub_ind1+1]._ist_blok_cnt,2,5,0);
-		int2lcdyx(bps[sub_ind1+2]._ist_blok_cnt,3,5,0);*/			
-		
-	/*	char2lcdhyx(bps[sub_ind1  ]._flags_tu,1,8);
-		char2lcdhyx(bps[sub_ind1+1]._flags_tu,2,8);
-		char2lcdhyx(bps[sub_ind1+2]._flags_tu,3,8);
-	  */
-		int2lcdyx(bps[sub_ind1  ]._xu_+50,1,12,0);
-		int2lcdyx(bps[sub_ind1+1]._xu_+50,2,12,0);
-		int2lcdyx(bps[sub_ind1+2]._xu_+50,3,12,0);		
-
-	 /*
-		char2lcdhyx(bps[sub_ind1]._flags_tm,1,15);
-		char2lcdhyx(bps[sub_ind1+1]._flags_tm,2,15);
-		char2lcdhyx(bps[sub_ind1+2]._flags_tm,3,15);	
-		*/
-		int2lcdyx(bps[sub_ind1]._Ii,1,15,0);
-		int2lcdyx(bps[sub_ind1+1]._Ii,2,15,0);
-		int2lcdyx(bps[sub_ind1+2]._Ii,3,15,0);
-	/*
-		char2lcdhyx(bps[sub_ind1]._rotor>>8,1,15);
-		char2lcdhyx(bps[sub_ind1+1]._rotor>>8,2,15);
-		char2lcdhyx(bps[sub_ind1+2]._rotor>>8,3,15);		
-		*/
-		
-		int2lcdyx(bps[sub_ind1]._state,1,19,0);
-		int2lcdyx(bps[sub_ind1+1]._state,2,19,0);
-		int2lcdyx(bps[sub_ind1+2]._state,3,19,0);
-
-
+		int2lcdyx(tcp_get_state(socket_tcp),1,14,0);
+		int2lcdyx(EE_WRITE_CNT,0,14,0);
  		}
 
  
@@ -4219,7 +4167,6 @@ int2lcdyx(retcntsec,0,7,0);	*/
 //int2lcdyx(RELE_FUNC[1],0,14,0);
 //int2lcdyx(cnt_volt_contr,0,6,0);
 //int2lcdyx(cnt_rel_volt_umax,0,10,0);
-//int2lcdyx(cnt_rel_volt_umin,0,14,0);
 
 }							    
 
@@ -4435,7 +4382,7 @@ if(but==butUD)
      if(ind!=iDeb)
           {
 		c_ind=a_ind;
-		tree_up(iDeb,0,0,0);
+		tree_up(iDeb,1,0,0);
 		
           }
      else 

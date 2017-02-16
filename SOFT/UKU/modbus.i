@@ -1061,6 +1061,7 @@ extern signed short CUR_OFF_LEVEL_RELATIV;
 extern signed short CUR_OFF_LEVEL_ABSOLUT;
 extern signed short CUR_OFF_T_OFF;
 extern signed short CUR_OFF_T_ON;
+extern signed short EE_WRITE_CNT;
 
 
 
@@ -1420,6 +1421,8 @@ extern char avg_num;
 extern char num_of_dumm_src; 
 extern char num_of_max_src;
 extern char bAVG_CNT;
+
+extern short pvlk;
 
 
 
@@ -2280,34 +2283,34 @@ extern __declspec(__nothrow) void __use_no_semihosting(void);
 
 
 
-#line 38 "eeprom_map.h"
+#line 39 "eeprom_map.h"
 
-#line 133 "eeprom_map.h"
-
-
+#line 134 "eeprom_map.h"
 
 
 
-#line 152 "eeprom_map.h"
+
+
+#line 153 "eeprom_map.h"
 
 
 
-#line 164 "eeprom_map.h"
+#line 165 "eeprom_map.h"
 
 
-#line 175 "eeprom_map.h"
+#line 176 "eeprom_map.h"
 
 
-#line 184 "eeprom_map.h"
-
-
+#line 185 "eeprom_map.h"
 
 
 
 
 
 
-#line 230 "eeprom_map.h"
+
+
+#line 231 "eeprom_map.h"
 
 
 
@@ -4426,6 +4429,7 @@ char i;
 
 
 
+
 modbus_registers[0]=(char)(I_ug/256);					
 modbus_registers[1]=(char)(I_ug%256);
 modbus_registers[2]=(char)(U_up/256);					
@@ -4511,6 +4515,8 @@ else if(prot==1)
 	{
 	modbus_tcp_out_ptr=(char*)&modbus_registers[(reg_adr-50)*2];
 	}
+
+
 }
 
 

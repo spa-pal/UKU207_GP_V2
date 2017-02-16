@@ -2855,6 +2855,7 @@ extern signed short CUR_OFF_LEVEL_RELATIV;
 extern signed short CUR_OFF_LEVEL_ABSOLUT;
 extern signed short CUR_OFF_T_OFF;
 extern signed short CUR_OFF_T_ON;
+extern signed short EE_WRITE_CNT;
 
 
 
@@ -3215,10 +3216,56 @@ extern char num_of_dumm_src;
 extern char num_of_max_src;
 extern char bAVG_CNT;
 
+extern short pvlk;
+
 
 
  
 #line 4 "25lc640.c"
+#line 1 "eeprom_map.h"
+
+
+
+
+
+
+#line 39 "eeprom_map.h"
+
+#line 134 "eeprom_map.h"
+
+
+
+
+
+#line 153 "eeprom_map.h"
+
+
+
+#line 165 "eeprom_map.h"
+
+
+#line 176 "eeprom_map.h"
+
+
+#line 185 "eeprom_map.h"
+
+
+
+
+
+
+
+
+#line 231 "eeprom_map.h"
+
+
+
+
+
+
+
+
+#line 5 "25lc640.c"
 
 
 
@@ -3500,6 +3547,29 @@ spi1(temp);
 ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIODIR|=(1UL<<20);((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET|=(1UL<<20);
 ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIODIR|=(1UL<<20);((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET|=(1UL<<20);
 spi1_unconfig();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
 return temp;
 }  
 

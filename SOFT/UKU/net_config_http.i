@@ -1638,7 +1638,7 @@ U8        lhost_name[16] = "SPA-UKU202";
  U16 const tcp_2MSSTout  = (200 + 10 - 1) / 10;
  U16 const tcp_SynRetryTout = 2 * (1000 / 10);
  U16 const tcp_InitRetryTout= 1 * (1000 / 10);
- U16 const tcp_DefTout   = 120;
+ U16 const tcp_DefTout   = 5;
  U8  const tcp_ConRetry  = 7;
 
 

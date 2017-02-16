@@ -544,7 +544,7 @@
 //   <i> Default TCP Socket Keep Alive timeout. When it expires
 //   <i> with no TCP data frame send, TCP Connection is closed.
 //   <i> Default: 120
-#define TCP_DEFTOUT    120
+#define TCP_DEFTOUT    5
 
 /* TCP fixed timeouts */
 #define TCP_INIT_RETRY_TOUT 1     /* TCP initial Retransmit period in sec.   */

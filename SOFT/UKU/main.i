@@ -1094,6 +1094,7 @@ extern signed short CUR_OFF_LEVEL_RELATIV;
 extern signed short CUR_OFF_LEVEL_ABSOLUT;
 extern signed short CUR_OFF_T_OFF;
 extern signed short CUR_OFF_T_ON;
+extern signed short EE_WRITE_CNT;
 
 
 
@@ -1453,6 +1454,8 @@ extern char avg_num;
 extern char num_of_dumm_src; 
 extern char num_of_max_src;
 extern char bAVG_CNT;
+
+extern short pvlk;
 
 
 
@@ -1853,34 +1856,34 @@ void ret_hndl(void);
 
 
 
-#line 38 "eeprom_map.h"
+#line 39 "eeprom_map.h"
 
-#line 133 "eeprom_map.h"
-
-
+#line 134 "eeprom_map.h"
 
 
 
-#line 152 "eeprom_map.h"
+
+
+#line 153 "eeprom_map.h"
 
 
 
-#line 164 "eeprom_map.h"
+#line 165 "eeprom_map.h"
 
 
-#line 175 "eeprom_map.h"
+#line 176 "eeprom_map.h"
 
 
-#line 184 "eeprom_map.h"
-
-
+#line 185 "eeprom_map.h"
 
 
 
 
 
 
-#line 230 "eeprom_map.h"
+
+
+#line 231 "eeprom_map.h"
 
 
 
@@ -3337,6 +3340,8 @@ signed short CUR_OFF_LEVEL_RELATIV;
 signed short CUR_OFF_LEVEL_ABSOLUT;
 signed short CUR_OFF_T_OFF;
 signed short CUR_OFF_T_ON;
+
+signed short EE_WRITE_CNT;
 
 
 
@@ -5310,7 +5315,7 @@ typedef struct
  
 #line 1031 "C:\\Keil\\ARM\\INC\\NXP\\LPC17xx\\LPC17xx.H"
 
-#line 399 "main.c"
+#line 401 "main.c"
 
 
 
@@ -5591,6 +5596,8 @@ char avg_num;
 char num_of_dumm_src;
 char num_of_max_src;
 char bAVG_CNT;
+
+short pvlk;
 
 
 void rtc_init (void) 
@@ -8402,69 +8409,13 @@ if(a_ind . i==iDeb)
 
     	else if(a_ind . s_i==1) 
      	{
-     	bgnd_par("Á                   ",
-     	         "                    ",
+     	bgnd_par(" EEPROM_CNT         ",
+     	         " TCP_STATE          ",
      	         "                    ",
      	         "                    ");
 
-		int2lcdyx(bAVG,0,0,0); 
-		
-		
-		int2lcdyx(i_avg_min,0,9,0);
-		int2lcdyx(i_avg_max,0,13,0);
-		int2lcdyx(avg,0,19,0);	
-		int2lcdyx(num_of_dumm_src,0,2,0);
-		int2lcdyx(num_of_max_src,0,4,0);
- 
-
-
-
-
-
-
-
- 
-
-		int2lcdyx(a_ind . s_i1+1,1,1,0);
-		int2lcdyx(a_ind . s_i1+2,2,1,0);
-		int2lcdyx(a_ind . s_i1+3,3,1,0);
-		
-		
-		int2lcdyx(bps[a_ind . s_i1  ]._cnt,1,3,0);
-		int2lcdyx(bps[a_ind . s_i1+1]._cnt,2,3,0);
-		int2lcdyx(bps[a_ind . s_i1+2]._cnt,3,3,0);		
-		
-	
-
- 			
-		
-	
-
-
- 
-		int2lcdyx(bps[a_ind . s_i1  ]._xu_+50,1,12,0);
-		int2lcdyx(bps[a_ind . s_i1+1]._xu_+50,2,12,0);
-		int2lcdyx(bps[a_ind . s_i1+2]._xu_+50,3,12,0);		
-
-	 
-
-
-
- 
-		int2lcdyx(bps[a_ind . s_i1]._Ii,1,15,0);
-		int2lcdyx(bps[a_ind . s_i1+1]._Ii,2,15,0);
-		int2lcdyx(bps[a_ind . s_i1+2]._Ii,3,15,0);
-	
-
-
-
- 
-		
-		int2lcdyx(bps[a_ind . s_i1]._state,1,19,0);
-		int2lcdyx(bps[a_ind . s_i1+1]._state,2,19,0);
-		int2lcdyx(bps[a_ind . s_i1+2]._state,3,19,0);
-
-
+		int2lcdyx(tcp_get_state(socket_tcp),1,14,0);
+		int2lcdyx(EE_WRITE_CNT,0,14,0);
  		}
 
  
@@ -9135,7 +9086,6 @@ else if(a_ind . i==iAvz)
 
 
 
-
 }							    
 
 
@@ -9212,12 +9162,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4306 "main.c"
+#line 4253 "main.c"
 
 
 
 
-#line 4328 "main.c"
+#line 4275 "main.c"
 
 
 
@@ -9328,7 +9278,7 @@ if(but==249)
      if(a_ind . i!=iDeb)
           {
 		c_ind=a_ind;
-		tree_up(iDeb,0,0,0);
+		tree_up(iDeb,1,0,0);
 		
           }
      else 
@@ -16170,7 +16120,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11286 "main.c"
+#line 11233 "main.c"
 
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);

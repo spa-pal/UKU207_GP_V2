@@ -370,7 +370,7 @@
 
                           EXPORTAS ||area_number.25||, ||.constdata||
                   tcp_DefTout
-000000  0078              DCW      0x0078
+000000  0005              DCW      0x0005
 
                           AREA ||area_number.26||, DATA, READONLY, ALIGN=0
 

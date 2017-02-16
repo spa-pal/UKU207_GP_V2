@@ -1,6 +1,7 @@
 #include "25lc640.h"
 #include "LPC17xx.H"
 #include "main.h"
+#include "eeprom_map.h"
 
 #ifndef SPI1_DEFINED
 #define SPI1_DEFINED
@@ -282,6 +283,29 @@ spi1(temp);
 CS_OFF
 CS_OFF
 spi1_unconfig();
+
+
+/*
+while(lc640_rdsr()&0x01)
+	{
+	}
+lc640_wren();
+spi1_config();	
+CS_ON
+spi1(0x02);
+temp=EE_EE_WRITE_CNT/256;
+spi1(temp);
+temp=EE_EE_WRITE_CNT%256;
+spi1(temp);
+temp=(EE_WRITE_CNT+1)/256;
+spi1(temp);
+temp=(EE_WRITE_CNT+1)%256;
+spi1(temp);
+CS_OFF
+CS_OFF
+spi1_unconfig();
+*/
+
 return temp;
 }  
 
