@@ -172,6 +172,7 @@ void ach_off_hndl(void);
 void curr_off_hndl(void);
 void reset_CAP(void);
 void stop_CAP(void);
+void ramModbusCnt_hndl(void);
 void pause_CAP(void);
 void start_CAP(void); 
 
@@ -1378,6 +1379,8 @@ extern signed short T_DEL_REL_CURR_START;
 extern signed short T_DEL_REL_CURR_WRK;			
 extern signed short T_DEL_REL_VOLT_START;		
 extern signed short T_DEL_REL_VOLT_WRK;			
+extern signed short I_ug_ram;					
+extern signed short U_up_ram;					
 extern signed short DELT_REL_CURR_U;				
 extern signed short DELT_REL_CURR_I;
 extern signed short REL_VOLT_UMAX;				
@@ -1486,6 +1489,9 @@ extern char num_of_max_src;
 extern char bAVG_CNT;
 
 extern short pvlk;
+
+extern char eepromRamSwitch; 	
+extern short ramModbusCnt;		
 
 
 
@@ -4747,6 +4753,17 @@ void stop_CAP(void) {
 }
 
 
+void ramModbusCnt_hndl(void)  
+{
+if(ramModbusCnt) ramModbusCnt--;
+else 
+	{
+	I_ug_ram=0;
+	U_up_ram=0;
+	}	
+}
+
+
 void reset_CAP(void) {
 	work_stat=wsOFF;
 	cap_time_proc=0;
@@ -4938,8 +4955,8 @@ if(fiks_stat_U==2)U_up_temp=U_up3;
 
 }
 	
-gran(&I_ug_temp,I_MIN_IPS,I_MAX_IPS);
-gran(&U_up_temp,U_MIN,U_MAX);
+gran(&I_ug_temp,0 ,I_MAX_IPS);
+gran(&U_up_temp,0 ,U_MAX);
 
 if(sh_cnt0<10) {
 	sh_cnt0++;
@@ -6033,7 +6050,7 @@ else if(RELE_FUNC[1]==5)
 
 void rele_drv(void)
 {
-#line 2487 "control.c"
+#line 2498 "control.c"
 
 
 ((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 = ( (((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 & ~((0xffffffff>>(32-2))<<7*2)) | ((unsigned)0 << 7*2) );

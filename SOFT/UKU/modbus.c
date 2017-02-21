@@ -1402,10 +1402,10 @@ char i;
 //I_ug=reg_adr;
 //U_up=5678;
 
-modbus_registers[0]=(char)(I_ug/256);					//Πεγ50
-modbus_registers[1]=(char)(I_ug%256);
-modbus_registers[2]=(char)(U_up/256);					//Πεγ51
-modbus_registers[3]=(char)(U_up%256);
+modbus_registers[0]=(char)(lc640_read_int(EE_I_UG)/256);//Πεγ50
+modbus_registers[1]=(char)(lc640_read_int(EE_I_UG)%256);
+modbus_registers[2]=(char)(lc640_read_int(EE_U_UP)/256);//Πεγ51
+modbus_registers[3]=(char)(lc640_read_int(EE_U_UP)%256);
 modbus_registers[4]=(char)(U_maxg/256);					//Πεγ52
 modbus_registers[5]=(char)(U_maxg%256);
 modbus_registers[6]=(char)(I_maxp/256);					//Πεγ53
@@ -1460,6 +1460,11 @@ modbus_registers[50]=(char)((CAP_MAX_VOLT)/256);			//Πεγ75
 modbus_registers[51]=(char)((CAP_MAX_VOLT)%256);
 modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			//Πεγ76
 modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
+
+modbus_registers[80]=(char)((I_ug_ram)/256);			//Πεγ90
+modbus_registers[81]=(char)((I_ug_ram)%256);
+modbus_registers[82]=(char)((U_up_ram)/256);			//Πεγ91
+modbus_registers[83]=(char)((U_up_ram)%256);
 
 if(prot==MODBUS_RTU_PROT)
 	{

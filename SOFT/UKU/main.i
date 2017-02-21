@@ -1348,6 +1348,8 @@ extern signed short T_DEL_REL_CURR_START;
 extern signed short T_DEL_REL_CURR_WRK;			
 extern signed short T_DEL_REL_VOLT_START;		
 extern signed short T_DEL_REL_VOLT_WRK;			
+extern signed short I_ug_ram;					
+extern signed short U_up_ram;					
 extern signed short DELT_REL_CURR_U;				
 extern signed short DELT_REL_CURR_I;
 extern signed short REL_VOLT_UMAX;				
@@ -1456,6 +1458,9 @@ extern char num_of_max_src;
 extern char bAVG_CNT;
 
 extern short pvlk;
+
+extern char eepromRamSwitch; 	
+extern short ramModbusCnt;		
 
 
 
@@ -2086,6 +2091,7 @@ void ach_off_hndl(void);
 void curr_off_hndl(void);
 void reset_CAP(void);
 void stop_CAP(void);
+void ramModbusCnt_hndl(void);
 void pause_CAP(void);
 void start_CAP(void); 
 
@@ -5490,7 +5496,8 @@ signed short T_DEL_REL_CURR_START;
 signed short T_DEL_REL_CURR_WRK;			
 signed short T_DEL_REL_VOLT_START;		
 signed short T_DEL_REL_VOLT_WRK;			
-
+signed short I_ug_ram;					
+signed short U_up_ram;					
 signed short DELT_REL_CURR_U;				
 signed short DELT_REL_CURR_I;
 signed short REL_VOLT_UMAX;				
@@ -5598,6 +5605,9 @@ char num_of_max_src;
 char bAVG_CNT;
 
 short pvlk;
+
+char eepromRamSwitch; 	
+short ramModbusCnt;		
 
 
 void rtc_init (void) 
@@ -9086,6 +9096,11 @@ else if(a_ind . i==iAvz)
 
 
 
+
+
+
+ 
+
 }							    
 
 
@@ -9162,12 +9177,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4253 "main.c"
+#line 4262 "main.c"
 
 
 
 
-#line 4275 "main.c"
+#line 4284 "main.c"
 
 
 
@@ -9542,10 +9557,11 @@ else if(a_ind . i==iMn)
 				}
 			} else if(fiks_stat_I==0){
 				if(but==239) {
-			    		if(I_ug<1000)I_ug++;
+			    	if(I_ug<1000)I_ug++;
 					else I_ug=((I_ug/10)+1)*10;
-			    		gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-					lc640_write_int(0x10+16,I_ug);
+			    	gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+					eepromRamSwitch=0;
 					speed__=0;
 				} else if(but==111) {
 					speed__++;
@@ -9553,12 +9569,14 @@ else if(a_ind . i==iMn)
 						if(I_ug<1000)I_ug=((I_ug/5)+1)*5;
 						else I_ug=((I_ug/10)+1)*10;
 			    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-						lc640_write_int(0x10+16,I_ug);
+						if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+						eepromRamSwitch=0;
 						speed=1;
 					} else {
 						I_ug=((I_ug/50)+1)*50;
 			    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-						lc640_write_int(0x10+16,I_ug);
+						if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+						eepromRamSwitch=0;
 						speed=1;
 					}
 					speed=1;
@@ -9566,7 +9584,8 @@ else if(a_ind . i==iMn)
 					if(I_ug<1000)I_ug--;
 					else I_ug=((I_ug/10)-1)*10;
 			    		gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-					lc640_write_int(0x10+16,I_ug);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+					eepromRamSwitch=0;
 					speed__=0;
 				} else if(but==119) {
 					speed__++;
@@ -9574,12 +9593,14 @@ else if(a_ind . i==iMn)
 						if(I_ug<1000)I_ug=((I_ug/5)-1)*5;
 						else I_ug=((I_ug/10)-1)*10;
 			    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-						lc640_write_int(0x10+16,I_ug);
+						if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+						eepromRamSwitch=0;
 						speed=1;
 					} else {
 						I_ug=((I_ug/50)-1)*50;
 			    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-						lc640_write_int(0x10+16,I_ug);
+						if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+						eepromRamSwitch=0;
 						speed=1;
 					}
 					speed=1;
@@ -9849,10 +9870,11 @@ else if(a_ind . i==iMn)
 			{
 			if(but==239)
 				{
-		    		U_up++;
-		    		gran(&U_up,U_MIN,U_MAX);
-				lc640_write_int(0x10+18,U_up);
+		    	U_up++;
+		    	gran(&U_up,U_MIN,U_MAX);
+				if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
 				speed__=0;
+				eepromRamSwitch=0;
 				find_U_curve(U_up);
 				}
 			else if(but==111)
@@ -9861,15 +9883,17 @@ else if(a_ind . i==iMn)
 				if(speed__<50)
 					{
 					U_up=((U_up/5)+1)*5;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				else 
 					{
 					U_up=((U_up/50)+1)*50;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				speed=1;
@@ -9877,9 +9901,10 @@ else if(a_ind . i==iMn)
 
 			else if(but==247)
 				{
-		    		U_up--;
-		    		gran(&U_up,U_MIN,U_MAX);
-				lc640_write_int(0x10+18,U_up);
+		    	U_up--;
+		    	gran(&U_up,U_MIN,U_MAX);
+				if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+				eepromRamSwitch=0;
 				speed__=0;
 				}
 			else if(but==119)
@@ -9888,15 +9913,17 @@ else if(a_ind . i==iMn)
 				if(speed__<50)
 					{
 					U_up=((U_up/5)-1)*5;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				else 
 					{
 					U_up=((U_up/50)-1)*50;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				speed=1;
@@ -10208,7 +10235,8 @@ else if(a_ind . i==iMn)
 				{
 		    		I_ug++;
 		    		gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-				lc640_write_int(0x10+16,I_ug);
+				if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+				eepromRamSwitch=0;
 				speed__=0;
 				}
 			else if(but==111)
@@ -10218,14 +10246,16 @@ else if(a_ind . i==iMn)
 					{
 					I_ug=((I_ug/5)+1)*5;
 		    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-					lc640_write_int(0x10+16,I_ug);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				else 
 					{
 					I_ug=((I_ug/50)+1)*50;
 		    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-					lc640_write_int(0x10+16,I_ug);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				speed=1;
@@ -10235,7 +10265,8 @@ else if(a_ind . i==iMn)
 				{
 		    		I_ug--;
 		    		gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-				lc640_write_int(0x10+16,I_ug);
+				if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+				eepromRamSwitch=0;
 				speed__=0;
 				}
 			else if(but==119)
@@ -10245,14 +10276,16 @@ else if(a_ind . i==iMn)
 					{
 					I_ug=((I_ug/5)-1)*5;
 		    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-					lc640_write_int(0x10+16,I_ug);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				else 
 					{
 					I_ug=((I_ug/50)-1)*50;
-		    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-					lc640_write_int(0x10+16,I_ug);
+		    		gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				speed=1;
@@ -10452,44 +10485,50 @@ else if(a_ind . i==iMn)
 		  	}
 		else if(a_ind . s_i==5) {
 			if(but==239) {
-		    		if(U_up<1000)U_up++;
+		    	if(U_up<1000)U_up++;
 				else U_up=((U_up/10)+1)*10;
-		    		gran(&U_up,U_MIN,U_MAX);
-				lc640_write_int(0x10+18,U_up);
+		    	gran(&U_up,U_MIN,U_MAX);
+				if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+				eepromRamSwitch=0;
 				speed__=0;
 			} else if(but==111) {
 				speed__++;
 				if(speed__<50)	{
 					if(U_up<1000)U_up=((U_up/5)+1)*5;
 					else U_up=((U_up/10)+1)*10;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 				} else {
 					U_up=((U_up/50)+1)*50;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 				}
 				speed=1;
 			} else if(but==247) {
-		    		if(U_up<1000)U_up--;
+		    	if(U_up<1000)U_up--;
 				else U_up=((U_up/10)-1)*10;
-		    		gran(&U_up,U_MIN,U_MAX);
-				lc640_write_int(0x10+18,U_up);
+		    	gran(&U_up,U_MIN,U_MAX);
+				if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+				eepromRamSwitch=0;
 				speed__=0;
 			} else if(but==119) {
 				speed__++;
 				if(speed__<50)	{
 					if(U_up<1000)U_up=((U_up/5)-1)*5;
 					else U_up=((U_up/10)-1)*10;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 				} else {
 					U_up=((U_up/50)-1)*50;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 				}
 				speed=1;
@@ -10819,44 +10858,50 @@ else if(a_ind . i==iMn)
 		  	}
 		else if(a_ind . s_i==1) {
 			if(but==239) {
-		    		if(U_up<1000)U_up++;
+		    	if(U_up<1000)U_up++;
 				else U_up=((U_up/10)+1)*10;
-		    		gran(&U_up,U_MIN,U_MAX);
-				lc640_write_int(0x10+18,U_up);
+		    	gran(&U_up,U_MIN,U_MAX);
+				if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+				eepromRamSwitch=0;
 				speed__=0;
 			} else if(but==111) {
 				speed__++;
 				if(speed__<50)	{
 					if(U_up<1000)U_up=((U_up/5)+1)*5;
 					else U_up=((U_up/10)+1)*10;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 				} else {
 					U_up=((U_up/50)+1)*50;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 				}
 				speed=1;
 			} else if(but==247) {
-		    		if(U_up<1000)U_up--;
+		    	if(U_up<1000)U_up--;
 				else U_up=((U_up/10)-1)*10;
-		    		gran(&U_up,U_MIN,U_MAX);
-				lc640_write_int(0x10+18,U_up);
+		    	gran(&U_up,U_MIN,U_MAX);
+				if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+				eepromRamSwitch=0;
 				speed__=0;
 			} else if(but==119) {
 				speed__++;
 				if(speed__<50)	{
 					if(U_up<1000)U_up=((U_up/5)-1)*5;
 					else U_up=((U_up/10)-1)*10;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 				} else {
 					U_up=((U_up/50)-1)*50;
-		    			gran(&U_up,U_MIN,U_MAX);
-					lc640_write_int(0x10+18,U_up);
+		    		gran(&U_up,U_MIN,U_MAX);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+18,U_up);
+					eepromRamSwitch=0;
 					speed=1;
 				}
 				speed=1;
@@ -11053,9 +11098,10 @@ else if(a_ind . i==iMn)
 			{
 			if(but==239)
 				{
-		    		I_ug++;
-		    		gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-				lc640_write_int(0x10+16,I_ug);
+		    	I_ug++;
+		    	gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
+				if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+				eepromRamSwitch=0;
 				speed__=0;
 				}
 			else if(but==111)
@@ -11064,15 +11110,17 @@ else if(a_ind . i==iMn)
 				if(speed__<50)
 					{
 					I_ug=((I_ug/5)+1)*5;
-		    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-					lc640_write_int(0x10+16,I_ug);
+		    		gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				else 
 					{
 					I_ug=((I_ug/50)+1)*50;
-		    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-					lc640_write_int(0x10+16,I_ug);
+		    		gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				speed=1;
@@ -11080,9 +11128,10 @@ else if(a_ind . i==iMn)
 
 			else if(but==247)
 				{
-		    		I_ug--;
-		    		gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-				lc640_write_int(0x10+16,I_ug);
+		    	I_ug--;
+		    	gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
+				if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+				eepromRamSwitch=0;
 				speed__=0;
 				}
 			else if(but==119)
@@ -11091,15 +11140,17 @@ else if(a_ind . i==iMn)
 				if(speed__<50)
 					{
 					I_ug=((I_ug/5)-1)*5;
-		    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-					lc640_write_int(0x10+16,I_ug);
+		    		gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				else 
 					{
 					I_ug=((I_ug/50)-1)*50;
-		    			gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
-					lc640_write_int(0x10+16,I_ug);
+		    		gran(&I_ug,I_MIN_IPS,I_MAX_IPS);
+					if(eepromRamSwitch==0)lc640_write_int(0x10+16,I_ug);
+					eepromRamSwitch=0;
 					speed=1;
 					}
 				speed=1;
@@ -16120,8 +16171,12 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11233 "main.c"
+#line 11278 "main.c"
 
+
+AUSW_MAIN_NUMBER=1000;
+AUSW_MAIN_NUMBER=1001;
+AUSW_MAIN_NUMBER=1002;
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);
 mac_adr[4]=*(((char*)&AUSW_MAIN_NUMBER)+1);
@@ -16512,6 +16567,7 @@ while (1)
 		curr_off_hndl();	
 
 		avg_hndl();			
+		ramModbusCnt_hndl();
 		}
 	if(b1min)
 		{

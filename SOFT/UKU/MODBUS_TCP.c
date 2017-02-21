@@ -74,6 +74,7 @@ switch (evt)
 	if(modbus_tcp_unit==MODBUS_ADRESS)
 		{
 		//char modbus_tcp_tx_buff[200];
+		ramModbusCnt=300;
 
 		if(modbus_tcp_func==3)		//чтение произвольного кол-ва регистров хранения
 			{
@@ -552,6 +553,17 @@ switch (evt)
 
 				}
 
+			else if(modbus_tcp_rx_arg0==90)		//ток стабилизации для режима стабилизации тока, в ОЗУ
+				{
+				I_ug_ram=modbus_tcp_rx_arg1;
+				eepromRamSwitch=1;
+				}
+
+			else if(modbus_tcp_rx_arg0==91)	//напряжение стабилизации для режима стабилизации напряжения, в ОЗУ
+				{
+				U_up_ram=modbus_tcp_rx_arg1;
+				eepromRamSwitch=1;
+				}
 			
 			if((T_PROC_GS>T_PROC_MAX)||(T_PROC_GS<30))
 				{
@@ -613,7 +625,7 @@ switch (evt)
 
 
 
-			lc640_write_int(EE_EE_WRITE_CNT,EE_WRITE_CNT+1);
+			if((modbus_tcp_rx_arg0!=90)&&(modbus_tcp_rx_arg0!=91)) lc640_write_int(EE_EE_WRITE_CNT,EE_WRITE_CNT+1);
 
 
 			}
@@ -1031,7 +1043,20 @@ switch (evt)
 							}
 						}
 	
-					}				
+					}
+
+				if((modbus_tcp_rx_arg0+i)==90)		//ток стабилизации для режима стабилизации тока, в ОЗУ
+					{
+					I_ug_ram=modbus_tcp_write_args[i];
+					eepromRamSwitch=1;
+					}
+
+				else if((modbus_tcp_rx_arg0+i)==91)	//напряжение стабилизации для режима стабилизации напряжения, в ОЗУ
+					{
+					U_up_ram=modbus_tcp_write_args[i];
+					eepromRamSwitch=1;
+					}
+									
 				if((T_PROC_GS>T_PROC_MAX)||(T_PROC_GS<30))
 					{
 					if(T_PROC_GS>T_PROC_MAX)T_PROC_GS=T_PROC_MAX+1;
@@ -1061,20 +1086,7 @@ switch (evt)
 					}				
 				}
 
-			
 
-	 /*
-	
-
-
-
-
-
-
-
-			
-
-			*/
 			
 			//modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_tcp_func,modbus_tcp_rx_arg0,modbus_tcp_rx_arg1,MODBUS_TCP_PROT);
 	
@@ -1104,6 +1116,7 @@ switch (evt)
 				//modbus_tcp_tx_buff[10]=3;
 				//tcp_send (socket_tcp, modbus_tcp_tx_buff, 11);
 
+ 			if((modbus_tcp_rx_arg0!=90)&&(modbus_tcp_rx_arg0!=91)) lc640_write_int(EE_EE_WRITE_CNT,EE_WRITE_CNT+1);
 
 
 

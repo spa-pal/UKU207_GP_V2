@@ -841,6 +841,8 @@ extern signed short T_DEL_REL_CURR_START;		//период нечувствительности по времен
 extern signed short T_DEL_REL_CURR_WRK;			//период нечувствительности по времени реле токоограничения после наступления токоограничения, секунд
 extern signed short T_DEL_REL_VOLT_START;		//период нечувствительности по времени реле контроля напряжения после старта процесса, секунд 
 extern signed short T_DEL_REL_VOLT_WRK;			//период нечувствительности по времени реле контроля напряжения после наступления условия срабатывания реле, секунд
+extern signed short I_ug_ram;					//уставка тока хранящаяся в RAM
+extern signed short U_up_ram;					//уставка напряжения хранящаяся в RAM
 extern signed short DELT_REL_CURR_U;				
 extern signed short DELT_REL_CURR_I;
 extern signed short REL_VOLT_UMAX;				
@@ -949,6 +951,9 @@ extern char num_of_max_src;
 extern char bAVG_CNT;
 
 extern short pvlk;
+
+extern char eepromRamSwitch; 	//переключатель управления процессом с EEPROM (если 0) на RAM (другое)
+extern short ramModbusCnt;		//счетчик неактивности MODBUS, при достижении 300(5 минут) обнуляет управление
 
 /*----------------------------------------------------------------------------
  * end of file

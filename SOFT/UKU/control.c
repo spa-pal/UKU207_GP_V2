@@ -1191,6 +1191,17 @@ void stop_CAP(void) {
 }
 
 //-----------------------------------------------
+void ramModbusCnt_hndl(void)  
+{
+if(ramModbusCnt) ramModbusCnt--;
+else 
+	{
+	I_ug_ram=0;
+	U_up_ram=0;
+	}	
+}
+
+//-----------------------------------------------
 void reset_CAP(void) {
 	work_stat=wsOFF;
 	cap_time_proc=0;
@@ -1382,8 +1393,8 @@ if(fiks_stat_U==2)U_up_temp=U_up3;
 
 }
 	
-gran(&I_ug_temp,I_MIN_IPS,I_MAX_IPS);
-gran(&U_up_temp,U_MIN,U_MAX);
+gran(&I_ug_temp,0/*I_MIN_IPS*/,I_MAX_IPS);
+gran(&U_up_temp,0/*U_MIN*/,U_MAX);
 
 if(sh_cnt0<10) {
 	sh_cnt0++;

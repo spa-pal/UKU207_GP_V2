@@ -1315,6 +1315,8 @@ extern signed short T_DEL_REL_CURR_START;
 extern signed short T_DEL_REL_CURR_WRK;			
 extern signed short T_DEL_REL_VOLT_START;		
 extern signed short T_DEL_REL_VOLT_WRK;			
+extern signed short I_ug_ram;					
+extern signed short U_up_ram;					
 extern signed short DELT_REL_CURR_U;				
 extern signed short DELT_REL_CURR_I;
 extern signed short REL_VOLT_UMAX;				
@@ -1423,6 +1425,9 @@ extern char num_of_max_src;
 extern char bAVG_CNT;
 
 extern short pvlk;
+
+extern char eepromRamSwitch; 	
+extern short ramModbusCnt;		
 
 
 
@@ -2596,6 +2601,7 @@ void ach_off_hndl(void);
 void curr_off_hndl(void);
 void reset_CAP(void);
 void stop_CAP(void);
+void ramModbusCnt_hndl(void);
 void pause_CAP(void);
 void start_CAP(void); 
 
@@ -4430,10 +4436,10 @@ char i;
 
 
 
-modbus_registers[0]=(char)(I_ug/256);					
-modbus_registers[1]=(char)(I_ug%256);
-modbus_registers[2]=(char)(U_up/256);					
-modbus_registers[3]=(char)(U_up%256);
+modbus_registers[0]=(char)(lc640_read_int(0x10+16)/256);
+modbus_registers[1]=(char)(lc640_read_int(0x10+16)%256);
+modbus_registers[2]=(char)(lc640_read_int(0x10+18)/256);
+modbus_registers[3]=(char)(lc640_read_int(0x10+18)%256);
 modbus_registers[4]=(char)(U_maxg/256);					
 modbus_registers[5]=(char)(U_maxg%256);
 modbus_registers[6]=(char)(I_maxp/256);					
@@ -4488,6 +4494,11 @@ modbus_registers[50]=(char)((CAP_MAX_VOLT)/256);
 modbus_registers[51]=(char)((CAP_MAX_VOLT)%256);
 modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			
 modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
+
+modbus_registers[80]=(char)((I_ug_ram)/256);			
+modbus_registers[81]=(char)((I_ug_ram)%256);
+modbus_registers[82]=(char)((U_up_ram)/256);			
+modbus_registers[83]=(char)((U_up_ram)%256);
 
 if(prot==0)
 	{

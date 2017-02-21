@@ -17,10 +17,20 @@ I_MAX=lc640_read_int(EE_I_MAX);
 I_MIN=lc640_read_int(EE_I_MIN);
 T_MAX=lc640_read_int(EE_T_MAX);
 T_SIGN=lc640_read_int(EE_T_SIGN);
-if(!I_ug_block_cnt)I_ug=lc640_read_int(EE_I_UG);
+if(eepromRamSwitch==0)
+	{
+	if(!I_ug_block_cnt)I_ug=lc640_read_int(EE_I_UG); 
+	if(!U_up_block_cnt)U_up=lc640_read_int(EE_U_UP);
+	}
+else 
+	{
+	I_ug=I_ug_ram;
+	U_up=U_up_ram;
+	}
 I_ug2=lc640_read_int(EE_I_UG2);
 I_ug3=lc640_read_int(EE_I_UG3);
-if(!U_up_block_cnt)U_up=lc640_read_int(EE_U_UP);
+
+
 U_up2=lc640_read_int(EE_U_UP2);
 U_up3=lc640_read_int(EE_U_UP3);
 U_maxg=lc640_read_int(EE_U_MAX_G);

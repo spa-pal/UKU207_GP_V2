@@ -147,6 +147,7 @@ void ach_off_hndl(void);
 void curr_off_hndl(void);
 void reset_CAP(void);
 void stop_CAP(void);
+void ramModbusCnt_hndl(void);
 void pause_CAP(void);
 void start_CAP(void); 
 

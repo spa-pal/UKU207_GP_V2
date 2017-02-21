@@ -3144,6 +3144,8 @@ extern signed short T_DEL_REL_CURR_START;
 extern signed short T_DEL_REL_CURR_WRK;			
 extern signed short T_DEL_REL_VOLT_START;		
 extern signed short T_DEL_REL_VOLT_WRK;			
+extern signed short I_ug_ram;					
+extern signed short U_up_ram;					
 extern signed short DELT_REL_CURR_U;				
 extern signed short DELT_REL_CURR_I;
 extern signed short REL_VOLT_UMAX;				
@@ -3252,6 +3254,9 @@ extern char num_of_max_src;
 extern char bAVG_CNT;
 
 extern short pvlk;
+
+extern char eepromRamSwitch; 	
+extern short ramModbusCnt;		
 
 
 
@@ -3407,6 +3412,7 @@ void ach_off_hndl(void);
 void curr_off_hndl(void);
 void reset_CAP(void);
 void stop_CAP(void);
+void ramModbusCnt_hndl(void);
 void pause_CAP(void);
 void start_CAP(void); 
 

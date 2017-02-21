@@ -1128,6 +1128,8 @@ extern signed short T_DEL_REL_CURR_START;
 extern signed short T_DEL_REL_CURR_WRK;			
 extern signed short T_DEL_REL_VOLT_START;		
 extern signed short T_DEL_REL_VOLT_WRK;			
+extern signed short I_ug_ram;					
+extern signed short U_up_ram;					
 extern signed short DELT_REL_CURR_U;				
 extern signed short DELT_REL_CURR_I;
 extern signed short REL_VOLT_UMAX;				
@@ -1236,6 +1238,9 @@ extern char num_of_max_src;
 extern char bAVG_CNT;
 
 extern short pvlk;
+
+extern char eepromRamSwitch; 	
+extern short ramModbusCnt;		
 
 
 
@@ -1392,6 +1397,7 @@ void ach_off_hndl(void);
 void curr_off_hndl(void);
 void reset_CAP(void);
 void stop_CAP(void);
+void ramModbusCnt_hndl(void);
 void pause_CAP(void);
 void start_CAP(void); 
 
@@ -1410,10 +1416,20 @@ I_MAX=lc640_read_int(0x10+12);
 I_MIN=lc640_read_int(0x10+14);
 T_MAX=lc640_read_int(0x10+22);
 T_SIGN=lc640_read_int(0x10+24);
-if(!I_ug_block_cnt)I_ug=lc640_read_int(0x10+16);
+if(eepromRamSwitch==0)
+	{
+	if(!I_ug_block_cnt)I_ug=lc640_read_int(0x10+16); 
+	if(!U_up_block_cnt)U_up=lc640_read_int(0x10+18);
+	}
+else 
+	{
+	I_ug=I_ug_ram;
+	U_up=U_up_ram;
+	}
 I_ug2=lc640_read_int(0x10+50);
 I_ug3=lc640_read_int(0x10+52);
-if(!U_up_block_cnt)U_up=lc640_read_int(0x10+18);
+
+
 U_up2=lc640_read_int(0x10+54);
 U_up3=lc640_read_int(0x10+56);
 U_maxg=lc640_read_int(0x10+100+2);
