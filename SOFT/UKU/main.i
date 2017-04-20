@@ -9096,7 +9096,7 @@ else if(a_ind . i==iAvz)
 
 
 
-
+int2lcdyx(pvlk,0,3,0);
 
 
  

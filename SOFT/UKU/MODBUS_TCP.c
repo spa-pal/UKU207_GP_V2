@@ -637,12 +637,12 @@ switch (evt)
 			unsigned short modbus_tcp_write_args[100];
 			char i;
 
-			pvlk=0;
+			//pvlk=0;
 
 			for(i=0;i<modbus_tcp_rx_arg1;i++)
 				{
 				modbus_tcp_write_args[i]=(((unsigned short)ptr[13+(i*2)])*((unsigned short)256))+((unsigned short)ptr[14+(i*2)]);
-				pvlk++;
+				//pvlk++;
 				}
 			
 			for(i=0;i<modbus_tcp_rx_arg1;i++)

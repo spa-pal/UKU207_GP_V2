@@ -88,6 +88,82 @@ crc16_incapsulated = *((short*)&modbus_an_buffer[modbus_rx_counter-2]);
 
 
 
+if((modbus_an_buffer[0]=='r')&&(modbus_an_buffer[1]=='e')&&(modbus_an_buffer[2]=='a')&&(modbus_an_buffer[3]=='d')&&(modbus_an_buffer[6]==crc_87(modbus_an_buffer,6))&&(modbus_an_buffer[7]==crc_95(modbus_an_buffer,6)))
+	{
+	unsigned short ptr;
+	unsigned long data1,data2;
+	char temp_out[20];
+	pvlk++;
+	ptr=modbus_an_buffer[4]+(modbus_an_buffer[5]*256U);
+	data1=lc640_read_long(ptr);
+	data2=lc640_read_long(ptr+4);
+	temp_out[0]='r';
+	temp_out[1]='e';
+	temp_out[2]='a';
+	temp_out[3]='d';
+	temp_out[4]=*((char*)&ptr);
+	temp_out[5]=*(((char*)&ptr)+1);	
+	temp_out[6]=*((char*)&data1);
+	temp_out[7]=*(((char*)&data1)+1);		
+	temp_out[8]=*(((char*)&data1)+2);	
+	temp_out[9]=*(((char*)&data1)+3);		
+	temp_out[10]=*((char*)&data2);
+	temp_out[11]=*(((char*)&data2)+1);		
+	temp_out[12]=*(((char*)&data2)+2);	
+	temp_out[13]=*(((char*)&data2)+3);	
+	temp_out[14]=crc_87(temp_out,14);	
+	temp_out[15]=crc_95(temp_out,14);			
+	
+	temp_out[17]=0;
+	for (i=0;i<16;i++)
+		{
+		putchar_sc16is700(temp_out[i]);
+		temp_out[17]^=temp_out[i];
+		}
+	putchar_sc16is700(16);
+	putchar_sc16is700(temp_out[17]^16);
+	putchar_sc16is700(0x0a);
+	}
+
+/*
+if((UIB0[0]=='w')&&(UIB0[1]=='r')&&(UIB0[2]=='i')&&(UIB0[3]=='t')&&(UIB0[4]=='e')&&(UIB0[15]==crc_87(UIB0,15))&&(UIB0[16]==crc_95(UIB0,15)))
+	{
+	unsigned short ptr;
+	unsigned long data1,data2;
+	char temp_out[20];
+	ptr=UIB0[5]+(UIB0[6]*256U);
+	*((char*)&data1)=UIB0[7];
+	*(((char*)&data1)+1)=UIB0[8];
+	*(((char*)&data1)+2)=UIB0[9];
+	*(((char*)&data1)+3)=UIB0[10];
+	*((char*)&data2)=UIB0[11];
+	*(((char*)&data2)+1)=UIB0[12];
+	*(((char*)&data2)+2)=UIB0[13];
+	*(((char*)&data2)+3)=UIB0[14];	
+	lc640_write_long(ptr,data1);
+	lc640_write_long(ptr+4,data2);
+	
+	//data1=lc640_read_long(ptr);
+	//data2=lc640_read_long(ptr+4);
+	temp_out[0]='w';
+	temp_out[1]='r';
+	temp_out[2]='i';
+	temp_out[3]='t';
+	temp_out[4]='e';
+	temp_out[5]=*((char*)&ptr);
+	temp_out[6]=*(((char*)&ptr)+1);	
+
+	temp_out[7]=crc_87(temp_out,7);	
+	temp_out[8]=crc_95(temp_out,7);			
+	uart_out_adr0(temp_out,9);
+	}
+
+
+}
+	*/
+
+
+
 modbus_func=modbus_an_buffer[1];
 modbus_rx_arg0=(((unsigned short)modbus_an_buffer[2])*((unsigned short)256))+((unsigned short)modbus_an_buffer[3]);
 modbus_rx_arg1=(((unsigned short)modbus_an_buffer[4])*((unsigned short)256))+((unsigned short)modbus_an_buffer[5]);

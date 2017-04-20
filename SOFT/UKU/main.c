@@ -4172,8 +4172,8 @@ int2lcdyx(retcntsec,0,7,0);	*/
 //int2lcdyx(cnt_volt_contr,0,6,0);
 //int2lcdyx(cnt_rel_volt_umax,0,10,0);
 
-/*int2lcdyx(I_ug_ram,0,3,0);
-int2lcdyx(U_up_ram,0,9,0);
+int2lcdyx(pvlk,0,3,0);
+/*int2lcdyx(U_up_ram,0,9,0);
 int2lcdyx(eepromRamSwitch,0,13,0);
 int2lcdyx(ramModbusCnt,0,19,0);*/
 
