@@ -4172,7 +4172,7 @@ int2lcdyx(retcntsec,0,7,0);	*/
 //int2lcdyx(cnt_volt_contr,0,6,0);
 //int2lcdyx(cnt_rel_volt_umax,0,10,0);
 
-int2lcdyx(pvlk,0,3,0);
+//int2lcdyx(pvlk,0,3,0);
 /*int2lcdyx(U_up_ram,0,9,0);
 int2lcdyx(eepromRamSwitch,0,13,0);
 int2lcdyx(ramModbusCnt,0,19,0);*/
@@ -11441,6 +11441,10 @@ if (socket_tcp != 0)
 	{
     tcp_listen (socket_tcp, 502);
   	}
+
+if(MODBUS_BAUDRATE==0xffff)MODBUS_BAUDRATE=3840;
+lc640_write_int(EE_MODBUS_BAUDRATE,MODBUS_BAUDRATE);
+
 		
 while (1)  
 	{

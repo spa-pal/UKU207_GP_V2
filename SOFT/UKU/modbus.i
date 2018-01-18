@@ -3119,84 +3119,136 @@ crc16_incapsulated = *((short*)&modbus_an_buffer[modbus_rx_counter-2]);
 
 
 
+pvlk=0;
 
 
-
-if((modbus_an_buffer[0]=='r')&&(modbus_an_buffer[1]=='e')&&(modbus_an_buffer[2]=='a')&&(modbus_an_buffer[3]=='d')&&(modbus_an_buffer[6]==crc_87(modbus_an_buffer,6))&&(modbus_an_buffer[7]==crc_95(modbus_an_buffer,6)))
+if(modbus_an_buffer[0]=='r')
 	{
-	unsigned short ptr;
-	unsigned long data1,data2;
-	char temp_out[20];
-	pvlk++;
-	ptr=modbus_an_buffer[4]+(modbus_an_buffer[5]*256U);
-	data1=lc640_read_long(ptr);
-	data2=lc640_read_long(ptr+4);
-	temp_out[0]='r';
-	temp_out[1]='e';
-	temp_out[2]='a';
-	temp_out[3]='d';
-	temp_out[4]=*((char*)&ptr);
-	temp_out[5]=*(((char*)&ptr)+1);	
-	temp_out[6]=*((char*)&data1);
-	temp_out[7]=*(((char*)&data1)+1);		
-	temp_out[8]=*(((char*)&data1)+2);	
-	temp_out[9]=*(((char*)&data1)+3);		
-	temp_out[10]=*((char*)&data2);
-	temp_out[11]=*(((char*)&data2)+1);		
-	temp_out[12]=*(((char*)&data2)+2);	
-	temp_out[13]=*(((char*)&data2)+3);	
-	temp_out[14]=crc_87(temp_out,14);	
-	temp_out[15]=crc_95(temp_out,14);			
-	
-	temp_out[17]=0;
-	for (i=0;i<16;i++)
+	pvlk=1;
+	if(modbus_an_buffer[1]=='e')
 		{
-		putchar_sc16is700(temp_out[i]);
-		temp_out[17]^=temp_out[i];
+		pvlk=2;
+		if(modbus_an_buffer[2]=='a')
+			{
+			pvlk=3;
+			if(modbus_an_buffer[3]=='d')
+				{
+				pvlk=4;
+				
+
+
+
+
+ 	
+
+							{
+							unsigned short ptr;
+							unsigned long data1,data2;
+							char temp_out[20];
+							pvlk++;
+							ptr=modbus_an_buffer[4]+(modbus_an_buffer[5]*256U);
+							data1=lc640_read_long(ptr);
+							data2=lc640_read_long(ptr+4);
+							temp_out[0]='r';
+							temp_out[1]='e';
+							temp_out[2]='a';
+							temp_out[3]='d';
+							temp_out[4]=*((char*)&ptr);
+							temp_out[5]=*(((char*)&ptr)+1);	
+							temp_out[6]=*((char*)&data1);
+							temp_out[7]=*(((char*)&data1)+1);		
+							temp_out[8]=*(((char*)&data1)+2);	
+							temp_out[9]=*(((char*)&data1)+3);		
+							temp_out[10]=*((char*)&data2);
+							temp_out[11]=*(((char*)&data2)+1);		
+							temp_out[12]=*(((char*)&data2)+2);	
+							temp_out[13]=*(((char*)&data2)+3);	
+							temp_out[14]=crc_87(temp_out,14);	
+							temp_out[15]=crc_95(temp_out,14);			
+							
+							temp_out[17]=0;
+							for (i=0;i<16;i++)
+								{
+								putchar_sc16is700(temp_out[i]);
+								temp_out[17]^=temp_out[i];
+								}
+							putchar_sc16is700(16);
+							putchar_sc16is700(temp_out[17]^16);
+							putchar_sc16is700(0x0a);
+							}
+						}
+					}
+				}
+
+ 	 
+	} 
+
+if(modbus_an_buffer[0]=='w')
+	{
+	pvlk=1;
+	if(modbus_an_buffer[1]=='r')
+		{
+		pvlk=2;
+		if(modbus_an_buffer[2]=='i')
+			{
+			pvlk=3;
+			if(modbus_an_buffer[3]=='t')
+				{
+				pvlk=4;
+				if(modbus_an_buffer[4]=='e')
+					{
+					pvlk=5;
+					if(modbus_an_buffer[15]==crc_87(modbus_an_buffer,15))
+						{
+						pvlk=6;
+						if(modbus_an_buffer[16]==crc_95(modbus_an_buffer,15))
+
+							{
+							unsigned short ptr;
+							unsigned long data1,data2;
+							char temp_out[20];
+							pvlk=7;
+							ptr=modbus_an_buffer[5]+(modbus_an_buffer[6]*256U);
+							*((char*)&data1)=modbus_an_buffer[7];
+							*(((char*)&data1)+1)=modbus_an_buffer[8];
+							*(((char*)&data1)+2)=modbus_an_buffer[9];
+							*(((char*)&data1)+3)=modbus_an_buffer[10];
+							*((char*)&data2)=modbus_an_buffer[11];
+							*(((char*)&data2)+1)=modbus_an_buffer[12];
+							*(((char*)&data2)+2)=modbus_an_buffer[13];
+							*(((char*)&data2)+3)=modbus_an_buffer[14];	
+							lc640_write_long(ptr,data1);
+							lc640_write_long(ptr+4,data2);
+							
+							
+							
+							temp_out[0]='w';
+							temp_out[1]='r';
+							temp_out[2]='i';
+							temp_out[3]='t';
+							temp_out[4]='e';
+							temp_out[5]=*((char*)&ptr);
+							temp_out[6]=*(((char*)&ptr)+1);	
+						
+							temp_out[7]=crc_87(temp_out,7);	
+							temp_out[8]=crc_95(temp_out,7);			
+							
+							temp_out[10]=0;
+							for (i=0;i<9;i++)
+								{
+								putchar_sc16is700(temp_out[i]);
+								temp_out[10]^=temp_out[i];
+								}
+							putchar_sc16is700(9);
+							putchar_sc16is700(temp_out[10]^9);
+							putchar_sc16is700(0x0a);
+							}
+						}
+					}
+				}
+		   	}
 		}
-	putchar_sc16is700(16);
-	putchar_sc16is700(temp_out[17]^16);
-	putchar_sc16is700(0x0a);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
 
 modbus_func=modbus_an_buffer[1];
 modbus_rx_arg0=(((unsigned short)modbus_an_buffer[2])*((unsigned short)256))+((unsigned short)modbus_an_buffer[3]);

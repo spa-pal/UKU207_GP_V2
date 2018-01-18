@@ -9096,7 +9096,7 @@ else if(a_ind . i==iAvz)
 
 
 
-int2lcdyx(pvlk,0,3,0);
+
 
 
  
@@ -16338,6 +16338,10 @@ if (socket_tcp != 0)
 	{
     tcp_listen (socket_tcp, 502);
   	}
+
+if(MODBUS_BAUDRATE==0xffff)MODBUS_BAUDRATE=3840;
+lc640_write_int(0x10+100+130,MODBUS_BAUDRATE);
+
 		
 while (1)  
 	{
