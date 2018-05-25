@@ -376,7 +376,7 @@ typedef enum {
 	iK_power_net3,
 	iAvt,iLan_set,iRele_set,iRele_sel,iFiks_set,
 	iK_max_param,iCurr_contr_set,iVolt_contr_set,
-	iAch_off,iCurr_off,
+	iAch_off,iCurr_off,iUout_avar_control,
 	iProcIsComplete}i_enum;
 
 typedef struct  
@@ -588,6 +588,10 @@ extern signed short CUR_OFF_LEVEL_ABSOLUT;
 extern signed short CUR_OFF_T_OFF;
 extern signed short CUR_OFF_T_ON;
 extern signed short EE_WRITE_CNT;
+extern signed short UOUT_OFF_EN;	//функция отключения источников по превышению выхода над заданием вкл./выкл.
+extern signed short UOUT_OFF_LEVEL;	//Порог в процентах для функции отключения источников по превышению выхода над заданием
+extern signed short UOUT_OFF_DELAY;	//Задержка срабатывания в секундах для функции отключения источников по превышению выхода над заданием
+
 
 
 //***********************************************
@@ -629,15 +633,16 @@ typedef struct
      short _blok_cnt; //блокирование источников 
      char _flags_tm;
 	signed short _overload_av_cnt;     
-     signed short _temp_av_cnt;
-     signed short _umax_av_cnt;
-     signed short _umin_av_cnt;
-     signed _rotor;
-     signed  short _x_; 
-     char _adr_ee;
+    signed short _temp_av_cnt;
+    signed short _umax_av_cnt;
+    signed short _umin_av_cnt;
+    signed _rotor;
+    signed  short _x_; 
+    char _adr_ee;
 	char _last_avar; 
 	signed short _xu_;
-     } BPS_STAT; 
+	char _uout_avar_cnt;
+   	} BPS_STAT; 
 extern BPS_STAT bps[32];
 
 extern char first_inv_slot;
@@ -798,7 +803,7 @@ extern signed short _x_,_xu_;
 
 //**********************************************
 //Коэффициенты, отображаемые из EEPROM
-extern signed short Kiload0;
+extern int Kiload0;
 extern signed short Kiload1;
 extern signed short U_MAX;
 extern signed short U_MIN;
@@ -900,6 +905,7 @@ extern short AVT_REV_U_NOM_REW;
 extern short time_proc_phase;
 typedef enum {ppFF=0,ppFF_P_REW,ppREW,ppREW_P_FF}enum_proc_phase;
 extern enum_proc_phase proc_phase;
+extern short RS485_QWARZ_DIGIT;
 
 extern signed short I_ug_temp;
 extern signed short U_up_temp;
@@ -950,11 +956,15 @@ extern char num_of_dumm_src;
 extern char num_of_max_src;
 extern char bAVG_CNT;
 
+extern long gp_av_stat;
+
 extern short pvlk;
 
 extern char eepromRamSwitch; 	//переключатель управления процессом с EEPROM (если 0) на RAM (другое)
 extern short ramModbusCnt;		//счетчик неактивности MODBUS, при достижении 300(5 минут) обнуляет управление
 
+
+extern short plazma_umax;
 /*----------------------------------------------------------------------------
  * end of file
  *---------------------------------------------------------------------------*/

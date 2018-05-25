@@ -213,7 +213,12 @@ char bVOLT_IS_NORM;
 
 enum_rele_stat rele_stat[2];
 
+//***********************************************
+//Контроль наличия фаз
+signed char net_in_drv_cnt_B,net_in_drv_cnt_C;
+char net_in_drv_stat_B, net_in_drv_stat_C;
 
+signed long temp_temp_SL;
 
 //-----------------------------------------------
 void kb_init(void)
@@ -304,16 +309,6 @@ temp_SL*=(signed long)Kiload1;
 temp_SL/=5000L;
 load_I_=(signed short)temp_SL;
 
-if(I_LOAD_MODE==0)
-	{
-	temp_SL=0;
-	for(i=0;i<NUMIST;i++)
-		{
-		temp_SL+=(signed long)bps[i]._Ii;
-		}
-	load_I=(signed short)temp_SL;
-	}
-
 
 if(load_I<0)load_I=0;
 //load_I=333;
@@ -379,6 +374,63 @@ NVIC_EnableIRQ(ADC_IRQn);             /* enable ADC Interrupt               */
 
 
 }
+
+//-----------------------------------------------
+void net_in_drv(void)
+{
+if(adc_buff_[10]<3500)
+	{
+	if(net_in_drv_cnt_B	< 20)
+		{
+		net_in_drv_cnt_B++;
+		}
+	else if(net_in_drv_cnt_B>20)net_in_drv_cnt_B=0; 
+	}
+else
+	{
+	if(net_in_drv_cnt_B)
+		{
+		net_in_drv_cnt_B--;
+		}
+	}			 
+if(net_in_drv_cnt_B>=19) 
+	{
+	net_in_drv_stat_B=1;
+	gp_av_stat&=~0x00000001;
+	}
+else if(net_in_drv_cnt_B<=2) 
+	{
+	net_in_drv_stat_B=0;
+	gp_av_stat|=0x00000001;
+		
+	}
+
+if(adc_buff_[5]<3500)
+	{
+	if(net_in_drv_cnt_C	< 20)
+		{
+		net_in_drv_cnt_C++;
+		}
+	else if(net_in_drv_cnt_C>20)net_in_drv_cnt_C=0; 
+	}
+else
+	{
+	if(net_in_drv_cnt_C)
+		{
+		net_in_drv_cnt_C--;
+		}
+	}			 
+if(net_in_drv_cnt_C>=19) 
+	{
+	net_in_drv_stat_C=1;
+	gp_av_stat&=~0x00000002;
+	}
+else if(net_in_drv_cnt_C<=2) 
+	{
+	net_in_drv_stat_C=0;
+	gp_av_stat|=0x00000002;
+	}
+}	   
 
 //-----------------------------------------------
 void adc_drv7(void) //(Uсети - постоянка)
@@ -2015,6 +2067,17 @@ else
 //gran(&bps[0]._vol_u,10,1010);
 //gran(&bps[0]._vol_i,10,1010);
 
+
+for(i=0;i<NUMIST;i++) 
+	{
+	if(bps[i]._av&0x8f)
+		{
+		bps[i]._vol_u=0;
+		bps[i]._vol_i=0;
+		bps[i]._flags_tu=1;
+		}
+	}
+
 b1Hz_sh=0;
 }
 
@@ -2137,7 +2200,46 @@ else if(!(temp&(1<<AVUMIN)))
 
 //bps[in]._state=bsOFF;
 
-if (bps[in]._av&0x0f)					bps[in]._state=bsAV;
+
+if(((work_stat==wsGS) || (work_stat==wsPS))&&(UOUT_OFF_EN))
+	{
+	short tempU;
+	long tempL;
+
+	tempU= U_maxg;
+	if(work_stat==wsPS)tempU= U_up_temp;
+
+	tempL=((long)tempU)*((long)(100+UOUT_OFF_LEVEL));
+	tempL/=100L;
+
+	tempU=(short)tempL;
+	plazma_umax=tempU;
+
+	if(bps[in]._Uii>tempU)
+		{
+		if(bps[in]._uout_avar_cnt<(UOUT_OFF_DELAY*10))
+			{
+			bps[in]._uout_avar_cnt++;
+			if(bps[in]._uout_avar_cnt>=(UOUT_OFF_DELAY*10))
+				{
+				bps[in]._av|=0x80;
+				}
+			}
+		}
+	else 
+		{
+		if(bps[in]._uout_avar_cnt) bps[in]._uout_avar_cnt--;
+		}
+
+
+
+
+
+	}
+
+
+
+if (bps[in]._av&0x8f)					bps[in]._state=bsAV;
 else if ( (net_av) && (bps[in]._cnt>20)/*&& 
 		(bps[in]._Uii<200)*/)				bps[in]._state=bsOFF_AV_NET;
 else if (bps[in]._flags_tm&BIN8(100000))	bps[in]._state=bsRDY;

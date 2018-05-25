@@ -7,7 +7,7 @@
                   sc16is700_spi_init PROC
 ;;;18     //настройка SPI1
 ;;;19     void sc16is700_spi_init(void)
-000000  488a              LDR      r0,|L1.556|
+000000  4890              LDR      r0,|L1.580|
 ;;;20     {
 ;;;21     SET_REG( LPC_PINCON->PINSEL0, 0, 0*2, 2);
 000002  6801              LDR      r1,[r0,#0]
@@ -34,7 +34,7 @@
 ;;;28     S1SPCR=0x3f; */
 ;;;29     
 ;;;30     LPC_SPI->SPCCR=20;
-00002a  4881              LDR      r0,|L1.560|
+00002a  4887              LDR      r0,|L1.584|
 00002c  2114              MOVS     r1,#0x14
 00002e  60c1              STR      r1,[r0,#0xc]
 ;;;31     LPC_SPI->SPCR=0x20;
@@ -61,7 +61,7 @@
 000044  1e49              SUBS     r1,r1,#1
 000046  d1fd              BNE      |L1.68|
 ;;;41     sc16is700_CS_ON 
-000048  4d7a              LDR      r5,|L1.564|
+000048  4d80              LDR      r5,|L1.588|
 00004a  6828              LDR      r0,[r5,#0]
 00004c  f0400001          ORR      r0,r0,#1
 000050  6028              STR      r0,[r5,#0]
@@ -74,7 +74,7 @@
 00005e  f7fffffe          BL       spi1
 ;;;43     for (i=0;i<num;i++)spi1(tx_buffer_sc16is700[i]);
 000062  2400              MOVS     r4,#0
-000064  4f74              LDR      r7,|L1.568|
+000064  4f7a              LDR      r7,|L1.592|
 000066  e004              B        |L1.114|
                   |L1.104|
 000068  5d38              LDRB     r0,[r7,r4]
@@ -110,7 +110,7 @@
 000096  1e40              SUBS     r0,r0,#1
 000098  d1fd              BNE      |L1.150|
 ;;;51     sc16is700_CS_ON
-00009a  4c66              LDR      r4,|L1.564|
+00009a  4c6c              LDR      r4,|L1.588|
 00009c  6820              LDR      r0,[r4,#0]
 00009e  f0400001          ORR      r0,r0,#1
 0000a2  6020              STR      r0,[r4,#0]
@@ -151,7 +151,7 @@
 0000d6  1e49              SUBS     r1,r1,#1
 0000d8  d1fd              BNE      |L1.214|
 ;;;63     sc16is700_CS_ON
-0000da  4c56              LDR      r4,|L1.564|
+0000da  4c5c              LDR      r4,|L1.588|
 0000dc  6820              LDR      r0,[r4,#0]
 0000de  f0400001          ORR      r0,r0,#1
 0000e2  6020              STR      r0,[r4,#0]
@@ -182,7 +182,7 @@
                   sc16is700_init PROC
 ;;;89     
 ;;;90     void sc16is700_init(uint32_t baudrate)
-000112  494a              LDR      r1,|L1.572|
+000112  4950              LDR      r1,|L1.596|
 ;;;91     {
 000114  b570              PUSH     {r4-r6,lr}
 ;;;92     
@@ -190,239 +190,273 @@
 ;;;94     
 ;;;95     baud_h = (char)((10000000U/16U/baudrate)>>8);
 000116  fbb1f1f0          UDIV     r1,r1,r0
-00011a  f3c12507          UBFX     r5,r1,#8,#8
+00011a  f3c12407          UBFX     r4,r1,#8,#8
 ;;;96     baud_l = (char)((10000000U/16U/baudrate)); 
-00011e  b2cc              UXTB     r4,r1
 ;;;97     
 ;;;98     if(baudrate==57600U)baud_l=11;
-000120  f5b04f61          CMP      r0,#0xe100
-000124  d100              BNE      |L1.296|
-000126  240b              MOVS     r4,#0xb
-                  |L1.296|
 ;;;99     //if(baudrate==115200U)baud_l=6;
 ;;;100    
-;;;101    sc16is700_wr_byte(CS16IS7xx_LCR, 0x80);
-000128  2180              MOVS     r1,#0x80
-00012a  2003              MOVS     r0,#3
-00012c  f7fffffe          BL       sc16is700_wr_byte
-;;;102    sc16is700_wr_byte(CS16IS7xx_DLL, baud_l);
-000130  4621              MOV      r1,r4
-000132  2000              MOVS     r0,#0
-000134  f7fffffe          BL       sc16is700_wr_byte
-;;;103    sc16is700_wr_byte(CS16IS7xx_DLH, baud_h);
-000138  4629              MOV      r1,r5
-00013a  2001              MOVS     r0,#1
-00013c  f7fffffe          BL       sc16is700_wr_byte
-;;;104    sc16is700_wr_byte(CS16IS7xx_LCR, 0xBF);
-000140  21bf              MOVS     r1,#0xbf
+;;;101    
+;;;102    baud_h = (char)((10000000U/16U/baudrate)>>8);
+;;;103    baud_l = (char)((10000000U/16U/baudrate));
+00011e  b2cd              UXTB     r5,r1
+;;;104    
+;;;105    if(RS485_QWARZ_DIGIT==40)
+000120  494d              LDR      r1,|L1.600|
+000122  f9b11000          LDRSH    r1,[r1,#0]  ; RS485_QWARZ_DIGIT
+000126  2928              CMP      r1,#0x28
+000128  d002              BEQ      |L1.304|
+;;;106    	{
+;;;107    	baud_h = (char)((40000000U/16U/baudrate)>>8);
+;;;108    	baud_l = (char)((40000000U/16U/baudrate));
+;;;109    	} 
+;;;110    if(RS485_QWARZ_DIGIT==30)
+00012a  291e              CMP      r1,#0x1e
+00012c  d002              BEQ      |L1.308|
+00012e  e007              B        |L1.320|
+                  |L1.304|
+000130  494a              LDR      r1,|L1.604|
+000132  e000              B        |L1.310|
+                  |L1.308|
+;;;111    	{
+;;;112    	baud_h = (char)((30000000U/16U/baudrate)>>8);
+000134  494a              LDR      r1,|L1.608|
+                  |L1.310|
+000136  fbb1f0f0          UDIV     r0,r1,r0              ;107
+00013a  f3c02407          UBFX     r4,r0,#8,#8           ;107
+00013e  b2c5              UXTB     r5,r0                 ;108
+                  |L1.320|
+;;;113    	baud_l = (char)((30000000U/16U/baudrate));
+;;;114    	}
+;;;115    
+;;;116    sc16is700_wr_byte(CS16IS7xx_LCR, 0x80);
+000140  2180              MOVS     r1,#0x80
 000142  2003              MOVS     r0,#3
 000144  f7fffffe          BL       sc16is700_wr_byte
-;;;105    sc16is700_wr_byte(CS16IS7xx_EFR, 0X10);
-000148  2110              MOVS     r1,#0x10
-00014a  2002              MOVS     r0,#2
+;;;117    sc16is700_wr_byte(CS16IS7xx_DLL, baud_l);
+000148  4629              MOV      r1,r5
+00014a  2000              MOVS     r0,#0
 00014c  f7fffffe          BL       sc16is700_wr_byte
-;;;106    sc16is700_wr_byte(CS16IS7xx_LCR, 0x03);
-000150  2103              MOVS     r1,#3
-000152  4608              MOV      r0,r1
+;;;118    sc16is700_wr_byte(CS16IS7xx_DLH, baud_h);
+000150  4621              MOV      r1,r4
+000152  2001              MOVS     r0,#1
 000154  f7fffffe          BL       sc16is700_wr_byte
-;;;107    sc16is700_wr_byte(CS16IS7xx_FCR, 0x06);
-000158  2106              MOVS     r1,#6
-00015a  2002              MOVS     r0,#2
+;;;119    sc16is700_wr_byte(CS16IS7xx_LCR, 0xBF);
+000158  21bf              MOVS     r1,#0xbf
+00015a  2003              MOVS     r0,#3
 00015c  f7fffffe          BL       sc16is700_wr_byte
-;;;108    sc16is700_wr_byte(CS16IS7xx_FCR, 0x01);
-000160  2101              MOVS     r1,#1
+;;;120    sc16is700_wr_byte(CS16IS7xx_EFR, 0X10);
+000160  2110              MOVS     r1,#0x10
 000162  2002              MOVS     r0,#2
 000164  f7fffffe          BL       sc16is700_wr_byte
-;;;109    sc16is700_wr_byte(CS16IS7xx_EFCR, 0X30);
-000168  e8bd4070          POP      {r4-r6,lr}
-00016c  2130              MOVS     r1,#0x30
-00016e  200f              MOVS     r0,#0xf
-000170  e7fe              B        sc16is700_wr_byte
-;;;110    //sc16is700_wr_byte(CS16IS7xx_DLH, 0x04);
-;;;111    //sc16is700_wr_byte(CS16IS7xx_DLH, 0x04);
-;;;112    //sc16is700_wr_byte(CS16IS7xx_DLH, 0x04);
-;;;113    //sc16is700_wr_byte(CS16IS7xx_DLH, 0x04);
-;;;114    //sc16is700_wr_byte(CS16IS7xx_DLH, 0x04);
-;;;115    }
-;;;116    
+;;;121    sc16is700_wr_byte(CS16IS7xx_LCR, 0x03);
+000168  2103              MOVS     r1,#3
+00016a  4608              MOV      r0,r1
+00016c  f7fffffe          BL       sc16is700_wr_byte
+;;;122    sc16is700_wr_byte(CS16IS7xx_FCR, 0x06);
+000170  2106              MOVS     r1,#6
+000172  2002              MOVS     r0,#2
+000174  f7fffffe          BL       sc16is700_wr_byte
+;;;123    sc16is700_wr_byte(CS16IS7xx_FCR, 0x01);
+000178  2101              MOVS     r1,#1
+00017a  2002              MOVS     r0,#2
+00017c  f7fffffe          BL       sc16is700_wr_byte
+;;;124    sc16is700_wr_byte(CS16IS7xx_EFCR, 0X30);
+000180  e8bd4070          POP      {r4-r6,lr}
+000184  2130              MOVS     r1,#0x30
+000186  200f              MOVS     r0,#0xf
+000188  e7fe              B        sc16is700_wr_byte
+;;;125    //sc16is700_wr_byte(CS16IS7xx_DLH, 0x04);
+;;;126    //sc16is700_wr_byte(CS16IS7xx_DLH, 0x04);
+;;;127    //sc16is700_wr_byte(CS16IS7xx_DLH, 0x04);
+;;;128    //sc16is700_wr_byte(CS16IS7xx_DLH, 0x04);
+;;;129    //sc16is700_wr_byte(CS16IS7xx_DLH, 0x04);
+;;;130    }
+;;;131    
                           ENDP
 
                   putchar_sc16is700 PROC
-;;;135    //Посылка байта через sc16is700
-;;;136    void putchar_sc16is700(char out_byte)
-000172  4a33              LDR      r2,|L1.576|
-;;;137    {
-;;;138    tx_buffer_sc16is700[tx_wr_index_sc16is700]=out_byte;
-000174  4b30              LDR      r3,|L1.568|
-000176  7891              LDRB     r1,[r2,#2]  ; tx_wr_index_sc16is700
-000178  5458              STRB     r0,[r3,r1]
-;;;139    if (++tx_wr_index_sc16is700 == TX_BUFFER_SIZE_SC16IS700) tx_wr_index_sc16is700=0;
-00017a  1c49              ADDS     r1,r1,#1
-00017c  b2c8              UXTB     r0,r1
-00017e  7090              STRB     r0,[r2,#2]
-000180  2820              CMP      r0,#0x20
-000182  d101              BNE      |L1.392|
-000184  2000              MOVS     r0,#0
-000186  7090              STRB     r0,[r2,#2]
-                  |L1.392|
-;;;140    }
-000188  4770              BX       lr
-;;;141    
+;;;150    //Посылка байта через sc16is700
+;;;151    void putchar_sc16is700(char out_byte)
+00018a  4a36              LDR      r2,|L1.612|
+;;;152    {
+;;;153    tx_buffer_sc16is700[tx_wr_index_sc16is700]=out_byte;
+00018c  4b30              LDR      r3,|L1.592|
+00018e  7891              LDRB     r1,[r2,#2]  ; tx_wr_index_sc16is700
+000190  5458              STRB     r0,[r3,r1]
+;;;154    if (++tx_wr_index_sc16is700 == TX_BUFFER_SIZE_SC16IS700) tx_wr_index_sc16is700=0;
+000192  1c49              ADDS     r1,r1,#1
+000194  b2c8              UXTB     r0,r1
+000196  7090              STRB     r0,[r2,#2]
+000198  2820              CMP      r0,#0x20
+00019a  d101              BNE      |L1.416|
+00019c  2000              MOVS     r0,#0
+00019e  7090              STRB     r0,[r2,#2]
+                  |L1.416|
+;;;155    }
+0001a0  4770              BX       lr
+;;;156    
                           ENDP
 
                   sc16is700_uart_hndl PROC
-;;;172    //Обработчик sc16is700
-;;;173    void sc16is700_uart_hndl(void)
-00018a  e92d47f0          PUSH     {r4-r10,lr}
-;;;174    {
-;;;175    
-;;;176    sc16is700ByteAvailable=sc16is700_rd_byte(CS16IS7xx_RXLVL); //Читаем состояние ФИФО приема микросхемы
-00018e  2009              MOVS     r0,#9
-000190  f7fffffe          BL       sc16is700_rd_byte
-000194  4c2a              LDR      r4,|L1.576|
-000196  2600              MOVS     r6,#0
-000198  7020              STRB     r0,[r4,#0]
-;;;177    
-;;;178    if(sc16is700ByteAvailable) //Если в приемном ФИФО	микросхемы есть данные
-00019a  b1a0              CBZ      r0,|L1.454|
-;;;179    	{
-;;;180    	char i;
-;;;181    	for(i=0;(i<sc16is700ByteAvailable)&&(i<5);i++) //Читаем их пачками не больше 5 в программный буфер модбас
-00019c  2500              MOVS     r5,#0
-;;;182    		{
-;;;183    		if(!sc16is700RecieveDisableFlag)
-;;;184    			{
-;;;185    			modbus_rx_buffer[modbus_rx_buffer_ptr]=sc16is700_rd_byte(CS16IS7xx_RHR);
-00019e  f8df80a4          LDR      r8,|L1.580|
-0001a2  4f29              LDR      r7,|L1.584|
-;;;186    			modbus_rx_buffer_ptr++;
-;;;187    			modbus_timeout_cnt=0;   //Запускаем таймер опознавания конца посылки 
-0001a4  f8df90a4          LDR      r9,|L1.588|
-0001a8  e008              B        |L1.444|
-                  |L1.426|
-0001aa  79a0              LDRB     r0,[r4,#6]            ;183  ; sc16is700RecieveDisableFlag
-0001ac  2800              CMP      r0,#0                 ;183
-;;;188    			}
-;;;189    		else sc16is700_rd_byte(CS16IS7xx_RHR);
-0001ae  f04f0000          MOV      r0,#0
-0001b2  d011              BEQ      |L1.472|
-0001b4  f7fffffe          BL       sc16is700_rd_byte
-                  |L1.440|
-0001b8  1c6d              ADDS     r5,r5,#1              ;181
-0001ba  b2ed              UXTB     r5,r5                 ;181
-                  |L1.444|
-0001bc  7820              LDRB     r0,[r4,#0]            ;181  ; sc16is700ByteAvailable
-0001be  4285              CMP      r5,r0                 ;181
-0001c0  d201              BCS      |L1.454|
-0001c2  2d05              CMP      r5,#5                 ;181
-0001c4  d3f1              BCC      |L1.426|
-                  |L1.454|
-;;;190    		}
-;;;191    	}
+;;;187    //Обработчик sc16is700
+;;;188    void sc16is700_uart_hndl(void)
+0001a2  e92d47f0          PUSH     {r4-r10,lr}
+;;;189    {
+;;;190    
+;;;191    sc16is700ByteAvailable=sc16is700_rd_byte(CS16IS7xx_RXLVL); //Читаем состояние ФИФО приема микросхемы
+0001a6  2009              MOVS     r0,#9
+0001a8  f7fffffe          BL       sc16is700_rd_byte
+0001ac  4c2d              LDR      r4,|L1.612|
+0001ae  2600              MOVS     r6,#0
+0001b0  7020              STRB     r0,[r4,#0]
 ;;;192    
-;;;193    
-;;;194    
-;;;195    sc16is700TxFifoLevel=sc16is700_rd_byte(CS16IS7xx_TXLVL);//Читаем состояние ФИФО передачи
-0001c6  2008              MOVS     r0,#8
-0001c8  f7fffffe          BL       sc16is700_rd_byte
-;;;196    
-;;;197    if(sc16is700TxFifoLevel!=64) sc16is700TxFifoEmptyCnt=0;//Если ФИФО не пустой обнуляем счетчик свободности ФИФО передачи
-;;;198    if(sc16is700TxFifoLevel==64) //если ФИФО пустой то плюсуем счетчик если он меньше константы
-;;;199    	{
-;;;200    	if(sc16is700TxFifoEmptyCnt<SC16IS700TXFIFOEMPTYCNTMAX)sc16is700TxFifoEmptyCnt++;
-;;;201    	}
-;;;202    if(sc16is700TxFifoEmptyCnt==SC16IS700TXFIFOEMPTYCNTMAX) sc16is700TxPossibleFlag=1;//Если счетчик сравнялся с константой поднимаем флаг возможности передачи
-0001cc  2201              MOVS     r2,#1
-0001ce  7060              STRB     r0,[r4,#1]            ;195
-0001d0  2840              CMP      r0,#0x40              ;197
-0001d2  d00b              BEQ      |L1.492|
-0001d4  7126              STRB     r6,[r4,#4]            ;197
-0001d6  e011              B        |L1.508|
-                  |L1.472|
-0001d8  f7fffffe          BL       sc16is700_rd_byte
-0001dc  7839              LDRB     r1,[r7,#0]            ;185  ; modbus_rx_buffer_ptr
-0001de  f8080001          STRB     r0,[r8,r1]            ;185
-0001e2  1c49              ADDS     r1,r1,#1              ;186
-0001e4  7039              STRB     r1,[r7,#0]            ;186
-0001e6  f8896000          STRB     r6,[r9,#0]            ;187
-0001ea  e7e5              B        |L1.440|
-                  |L1.492|
-0001ec  7920              LDRB     r0,[r4,#4]            ;200  ; sc16is700TxFifoEmptyCnt
-0001ee  2805              CMP      r0,#5                 ;200
-0001f0  d201              BCS      |L1.502|
-0001f2  1c40              ADDS     r0,r0,#1              ;200
-0001f4  7120              STRB     r0,[r4,#4]            ;200
-                  |L1.502|
-0001f6  b2c0              UXTB     r0,r0
-0001f8  2805              CMP      r0,#5
-0001fa  d014              BEQ      |L1.550|
-                  |L1.508|
-;;;203    else sc16is700TxPossibleFlag=0;//Если не сравнялся - флаг сбрасываем.
-0001fc  7166              STRB     r6,[r4,#5]
-                  |L1.510|
-;;;204    
-;;;205    
-;;;206    if((tx_wr_index_sc16is700)&&(tx_wr_index_sc16is700!=tx_rd_index_sc16is700)) //Если программный буфер передачи не пуст
-0001fe  78a1              LDRB     r1,[r4,#2]  ; tx_wr_index_sc16is700
-000200  b149              CBZ      r1,|L1.534|
-000202  78e0              LDRB     r0,[r4,#3]  ; tx_rd_index_sc16is700
-000204  4281              CMP      r1,r0
-000206  d006              BEQ      |L1.534|
-;;;207    	{
-;;;208    	if(sc16is700TxPossibleFlag)//проверяем возможность передачи
-000208  7960              LDRB     r0,[r4,#5]  ; sc16is700TxPossibleFlag
-00020a  b120              CBZ      r0,|L1.534|
-;;;209    		{
-;;;210    		//char i;
-;;;211    		//for(;tx_rd_index_sc16is700++;tx_rd_index_sc16is700<=tx_wr_index_sc16is700)
-;;;212    			//{
-;;;213    		sc16is700RecieveDisableFlag=1;
-00020c  71a2              STRB     r2,[r4,#6]
-;;;214    		sc16is700_wr_buff(CS16IS7xx_THR, tx_wr_index_sc16is700);
-00020e  2000              MOVS     r0,#0
-000210  f7fffffe          BL       sc16is700_wr_buff
-;;;215    			//}
-;;;216    		
-;;;217    		tx_wr_index_sc16is700=0;
-000214  70a6              STRB     r6,[r4,#2]
+;;;193    if(sc16is700ByteAvailable) //Если в приемном ФИФО	микросхемы есть данные
+0001b2  b1a0              CBZ      r0,|L1.478|
+;;;194    	{
+;;;195    	char i;
+;;;196    	for(i=0;(i<sc16is700ByteAvailable)&&(i<5);i++) //Читаем их пачками не больше 5 в программный буфер модбас
+0001b4  2500              MOVS     r5,#0
+;;;197    		{
+;;;198    		if(!sc16is700RecieveDisableFlag)
+;;;199    			{
+;;;200    			modbus_rx_buffer[modbus_rx_buffer_ptr]=sc16is700_rd_byte(CS16IS7xx_RHR);
+0001b6  f8df80b0          LDR      r8,|L1.616|
+0001ba  4f2c              LDR      r7,|L1.620|
+;;;201    			modbus_rx_buffer_ptr++;
+;;;202    			modbus_timeout_cnt=0;   //Запускаем таймер опознавания конца посылки 
+0001bc  f8df90b0          LDR      r9,|L1.624|
+0001c0  e008              B        |L1.468|
+                  |L1.450|
+0001c2  79a0              LDRB     r0,[r4,#6]            ;198  ; sc16is700RecieveDisableFlag
+0001c4  2800              CMP      r0,#0                 ;198
+;;;203    			}
+;;;204    		else sc16is700_rd_byte(CS16IS7xx_RHR);
+0001c6  f04f0000          MOV      r0,#0
+0001ca  d011              BEQ      |L1.496|
+0001cc  f7fffffe          BL       sc16is700_rd_byte
+                  |L1.464|
+0001d0  1c6d              ADDS     r5,r5,#1              ;196
+0001d2  b2ed              UXTB     r5,r5                 ;196
+                  |L1.468|
+0001d4  7820              LDRB     r0,[r4,#0]            ;196  ; sc16is700ByteAvailable
+0001d6  4285              CMP      r5,r0                 ;196
+0001d8  d201              BCS      |L1.478|
+0001da  2d05              CMP      r5,#5                 ;196
+0001dc  d3f1              BCC      |L1.450|
+                  |L1.478|
+;;;205    		}
+;;;206    	}
+;;;207    
+;;;208    
+;;;209    
+;;;210    sc16is700TxFifoLevel=sc16is700_rd_byte(CS16IS7xx_TXLVL);//Читаем состояние ФИФО передачи
+0001de  2008              MOVS     r0,#8
+0001e0  f7fffffe          BL       sc16is700_rd_byte
+;;;211    
+;;;212    if(sc16is700TxFifoLevel!=64) sc16is700TxFifoEmptyCnt=0;//Если ФИФО не пустой обнуляем счетчик свободности ФИФО передачи
+;;;213    if(sc16is700TxFifoLevel==64) //если ФИФО пустой то плюсуем счетчик если он меньше константы
+;;;214    	{
+;;;215    	if(sc16is700TxFifoEmptyCnt<SC16IS700TXFIFOEMPTYCNTMAX)sc16is700TxFifoEmptyCnt++;
+;;;216    	}
+;;;217    if(sc16is700TxFifoEmptyCnt==SC16IS700TXFIFOEMPTYCNTMAX) sc16is700TxPossibleFlag=1;//Если счетчик сравнялся с константой поднимаем флаг возможности передачи
+0001e4  2201              MOVS     r2,#1
+0001e6  7060              STRB     r0,[r4,#1]            ;210
+0001e8  2840              CMP      r0,#0x40              ;212
+0001ea  d00b              BEQ      |L1.516|
+0001ec  7126              STRB     r6,[r4,#4]            ;212
+0001ee  e011              B        |L1.532|
+                  |L1.496|
+0001f0  f7fffffe          BL       sc16is700_rd_byte
+0001f4  7839              LDRB     r1,[r7,#0]            ;200  ; modbus_rx_buffer_ptr
+0001f6  f8080001          STRB     r0,[r8,r1]            ;200
+0001fa  1c49              ADDS     r1,r1,#1              ;201
+0001fc  7039              STRB     r1,[r7,#0]            ;201
+0001fe  f8896000          STRB     r6,[r9,#0]            ;202
+000202  e7e5              B        |L1.464|
+                  |L1.516|
+000204  7920              LDRB     r0,[r4,#4]            ;215  ; sc16is700TxFifoEmptyCnt
+000206  2805              CMP      r0,#5                 ;215
+000208  d201              BCS      |L1.526|
+00020a  1c40              ADDS     r0,r0,#1              ;215
+00020c  7120              STRB     r0,[r4,#4]            ;215
+                  |L1.526|
+00020e  b2c0              UXTB     r0,r0
+000210  2805              CMP      r0,#5
+000212  d014              BEQ      |L1.574|
+                  |L1.532|
+;;;218    else sc16is700TxPossibleFlag=0;//Если не сравнялся - флаг сбрасываем.
+000214  7166              STRB     r6,[r4,#5]
                   |L1.534|
-;;;218    		}
-;;;219    	}
+;;;219    
 ;;;220    
-;;;221    if((sc16is700_rd_byte(CS16IS7xx_LSR))&0x40)	sc16is700RecieveDisableFlag=0;
-000216  2005              MOVS     r0,#5
-000218  f7fffffe          BL       sc16is700_rd_byte
-00021c  0640              LSLS     r0,r0,#25
-00021e  d500              BPL      |L1.546|
-000220  71a6              STRB     r6,[r4,#6]
-                  |L1.546|
-;;;222    
-;;;223    
-;;;224    }
-000222  e8bd87f0          POP      {r4-r10,pc}
-                  |L1.550|
-000226  7162              STRB     r2,[r4,#5]            ;202
-000228  e7e9              B        |L1.510|
+;;;221    if((tx_wr_index_sc16is700)&&(tx_wr_index_sc16is700!=tx_rd_index_sc16is700)) //Если программный буфер передачи не пуст
+000216  78a1              LDRB     r1,[r4,#2]  ; tx_wr_index_sc16is700
+000218  b149              CBZ      r1,|L1.558|
+00021a  78e0              LDRB     r0,[r4,#3]  ; tx_rd_index_sc16is700
+00021c  4281              CMP      r1,r0
+00021e  d006              BEQ      |L1.558|
+;;;222    	{
+;;;223    	if(sc16is700TxPossibleFlag)//проверяем возможность передачи
+000220  7960              LDRB     r0,[r4,#5]  ; sc16is700TxPossibleFlag
+000222  b120              CBZ      r0,|L1.558|
+;;;224    		{
+;;;225    		//char i;
+;;;226    		//for(;tx_rd_index_sc16is700++;tx_rd_index_sc16is700<=tx_wr_index_sc16is700)
+;;;227    			//{
+;;;228    		sc16is700RecieveDisableFlag=1;
+000224  71a2              STRB     r2,[r4,#6]
+;;;229    		sc16is700_wr_buff(CS16IS7xx_THR, tx_wr_index_sc16is700);
+000226  2000              MOVS     r0,#0
+000228  f7fffffe          BL       sc16is700_wr_buff
+;;;230    			//}
+;;;231    		
+;;;232    		tx_wr_index_sc16is700=0;
+00022c  70a6              STRB     r6,[r4,#2]
+                  |L1.558|
+;;;233    		}
+;;;234    	}
+;;;235    
+;;;236    if((sc16is700_rd_byte(CS16IS7xx_LSR))&0x40)	sc16is700RecieveDisableFlag=0;
+00022e  2005              MOVS     r0,#5
+000230  f7fffffe          BL       sc16is700_rd_byte
+000234  0640              LSLS     r0,r0,#25
+000236  d500              BPL      |L1.570|
+000238  71a6              STRB     r6,[r4,#6]
+                  |L1.570|
+;;;237    
+;;;238    
+;;;239    }
+00023a  e8bd87f0          POP      {r4-r10,pc}
+                  |L1.574|
+00023e  7162              STRB     r2,[r4,#5]            ;217
+000240  e7e9              B        |L1.534|
                           ENDP
 
-00022a  0000              DCW      0x0000
-                  |L1.556|
-                          DCD      0x4002c000
-                  |L1.560|
-                          DCD      0x40020000
-                  |L1.564|
-                          DCD      0x2009c000
-                  |L1.568|
-                          DCD      ||.bss||
-                  |L1.572|
-                          DCD      0x00098968
-                  |L1.576|
-                          DCD      ||.data||
+000242  0000              DCW      0x0000
                   |L1.580|
-                          DCD      modbus_rx_buffer
+                          DCD      0x4002c000
                   |L1.584|
-                          DCD      modbus_rx_buffer_ptr
+                          DCD      0x40020000
                   |L1.588|
+                          DCD      0x2009c000
+                  |L1.592|
+                          DCD      ||.bss||
+                  |L1.596|
+                          DCD      0x00098968
+                  |L1.600|
+                          DCD      RS485_QWARZ_DIGIT
+                  |L1.604|
+                          DCD      0x002625a0
+                  |L1.608|
+                          DCD      0x001c9c38
+                  |L1.612|
+                          DCD      ||.data||
+                  |L1.616|
+                          DCD      modbus_rx_buffer
+                  |L1.620|
+                          DCD      modbus_rx_buffer_ptr
+                  |L1.624|
                           DCD      modbus_timeout_cnt
 
                           AREA ||area_number.2||, CODE, READONLY, ALIGN=1

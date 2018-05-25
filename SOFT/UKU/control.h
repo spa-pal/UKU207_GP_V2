@@ -133,6 +133,9 @@ extern char bVOLT_IS_NOT_DOWN;
 extern char bVOLT_IS_NOT_UP;
 extern char bVOLT_IS_NORM;
 
+extern signed char net_in_drv_cnt_B,net_in_drv_cnt_C;
+extern char net_in_drv_stat_B, net_in_drv_stat_C;
+
 void zar_superviser_drv(void);
 void zar_superviser_start(void);
 void current_stab_hndl(void);

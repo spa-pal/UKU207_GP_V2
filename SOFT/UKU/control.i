@@ -158,6 +158,9 @@ extern char bVOLT_IS_NOT_DOWN;
 extern char bVOLT_IS_NOT_UP;
 extern char bVOLT_IS_NORM;
 
+extern signed char net_in_drv_cnt_B,net_in_drv_cnt_C;
+extern char net_in_drv_stat_B, net_in_drv_stat_C;
+
 void zar_superviser_drv(void);
 void zar_superviser_start(void);
 void current_stab_hndl(void);
@@ -259,34 +262,34 @@ void community2lcd(char* in,
 
 
 
-#line 39 "eeprom_map.h"
+#line 42 "eeprom_map.h"
 
-#line 134 "eeprom_map.h"
-
-
+#line 138 "eeprom_map.h"
 
 
 
-#line 153 "eeprom_map.h"
+
+
+#line 157 "eeprom_map.h"
 
 
 
-#line 165 "eeprom_map.h"
+#line 169 "eeprom_map.h"
 
 
-#line 176 "eeprom_map.h"
+#line 180 "eeprom_map.h"
 
 
-#line 185 "eeprom_map.h"
-
-
+#line 189 "eeprom_map.h"
 
 
 
 
 
 
-#line 231 "eeprom_map.h"
+
+
+#line 235 "eeprom_map.h"
 
 
 
@@ -914,7 +917,7 @@ typedef enum {
 	iK_power_net3,
 	iAvt,iLan_set,iRele_set,iRele_sel,iFiks_set,
 	iK_max_param,iCurr_contr_set,iVolt_contr_set,
-	iAch_off,iCurr_off,
+	iAch_off,iCurr_off,iUout_avar_control,
 	iProcIsComplete}i_enum;
 
 typedef struct  
@@ -1126,6 +1129,10 @@ extern signed short CUR_OFF_LEVEL_ABSOLUT;
 extern signed short CUR_OFF_T_OFF;
 extern signed short CUR_OFF_T_ON;
 extern signed short EE_WRITE_CNT;
+extern signed short UOUT_OFF_EN;	
+extern signed short UOUT_OFF_LEVEL;	
+extern signed short UOUT_OFF_DELAY;	
+
 
 
 
@@ -1167,15 +1174,16 @@ typedef struct
      short _blok_cnt; 
      char _flags_tm;
 	signed short _overload_av_cnt;     
-     signed short _temp_av_cnt;
-     signed short _umax_av_cnt;
-     signed short _umin_av_cnt;
-     signed _rotor;
-     signed  short _x_; 
-     char _adr_ee;
+    signed short _temp_av_cnt;
+    signed short _umax_av_cnt;
+    signed short _umin_av_cnt;
+    signed _rotor;
+    signed  short _x_; 
+    char _adr_ee;
 	char _last_avar; 
 	signed short _xu_;
-     } BPS_STAT; 
+	char _uout_avar_cnt;
+   	} BPS_STAT; 
 extern BPS_STAT bps[32];
 
 extern char first_inv_slot;
@@ -1336,7 +1344,7 @@ extern signed short _x_,_xu_;
 
 
 
-extern signed short Kiload0;
+extern int Kiload0;
 extern signed short Kiload1;
 extern signed short U_MAX;
 extern signed short U_MIN;
@@ -1438,6 +1446,7 @@ extern short AVT_REV_U_NOM_REW;
 extern short time_proc_phase;
 typedef enum {ppFF=0,ppFF_P_REW,ppREW,ppREW_P_FF}enum_proc_phase;
 extern enum_proc_phase proc_phase;
+extern short RS485_QWARZ_DIGIT;
 
 extern signed short I_ug_temp;
 extern signed short U_up_temp;
@@ -1488,11 +1497,15 @@ extern char num_of_dumm_src;
 extern char num_of_max_src;
 extern char bAVG_CNT;
 
+extern long gp_av_stat;
+
 extern short pvlk;
 
 extern char eepromRamSwitch; 	
 extern short ramModbusCnt;		
 
+
+extern short plazma_umax;
 
 
  
@@ -3777,6 +3790,11 @@ enum_rele_stat rele_stat[2];
 
 
 
+signed char net_in_drv_cnt_B,net_in_drv_cnt_C;
+char net_in_drv_stat_B, net_in_drv_stat_C;
+
+signed long temp_temp_SL;
+
 
 void kb_init(void)
 {
@@ -3866,16 +3884,6 @@ temp_SL*=(signed long)Kiload1;
 temp_SL/=5000L;
 load_I_=(signed short)temp_SL;
 
-if(I_LOAD_MODE==0)
-	{
-	temp_SL=0;
-	for(i=0;i<NUMIST;i++)
-		{
-		temp_SL+=(signed long)bps[i]._Ii;
-		}
-	load_I=(signed short)temp_SL;
-	}
-
 
 if(load_I<0)load_I=0;
 
@@ -3941,6 +3949,63 @@ NVIC_EnableIRQ(ADC_IRQn);
 
 
 }
+
+
+void net_in_drv(void)
+{
+if(adc_buff_[10]<3500)
+	{
+	if(net_in_drv_cnt_B	< 20)
+		{
+		net_in_drv_cnt_B++;
+		}
+	else if(net_in_drv_cnt_B>20)net_in_drv_cnt_B=0; 
+	}
+else
+	{
+	if(net_in_drv_cnt_B)
+		{
+		net_in_drv_cnt_B--;
+		}
+	}			 
+if(net_in_drv_cnt_B>=19) 
+	{
+	net_in_drv_stat_B=1;
+	gp_av_stat&=~0x00000001;
+	}
+else if(net_in_drv_cnt_B<=2) 
+	{
+	net_in_drv_stat_B=0;
+	gp_av_stat|=0x00000001;
+		
+	}
+
+if(adc_buff_[5]<3500)
+	{
+	if(net_in_drv_cnt_C	< 20)
+		{
+		net_in_drv_cnt_C++;
+		}
+	else if(net_in_drv_cnt_C>20)net_in_drv_cnt_C=0; 
+	}
+else
+	{
+	if(net_in_drv_cnt_C)
+		{
+		net_in_drv_cnt_C--;
+		}
+	}			 
+if(net_in_drv_cnt_C>=19) 
+	{
+	net_in_drv_stat_C=1;
+	gp_av_stat&=~0x00000002;
+	}
+else if(net_in_drv_cnt_C<=2) 
+	{
+	net_in_drv_stat_C=0;
+	gp_av_stat|=0x00000002;
+	}
+}	   
 
 
 void adc_drv7(void) 
@@ -5577,6 +5642,17 @@ else
 
 
 
+
+for(i=0;i<NUMIST;i++) 
+	{
+	if(bps[i]._av&0x8f)
+		{
+		bps[i]._vol_u=0;
+		bps[i]._vol_i=0;
+		bps[i]._flags_tu=1;
+		}
+	}
+
 b1Hz_sh=0;
 }
 
@@ -5699,7 +5775,46 @@ else if(!(temp&(1<<4)))
 
 
 
-if (bps[in]._av&0x0f)					bps[in]._state=bsAV;
+
+if(((work_stat==wsGS) || (work_stat==wsPS))&&(UOUT_OFF_EN))
+	{
+	short tempU;
+	long tempL;
+
+	tempU= U_maxg;
+	if(work_stat==wsPS)tempU= U_up_temp;
+
+	tempL=((long)tempU)*((long)(100+UOUT_OFF_LEVEL));
+	tempL/=100L;
+
+	tempU=(short)tempL;
+	plazma_umax=tempU;
+
+	if(bps[in]._Uii>tempU)
+		{
+		if(bps[in]._uout_avar_cnt<(UOUT_OFF_DELAY*10))
+			{
+			bps[in]._uout_avar_cnt++;
+			if(bps[in]._uout_avar_cnt>=(UOUT_OFF_DELAY*10))
+				{
+				bps[in]._av|=0x80;
+				}
+			}
+		}
+	else 
+		{
+		if(bps[in]._uout_avar_cnt) bps[in]._uout_avar_cnt--;
+		}
+
+
+
+
+
+	}
+
+
+
+if (bps[in]._av&0x8f)					bps[in]._state=bsAV;
 else if ( (net_av) && (bps[in]._cnt>20)
  )				bps[in]._state=bsOFF_AV_NET;
 else if (bps[in]._flags_tm&(((0x100000) | 0x100000>>3 | 0x100000>>6 | 0x100000>>9) & 0xf | ((0x100000) | 0x100000>>3 | 0x100000>>6 | 0x100000>>9)>>12 & 0xf0))	bps[in]._state=bsRDY;
@@ -6050,7 +6165,7 @@ else if(RELE_FUNC[1]==5)
 
 void rele_drv(void)
 {
-#line 2498 "control.c"
+#line 2600 "control.c"
 
 
 ((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 = ( (((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 & ~((0xffffffff>>(32-2))<<7*2)) | ((unsigned)0 << 7*2) );

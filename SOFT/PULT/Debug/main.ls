@@ -1943,7 +1943,7 @@
 5936  0a33 273b          	jreq	L1113
 5938  0a35 3d6f          	tnz	_but_state
 5939  0a37 2637          	jrne	L1113
-5940                     ; 1015 		if(ind_I_set<=999)int2ind_slkuf1(ind_I_set,0,3,1,1,0,1);
+5940                     ; 1015 		if(ind_I_set<=999)int2ind_slkuf1(ind_I_set,0,4,1,1,0,1);
 5942  0a39 9c            	rvf
 5943  0a3a be54          	ldw	x,_ind_I_set
 5944  0a3c a303e8        	cpw	x,#1000
@@ -1952,7 +1952,7 @@
 5949  0a43 4b00          	push	#0
 5950  0a45 4b01          	push	#1
 5951  0a47 4b01          	push	#1
-5952  0a49 4b03          	push	#3
+5952  0a49 4b04          	push	#4
 5953  0a4b 4b00          	push	#0
 5954  0a4d be54          	ldw	x,_ind_I_set
 5955  0a4f cd0375        	call	_int2ind_slkuf1
@@ -1973,7 +1973,7 @@
 5975  0a6c 5b06          	addw	sp,#6
 5976  0a6e 2035          	jra	L7113
 5977  0a70               L1113:
-5978                     ; 1021 		if(ind_I<=999)int2ind_slkuf1(ind_I,0,3,1,1,0,0);
+5978                     ; 1021 		if(ind_I<=999)int2ind_slkuf1(ind_I,0,4,1,1,0,0);
 5980  0a70 9c            	rvf
 5981  0a71 be58          	ldw	x,_ind_I
 5982  0a73 a303e8        	cpw	x,#1000
@@ -1982,7 +1982,7 @@
 5987  0a7a 4b00          	push	#0
 5988  0a7c 4b01          	push	#1
 5989  0a7e 4b01          	push	#1
-5990  0a80 4b03          	push	#3
+5990  0a80 4b04          	push	#4
 5991  0a82 4b00          	push	#0
 5992  0a84 be58          	ldw	x,_ind_I
 5993  0a86 cd0375        	call	_int2ind_slkuf1
@@ -2091,7 +2091,7 @@
 6121  0b4b 2703          	jreq	L451
 6122  0b4d cc0c66        	jp	L1413
 6123  0b50               L451:
-6124                     ; 1041 	if(ind_I<=999)int2ind_slkuf1(ind_I,0,3,1,1,0,0);
+6124                     ; 1041 	if(ind_I<=999)int2ind_slkuf1(ind_I,0,4,1,1,0,0);
 6126  0b50 9c            	rvf
 6127  0b51 be58          	ldw	x,_ind_I
 6128  0b53 a303e8        	cpw	x,#1000
@@ -2100,7 +2100,7 @@
 6133  0b5a 4b00          	push	#0
 6134  0b5c 4b01          	push	#1
 6135  0b5e 4b01          	push	#1
-6136  0b60 4b03          	push	#3
+6136  0b60 4b04          	push	#4
 6137  0b62 4b00          	push	#0
 6138  0b64 be58          	ldw	x,_ind_I
 6139  0b66 cd0375        	call	_int2ind_slkuf1
@@ -2251,7 +2251,7 @@
 6319  0c71 273b          	jreq	L7713
 6321  0c73 3d6f          	tnz	_but_state
 6322  0c75 2637          	jrne	L7713
-6323                     ; 1077 			if(ind_I_set<=999)int2ind_slkuf1(ind_I_set,0,3,1,1,0,1);
+6323                     ; 1077 			if(ind_I_set<=999)int2ind_slkuf1(ind_I_set,0,4,1,1,0,1);
 6325  0c77 9c            	rvf
 6326  0c78 be54          	ldw	x,_ind_I_set
 6327  0c7a a303e8        	cpw	x,#1000
@@ -2260,7 +2260,7 @@
 6332  0c81 4b00          	push	#0
 6333  0c83 4b01          	push	#1
 6334  0c85 4b01          	push	#1
-6335  0c87 4b03          	push	#3
+6335  0c87 4b04          	push	#4
 6336  0c89 4b00          	push	#0
 6337  0c8b be54          	ldw	x,_ind_I_set
 6338  0c8d cd0375        	call	_int2ind_slkuf1
@@ -2281,7 +2281,7 @@
 6358  0caa 5b06          	addw	sp,#6
 6359  0cac 2035          	jra	L5023
 6360  0cae               L7713:
-6361                     ; 1082 			if(ind_I_set<=999)int2ind_slkuf1(ind_I_set,0,3,1,1,0,0);
+6361                     ; 1082 			if(ind_I_set<=999)int2ind_slkuf1(ind_I_set,0,4,1,1,0,0);
 6363  0cae 9c            	rvf
 6364  0caf be54          	ldw	x,_ind_I_set
 6365  0cb1 a303e8        	cpw	x,#1000
@@ -2290,7 +2290,7 @@
 6370  0cb8 4b00          	push	#0
 6371  0cba 4b01          	push	#1
 6372  0cbc 4b01          	push	#1
-6373  0cbe 4b03          	push	#3
+6373  0cbe 4b04          	push	#4
 6374  0cc0 4b00          	push	#0
 6375  0cc2 be54          	ldw	x,_ind_I_set
 6376  0cc4 cd0375        	call	_int2ind_slkuf1

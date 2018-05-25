@@ -3027,7 +3027,7 @@ typedef enum {
 	iK_power_net3,
 	iAvt,iLan_set,iRele_set,iRele_sel,iFiks_set,
 	iK_max_param,iCurr_contr_set,iVolt_contr_set,
-	iAch_off,iCurr_off,
+	iAch_off,iCurr_off,iUout_avar_control,
 	iProcIsComplete}i_enum;
 
 typedef struct  
@@ -3239,6 +3239,10 @@ extern signed short CUR_OFF_LEVEL_ABSOLUT;
 extern signed short CUR_OFF_T_OFF;
 extern signed short CUR_OFF_T_ON;
 extern signed short EE_WRITE_CNT;
+extern signed short UOUT_OFF_EN;	
+extern signed short UOUT_OFF_LEVEL;	
+extern signed short UOUT_OFF_DELAY;	
+
 
 
 
@@ -3280,15 +3284,16 @@ typedef struct
      short _blok_cnt; 
      char _flags_tm;
 	signed short _overload_av_cnt;     
-     signed short _temp_av_cnt;
-     signed short _umax_av_cnt;
-     signed short _umin_av_cnt;
-     signed _rotor;
-     signed  short _x_; 
-     char _adr_ee;
+    signed short _temp_av_cnt;
+    signed short _umax_av_cnt;
+    signed short _umin_av_cnt;
+    signed _rotor;
+    signed  short _x_; 
+    char _adr_ee;
 	char _last_avar; 
 	signed short _xu_;
-     } BPS_STAT; 
+	char _uout_avar_cnt;
+   	} BPS_STAT; 
 extern BPS_STAT bps[32];
 
 extern char first_inv_slot;
@@ -3449,7 +3454,7 @@ extern signed short _x_,_xu_;
 
 
 
-extern signed short Kiload0;
+extern int Kiload0;
 extern signed short Kiload1;
 extern signed short U_MAX;
 extern signed short U_MIN;
@@ -3551,6 +3556,7 @@ extern short AVT_REV_U_NOM_REW;
 extern short time_proc_phase;
 typedef enum {ppFF=0,ppFF_P_REW,ppREW,ppREW_P_FF}enum_proc_phase;
 extern enum_proc_phase proc_phase;
+extern short RS485_QWARZ_DIGIT;
 
 extern signed short I_ug_temp;
 extern signed short U_up_temp;
@@ -3601,11 +3607,15 @@ extern char num_of_dumm_src;
 extern char num_of_max_src;
 extern char bAVG_CNT;
 
+extern long gp_av_stat;
+
 extern short pvlk;
 
 extern char eepromRamSwitch; 	
 extern short ramModbusCnt;		
 
+
+extern short plazma_umax;
 
 
  
@@ -3745,6 +3755,9 @@ extern signed short cnt_rel_volt_umax;
 extern char bVOLT_IS_NOT_DOWN;
 extern char bVOLT_IS_NOT_UP;
 extern char bVOLT_IS_NORM;
+
+extern signed char net_in_drv_cnt_B,net_in_drv_cnt_C;
+extern char net_in_drv_stat_B, net_in_drv_stat_C;
 
 void zar_superviser_drv(void);
 void zar_superviser_start(void);
