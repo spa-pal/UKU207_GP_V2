@@ -1182,6 +1182,11 @@ extern char eepromRamSwitch;
 extern short ramModbusCnt;		
 
 
+
+extern signed short pwm_u_reg;
+extern signed short pwm_i_reg;
+extern signed short pwm_t_reg;
+
 extern short plazma_umax;
 
 

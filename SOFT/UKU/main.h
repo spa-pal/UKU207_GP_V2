@@ -963,6 +963,11 @@ extern short pvlk;
 extern char eepromRamSwitch; 	//переключатель управления процессом с EEPROM (если 0) на RAM (другое)
 extern short ramModbusCnt;		//счетчик неактивности MODBUS, при достижении 300(5 минут) обнуляет управление
 
+//-----------------------------------------------
+//Регистры для непосредственного управления по MODBUS
+extern signed short pwm_u_reg;
+extern signed short pwm_i_reg;
+extern signed short pwm_t_reg;
 
 extern short plazma_umax;
 /*----------------------------------------------------------------------------

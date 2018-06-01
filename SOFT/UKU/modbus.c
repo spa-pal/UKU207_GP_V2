@@ -26,6 +26,7 @@ short modbus_plazma;				//Отладка
 short modbus_plazma1;				//Отладка
 short modbus_plazma2;				//Отладка
 short modbus_plazma3;				//Отладка
+
 char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt=33;
 
 char modbus_registers[200];
@@ -729,7 +730,7 @@ if(crc16_calculated==crc16_incapsulated)
 		{
 		if(modbus_func==3)		//чтение произвольного кол-ва регистров
 			{
-			if((modbus_rx_arg0>=50)&&(modbus_rx_arg0<80)) modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func, modbus_rx_arg0,modbus_rx_arg1, MODBUS_RTU_PROT);
+			if((modbus_rx_arg0>=50)&&(modbus_rx_arg0<90)) modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func, modbus_rx_arg0,modbus_rx_arg1, MODBUS_RTU_PROT);
 			}
 		else if(modbus_func==4)		//чтение произвольного кол-ва регистров	входов
 			{
@@ -1138,7 +1139,21 @@ if(crc16_calculated==crc16_incapsulated)
 
 				}
 
-			
+			if(modbus_rx_arg0==80)		//Шим напряжения в режиме непосредственного управления 
+				{
+				pwm_u_reg = modbus_rx_arg1;
+				}
+
+			if(modbus_rx_arg0==81)		//Шим тока в режиме непосредственного управления 
+				{
+				pwm_i_reg = modbus_rx_arg1;
+				}
+
+			if(modbus_rx_arg0==82)		//Регистр времени в режиме непосредственного управления 
+				{
+				pwm_t_reg = modbus_rx_arg1*10;
+				}
+											
 			if((T_PROC_GS>T_PROC_MAX)||(T_PROC_GS<30))
 				{
 				if(T_PROC_GS>T_PROC_MAX)T_PROC_GS=T_PROC_MAX+1;
@@ -1588,6 +1603,13 @@ modbus_registers[50]=(char)((CAP_MAX_VOLT)/256);			//Рег75
 modbus_registers[51]=(char)((CAP_MAX_VOLT)%256);
 modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			//Рег76
 modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
+
+modbus_registers[60]=(char)((pwm_u_reg)/256);			//Рег80
+modbus_registers[61]=(char)((pwm_u_reg)%256);
+modbus_registers[62]=(char)((pwm_i_reg)/256);			//Рег81
+modbus_registers[63]=(char)((pwm_i_reg)%256);
+modbus_registers[64]=(char)((pwm_t_reg/10)/256);			//Рег82
+modbus_registers[65]=(char)((pwm_t_reg/10)%256);
 
 modbus_registers[80]=(char)((I_ug_ram)/256);			//Рег90
 modbus_registers[81]=(char)((I_ug_ram)%256);

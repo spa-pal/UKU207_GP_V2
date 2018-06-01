@@ -1505,6 +1505,11 @@ extern char eepromRamSwitch;
 extern short ramModbusCnt;		
 
 
+
+extern signed short pwm_u_reg;
+extern signed short pwm_i_reg;
+extern signed short pwm_t_reg;
+
 extern short plazma_umax;
 
 
@@ -5642,6 +5647,20 @@ else
 
 
 
+if(pwm_t_reg)
+	{
+	if(--pwm_t_reg)
+		{
+		pwm_u_reg=0;
+		pwm_i_reg=0;
+		}
+	for(i=0;i<NUMIST;i++) 
+		{
+		bps[i]._vol_u=pwm_u_reg;
+		bps[i]._vol_i=pwm_i_reg;
+		}
+	}
+
 
 for(i=0;i<NUMIST;i++) 
 	{
@@ -6165,7 +6184,7 @@ else if(RELE_FUNC[1]==5)
 
 void rele_drv(void)
 {
-#line 2600 "control.c"
+#line 2614 "control.c"
 
 
 ((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 = ( (((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 & ~((0xffffffff>>(32-2))<<7*2)) | ((unsigned)0 << 7*2) );

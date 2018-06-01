@@ -1471,6 +1471,11 @@ extern char eepromRamSwitch;
 extern short ramModbusCnt;		
 
 
+
+extern signed short pwm_u_reg;
+extern signed short pwm_i_reg;
+extern signed short pwm_t_reg;
+
 extern short plazma_umax;
 
 
@@ -2826,6 +2831,9 @@ extern short modbus_plazma;
 extern short modbus_plazma1;				
 extern short modbus_plazma2;				
 extern short modbus_plazma3;				
+extern short modbus_plazma_p;				
+extern short modbus_plazma_pp;				
+extern short modbus_plazma_ppp;
 extern char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt;
 
 extern char modbus_registers[200];
@@ -5634,6 +5642,12 @@ short ramModbusCnt;
 short plazma_umax;
 
 
+
+signed short pwm_u_reg;
+signed short pwm_i_reg;
+signed short pwm_t_reg;
+
+
 void rtc_init (void) 
 {
 ((LPC_RTC_TypeDef *) ((0x40000000UL) + 0x24000) )->CCR=0x11;
@@ -7029,7 +7043,9 @@ if(a_ind . i==iMn)
 
 
  
-	
+int2lcdyx(modbus_plazma_p,0,10,0);
+int2lcdyx(modbus_plazma_pp,0,19,0);
+int2lcdyx(modbus_plazma_ppp,0,3,0);
 
 
 
@@ -9324,12 +9340,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4396 "main.c"
+#line 4404 "main.c"
 
 
 
 
-#line 4418 "main.c"
+#line 4426 "main.c"
 
 
 
@@ -16506,7 +16522,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11600 "main.c"
+#line 11608 "main.c"
 
 
 AUSW_MAIN_NUMBER=1000;
@@ -16734,7 +16750,7 @@ while (1)
 		adc_drv7();
 
 
-		can_mcp2515_hndl();
+		
 		
 
 
@@ -16828,11 +16844,11 @@ while (1)
 
 		if(!bRESET)
 			{
-			ad7705_drv();
+			
 			}
 		if(!bRESET)
 			{
-			memo_read();
+			
 			}
 		((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00020) )->FIODIR|=(1UL<<26);
 		matemat();
@@ -16910,6 +16926,8 @@ while (1)
 
 		avg_hndl();			
 		ramModbusCnt_hndl();
+
+		sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
 		}
 	if(b1min)
 		{

@@ -697,6 +697,12 @@ short ramModbusCnt;		//счетчик неактивности MODBUS, при достижении 300(5 минут) 
 short plazma_umax;
 
 //-----------------------------------------------
+//Регистры для непосредственного управления по MODBUS
+signed short pwm_u_reg;
+signed short pwm_i_reg;
+signed short pwm_t_reg;
+
+//-----------------------------------------------
 void rtc_init (void) 
 {
 LPC_RTC->CCR=0x11;
