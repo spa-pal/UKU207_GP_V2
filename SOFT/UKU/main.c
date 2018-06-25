@@ -31,6 +31,7 @@
 #include "sc16is7xx.h"
 #include "snmp_data_file.h" 
 #include "modbus_tcp.h"
+#include "curr_version.h"
 
 #ifdef UKU2071x
 //#define MCP2515_CAN
@@ -1322,6 +1323,7 @@ if(ind==iMn)
 	   	ptrs[6]=		" Выход              ";
 		ptrs[7]=		" Установки          ";
 	   	ptrs[8]=		" Выпрямители        ";	
+		ptrs[9]=  		" Версия ПО          ";
 	
 		if(sub_ind-index_set>3)index_set=sub_ind-3;
 		else if (sub_ind<index_set)index_set=sub_ind;
@@ -1478,6 +1480,7 @@ if(ind==iMn)
 	   	ptrs[6]=		" Выход              ";
 		ptrs[7]=		" Установки          ";
 	   	ptrs[8]=		" Выпрямители        ";	
+		ptrs[9]=  		" Версия ПО          ";
 	
 		if(sub_ind-index_set>3)index_set=sub_ind-3;
 		else if (sub_ind<index_set)index_set=sub_ind;
@@ -1694,7 +1697,8 @@ if(ind==iMn)
 		ptrs[10]=		" Аварии             ";
 	   	ptrs[11]=		" Выход              ";
 		ptrs[12]=		" Установки          ";
-	   	ptrs[13]=		" Выпрямители        ";	
+	   	ptrs[13]=		" Выпрямители        ";
+		ptrs[14]=  		" Версия ПО          ";	
 	
 		if(sub_ind-index_set>3)index_set=sub_ind-3;
 		else if (sub_ind<index_set)index_set=sub_ind;
@@ -1929,6 +1933,7 @@ if(ind==iMn)
 	   	ptrs[11]=		" Выход              ";
 		ptrs[12]=		" Установки          ";
 	   	ptrs[13]=		" Выпрямители        ";
+		ptrs[14]=  		" Версия ПО          ";
 
 	
 	
@@ -2082,12 +2087,14 @@ if(ind==iMn)
 		int2lcd(AMPERCHAS,'q',1);
 
 	/*	//int2lcdyx(can2_plazma,0,19,0);*/
-		//int2lcd(bps[0]._vol_i,'{',0);
+		//int2lcd(pwm_u_reg,'{',0);
 		//int2lcd(bps[1]._vol_i,'}',0);
 		//int2lcd(bps[0]._vol_u,'[',0);
 		//int2lcd(bps[1]._vol_u,']',0);
 		}
-		//int2lcdyx(bps[0]._vol_u,0,4,0);
+		//int2lcdyx(pwm_u_reg,0,4,0);
+		//int2lcdyx(pwm_i_reg,0,8,0);
+		//int2lcdyx(pwm_t_reg,0,12,0);
 		//int2lcdyx(300+_xu_,0,8,0);
 		//int2lcdyx(bps[0]._vol_i,0,12,0);
 		//int2lcdyx(300+_x_,0,16,0);	
@@ -4256,7 +4263,18 @@ else if(ind==iAvz)
 	
 	}
 
-
+else if(ind==iFWabout)
+	{
+	bgnd_par(	" Версия             ",
+				" Сборка  0000.00.00 ",
+				"                    ",
+				"                    ");
+	int2lcdyx(BUILD_YEAR,1,12,0);
+	int2lcdyx(BUILD_MONTH,1,15,0);
+	int2lcdyx(BUILD_DAY,1,18,0);
+	
+	sprintf(&lcd_buffer[9],"%d.%d.%d",HARDWARE_VERSION,SOFT_VERSION,BUILD);
+	}
 
 
 #endif
@@ -4673,7 +4691,7 @@ else if(ind==iMn)
 				sub_ind++;
 				}
 	
-			gran_char(&sub_ind,0,8);
+			gran_char(&sub_ind,0,9);
 			}
 			
 		else if(but==butU)
@@ -4684,7 +4702,7 @@ else if(ind==iMn)
 				sub_ind--;
 				}
 	
-			gran_char(&sub_ind,0,8);
+			gran_char(&sub_ind,0,9);
 			}	
 		
 		else if(sub_ind==0)
@@ -5029,6 +5047,13 @@ else if(ind==iMn)
 				parol_init();
 				}
 		    	}*/
+		else if(sub_ind==9)
+			{
+			if(but==butE)
+		     	{
+		     	tree_up(iFWabout,0,0,0);
+		     	}
+			}
 		}
 
 	else if(main_menu_mode==mmmIN)
@@ -5041,7 +5066,7 @@ else if(ind==iMn)
 				sub_ind++;
 				}
 	
-			gran_char(&sub_ind,0,7);
+			gran_char(&sub_ind,0,9);
 			}
 			
 		else if(but==butU)
@@ -5052,7 +5077,7 @@ else if(ind==iMn)
 				sub_ind--;
 				}
 		
-			gran_char(&sub_ind,0,7);
+			gran_char(&sub_ind,0,9);
 			}	
 	
 	
@@ -5396,6 +5421,13 @@ else if(ind==iMn)
 				parol_init();
 				}
 		    	}  */
+		else if(sub_ind==9)
+			{
+			if(but==butE)
+		     	{
+		     	tree_up(iFWabout,0,0,0);
+		     	}
+			}
 		}
 	else if(main_menu_mode==mmmITIN)
 		{
@@ -5412,7 +5444,7 @@ else if(ind==iMn)
 				sub_ind++;
 				}
 			
-			gran_char(&sub_ind,0,12);
+			gran_char(&sub_ind,0,14);
 			}
 			
 		else if(but==butU)
@@ -5428,7 +5460,7 @@ else if(ind==iMn)
 				sub_ind--;
 				}
 						
-			gran_char(&sub_ind,0,12);
+			gran_char(&sub_ind,0,14);
 			}	
 	
 	
@@ -6035,6 +6067,13 @@ else if(ind==iMn)
 				parol_init();
 				}
 		    }
+		else if(sub_ind==14)
+			{
+			if(but==butE)
+		     	{
+		     	tree_up(iFWabout,0,0,0);
+		     	}
+			}
 		}
 	else /*if(main_menu_mode==mmmINIT)*/
 		{
@@ -6051,7 +6090,7 @@ else if(ind==iMn)
 				sub_ind++;
 				}
 			
-			gran_char(&sub_ind,0,12);
+			gran_char(&sub_ind,0,14);
 			}
 			
 		else if(but==butU)
@@ -6067,7 +6106,7 @@ else if(ind==iMn)
 				sub_ind--;
 				}
 						
-			gran_char(&sub_ind,0,12);
+			gran_char(&sub_ind,0,14);
 			}	
 	
 	
@@ -6670,6 +6709,13 @@ else if(ind==iMn)
 				parol_init();
 				}
 		    }
+		else if(sub_ind==14)
+			{
+			if(but==butE)
+		     	{
+		     	tree_up(iFWabout,0,0,0);
+		     	}
+			}
 		}
 	}
 
@@ -11330,6 +11376,15 @@ else if(ind==iUout_avar_control)
 else if (ind==iProcIsComplete)
 	{
 	tree_down(0,0);
+	}
+else if(ind==iFWabout)
+	{
+	ret(1000);
+	if(but==butE)
+	     {
+	     tree_down(0,0);
+	     ret(0);
+	     }
 	}
 but_an_end:
 n_but=0;

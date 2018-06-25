@@ -238,9 +238,6 @@ extern short modbus_plazma;
 extern short modbus_plazma1;				
 extern short modbus_plazma2;				
 extern short modbus_plazma3;				
-extern short modbus_plazma_p;				
-extern short modbus_plazma_pp;				
-extern short modbus_plazma_ppp;
 extern char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt;
 
 extern char modbus_registers[200];
@@ -854,7 +851,8 @@ typedef enum {
 	iAvt,iLan_set,iRele_set,iRele_sel,iFiks_set,
 	iK_max_param,iCurr_contr_set,iVolt_contr_set,
 	iAch_off,iCurr_off,iUout_avar_control,
-	iProcIsComplete}i_enum;
+	iProcIsComplete,
+	iFWabout}i_enum;
 
 typedef struct  
 {
@@ -3081,9 +3079,7 @@ short modbus_plazma;
 short modbus_plazma1;				
 short modbus_plazma2;				
 short modbus_plazma3;				
-short modbus_plazma_p;				
-short modbus_plazma_ppp;
-short modbus_plazma_pp;				
+
 char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt=33;
 
 char modbus_registers[200];
@@ -4267,8 +4263,8 @@ char i;
 
 
 
- 
 
+ 
 modbus_registers[0]=(char)(load_U/256);					
 modbus_registers[1]=(char)(load_U%256);
 modbus_registers[2]=(char)(load_I/256);					

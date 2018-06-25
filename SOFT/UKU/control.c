@@ -2069,7 +2069,7 @@ else
 
 if(pwm_t_reg)
 	{
-	if(--pwm_t_reg)
+	if(--pwm_t_reg==0)
 		{
 		pwm_u_reg=0;
 		pwm_i_reg=0;
@@ -2078,6 +2078,7 @@ if(pwm_t_reg)
 		{
 		bps[i]._vol_u=pwm_u_reg;
 		bps[i]._vol_i=pwm_i_reg;
+		bps[i]._flags_tu=0;
 		}
 	}
 

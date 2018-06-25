@@ -752,7 +752,7 @@
 0005b6  49f9              LDR      r1,|L1.2460|
 0005b8  8008              STRH     r0,[r1,#0]
 ;;;150    RS485_QWARZ_DIGIT=lc640_read_int(EE_RS485_QWARZ_DIGIT);
-0005ba  f44f709f          MOV      r0,#0x13e
+0005ba  f44f70a0          MOV      r0,#0x140
 0005be  f7fffffe          BL       lc640_read_int
 0005c2  49f7              LDR      r1,|L1.2464|
 0005c4  8008              STRH     r0,[r1,#0]

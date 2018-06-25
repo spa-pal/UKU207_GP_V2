@@ -918,7 +918,8 @@ typedef enum {
 	iAvt,iLan_set,iRele_set,iRele_sel,iFiks_set,
 	iK_max_param,iCurr_contr_set,iVolt_contr_set,
 	iAch_off,iCurr_off,iUout_avar_control,
-	iProcIsComplete}i_enum;
+	iProcIsComplete,
+	iFWabout}i_enum;
 
 typedef struct  
 {
@@ -5649,7 +5650,7 @@ else
 
 if(pwm_t_reg)
 	{
-	if(--pwm_t_reg)
+	if(--pwm_t_reg==0)
 		{
 		pwm_u_reg=0;
 		pwm_i_reg=0;
@@ -5658,6 +5659,7 @@ if(pwm_t_reg)
 		{
 		bps[i]._vol_u=pwm_u_reg;
 		bps[i]._vol_i=pwm_i_reg;
+		bps[i]._flags_tu=0;
 		}
 	}
 
@@ -6184,7 +6186,7 @@ else if(RELE_FUNC[1]==5)
 
 void rele_drv(void)
 {
-#line 2614 "control.c"
+#line 2615 "control.c"
 
 
 ((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 = ( (((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 & ~((0xffffffff>>(32-2))<<7*2)) | ((unsigned)0 << 7*2) );

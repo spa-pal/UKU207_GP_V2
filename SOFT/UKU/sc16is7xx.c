@@ -113,6 +113,9 @@ if(RS485_QWARZ_DIGIT==30)
 	baud_l = (char)((30000000U/16U/baudrate));
 	}
 
+//	baud_h = (char)((30000000U/16U/baudrate)>>8);
+//	baud_l = (char)((30000000U/16U/baudrate));
+
 sc16is700_wr_byte(CS16IS7xx_LCR, 0x80);
 sc16is700_wr_byte(CS16IS7xx_DLL, baud_l);
 sc16is700_wr_byte(CS16IS7xx_DLH, baud_h);

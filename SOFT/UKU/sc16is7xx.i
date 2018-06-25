@@ -2683,7 +2683,8 @@ typedef enum {
 	iAvt,iLan_set,iRele_set,iRele_sel,iFiks_set,
 	iK_max_param,iCurr_contr_set,iVolt_contr_set,
 	iAch_off,iCurr_off,iUout_avar_control,
-	iProcIsComplete}i_enum;
+	iProcIsComplete,
+	iFWabout}i_enum;
 
 typedef struct  
 {
@@ -3295,9 +3296,6 @@ extern short modbus_plazma;
 extern short modbus_plazma1;				
 extern short modbus_plazma2;				
 extern short modbus_plazma3;				
-extern short modbus_plazma_p;				
-extern short modbus_plazma_pp;				
-extern short modbus_plazma_ppp;
 extern char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt;
 
 extern char modbus_registers[200];
@@ -3421,7 +3419,6 @@ void sc16is700_init(uint32_t baudrate)
 {
 
 unsigned char baud_h,baud_l;
-modbus_plazma_ppp++;
 
 baud_h = (char)((10000000U/16U/baudrate)>>8);
 baud_l = (char)((10000000U/16U/baudrate)); 
@@ -3445,7 +3442,7 @@ if(RS485_QWARZ_DIGIT==30)
 	}
 
 
-baud_h=123;
+
 
 sc16is700_wr_byte(0x03, 0x80);
 sc16is700_wr_byte(0x00, baud_l);
@@ -3521,19 +3518,12 @@ for (i=0;i<num+3;i++)
 
 void sc16is700_uart_hndl(void)
 {
-modbus_plazma_p++;
-							
 
-
-
-modbus_plazma_pp=sc16is700_rd_byte(0x01);
-
-
+sc16is700ByteAvailable=sc16is700_rd_byte(0x09); 
 
 if(sc16is700ByteAvailable) 
 	{
-	char i;	
-	
+	char i;
 	for(i=0;(i<sc16is700ByteAvailable)&&(i<5);i++) 
 		{
 		if(!sc16is700RecieveDisableFlag)
@@ -3541,7 +3531,6 @@ if(sc16is700ByteAvailable)
 			modbus_rx_buffer[modbus_rx_buffer_ptr]=sc16is700_rd_byte(0x00);
 			modbus_rx_buffer_ptr++;
 			modbus_timeout_cnt=0;   
-
 			}
 		else sc16is700_rd_byte(0x00);
 		}
@@ -3549,7 +3538,7 @@ if(sc16is700ByteAvailable)
 
 
 
-
+sc16is700TxFifoLevel=sc16is700_rd_byte(0x08);
 
 if(sc16is700TxFifoLevel!=64) sc16is700TxFifoEmptyCnt=0;
 if(sc16is700TxFifoLevel==64) 
@@ -3575,7 +3564,7 @@ if((tx_wr_index_sc16is700)&&(tx_wr_index_sc16is700!=tx_rd_index_sc16is700))
 		}
 	}
 
-
+if((sc16is700_rd_byte(0x05))&0x40)	sc16is700RecieveDisableFlag=0;
 
 
 }

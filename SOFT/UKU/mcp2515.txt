@@ -7,7 +7,7 @@
                   spi1_config_mcp2515 PROC
 ;;;15     //настройка SPI1
 ;;;16     void spi1_config_mcp2515(void)
-000000  48a7              LDR      r0,|L1.672|
+000000  48ec              LDR      r0,|L1.948|
 ;;;17     { 
 ;;;18     
 ;;;19     SET_REG( LPC_PINCON->PINSEL0, 3, 15*2, 2);
@@ -31,7 +31,7 @@
 ;;;25     S1SPCR=0x3f; */
 ;;;26     
 ;;;27     LPC_SPI->SPCCR=32;
-000022  48a0              LDR      r0,|L1.676|
+000022  48e5              LDR      r0,|L1.952|
 000024  2120              MOVS     r1,#0x20
 000026  60c1              STR      r1,[r0,#0xc]
 ;;;28     LPC_SPI->SPCR=0x38;
@@ -50,7 +50,7 @@
 ;;;34     spi1_config_mcp2515();
 000030  f7fffffe          BL       spi1_config_mcp2515
 ;;;35     MCP2515_CS_ON
-000034  4c9c              LDR      r4,|L1.680|
+000034  4ce1              LDR      r4,|L1.956|
 000036  6820              LDR      r0,[r4,#0]
 000038  f0400002          ORR      r0,r0,#2
 00003c  6020              STR      r0,[r4,#0]
@@ -85,7 +85,7 @@
 ;;;45     spi1_config_mcp2515();       
 000068  f7fffffe          BL       spi1_config_mcp2515
 ;;;46     MCP2515_CS_ON
-00006c  4c8e              LDR      r4,|L1.680|
+00006c  4cd3              LDR      r4,|L1.956|
 00006e  6820              LDR      r0,[r4,#0]
 000070  f0400002          ORR      r0,r0,#2
 000074  6020              STR      r0,[r4,#0]
@@ -127,7 +127,7 @@
 ;;;59     spi1_config_mcp2515();       
 0000aa  f7fffffe          BL       spi1_config_mcp2515
 ;;;60     MCP2515_CS_ON
-0000ae  4c7e              LDR      r4,|L1.680|
+0000ae  4cc3              LDR      r4,|L1.956|
 0000b0  6820              LDR      r0,[r4,#0]
 0000b2  f0400002          ORR      r0,r0,#2
 0000b6  6020              STR      r0,[r4,#0]
@@ -172,7 +172,7 @@
 ;;;72     spi1_config_mcp2515();       
 0000f4  f7fffffe          BL       spi1_config_mcp2515
 ;;;73     MCP2515_CS_ON
-0000f8  4c6b              LDR      r4,|L1.680|
+0000f8  4cb0              LDR      r4,|L1.956|
 0000fa  6820              LDR      r0,[r4,#0]
 0000fc  f0400002          ORR      r0,r0,#2
 000100  6020              STR      r0,[r4,#0]
@@ -203,182 +203,275 @@
 ;;;80     
                           ENDP
 
+                  mcp2515_read_status PROC
+;;;81     //-----------------------------------------------
+;;;82     char mcp2515_read_status(void)
+000134  b510              PUSH     {r4,lr}
+;;;83     {           
+;;;84     char temp;
+;;;85     //#asm("cli")
+;;;86     spi1_config_mcp2515();       
+000136  f7fffffe          BL       spi1_config_mcp2515
+;;;87     MCP2515_CS_ON
+00013a  4ca0              LDR      r4,|L1.956|
+00013c  6820              LDR      r0,[r4,#0]
+00013e  f0400002          ORR      r0,r0,#2
+000142  6020              STR      r0,[r4,#0]
+000144  69e0              LDR      r0,[r4,#0x1c]
+000146  f0400002          ORR      r0,r0,#2
+00014a  61e0              STR      r0,[r4,#0x1c]
+;;;88     delay_us(1);
+00014c  200c              MOVS     r0,#0xc
+                  |L1.334|
+00014e  1e40              SUBS     r0,r0,#1
+000150  d1fd              BNE      |L1.334|
+;;;89     spi1(0xa0);
+000152  20a0              MOVS     r0,#0xa0
+000154  f7fffffe          BL       spi1
+;;;90     temp=spi1(0x55);
+000158  2055              MOVS     r0,#0x55
+00015a  f7fffffe          BL       spi1
+;;;91     MCP2515_CS_OFF
+00015e  6821              LDR      r1,[r4,#0]
+000160  f0410102          ORR      r1,r1,#2
+000164  6021              STR      r1,[r4,#0]
+000166  69a1              LDR      r1,[r4,#0x18]
+000168  f0410102          ORR      r1,r1,#2
+00016c  61a1              STR      r1,[r4,#0x18]
+;;;92     //#asm("sei")    
+;;;93     return temp;                
+;;;94     }
+00016e  bd10              POP      {r4,pc}
+;;;95     
+                          ENDP
+
+                  mcp2515_rts PROC
+;;;96     //-----------------------------------------------
+;;;97     void mcp2515_rts(char in)
+000170  b510              PUSH     {r4,lr}
+;;;98     {
+000172  4602              MOV      r2,r0
+;;;99     //#asm("cli")
+;;;100    spi1_config_mcp2515();       
+000174  f7fffffe          BL       spi1_config_mcp2515
+;;;101    MCP2515_CS_ON
+000178  4c90              LDR      r4,|L1.956|
+00017a  6820              LDR      r0,[r4,#0]
+00017c  f0400002          ORR      r0,r0,#2
+000180  6020              STR      r0,[r4,#0]
+000182  69e0              LDR      r0,[r4,#0x1c]
+000184  f0400002          ORR      r0,r0,#2
+000188  61e0              STR      r0,[r4,#0x1c]
+;;;102    if(in==0) in=0x81;
+00018a  b122              CBZ      r2,|L1.406|
+;;;103    else if(in==1) in=0x82;
+00018c  2a01              CMP      r2,#1
+00018e  d004              BEQ      |L1.410|
+;;;104    else if(in==2) in=0x84;
+000190  2a02              CMP      r2,#2
+000192  d004              BEQ      |L1.414|
+000194  e004              B        |L1.416|
+                  |L1.406|
+000196  2281              MOVS     r2,#0x81              ;102
+000198  e002              B        |L1.416|
+                  |L1.410|
+00019a  2282              MOVS     r2,#0x82              ;103
+00019c  e000              B        |L1.416|
+                  |L1.414|
+00019e  2284              MOVS     r2,#0x84
+                  |L1.416|
+;;;105    spi1(in);
+0001a0  4610              MOV      r0,r2
+0001a2  f7fffffe          BL       spi1
+;;;106    MCP2515_CS_OFF
+0001a6  6820              LDR      r0,[r4,#0]
+0001a8  f0400002          ORR      r0,r0,#2
+0001ac  6020              STR      r0,[r4,#0]
+0001ae  69a0              LDR      r0,[r4,#0x18]
+0001b0  f0400002          ORR      r0,r0,#2
+0001b4  61a0              STR      r0,[r4,#0x18]
+;;;107    //#asm("sei")                    
+;;;108    }
+0001b6  bd10              POP      {r4,pc}
+;;;109    
+                          ENDP
+
                   can_mcp2515_init PROC
 ;;;110    //-----------------------------------------------
 ;;;111    void can_mcp2515_init(void)
-000134  b510              PUSH     {r4,lr}
+0001b8  b510              PUSH     {r4,lr}
 ;;;112    {
 ;;;113    char spi_temp;                 
 ;;;114    
 ;;;115    mcp2515_reset();
-000136  f7fffffe          BL       mcp2515_reset
+0001ba  f7fffffe          BL       mcp2515_reset
 ;;;116    spi_temp=mcp2515_read(CANSTAT);
-00013a  200e              MOVS     r0,#0xe
-00013c  f7fffffe          BL       mcp2515_read
+0001be  200e              MOVS     r0,#0xe
+0001c0  f7fffffe          BL       mcp2515_read
 ;;;117    if((spi_temp&0xe0)!=0x80)
-000140  2104              MOVS     r1,#4
-000142  ebb11f50          CMP      r1,r0,LSR #5
-000146  d004              BEQ      |L1.338|
+0001c4  2104              MOVS     r1,#4
+0001c6  ebb11f50          CMP      r1,r0,LSR #5
+0001ca  d004              BEQ      |L1.470|
 ;;;118    	{
 ;;;119    	mcp2515_bit_modify(CANCTRL,0xe0,0x80);
-000148  2280              MOVS     r2,#0x80
-00014a  21e0              MOVS     r1,#0xe0
-00014c  200f              MOVS     r0,#0xf
-00014e  f7fffffe          BL       mcp2515_bit_modify
-                  |L1.338|
+0001cc  2280              MOVS     r2,#0x80
+0001ce  21e0              MOVS     r1,#0xe0
+0001d0  200f              MOVS     r0,#0xf
+0001d2  f7fffffe          BL       mcp2515_bit_modify
+                  |L1.470|
 ;;;120    	}
 ;;;121    delay_us(10);		
-000152  2078              MOVS     r0,#0x78
-                  |L1.340|
-000154  1e40              SUBS     r0,r0,#1
-000156  d1fd              BNE      |L1.340|
+0001d6  2078              MOVS     r0,#0x78
+                  |L1.472|
+0001d8  1e40              SUBS     r0,r0,#1
+0001da  d1fd              BNE      |L1.472|
 ;;;122    mcp2515_write(CNF1,CNF1_init);
-000158  21c3              MOVS     r1,#0xc3
-00015a  202a              MOVS     r0,#0x2a
-00015c  f7fffffe          BL       mcp2515_write
+0001dc  21c3              MOVS     r1,#0xc3
+0001de  202a              MOVS     r0,#0x2a
+0001e0  f7fffffe          BL       mcp2515_write
 ;;;123    mcp2515_write(CNF2,CNF2_init);
-000160  21fe              MOVS     r1,#0xfe
-000162  2029              MOVS     r0,#0x29
-000164  f7fffffe          BL       mcp2515_write
+0001e4  21fe              MOVS     r1,#0xfe
+0001e6  2029              MOVS     r0,#0x29
+0001e8  f7fffffe          BL       mcp2515_write
 ;;;124    mcp2515_write(CNF3,CNF3_init);
-000168  2103              MOVS     r1,#3
-00016a  2028              MOVS     r0,#0x28
-00016c  f7fffffe          BL       mcp2515_write
+0001ec  2103              MOVS     r1,#3
+0001ee  2028              MOVS     r0,#0x28
+0001f0  f7fffffe          BL       mcp2515_write
 ;;;125    
 ;;;126    mcp2515_write(RXB0CTRL,0x20/*0b00100000*/);
-000170  2120              MOVS     r1,#0x20
-000172  2060              MOVS     r0,#0x60
-000174  f7fffffe          BL       mcp2515_write
+0001f4  2120              MOVS     r1,#0x20
+0001f6  2060              MOVS     r0,#0x60
+0001f8  f7fffffe          BL       mcp2515_write
 ;;;127    mcp2515_write(RXB1CTRL,0x20/*0b00100000*/);
-000178  2120              MOVS     r1,#0x20
-00017a  2070              MOVS     r0,#0x70
-00017c  f7fffffe          BL       mcp2515_write
+0001fc  2120              MOVS     r1,#0x20
+0001fe  2070              MOVS     r0,#0x70
+000200  f7fffffe          BL       mcp2515_write
 ;;;128    
 ;;;129    delay_ms(10);
-000180  484a              LDR      r0,|L1.684|
-                  |L1.386|
-000182  1e40              SUBS     r0,r0,#1
-000184  d1fd              BNE      |L1.386|
+000204  486e              LDR      r0,|L1.960|
+                  |L1.518|
+000206  1e40              SUBS     r0,r0,#1
+000208  d1fd              BNE      |L1.518|
 ;;;130    
 ;;;131    mcp2515_write(RXM0SIDH, 0xFF); 
-000186  21ff              MOVS     r1,#0xff
-000188  2020              MOVS     r0,#0x20
-00018a  f7fffffe          BL       mcp2515_write
+00020a  21ff              MOVS     r1,#0xff
+00020c  2020              MOVS     r0,#0x20
+00020e  f7fffffe          BL       mcp2515_write
 ;;;132    mcp2515_write(RXM0SIDL, 0xFF); 
-00018e  21ff              MOVS     r1,#0xff
-000190  2021              MOVS     r0,#0x21
-000192  f7fffffe          BL       mcp2515_write
+000212  21ff              MOVS     r1,#0xff
+000214  2021              MOVS     r0,#0x21
+000216  f7fffffe          BL       mcp2515_write
 ;;;133    mcp2515_write(RXF0SIDH, 0xFF); 
-000196  21ff              MOVS     r1,#0xff
-000198  2000              MOVS     r0,#0
-00019a  f7fffffe          BL       mcp2515_write
+00021a  21ff              MOVS     r1,#0xff
+00021c  2000              MOVS     r0,#0
+00021e  f7fffffe          BL       mcp2515_write
 ;;;134    mcp2515_write(RXF0SIDL, 0xFF); 
-00019e  21ff              MOVS     r1,#0xff
-0001a0  2001              MOVS     r0,#1
-0001a2  f7fffffe          BL       mcp2515_write
+000222  21ff              MOVS     r1,#0xff
+000224  2001              MOVS     r0,#1
+000226  f7fffffe          BL       mcp2515_write
 ;;;135    mcp2515_write(RXF1SIDH, 0xFF);
-0001a6  21ff              MOVS     r1,#0xff
-0001a8  2004              MOVS     r0,#4
-0001aa  f7fffffe          BL       mcp2515_write
+00022a  21ff              MOVS     r1,#0xff
+00022c  2004              MOVS     r0,#4
+00022e  f7fffffe          BL       mcp2515_write
 ;;;136    mcp2515_write(RXF1SIDL, 0xFF); 
-0001ae  21ff              MOVS     r1,#0xff
-0001b0  2005              MOVS     r0,#5
-0001b2  f7fffffe          BL       mcp2515_write
+000232  21ff              MOVS     r1,#0xff
+000234  2005              MOVS     r0,#5
+000236  f7fffffe          BL       mcp2515_write
 ;;;137    
 ;;;138    mcp2515_write(RXM1SIDH, 0xff); 
-0001b6  21ff              MOVS     r1,#0xff
-0001b8  2024              MOVS     r0,#0x24
-0001ba  f7fffffe          BL       mcp2515_write
+00023a  21ff              MOVS     r1,#0xff
+00023c  2024              MOVS     r0,#0x24
+00023e  f7fffffe          BL       mcp2515_write
 ;;;139    mcp2515_write(RXM1SIDL, 0xe0); 
-0001be  21e0              MOVS     r1,#0xe0
-0001c0  2025              MOVS     r0,#0x25
-0001c2  f7fffffe          BL       mcp2515_write
+000242  21e0              MOVS     r1,#0xe0
+000244  2025              MOVS     r0,#0x25
+000246  f7fffffe          BL       mcp2515_write
 ;;;140    
 ;;;141    mcp2515_write(RXF2SIDH, 0x31); 
-0001c6  2131              MOVS     r1,#0x31
-0001c8  2008              MOVS     r0,#8
-0001ca  f7fffffe          BL       mcp2515_write
+00024a  2131              MOVS     r1,#0x31
+00024c  2008              MOVS     r0,#8
+00024e  f7fffffe          BL       mcp2515_write
 ;;;142    mcp2515_write(RXF2SIDL, 0xc0); 
-0001ce  21c0              MOVS     r1,#0xc0
-0001d0  2009              MOVS     r0,#9
-0001d2  f7fffffe          BL       mcp2515_write
+000252  21c0              MOVS     r1,#0xc0
+000254  2009              MOVS     r0,#9
+000256  f7fffffe          BL       mcp2515_write
 ;;;143    
 ;;;144    mcp2515_write(RXF3SIDH, 0x00); 
-0001d6  2100              MOVS     r1,#0
-0001d8  2010              MOVS     r0,#0x10
-0001da  f7fffffe          BL       mcp2515_write
+00025a  2100              MOVS     r1,#0
+00025c  2010              MOVS     r0,#0x10
+00025e  f7fffffe          BL       mcp2515_write
 ;;;145    mcp2515_write(RXF3SIDL, 0x00); 
-0001de  2100              MOVS     r1,#0
-0001e0  2011              MOVS     r0,#0x11
-0001e2  f7fffffe          BL       mcp2515_write
+000262  2100              MOVS     r1,#0
+000264  2011              MOVS     r0,#0x11
+000266  f7fffffe          BL       mcp2515_write
 ;;;146    
 ;;;147    mcp2515_write(RXF4SIDH, 0x00); 
-0001e6  2100              MOVS     r1,#0
-0001e8  2014              MOVS     r0,#0x14
-0001ea  f7fffffe          BL       mcp2515_write
+00026a  2100              MOVS     r1,#0
+00026c  2014              MOVS     r0,#0x14
+00026e  f7fffffe          BL       mcp2515_write
 ;;;148    mcp2515_write(RXF4SIDL, 0x00); 
-0001ee  2100              MOVS     r1,#0
-0001f0  2015              MOVS     r0,#0x15
-0001f2  f7fffffe          BL       mcp2515_write
+000272  2100              MOVS     r1,#0
+000274  2015              MOVS     r0,#0x15
+000276  f7fffffe          BL       mcp2515_write
 ;;;149    
 ;;;150    mcp2515_write(RXF5SIDH, 0x00); 
-0001f6  2100              MOVS     r1,#0
-0001f8  2018              MOVS     r0,#0x18
-0001fa  f7fffffe          BL       mcp2515_write
+00027a  2100              MOVS     r1,#0
+00027c  2018              MOVS     r0,#0x18
+00027e  f7fffffe          BL       mcp2515_write
 ;;;151    mcp2515_write(RXF5SIDL, 0x00); 
-0001fe  2100              MOVS     r1,#0
-000200  2019              MOVS     r0,#0x19
-000202  f7fffffe          BL       mcp2515_write
+000282  2100              MOVS     r1,#0
+000284  2019              MOVS     r0,#0x19
+000286  f7fffffe          BL       mcp2515_write
 ;;;152    
 ;;;153    mcp2515_write(TXB2SIDH, 0x13); 
-000206  2113              MOVS     r1,#0x13
-000208  2051              MOVS     r0,#0x51
-00020a  f7fffffe          BL       mcp2515_write
+00028a  2113              MOVS     r1,#0x13
+00028c  2051              MOVS     r0,#0x51
+00028e  f7fffffe          BL       mcp2515_write
 ;;;154    mcp2515_write(TXB2SIDL, 0xc0); 
-00020e  21c0              MOVS     r1,#0xc0
-000210  2052              MOVS     r0,#0x52
-000212  f7fffffe          BL       mcp2515_write
+000292  21c0              MOVS     r1,#0xc0
+000294  2052              MOVS     r0,#0x52
+000296  f7fffffe          BL       mcp2515_write
 ;;;155    
 ;;;156    mcp2515_write(TXB1SIDH, 0x13); 
-000216  2113              MOVS     r1,#0x13
-000218  2041              MOVS     r0,#0x41
-00021a  f7fffffe          BL       mcp2515_write
+00029a  2113              MOVS     r1,#0x13
+00029c  2041              MOVS     r0,#0x41
+00029e  f7fffffe          BL       mcp2515_write
 ;;;157    mcp2515_write(TXB1SIDL, 0xc0); 
-00021e  21c0              MOVS     r1,#0xc0
-000220  2042              MOVS     r0,#0x42
-000222  f7fffffe          BL       mcp2515_write
+0002a2  21c0              MOVS     r1,#0xc0
+0002a4  2042              MOVS     r0,#0x42
+0002a6  f7fffffe          BL       mcp2515_write
 ;;;158    
 ;;;159    mcp2515_write(TXB0SIDH, 0x13); 
-000226  2113              MOVS     r1,#0x13
-000228  2031              MOVS     r0,#0x31
-00022a  f7fffffe          BL       mcp2515_write
+0002aa  2113              MOVS     r1,#0x13
+0002ac  2031              MOVS     r0,#0x31
+0002ae  f7fffffe          BL       mcp2515_write
 ;;;160    mcp2515_write(TXB0SIDL, 0xc0); 
-00022e  21c0              MOVS     r1,#0xc0
-000230  2032              MOVS     r0,#0x32
-000232  f7fffffe          BL       mcp2515_write
+0002b2  21c0              MOVS     r1,#0xc0
+0002b4  2032              MOVS     r0,#0x32
+0002b6  f7fffffe          BL       mcp2515_write
 ;;;161    
 ;;;162    
 ;;;163    
 ;;;164    mcp2515_bit_modify(CANCTRL,0xe7,0x05/*0b00000101*/);
-000236  2205              MOVS     r2,#5
-000238  21e7              MOVS     r1,#0xe7
-00023a  200f              MOVS     r0,#0xf
-00023c  f7fffffe          BL       mcp2515_bit_modify
+0002ba  2205              MOVS     r2,#5
+0002bc  21e7              MOVS     r1,#0xe7
+0002be  200f              MOVS     r0,#0xf
+0002c0  f7fffffe          BL       mcp2515_bit_modify
 ;;;165    
 ;;;166    mcp2515_write(CANINTE,0x06/*0b00000110*/);
-000240  2106              MOVS     r1,#6
-000242  202b              MOVS     r0,#0x2b
-000244  f7fffffe          BL       mcp2515_write
+0002c4  2106              MOVS     r1,#6
+0002c6  202b              MOVS     r0,#0x2b
+0002c8  f7fffffe          BL       mcp2515_write
 ;;;167    delay_ms(100);
-000248  4819              LDR      r0,|L1.688|
-                  |L1.586|
-00024a  1e40              SUBS     r0,r0,#1
-00024c  d1fd              BNE      |L1.586|
+0002cc  483d              LDR      r0,|L1.964|
+                  |L1.718|
+0002ce  1e40              SUBS     r0,r0,#1
+0002d0  d1fd              BNE      |L1.718|
 ;;;168    mcp2515_write(BFPCTRL,0x00/*0b00000000*/);  
-00024e  2100              MOVS     r1,#0
-000250  e8bd4010          POP      {r4,lr}
-000254  200c              MOVS     r0,#0xc
-000256  e7fe              B        mcp2515_write
+0002d2  2100              MOVS     r1,#0
+0002d4  e8bd4010          POP      {r4,lr}
+0002d8  200c              MOVS     r0,#0xc
+0002da  e7fe              B        mcp2515_write
 ;;;169    
 ;;;170    }
 ;;;171    
@@ -387,26 +480,26 @@
                   mcp2515_transmit PROC
 ;;;172    //-----------------------------------------------
 ;;;173    void mcp2515_transmit(char data0,char data1,char data2,char data3,char data4,char data5,char data6,char data7)
-000258  e92d47f0          PUSH     {r4-r10,lr}
+0002dc  e92d47f0          PUSH     {r4-r10,lr}
 ;;;174    {
-00025c  ac09              ADD      r4,sp,#0x24
+0002e0  ac09              ADD      r4,sp,#0x24
 ;;;175    if(/*(mcp2515_buff_wr_ptr<0)||*/(mcp2515_buff_wr_ptr>7))mcp2515_buff_wr_ptr=0;
-00025e  2600              MOVS     r6,#0
-000260  e8b40700          LDM      r4!,{r8-r10}          ;174
-000264  4c13              LDR      r4,|L1.692|
-000266  f8ddc020          LDR      r12,[sp,#0x20]
-00026a  78e5              LDRB     r5,[r4,#3]  ; mcp2515_buff_wr_ptr
-00026c  2d07              CMP      r5,#7
-00026e  d900              BLS      |L1.626|
-000270  70e6              STRB     r6,[r4,#3]
-                  |L1.626|
+0002e2  2600              MOVS     r6,#0
+0002e4  e8b40700          LDM      r4!,{r8-r10}          ;174
+0002e8  4c37              LDR      r4,|L1.968|
+0002ea  f8ddc020          LDR      r12,[sp,#0x20]
+0002ee  78e5              LDRB     r5,[r4,#3]  ; mcp2515_buff_wr_ptr
+0002f0  2d07              CMP      r5,#7
+0002f2  d900              BLS      |L1.758|
+0002f4  70e6              STRB     r6,[r4,#3]
+                  |L1.758|
 ;;;176    
 ;;;177    mcp2515_out_buff[0][mcp2515_buff_wr_ptr]=data0;
-000272  4f11              LDR      r7,|L1.696|
-000274  78e5              LDRB     r5,[r4,#3]  ; mcp2515_buff_wr_ptr
-000276  5578              STRB     r0,[r7,r5]
+0002f6  4f35              LDR      r7,|L1.972|
+0002f8  78e5              LDRB     r5,[r4,#3]  ; mcp2515_buff_wr_ptr
+0002fa  5578              STRB     r0,[r7,r5]
 ;;;178    mcp2515_out_buff[1][mcp2515_buff_wr_ptr]=data1;
-000278  1978              ADDS     r0,r7,r5
+0002fc  1978              ADDS     r0,r7,r5
 ;;;179    mcp2515_out_buff[2][mcp2515_buff_wr_ptr]=data2;
 ;;;180    mcp2515_out_buff[3][mcp2515_buff_wr_ptr]=data3;
 ;;;181    mcp2515_out_buff[4][mcp2515_buff_wr_ptr]=data4;
@@ -415,256 +508,72 @@
 ;;;184    mcp2515_out_buff[7][mcp2515_buff_wr_ptr]=data7;
 ;;;185    
 ;;;186    mcp2515_buff_wr_ptr++;
-00027a  1c6d              ADDS     r5,r5,#1
-00027c  7201              STRB     r1,[r0,#8]            ;178
-00027e  7402              STRB     r2,[r0,#0x10]         ;179
-000280  7603              STRB     r3,[r0,#0x18]         ;180
-000282  f880c020          STRB     r12,[r0,#0x20]        ;181
-000286  f8808028          STRB     r8,[r0,#0x28]         ;182
-00028a  f8809030          STRB     r9,[r0,#0x30]         ;183
-00028e  f880a038          STRB     r10,[r0,#0x38]        ;184
-000292  b2e8              UXTB     r0,r5
-000294  70e0              STRB     r0,[r4,#3]
+0002fe  1c6d              ADDS     r5,r5,#1
+000300  7201              STRB     r1,[r0,#8]            ;178
+000302  7402              STRB     r2,[r0,#0x10]         ;179
+000304  7603              STRB     r3,[r0,#0x18]         ;180
+000306  f880c020          STRB     r12,[r0,#0x20]        ;181
+00030a  f8808028          STRB     r8,[r0,#0x28]         ;182
+00030e  f8809030          STRB     r9,[r0,#0x30]         ;183
+000312  f880a038          STRB     r10,[r0,#0x38]        ;184
+000316  b2e8              UXTB     r0,r5
+000318  70e0              STRB     r0,[r4,#3]
 ;;;187    if(mcp2515_buff_wr_ptr>7)mcp2515_buff_wr_ptr=0;
-000296  2807              CMP      r0,#7
-000298  d900              BLS      |L1.668|
-00029a  70e6              STRB     r6,[r4,#3]
-                  |L1.668|
+00031a  2807              CMP      r0,#7
+00031c  d900              BLS      |L1.800|
+00031e  70e6              STRB     r6,[r4,#3]
+                  |L1.800|
 ;;;188    } 
-00029c  e8bd87f0          POP      {r4-r10,pc}
+000320  e8bd87f0          POP      {r4-r10,pc}
 ;;;189    
                           ENDP
 
-                  |L1.672|
-                          DCD      0x4002c000
-                  |L1.676|
-                          DCD      0x40020000
-                  |L1.680|
-                          DCD      0x2009c000
-                  |L1.684|
-                          DCD      0x0001d4c0
-                  |L1.688|
-                          DCD      0x00124f80
-                  |L1.692|
-                          DCD      ||.data||
-                  |L1.696|
-                          DCD      ||area_number.7||
-
-                          AREA ||area_number.2||, CODE, READONLY, ALIGN=2
-
-                          EXPORTAS ||area_number.2||, ||.text||
-                  mcp2515_read_status PROC
-;;;190    //-----------------------------------------------
-;;;191    void can_mcp2515_hndl(void)
-000000  b510              PUSH     {r4,lr}
-;;;192    {
-;;;193    unsigned char /*temp,*/j/*,temp_index*//*,c_temp*/;
-;;;194    //static char ch_cnt;
-;;;195    //#asm("cli")
-;;;196    mcp2515_can_st=mcp2515_read_status();
-000002  f7fffffe          BL       spi1_config_mcp2515
-000006  4c0d              LDR      r4,|L2.60|
-;;;197    mcp2515_can_st_old=mcp2515_can_st;
-;;;198    
-;;;199    
-;;;200    if(mcp2515_can_st&0x02/*0b00000010*/)
-000008  6820              LDR      r0,[r4,#0]
-00000a  f0400002          ORR      r0,r0,#2              ;196
-00000e  6020              STR      r0,[r4,#0]
-;;;201    	{
-;;;202    	
-;;;203    	for(j=0;j<8;j++)
-;;;204    		{
-;;;205    		/*MCP2515_*/RXBUFF[j]=mcp2515_read(RXB1D0+j);
-000010  69e0              LDR      r0,[r4,#0x1c]
-000012  f0400002          ORR      r0,r0,#2              ;203
-000016  61e0              STR      r0,[r4,#0x1c]
-000018  200c              MOVS     r0,#0xc
-                  |L2.26|
-00001a  1e40              SUBS     r0,r0,#1
-00001c  d1fd              BNE      |L2.26|
-00001e  20a0              MOVS     r0,#0xa0
-000020  f7fffffe          BL       spi1
-000024  2055              MOVS     r0,#0x55              ;203
-000026  f7fffffe          BL       spi1
-;;;206    		}
-;;;207    	
-;;;208    	mcp2515_bit_modify(CANINTF,0x02 /*0b00000010*/ ,0x00);
-00002a  6821              LDR      r1,[r4,#0]
-00002c  f0410102          ORR      r1,r1,#2
-000030  6021              STR      r1,[r4,#0]
-;;;209         bMCP2515_IN=1;
-000032  69a1              LDR      r1,[r4,#0x18]
-000034  f0410102          ORR      r1,r1,#2
-;;;210    	}
-;;;211               
-;;;212               
-;;;213    else if(/*(can_st1&0b10101000)&&*/(!(mcp2515_can_st&0x54/*0b01010100*/)))
-000038  61a1              STR      r1,[r4,#0x18]
-00003a  bd10              POP      {r4,pc}
-;;;214    	{
-;;;215    	char n;
-;;;216         mcp2515_bit_modify(CANINTF,0x1c/*0b00011100*/,0x00);
-;;;217         
-;;;218         if(mcp2515_buff_rd_ptr!=mcp2515_buff_wr_ptr)
-;;;219         	{
-;;;220    //		can_plazma++;
-;;;221             	for(n=0;n<8;n++)
-;;;222    			{ 
-;;;223    			mcp2515_write(TXB0D0+n,mcp2515_out_buff[n][mcp2515_buff_rd_ptr]);
-;;;224    			} 
-;;;225        		mcp2515_write(TXB0DLC,8);
-;;;226        		mcp2515_rts(0); 
-;;;227        		
-;;;228        		mcp2515_buff_rd_ptr++;
-;;;229        		if(mcp2515_buff_rd_ptr>7)mcp2515_buff_rd_ptr=0;
-;;;230        		} 
-;;;231     	} 	
-;;;232    		
-;;;233    //#asm("sei") 
-;;;234    }
-                          ENDP
-
-                  |L2.60|
-                          DCD      0x2009c000
-
-                          AREA ||area_number.3||, CODE, READONLY, ALIGN=2
-
-                          EXPORTAS ||area_number.3||, ||.text||
-                  mcp2515_rts PROC
-;;;190    //-----------------------------------------------
-;;;191    void can_mcp2515_hndl(void)
-000000  b510              PUSH     {r4,lr}
-;;;192    {
-;;;193    unsigned char /*temp,*/j/*,temp_index*//*,c_temp*/;
-;;;194    //static char ch_cnt;
-;;;195    //#asm("cli")
-;;;196    mcp2515_can_st=mcp2515_read_status();
-000002  4602              MOV      r2,r0
-000004  f7fffffe          BL       spi1_config_mcp2515
-;;;197    mcp2515_can_st_old=mcp2515_can_st;
-;;;198    
-;;;199    
-;;;200    if(mcp2515_can_st&0x02/*0b00000010*/)
-000008  4c0f              LDR      r4,|L3.72|
-00000a  6820              LDR      r0,[r4,#0]            ;196
-00000c  f0400002          ORR      r0,r0,#2              ;197
-;;;201    	{
-;;;202    	
-;;;203    	for(j=0;j<8;j++)
-;;;204    		{
-;;;205    		/*MCP2515_*/RXBUFF[j]=mcp2515_read(RXB1D0+j);
-000010  6020              STR      r0,[r4,#0]
-000012  69e0              LDR      r0,[r4,#0x1c]         ;203
-000014  f0400002          ORR      r0,r0,#2
-000018  61e0              STR      r0,[r4,#0x1c]
-00001a  b122              CBZ      r2,|L3.38|
-00001c  2a01              CMP      r2,#1
-00001e  d004              BEQ      |L3.42|
-000020  2a02              CMP      r2,#2                 ;203
-000022  d004              BEQ      |L3.46|
-000024  e004              B        |L3.48|
-                  |L3.38|
-000026  2281              MOVS     r2,#0x81              ;203
-;;;206    		}
-;;;207    	
-;;;208    	mcp2515_bit_modify(CANINTF,0x02 /*0b00000010*/ ,0x00);
-000028  e002              B        |L3.48|
-                  |L3.42|
-00002a  2282              MOVS     r2,#0x82
-00002c  e000              B        |L3.48|
-                  |L3.46|
-00002e  2284              MOVS     r2,#0x84
-                  |L3.48|
-000030  4610              MOV      r0,r2
-;;;209         bMCP2515_IN=1;
-000032  f7fffffe          BL       spi1
-;;;210    	}
-;;;211               
-;;;212               
-;;;213    else if(/*(can_st1&0b10101000)&&*/(!(mcp2515_can_st&0x54/*0b01010100*/)))
-;;;214    	{
-;;;215    	char n;
-;;;216         mcp2515_bit_modify(CANINTF,0x1c/*0b00011100*/,0x00);
-;;;217         
-;;;218         if(mcp2515_buff_rd_ptr!=mcp2515_buff_wr_ptr)
-;;;219         	{
-;;;220    //		can_plazma++;
-;;;221             	for(n=0;n<8;n++)
-;;;222    			{ 
-;;;223    			mcp2515_write(TXB0D0+n,mcp2515_out_buff[n][mcp2515_buff_rd_ptr]);
-;;;224    			} 
-;;;225        		mcp2515_write(TXB0DLC,8);
-;;;226        		mcp2515_rts(0); 
-;;;227        		
-;;;228        		mcp2515_buff_rd_ptr++;
-;;;229        		if(mcp2515_buff_rd_ptr>7)mcp2515_buff_rd_ptr=0;
-;;;230        		} 
-;;;231     	} 	
-;;;232    		
-;;;233    //#asm("sei") 
-;;;234    }
-000036  6820              LDR      r0,[r4,#0]
-000038  f0400002          ORR      r0,r0,#2              ;213
-00003c  6020              STR      r0,[r4,#0]            ;213
-00003e  69a0              LDR      r0,[r4,#0x18]         ;216
-000040  f0400002          ORR      r0,r0,#2              ;216
-000044  61a0              STR      r0,[r4,#0x18]         ;216
-000046  bd10              POP      {r4,pc}               ;216
-                          ENDP
-
-                  |L3.72|
-                          DCD      0x2009c000
-
-                          AREA ||area_number.4||, CODE, READONLY, ALIGN=2
-
-                          EXPORTAS ||area_number.4||, ||.text||
                   can_mcp2515_hndl PROC
 ;;;190    //-----------------------------------------------
 ;;;191    void can_mcp2515_hndl(void)
-000000  b570              PUSH     {r4-r6,lr}
+000324  b570              PUSH     {r4-r6,lr}
 ;;;192    {
 ;;;193    unsigned char /*temp,*/j/*,temp_index*//*,c_temp*/;
 ;;;194    //static char ch_cnt;
 ;;;195    //#asm("cli")
 ;;;196    mcp2515_can_st=mcp2515_read_status();
-000002  f7fffffe          BL       mcp2515_read_status
-000006  4d22              LDR      r5,|L4.144|
+000326  f7fffffe          BL       mcp2515_read_status
+00032a  4d27              LDR      r5,|L1.968|
 ;;;197    mcp2515_can_st_old=mcp2515_can_st;
 ;;;198    
 ;;;199    
 ;;;200    if(mcp2515_can_st&0x02/*0b00000010*/)
-000008  0781              LSLS     r1,r0,#30
-00000a  7028              STRB     r0,[r5,#0]            ;196
-00000c  7068              STRB     r0,[r5,#1]            ;197
-00000e  d513              BPL      |L4.56|
+00032c  0781              LSLS     r1,r0,#30
+00032e  7028              STRB     r0,[r5,#0]            ;196
+000330  7068              STRB     r0,[r5,#1]            ;197
+000332  d513              BPL      |L1.860|
 ;;;201    	{
 ;;;202    	
 ;;;203    	for(j=0;j<8;j++)
 ;;;204    		{
 ;;;205    		/*MCP2515_*/RXBUFF[j]=mcp2515_read(RXB1D0+j);
-000010  4e20              LDR      r6,|L4.148|
-000012  2400              MOVS     r4,#0                 ;203
-                  |L4.20|
-000014  f1040076          ADD      r0,r4,#0x76
-000018  b2c0              UXTB     r0,r0
-00001a  f7fffffe          BL       mcp2515_read
-00001e  5530              STRB     r0,[r6,r4]
-000020  1c64              ADDS     r4,r4,#1              ;203
-000022  b2e4              UXTB     r4,r4                 ;203
-000024  2c08              CMP      r4,#8                 ;203
-000026  d3f5              BCC      |L4.20|
+000334  4e26              LDR      r6,|L1.976|
+000336  2400              MOVS     r4,#0                 ;203
+                  |L1.824|
+000338  f1040076          ADD      r0,r4,#0x76
+00033c  b2c0              UXTB     r0,r0
+00033e  f7fffffe          BL       mcp2515_read
+000342  5530              STRB     r0,[r6,r4]
+000344  1c64              ADDS     r4,r4,#1              ;203
+000346  b2e4              UXTB     r4,r4                 ;203
+000348  2c08              CMP      r4,#8                 ;203
+00034a  d3f5              BCC      |L1.824|
 ;;;206    		}
 ;;;207    	
 ;;;208    	mcp2515_bit_modify(CANINTF,0x02 /*0b00000010*/ ,0x00);
-000028  2200              MOVS     r2,#0
-00002a  2102              MOVS     r1,#2
-00002c  202c              MOVS     r0,#0x2c
-00002e  f7fffffe          BL       mcp2515_bit_modify
+00034c  2200              MOVS     r2,#0
+00034e  2102              MOVS     r1,#2
+000350  202c              MOVS     r0,#0x2c
+000352  f7fffffe          BL       mcp2515_bit_modify
 ;;;209         bMCP2515_IN=1;
-000032  2001              MOVS     r0,#1
-000034  70a8              STRB     r0,[r5,#2]
-                  |L4.54|
+000356  2001              MOVS     r0,#1
+000358  70a8              STRB     r0,[r5,#2]
+                  |L1.858|
 ;;;210    	}
 ;;;211               
 ;;;212               
@@ -690,63 +599,73 @@
 ;;;232    		
 ;;;233    //#asm("sei") 
 ;;;234    }
-000036  bd70              POP      {r4-r6,pc}
-                  |L4.56|
-000038  f0100f54          TST      r0,#0x54              ;213
-00003c  d1fb              BNE      |L4.54|
-00003e  2200              MOVS     r2,#0                 ;216
-000040  211c              MOVS     r1,#0x1c              ;216
-000042  202c              MOVS     r0,#0x2c              ;216
-000044  f7fffffe          BL       mcp2515_bit_modify
-000048  7928              LDRB     r0,[r5,#4]            ;218  ; mcp2515_buff_rd_ptr
-00004a  78e9              LDRB     r1,[r5,#3]            ;218  ; mcp2515_buff_wr_ptr
-00004c  4288              CMP      r0,r1                 ;218
-00004e  d0f2              BEQ      |L4.54|
-000050  4e11              LDR      r6,|L4.152|
-000052  2400              MOVS     r4,#0                 ;221
-                  |L4.84|
-000054  7929              LDRB     r1,[r5,#4]            ;223  ; mcp2515_buff_rd_ptr
-000056  eb0600c4          ADD      r0,r6,r4,LSL #3       ;223
-00005a  5c41              LDRB     r1,[r0,r1]            ;223
-00005c  f1040036          ADD      r0,r4,#0x36           ;223
-000060  b2c0              UXTB     r0,r0                 ;223
-000062  f7fffffe          BL       mcp2515_write
-000066  1c64              ADDS     r4,r4,#1              ;221
-000068  b2e4              UXTB     r4,r4                 ;221
-00006a  2c08              CMP      r4,#8                 ;221
-00006c  d3f2              BCC      |L4.84|
-00006e  2108              MOVS     r1,#8                 ;225
-000070  2035              MOVS     r0,#0x35              ;225
-000072  f7fffffe          BL       mcp2515_write
-000076  2000              MOVS     r0,#0                 ;226
-000078  f7fffffe          BL       mcp2515_rts
-00007c  7928              LDRB     r0,[r5,#4]            ;228  ; mcp2515_buff_rd_ptr
-00007e  1c40              ADDS     r0,r0,#1              ;228
-000080  b2c0              UXTB     r0,r0                 ;228
-000082  7128              STRB     r0,[r5,#4]            ;228
-000084  2807              CMP      r0,#7                 ;229
-000086  d9d6              BLS      |L4.54|
-000088  2000              MOVS     r0,#0                 ;229
-00008a  7128              STRB     r0,[r5,#4]            ;229
-00008c  bd70              POP      {r4-r6,pc}
+00035a  bd70              POP      {r4-r6,pc}
+                  |L1.860|
+00035c  f0100f54          TST      r0,#0x54              ;213
+000360  d1fb              BNE      |L1.858|
+000362  2200              MOVS     r2,#0                 ;216
+000364  211c              MOVS     r1,#0x1c              ;216
+000366  202c              MOVS     r0,#0x2c              ;216
+000368  f7fffffe          BL       mcp2515_bit_modify
+00036c  7928              LDRB     r0,[r5,#4]            ;218  ; mcp2515_buff_rd_ptr
+00036e  78e9              LDRB     r1,[r5,#3]            ;218  ; mcp2515_buff_wr_ptr
+000370  4288              CMP      r0,r1                 ;218
+000372  d0f2              BEQ      |L1.858|
+000374  4e15              LDR      r6,|L1.972|
+000376  2400              MOVS     r4,#0                 ;221
+                  |L1.888|
+000378  7929              LDRB     r1,[r5,#4]            ;223  ; mcp2515_buff_rd_ptr
+00037a  eb0600c4          ADD      r0,r6,r4,LSL #3       ;223
+00037e  5c41              LDRB     r1,[r0,r1]            ;223
+000380  f1040036          ADD      r0,r4,#0x36           ;223
+000384  b2c0              UXTB     r0,r0                 ;223
+000386  f7fffffe          BL       mcp2515_write
+00038a  1c64              ADDS     r4,r4,#1              ;221
+00038c  b2e4              UXTB     r4,r4                 ;221
+00038e  2c08              CMP      r4,#8                 ;221
+000390  d3f2              BCC      |L1.888|
+000392  2108              MOVS     r1,#8                 ;225
+000394  2035              MOVS     r0,#0x35              ;225
+000396  f7fffffe          BL       mcp2515_write
+00039a  2000              MOVS     r0,#0                 ;226
+00039c  f7fffffe          BL       mcp2515_rts
+0003a0  7928              LDRB     r0,[r5,#4]            ;228  ; mcp2515_buff_rd_ptr
+0003a2  1c40              ADDS     r0,r0,#1              ;228
+0003a4  b2c0              UXTB     r0,r0                 ;228
+0003a6  7128              STRB     r0,[r5,#4]            ;228
+0003a8  2807              CMP      r0,#7                 ;229
+0003aa  d9d6              BLS      |L1.858|
+0003ac  2000              MOVS     r0,#0                 ;229
+0003ae  7128              STRB     r0,[r5,#4]            ;229
+0003b0  bd70              POP      {r4-r6,pc}
                           ENDP
 
-00008e  0000              DCW      0x0000
-                  |L4.144|
+0003b2  0000              DCW      0x0000
+                  |L1.948|
+                          DCD      0x4002c000
+                  |L1.952|
+                          DCD      0x40020000
+                  |L1.956|
+                          DCD      0x2009c000
+                  |L1.960|
+                          DCD      0x0001d4c0
+                  |L1.964|
+                          DCD      0x00124f80
+                  |L1.968|
                           DCD      ||.data||
-                  |L4.148|
+                  |L1.972|
+                          DCD      ||area_number.4||
+                  |L1.976|
                           DCD      RXBUFF
-                  |L4.152|
-                          DCD      ||area_number.7||
 
                           AREA ||.bss||, DATA, NOINIT, ALIGN=0
 
                   MCP2515_RXBUFF
                           %        40
 
-                          AREA ||area_number.7||, DATA, NOINIT, ALIGN=0
+                          AREA ||area_number.4||, DATA, NOINIT, ALIGN=0
 
-                          EXPORTAS ||area_number.7||, ||.bss||
+                          EXPORTAS ||area_number.4||, ||.bss||
                   mcp2515_out_buff
                           %        64
 

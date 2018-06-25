@@ -884,7 +884,8 @@ typedef enum {
 	iAvt,iLan_set,iRele_set,iRele_sel,iFiks_set,
 	iK_max_param,iCurr_contr_set,iVolt_contr_set,
 	iAch_off,iCurr_off,iUout_avar_control,
-	iProcIsComplete}i_enum;
+	iProcIsComplete,
+	iFWabout}i_enum;
 
 typedef struct  
 {
@@ -2831,9 +2832,6 @@ extern short modbus_plazma;
 extern short modbus_plazma1;				
 extern short modbus_plazma2;				
 extern short modbus_plazma3;				
-extern short modbus_plazma_p;				
-extern short modbus_plazma_pp;				
-extern short modbus_plazma_ppp;
 extern char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt;
 
 extern char modbus_registers[200];
@@ -3165,6 +3163,14 @@ extern short modbus_tcp_rx_arg1;
 extern char* modbus_tcp_out_ptr;
 
 #line 34 "main.c"
+#line 1 "curr_version.h"
+extern const short HARDWARE_VERSION;
+extern const short SOFT_VERSION;
+extern const short BUILD;
+extern const short BUILD_YEAR;
+extern const short BUILD_MONTH;
+extern const short BUILD_DAY;
+#line 35 "main.c"
 
 
 
@@ -5346,7 +5352,7 @@ typedef struct
  
 #line 1031 "C:\\Keil\\ARM\\INC\\NXP\\LPC17xx\\LPC17xx.H"
 
-#line 405 "main.c"
+#line 406 "main.c"
 
 
 
@@ -6267,6 +6273,7 @@ if(a_ind . i==iMn)
 	   	ptrs[6]=		" Выход              ";
 		ptrs[7]=		" Установки          ";
 	   	ptrs[8]=		" Выпрямители        ";	
+		ptrs[9]=  		" Версия ПО          ";
 	
 		if(a_ind . s_i-a_ind . i_s>3)a_ind . i_s=a_ind . s_i-3;
 		else if (a_ind . s_i<a_ind . i_s)a_ind . i_s=a_ind . s_i;
@@ -6423,6 +6430,7 @@ if(a_ind . i==iMn)
 	   	ptrs[6]=		" Выход              ";
 		ptrs[7]=		" Установки          ";
 	   	ptrs[8]=		" Выпрямители        ";	
+		ptrs[9]=  		" Версия ПО          ";
 	
 		if(a_ind . s_i-a_ind . i_s>3)a_ind . i_s=a_ind . s_i-3;
 		else if (a_ind . s_i<a_ind . i_s)a_ind . i_s=a_ind . s_i;
@@ -6639,7 +6647,8 @@ if(a_ind . i==iMn)
 		ptrs[10]=		" Аварии             ";
 	   	ptrs[11]=		" Выход              ";
 		ptrs[12]=		" Установки          ";
-	   	ptrs[13]=		" Выпрямители        ";	
+	   	ptrs[13]=		" Выпрямители        ";
+		ptrs[14]=  		" Версия ПО          ";	
 	
 		if(a_ind . s_i-a_ind . i_s>3)a_ind . i_s=a_ind . s_i-3;
 		else if (a_ind . s_i<a_ind . i_s)a_ind . i_s=a_ind . s_i;
@@ -6874,6 +6883,7 @@ if(a_ind . i==iMn)
 	   	ptrs[11]=		" Выход              ";
 		ptrs[12]=		" Установки          ";
 	   	ptrs[13]=		" Выпрямители        ";
+		ptrs[14]=  		" Версия ПО          ";
 
 	
 	
@@ -7036,6 +7046,8 @@ if(a_ind . i==iMn)
 		
 		
 		
+		
+		
 	
 
 
@@ -7043,9 +7055,7 @@ if(a_ind . i==iMn)
 
 
  
-int2lcdyx(modbus_plazma_p,0,10,0);
-int2lcdyx(modbus_plazma_pp,0,19,0);
-int2lcdyx(modbus_plazma_ppp,0,3,0);
+	
 
 
 
@@ -9203,7 +9213,18 @@ else if(a_ind . i==iAvz)
 	
 	}
 
-
+else if(a_ind . i==iFWabout)
+	{
+	bgnd_par(	" Версия             ",
+				" Сборка  0000.00.00 ",
+				"                    ",
+				"                    ");
+	int2lcdyx(BUILD_YEAR,1,12,0);
+	int2lcdyx(BUILD_MONTH,1,15,0);
+	int2lcdyx(BUILD_DAY,1,18,0);
+	
+	sprintf(&lcd_buffer[9],"%d.%d.%d",HARDWARE_VERSION,SOFT_VERSION,BUILD);
+	}
 
 
 
@@ -9340,12 +9361,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4404 "main.c"
+#line 4420 "main.c"
 
 
 
 
-#line 4426 "main.c"
+#line 4442 "main.c"
 
 
 
@@ -9598,7 +9619,7 @@ else if(a_ind . i==iMn)
 				a_ind . s_i++;
 				}
 	
-			gran_char(&a_ind . s_i,0,8);
+			gran_char(&a_ind . s_i,0,9);
 			}
 			
 		else if(but==253)
@@ -9609,7 +9630,7 @@ else if(a_ind . i==iMn)
 				a_ind . s_i--;
 				}
 	
-			gran_char(&a_ind . s_i,0,8);
+			gran_char(&a_ind . s_i,0,9);
 			}	
 		
 		else if(a_ind . s_i==0)
@@ -9954,6 +9975,13 @@ else if(a_ind . i==iMn)
 
 
  
+		else if(a_ind . s_i==9)
+			{
+			if(but==254)
+		     	{
+		     	tree_up(iFWabout,0,0,0);
+		     	}
+			}
 		}
 
 	else if(main_menu_mode==mmmIN)
@@ -9966,7 +9994,7 @@ else if(a_ind . i==iMn)
 				a_ind . s_i++;
 				}
 	
-			gran_char(&a_ind . s_i,0,7);
+			gran_char(&a_ind . s_i,0,9);
 			}
 			
 		else if(but==253)
@@ -9977,7 +10005,7 @@ else if(a_ind . i==iMn)
 				a_ind . s_i--;
 				}
 		
-			gran_char(&a_ind . s_i,0,7);
+			gran_char(&a_ind . s_i,0,9);
 			}	
 	
 	
@@ -10321,6 +10349,13 @@ else if(a_ind . i==iMn)
 
 
  
+		else if(a_ind . s_i==9)
+			{
+			if(but==254)
+		     	{
+		     	tree_up(iFWabout,0,0,0);
+		     	}
+			}
 		}
 	else if(main_menu_mode==mmmITIN)
 		{
@@ -10337,7 +10372,7 @@ else if(a_ind . i==iMn)
 				a_ind . s_i++;
 				}
 			
-			gran_char(&a_ind . s_i,0,12);
+			gran_char(&a_ind . s_i,0,14);
 			}
 			
 		else if(but==253)
@@ -10353,7 +10388,7 @@ else if(a_ind . i==iMn)
 				a_ind . s_i--;
 				}
 						
-			gran_char(&a_ind . s_i,0,12);
+			gran_char(&a_ind . s_i,0,14);
 			}	
 	
 	
@@ -10960,6 +10995,13 @@ else if(a_ind . i==iMn)
 				parol_init();
 				}
 		    }
+		else if(a_ind . s_i==14)
+			{
+			if(but==254)
+		     	{
+		     	tree_up(iFWabout,0,0,0);
+		     	}
+			}
 		}
 	else  
 		{
@@ -10976,7 +11018,7 @@ else if(a_ind . i==iMn)
 				a_ind . s_i++;
 				}
 			
-			gran_char(&a_ind . s_i,0,12);
+			gran_char(&a_ind . s_i,0,14);
 			}
 			
 		else if(but==253)
@@ -10992,7 +11034,7 @@ else if(a_ind . i==iMn)
 				a_ind . s_i--;
 				}
 						
-			gran_char(&a_ind . s_i,0,12);
+			gran_char(&a_ind . s_i,0,14);
 			}	
 	
 	
@@ -11595,6 +11637,13 @@ else if(a_ind . i==iMn)
 				parol_init();
 				}
 		    }
+		else if(a_ind . s_i==14)
+			{
+			if(but==254)
+		     	{
+		     	tree_up(iFWabout,0,0,0);
+		     	}
+			}
 		}
 	}
 
@@ -13768,7 +13817,7 @@ else if(a_ind . i==iK)
 				else RS485_QWARZ_DIGIT=10;
 				}
 			gran(&RS485_QWARZ_DIGIT,10,40);
-			lc640_write_int(0x10+100+202,RS485_QWARZ_DIGIT);
+			lc640_write_int(0x10+100+204,RS485_QWARZ_DIGIT);
 			speed=0;
 			}					
 	else if(but==254)
@@ -16256,6 +16305,15 @@ else if (a_ind . i==iProcIsComplete)
 	{
 	tree_down(0,0);
 	}
+else if(a_ind . i==iFWabout)
+	{
+	ret(1000);
+	if(but==254)
+	     {
+	     tree_down(0,0);
+	     ret(0);
+	     }
+	}
 but_an_end:
 n_but=0;
 
@@ -16522,7 +16580,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11608 "main.c"
+#line 11661 "main.c"
 
 
 AUSW_MAIN_NUMBER=1000;
@@ -16750,7 +16808,7 @@ while (1)
 		adc_drv7();
 
 
-		
+		can_mcp2515_hndl();
 		
 
 
@@ -16844,11 +16902,11 @@ while (1)
 
 		if(!bRESET)
 			{
-			
+			ad7705_drv();
 			}
 		if(!bRESET)
 			{
-			
+			memo_read();
 			}
 		((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00020) )->FIODIR|=(1UL<<26);
 		matemat();
@@ -16926,8 +16984,6 @@ while (1)
 
 		avg_hndl();			
 		ramModbusCnt_hndl();
-
-		sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
 		}
 	if(b1min)
 		{

@@ -1210,8 +1210,8 @@ time_proc=361233UL;//1357;
 time_proc_remain=722444UL;//1357;
 
 bVOLT_IS_NOT_DOWN=0;
-bVOLT_IS_NOT_UP=1;	*/
-
+bVOLT_IS_NOT_UP=1;	
+*/
 modbus_registers[0]=(char)(load_U/256);					//Πεγ1
 modbus_registers[1]=(char)(load_U%256);
 modbus_registers[2]=(char)(load_I/256);					//Πεγ2

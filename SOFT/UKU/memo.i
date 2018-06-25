@@ -664,7 +664,8 @@ typedef enum {
 	iAvt,iLan_set,iRele_set,iRele_sel,iFiks_set,
 	iK_max_param,iCurr_contr_set,iVolt_contr_set,
 	iAch_off,iCurr_off,iUout_avar_control,
-	iProcIsComplete}i_enum;
+	iProcIsComplete,
+	iFWabout}i_enum;
 
 typedef struct  
 {
@@ -1564,7 +1565,7 @@ UBM_AV=lc640_read_int(3000+96);
 UOUT_OFF_EN=lc640_read_int(0x10+62);	
 UOUT_OFF_LEVEL=lc640_read_int(0x10+64);	
 UOUT_OFF_DELAY=lc640_read_int(0x10+66);	
-RS485_QWARZ_DIGIT=lc640_read_int(0x10+100+202);
+RS485_QWARZ_DIGIT=lc640_read_int(0x10+100+204);
 
 
 

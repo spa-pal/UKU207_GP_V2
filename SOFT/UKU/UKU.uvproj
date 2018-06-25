@@ -583,6 +583,11 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>curr_version.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\curr_version.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -742,9 +747,9 @@
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
           </BeforeCompile>
           <BeforeMake>
-            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name></UserProg1Name>
+            <UserProg1Name>python curr_version.py</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
@@ -1261,6 +1266,11 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>curr_version.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\curr_version.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1941,6 +1951,11 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>curr_version.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\curr_version.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2619,6 +2634,11 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>curr_version.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\curr_version.c</FilePath>
             </File>
           </Files>
         </Group>
