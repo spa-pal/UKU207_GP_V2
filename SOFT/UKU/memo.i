@@ -41,32 +41,33 @@ void memo_read (void);
 
 #line 42 "eeprom_map.h"
 
-#line 138 "eeprom_map.h"
-
-
-
-
-
-#line 157 "eeprom_map.h"
-
-
-
-#line 169 "eeprom_map.h"
-
-
-#line 180 "eeprom_map.h"
-
-
-#line 189 "eeprom_map.h"
+#line 136 "eeprom_map.h"
 
 
 
 
 
 
+#line 156 "eeprom_map.h"
 
 
-#line 235 "eeprom_map.h"
+
+#line 168 "eeprom_map.h"
+
+
+#line 179 "eeprom_map.h"
+
+
+#line 188 "eeprom_map.h"
+
+
+
+
+
+
+
+
+#line 234 "eeprom_map.h"
 
 
 
@@ -1492,7 +1493,7 @@ CUR_OFF_LEVEL_RELATIV=lc640_read_int(0x10+100+192);
 CUR_OFF_LEVEL_ABSOLUT=lc640_read_int(0x10+100+194);
 CUR_OFF_T_OFF=lc640_read_int(0x10+100+196);
 CUR_OFF_T_ON=lc640_read_int(0x10+100+198);
-AMPERCHAS=lc640_read_int(0x10+100+200);
+AMPERCHAS=lc640_read_int(3000+100);
 UMAX=lc640_read_int(0x10+58);
 EE_WRITE_CNT=lc640_read_int(0x10+60);
 			
@@ -1565,7 +1566,7 @@ UBM_AV=lc640_read_int(3000+96);
 UOUT_OFF_EN=lc640_read_int(0x10+62);	
 UOUT_OFF_LEVEL=lc640_read_int(0x10+64);	
 UOUT_OFF_DELAY=lc640_read_int(0x10+66);	
-RS485_QWARZ_DIGIT=lc640_read_int(0x10+100+204);
+RS485_QWARZ_DIGIT=lc640_read_int(3000+104);
 
 
 

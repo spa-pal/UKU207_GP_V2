@@ -133,10 +133,9 @@
 #define EE_CUR_OFF_LEVEL_ABSOLUT		SECTOR_SETS+194
 #define EE_CUR_OFF_T_OFF				SECTOR_SETS+196
 #define EE_CUR_OFF_T_ON				SECTOR_SETS+198
-#define EE_AMPERCHAS				SECTOR_SETS+200	   /*4 байта!!!!!	*/
-#define EE_RS485_QWARZ_DIGIT		 	SECTOR_SETS+204
+//
 //+4
-
+//  Дальше здесь не писать
 
 #define SECTOR_AUSW  		SECTOR_KOEF+300
 
@@ -291,3 +290,5 @@
 #define EE_POWER_CNT_ADRESS   SECTOR_EXT+94
 #define EE_UBM_AV             SECTOR_EXT+96
 #define EE_NUMAVT			SECTOR_EXT+98
+#define EE_AMPERCHAS		SECTOR_EXT+100	   /*4 байта!!!!!	*/
+#define EE_RS485_QWARZ_DIGIT	SECTOR_EXT+104

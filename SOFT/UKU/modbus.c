@@ -730,7 +730,7 @@ if(crc16_calculated==crc16_incapsulated)
 		{
 		if(modbus_func==3)		//чтение произвольного кол-ва регистров
 			{
-			if((modbus_rx_arg0>=50)&&(modbus_rx_arg0<90)) modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func, modbus_rx_arg0,modbus_rx_arg1, MODBUS_RTU_PROT);
+			if((modbus_rx_arg0>=50)&&(modbus_rx_arg0<100)) modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func, modbus_rx_arg0,modbus_rx_arg1, MODBUS_RTU_PROT);
 			}
 		else if(modbus_func==4)		//чтение произвольного кол-ва регистров	входов
 			{
@@ -1153,6 +1153,67 @@ if(crc16_calculated==crc16_incapsulated)
 				{
 				pwm_t_reg = modbus_rx_arg1*10;
 				}
+
+			if(modbus_rx_arg0==90)		//ток стабилизации для режима стабилизации тока, в ОЗУ
+				{
+				I_ug_ram=modbus_rx_arg1;
+				eepromRamSwitch=1;
+				ramModbusCnt=300;
+				}
+
+			if(modbus_rx_arg0==91)	//напряжение стабилизации для режима стабилизации напряжения, в ОЗУ
+				{
+				U_up_ram=modbus_rx_arg1;
+				eepromRamSwitch=1;
+				ramModbusCnt=300;
+				}
+
+			if(modbus_rx_arg0==92)		//вкл/выкл источника напр.
+				{
+				if(modbus_rx_arg1==1)
+					{
+					if(work_stat!=wsPS)
+						{
+						work_stat=wsPS;
+						time_proc=0;
+						time_proc_remain=T_PROC_PS;
+						restart_on_PS();
+						lc640_write_int(EE_MAIN_MENU_MODE,mmmIN);
+						}
+					}
+				if(modbus_rx_arg1==0)
+					{
+					if(work_stat==wsPS)
+						{
+						work_stat=wsOFF;
+						restart_off();
+						}
+					}
+				ramModbusCnt=300;
+				}
+			if(modbus_rx_arg0==93)		//вкл/выкл источника тока
+				{
+				if(modbus_rx_arg1==1)
+					{
+					if(work_stat!=wsGS)
+						{
+						work_stat=wsGS;
+						time_proc=0;
+						time_proc_remain=T_PROC_GS;
+						lc640_write_int(EE_MAIN_MENU_MODE,mmmIT);
+						}
+					}
+				if(modbus_rx_arg1==0)
+					{
+					if(work_stat==wsGS)
+						{
+						work_stat=wsOFF;
+						restart_off();
+						}
+					}
+				ramModbusCnt=300;
+				}
+
 											
 			if((T_PROC_GS>T_PROC_MAX)||(T_PROC_GS<30))
 				{
@@ -1185,7 +1246,8 @@ if(crc16_calculated==crc16_incapsulated)
 			modbus_hold_register_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0);
 
 
-			//modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0,2);
+			if((modbus_rx_arg0!=90)&&(modbus_rx_arg0!=91)&&(modbus_rx_arg0!=92)&&(modbus_rx_arg0!=93)) lc640_write_int(EE_EE_WRITE_CNT,EE_WRITE_CNT+1);
+//modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0,2);
 
 
 			}
@@ -1615,6 +1677,12 @@ modbus_registers[80]=(char)((I_ug_ram)/256);			//Рег90
 modbus_registers[81]=(char)((I_ug_ram)%256);
 modbus_registers[82]=(char)((U_up_ram)/256);			//Рег91
 modbus_registers[83]=(char)((U_up_ram)%256);
+modbus_registers[84]=0;									//Рег92
+modbus_registers[85]=0;
+if(work_stat==wsPS)modbus_registers[85]=1;
+modbus_registers[86]=0;									//Рег93
+modbus_registers[87]=0;
+if(work_stat==wsGS)modbus_registers[87]=1;
 
 if(prot==MODBUS_RTU_PROT)
 	{

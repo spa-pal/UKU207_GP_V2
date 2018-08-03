@@ -2550,7 +2550,7 @@ else if((ind==iSet_prl)||(ind==iK_prl))
 	
 else if(ind==iSet)
 	{
-	#define SI_SET_MAX	37
+	#define SI_SET_MAX	38
     ptrs[0]=				" Источников        !";
 	ptrs[1]=				" Максимальная длит- ";
    	ptrs[2]=				" сть процесса  0[:0]";
@@ -2586,6 +2586,7 @@ else if(ind==iSet)
 	ptrs[32]=				" Uавар           +B ";
 	ptrs[33]=				" Выключение по      ";
 	ptrs[34]=				" превышению уставки ";
+	ptrs[35]=      			" Серийный N        w";
    	ptrs[SI_SET_MAX-2]=		" Выход              ";
 	ptrs[SI_SET_MAX-1]=		" Калибровка         ";
 	ptrs[SI_SET_MAX]=		" Тест ШИМ           ";
@@ -2646,6 +2647,7 @@ else if(ind==iSet)
 
 	int2lcd(UMAX,'+',1);
 
+	long2lcd_mmm(AUSW_MAIN_NUMBER,'w',0);
 	//int2lcdyx(sub_ind,0,4,0);
 	//int2lcdyx(index_set,0,8,0);
 	}
@@ -7561,6 +7563,19 @@ else if(ind==iSet)
 			tree_up(iUout_avar_control,0,0,0);
 			}
 	    }
+	else if(sub_ind==35)
+	    {
+	    if(but==butR)AUSW_MAIN_NUMBER++;
+	    else if(but==butR_)AUSW_MAIN_NUMBER+=20;
+	    else if(but==butL)AUSW_MAIN_NUMBER--;
+	    else if(but==butL_)AUSW_MAIN_NUMBER-=20;
+		else if(but==butEL_)AUSW_MAIN_NUMBER=15000;
+		if(AUSW_MAIN_NUMBER<13000)AUSW_MAIN_NUMBER=100000;
+		if(AUSW_MAIN_NUMBER>100000)AUSW_MAIN_NUMBER=13000;
+	    lc640_write_int(EE_AUSW_MAIN_NUMBER,(short)(AUSW_MAIN_NUMBER&0x0000ffffUL));
+		lc640_write_int(EE_AUSW_MAIN_NUMBER+2,(short)((AUSW_MAIN_NUMBER&0xffff0000UL)>>16UL));
+	    speed=1;
+	    } 
 	else if(sub_ind==SI_SET_MAX-2)
 	    	{
 		if(but==butE)

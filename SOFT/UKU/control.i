@@ -264,32 +264,33 @@ void community2lcd(char* in,
 
 #line 42 "eeprom_map.h"
 
-#line 138 "eeprom_map.h"
-
-
-
-
-
-#line 157 "eeprom_map.h"
-
-
-
-#line 169 "eeprom_map.h"
-
-
-#line 180 "eeprom_map.h"
-
-
-#line 189 "eeprom_map.h"
+#line 136 "eeprom_map.h"
 
 
 
 
 
 
+#line 156 "eeprom_map.h"
 
 
-#line 235 "eeprom_map.h"
+
+#line 168 "eeprom_map.h"
+
+
+#line 179 "eeprom_map.h"
+
+
+#line 188 "eeprom_map.h"
+
+
+
+
+
+
+
+
+#line 234 "eeprom_map.h"
 
 
 
@@ -4523,7 +4524,7 @@ if((work_stat!=wsOFF)&&(ACH_OFF_EN))
 		{
 		milliAmperSecunda-=3600L;
 		AMPERCHAS+=1;
-		lc640_write_long(0x10+100+200,AMPERCHAS);
+		lc640_write_long(3000+100,AMPERCHAS);
 
 		if(AMPERCHAS>=ACH_OFF_LEVEL)
 			{
@@ -4782,7 +4783,7 @@ void start_GS(void) {
 
 	milliAmperSecunda=0L;
 	AMPERCHAS=0L;
-	lc640_write_long(0x10+100+200,AMPERCHAS);
+	lc640_write_long(3000+100,AMPERCHAS);
 }
 
 
@@ -4804,7 +4805,7 @@ void start_PS(void) {
 	}
 	milliAmperSecunda=0L;
 	AMPERCHAS=0L;
-	lc640_write_long(0x10+100+200,AMPERCHAS);
+	lc640_write_long(3000+100,AMPERCHAS);
 }
 
 

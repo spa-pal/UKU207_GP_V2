@@ -2306,32 +2306,33 @@ extern __declspec(__nothrow) void __use_no_semihosting(void);
 
 #line 42 "eeprom_map.h"
 
-#line 138 "eeprom_map.h"
-
-
-
-
-
-#line 157 "eeprom_map.h"
-
-
-
-#line 169 "eeprom_map.h"
-
-
-#line 180 "eeprom_map.h"
-
-
-#line 189 "eeprom_map.h"
+#line 136 "eeprom_map.h"
 
 
 
 
 
 
+#line 156 "eeprom_map.h"
 
 
-#line 235 "eeprom_map.h"
+
+#line 168 "eeprom_map.h"
+
+
+#line 179 "eeprom_map.h"
+
+
+#line 188 "eeprom_map.h"
+
+
+
+
+
+
+
+
+#line 234 "eeprom_map.h"
 
 
 
@@ -3783,7 +3784,7 @@ if(crc16_calculated==crc16_incapsulated)
 		{
 		if(modbus_func==3)		
 			{
-			if((modbus_rx_arg0>=50)&&(modbus_rx_arg0<90)) modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func, modbus_rx_arg0,modbus_rx_arg1, 0);
+			if((modbus_rx_arg0>=50)&&(modbus_rx_arg0<100)) modbus_hold_registers_transmit(MODBUS_ADRESS,modbus_func, modbus_rx_arg0,modbus_rx_arg1, 0);
 			}
 		else if(modbus_func==4)		
 			{
@@ -4206,6 +4207,67 @@ if(crc16_calculated==crc16_incapsulated)
 				{
 				pwm_t_reg = modbus_rx_arg1*10;
 				}
+
+			if(modbus_rx_arg0==90)		
+				{
+				I_ug_ram=modbus_rx_arg1;
+				eepromRamSwitch=1;
+				ramModbusCnt=300;
+				}
+
+			if(modbus_rx_arg0==91)	
+				{
+				U_up_ram=modbus_rx_arg1;
+				eepromRamSwitch=1;
+				ramModbusCnt=300;
+				}
+
+			if(modbus_rx_arg0==92)		
+				{
+				if(modbus_rx_arg1==1)
+					{
+					if(work_stat!=wsPS)
+						{
+						work_stat=wsPS;
+						time_proc=0;
+						time_proc_remain=T_PROC_PS;
+						restart_on_PS();
+						lc640_write_int(0x10+100+118,mmmIN);
+						}
+					}
+				if(modbus_rx_arg1==0)
+					{
+					if(work_stat==wsPS)
+						{
+						work_stat=wsOFF;
+						restart_off();
+						}
+					}
+				ramModbusCnt=300;
+				}
+			if(modbus_rx_arg0==93)		
+				{
+				if(modbus_rx_arg1==1)
+					{
+					if(work_stat!=wsGS)
+						{
+						work_stat=wsGS;
+						time_proc=0;
+						time_proc_remain=T_PROC_GS;
+						lc640_write_int(0x10+100+118,mmmIT);
+						}
+					}
+				if(modbus_rx_arg1==0)
+					{
+					if(work_stat==wsGS)
+						{
+						work_stat=wsOFF;
+						restart_off();
+						}
+					}
+				ramModbusCnt=300;
+				}
+
 											
 			if((T_PROC_GS>T_PROC_MAX)||(T_PROC_GS<30))
 				{
@@ -4238,7 +4300,8 @@ if(crc16_calculated==crc16_incapsulated)
 			modbus_hold_register_transmit(MODBUS_ADRESS,modbus_func,modbus_rx_arg0);
 
 
-			
+			if((modbus_rx_arg0!=90)&&(modbus_rx_arg0!=91)&&(modbus_rx_arg0!=92)&&(modbus_rx_arg0!=93)) lc640_write_int(0x10+60,EE_WRITE_CNT+1);
+
 
 
 			}
@@ -4668,6 +4731,12 @@ modbus_registers[80]=(char)((I_ug_ram)/256);
 modbus_registers[81]=(char)((I_ug_ram)%256);
 modbus_registers[82]=(char)((U_up_ram)/256);			
 modbus_registers[83]=(char)((U_up_ram)%256);
+modbus_registers[84]=0;									
+modbus_registers[85]=0;
+if(work_stat==wsPS)modbus_registers[85]=1;
+modbus_registers[86]=0;									
+modbus_registers[87]=0;
+if(work_stat==wsGS)modbus_registers[87]=1;
 
 if(prot==0)
 	{

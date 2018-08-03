@@ -1879,32 +1879,33 @@ void ret_hndl(void);
 
 #line 42 "eeprom_map.h"
 
-#line 138 "eeprom_map.h"
-
-
-
-
-
-#line 157 "eeprom_map.h"
-
-
-
-#line 169 "eeprom_map.h"
-
-
-#line 180 "eeprom_map.h"
-
-
-#line 189 "eeprom_map.h"
+#line 136 "eeprom_map.h"
 
 
 
 
 
 
+#line 156 "eeprom_map.h"
 
 
-#line 235 "eeprom_map.h"
+
+#line 168 "eeprom_map.h"
+
+
+#line 179 "eeprom_map.h"
+
+
+#line 188 "eeprom_map.h"
+
+
+
+
+
+
+
+
+#line 234 "eeprom_map.h"
 
 
 
@@ -7536,11 +7537,12 @@ else if(a_ind . i==iSet)
 	ptrs[32]=				" Uавар           +B ";
 	ptrs[33]=				" Выключение по      ";
 	ptrs[34]=				" превышению уставки ";
-   	ptrs[37-2]=		" Выход              ";
-	ptrs[37-1]=		" Калибровка         ";
-	ptrs[37]=		" Тест ШИМ           ";
-	ptrs[37+1]=		"                    ";
-	ptrs[37+2]=		"                    ";	        
+	ptrs[35]=      			" Серийный N        w";
+   	ptrs[38-2]=		" Выход              ";
+	ptrs[38-1]=		" Калибровка         ";
+	ptrs[38]=		" Тест ШИМ           ";
+	ptrs[38+1]=		"                    ";
+	ptrs[38+2]=		"                    ";	        
 	
 	if((a_ind . s_i-a_ind . i_s)>2)a_ind . i_s=a_ind . s_i-2;
 	else if(a_ind . s_i<a_ind . i_s)a_ind . i_s=a_ind . s_i;
@@ -7596,6 +7598,7 @@ else if(a_ind . i==iSet)
 
 	int2lcd(UMAX,'+',1);
 
+	long2lcd_mmm(AUSW_MAIN_NUMBER,'w',0);
 	
 	
 	}
@@ -9361,12 +9364,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4420 "main.c"
+#line 4422 "main.c"
 
 
 
 
-#line 4442 "main.c"
+#line 4444 "main.c"
 
 
 
@@ -12104,7 +12107,7 @@ else if(a_ind . i==iSet)
 			a_ind . s_i=35;
 			a_ind . i_s=32;
             }														
-		gran_char(&a_ind . s_i,0,37);
+		gran_char(&a_ind . s_i,0,38);
 		}
 	else if(but==253)
 		{
@@ -12184,11 +12187,11 @@ else if(a_ind . i==iSet)
 			a_ind . i_s=33;
             }
 
-		gran_char(&a_ind . s_i,0,37);
+		gran_char(&a_ind . s_i,0,38);
 		}
 	else if(but==123)
 		{
-		a_ind . s_i=37-2;
+		a_ind . s_i=38-2;
 		}
 
      else if(a_ind . s_i==0)
@@ -12489,7 +12492,20 @@ else if(a_ind . i==iSet)
 			tree_up(iUout_avar_control,0,0,0);
 			}
 	    }
-	else if(a_ind . s_i==37-2)
+	else if(a_ind . s_i==35)
+	    {
+	    if(but==239)AUSW_MAIN_NUMBER++;
+	    else if(but==111)AUSW_MAIN_NUMBER+=20;
+	    else if(but==247)AUSW_MAIN_NUMBER--;
+	    else if(but==119)AUSW_MAIN_NUMBER-=20;
+		else if(but==118)AUSW_MAIN_NUMBER=15000;
+		if(AUSW_MAIN_NUMBER<13000)AUSW_MAIN_NUMBER=100000;
+		if(AUSW_MAIN_NUMBER>100000)AUSW_MAIN_NUMBER=13000;
+	    lc640_write_int(0x10+300+2,(short)(AUSW_MAIN_NUMBER&0x0000ffffUL));
+		lc640_write_int(0x10+300+2+2,(short)((AUSW_MAIN_NUMBER&0xffff0000UL)>>16UL));
+	    speed=1;
+	    } 
+	else if(a_ind . s_i==38-2)
 	    	{
 		if(but==254)
 			{
@@ -12497,7 +12513,7 @@ else if(a_ind . i==iSet)
 			a_ind . s_i=0;
 			}
 	    	}
-	else if(a_ind . s_i==37-1)
+	else if(a_ind . s_i==38-1)
 	    	{
 		if(but==254)
 			{
@@ -12505,7 +12521,7 @@ else if(a_ind . i==iSet)
 			parol_init();
 			}
 	    	}	
-	else if(a_ind . s_i==37)
+	else if(a_ind . s_i==38)
 	    {
 		if(but==254)
 			{
@@ -13817,7 +13833,7 @@ else if(a_ind . i==iK)
 				else RS485_QWARZ_DIGIT=10;
 				}
 			gran(&RS485_QWARZ_DIGIT,10,40);
-			lc640_write_int(0x10+100+204,RS485_QWARZ_DIGIT);
+			lc640_write_int(3000+104,RS485_QWARZ_DIGIT);
 			speed=0;
 			}					
 	else if(but==254)
@@ -16580,7 +16596,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11661 "main.c"
+#line 11676 "main.c"
 
 
 AUSW_MAIN_NUMBER=1000;

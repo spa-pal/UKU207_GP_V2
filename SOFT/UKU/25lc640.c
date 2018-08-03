@@ -1,6 +1,6 @@
 #include "25lc640.h"
 #include "LPC17xx.H"
-#include "main.h"
+#include "main.h"		
 #include "eeprom_map.h"
 
 #ifndef SPI1_DEFINED

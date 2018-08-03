@@ -1169,7 +1169,7 @@
 0005b8  6001              STR      r1,[r0,#0]  ; milliAmperSecunda
 0005ba  6831              LDR      r1,[r6,#0]  ; AMPERCHAS
 ;;;945    		lc640_write_long(EE_AMPERCHAS,AMPERCHAS);
-0005bc  f44f709e          MOV      r0,#0x13c
+0005bc  f640401c          MOV      r0,#0xc1c
 0005c0  1c49              ADDS     r1,r1,#1              ;944
 0005c2  6031              STR      r1,[r6,#0]  ; AMPERCHAS
 0005c4  f7fffffe          BL       lc640_write_long
@@ -1940,7 +1940,7 @@
 ;;;1204   	lc640_write_long(EE_AMPERCHAS,AMPERCHAS);
 0009c6  6004              STR      r4,[r0,#0]  ; AMPERCHAS
 0009c8  e8bd4070          POP      {r4-r6,lr}
-0009cc  f44f709e          MOV      r0,#0x13c
+0009cc  f640401c          MOV      r0,#0xc1c
 0009d0  f7ffbffe          B.W      lc640_write_long
 ;;;1205   }
 ;;;1206   
@@ -2002,7 +2002,7 @@
 ;;;1226   	lc640_write_long(EE_AMPERCHAS,AMPERCHAS);
 000a18  6004              STR      r4,[r0,#0]  ; AMPERCHAS
 000a1a  e8bd4010          POP      {r4,lr}
-000a1e  f44f709e          MOV      r0,#0x13c
+000a1e  f640401c          MOV      r0,#0xc1c
 000a22  f7ffbffe          B.W      lc640_write_long
 ;;;1227   }
 ;;;1228   

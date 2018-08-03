@@ -564,6 +564,51 @@ switch (evt)
 				U_up_ram=modbus_tcp_rx_arg1;
 				eepromRamSwitch=1;
 				}
+
+			else if(modbus_tcp_rx_arg0==92)		//вкл/выкл источника напр.
+				{
+				if(modbus_tcp_rx_arg1==1)
+					{
+					if(work_stat!=wsPS)
+						{
+						work_stat=wsPS;
+						time_proc=0;
+						time_proc_remain=T_PROC_PS;
+						restart_on_PS();
+						lc640_write_int(EE_MAIN_MENU_MODE,mmmIN);
+						}
+					}
+				if(modbus_tcp_rx_arg1==0)
+					{
+					if(work_stat==wsPS)
+						{
+						work_stat=wsOFF;
+						restart_off();
+						}
+					}
+				}
+			else if(modbus_tcp_rx_arg0==93)		//вкл/выкл источника тока
+				{
+				if(modbus_tcp_rx_arg1==1)
+					{
+					if(work_stat!=wsGS)
+						{
+						work_stat=wsGS;
+						time_proc=0;
+						time_proc_remain=T_PROC_GS;
+						lc640_write_int(EE_MAIN_MENU_MODE,mmmIT);
+						}
+					}
+				if(modbus_tcp_rx_arg1==0)
+					{
+					if(work_stat==wsGS)
+						{
+						work_stat=wsOFF;
+						restart_off();
+						}
+					}
+				}
+
 			
 			if((T_PROC_GS>T_PROC_MAX)||(T_PROC_GS<30))
 				{
@@ -625,7 +670,7 @@ switch (evt)
 
 
 
-			if((modbus_tcp_rx_arg0!=90)&&(modbus_tcp_rx_arg0!=91)) lc640_write_int(EE_EE_WRITE_CNT,EE_WRITE_CNT+1);
+			if((modbus_tcp_rx_arg0!=90)&&(modbus_tcp_rx_arg0!=91)&&(modbus_tcp_rx_arg0!=92)&&(modbus_tcp_rx_arg0!=93)) lc640_write_int(EE_EE_WRITE_CNT,EE_WRITE_CNT+1);
 
 
 			}
@@ -1056,6 +1101,50 @@ switch (evt)
 					U_up_ram=modbus_tcp_write_args[i];
 					eepromRamSwitch=1;
 					}
+
+			else if(modbus_tcp_rx_arg0==92)		//вкл/выкл источника напр.
+				{
+				if(modbus_tcp_rx_arg1==1)
+					{
+					if(work_stat!=wsPS)
+						{
+						work_stat=wsPS;
+						time_proc=0;
+						time_proc_remain=T_PROC_PS;
+						restart_on_PS();
+						lc640_write_int(EE_MAIN_MENU_MODE,mmmIN);
+						}
+					}
+				if(modbus_tcp_rx_arg1==0)
+					{
+					if(work_stat==wsPS)
+						{
+						work_stat=wsOFF;
+						restart_off();
+						}
+					}
+				}
+			else if(modbus_tcp_rx_arg0==93)		//вкл/выкл источника тока
+				{
+				if(modbus_tcp_rx_arg1==1)
+					{
+					if(work_stat!=wsGS)
+						{
+						work_stat=wsGS;
+						time_proc=0;
+						time_proc_remain=T_PROC_GS;
+						lc640_write_int(EE_MAIN_MENU_MODE,mmmIT);
+						}
+					}
+				if(modbus_tcp_rx_arg1==0)
+					{
+					if(work_stat==wsGS)
+						{
+						work_stat=wsOFF;
+						restart_off();
+						}
+					}
+				}
 									
 				if((T_PROC_GS>T_PROC_MAX)||(T_PROC_GS<30))
 					{
@@ -1116,7 +1205,7 @@ switch (evt)
 				//modbus_tcp_tx_buff[10]=3;
 				//tcp_send (socket_tcp, modbus_tcp_tx_buff, 11);
 
- 			if((modbus_tcp_rx_arg0!=90)&&(modbus_tcp_rx_arg0!=91)) lc640_write_int(EE_EE_WRITE_CNT,EE_WRITE_CNT+1);
+ 			if((modbus_tcp_rx_arg0!=90)&&(modbus_tcp_rx_arg0!=91)&&(modbus_tcp_rx_arg0!=92)&&(modbus_tcp_rx_arg0!=93)) lc640_write_int(EE_EE_WRITE_CNT,EE_WRITE_CNT+1);
 
 
 

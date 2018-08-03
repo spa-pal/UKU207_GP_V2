@@ -3458,32 +3458,33 @@ void start_CAP(void);
 
 #line 42 "eeprom_map.h"
 
-#line 138 "eeprom_map.h"
-
-
-
-
-
-#line 157 "eeprom_map.h"
-
-
-
-#line 169 "eeprom_map.h"
-
-
-#line 180 "eeprom_map.h"
-
-
-#line 189 "eeprom_map.h"
+#line 136 "eeprom_map.h"
 
 
 
 
 
 
+#line 156 "eeprom_map.h"
 
 
-#line 235 "eeprom_map.h"
+
+#line 168 "eeprom_map.h"
+
+
+#line 179 "eeprom_map.h"
+
+
+#line 188 "eeprom_map.h"
+
+
+
+
+
+
+
+
+#line 234 "eeprom_map.h"
 
 
 
