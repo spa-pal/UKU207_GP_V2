@@ -897,7 +897,7 @@ typedef enum {
 	iLoad,iSpc_prl_vz,iSpc_prl_ke,iKe,iVz,iAvz,iAVAR,
 	iStr,
 	iVrs,iApv,
-	iK_bps,iK_bps_sel,iK_bat,iK_bat_simple,iK_bat_sel,iK_load,iK_net,iK_net3,
+	iK_bps,iK_bps_v2,iK_bps_sel,iK_bat,iK_bat_simple,iK_bat_sel,iK_load,iK_net,iK_net3,
 	iTst_pwm,iDebug,iExtCtrl,
 	iDef,iDef_3U,iDef_RSTKM,iDef_GLONASS,iDef_KONTUR,iDef_6U,iDef_220,
 	iSet_st_prl,iK_pdp,iSet_T,
@@ -5098,9 +5098,9 @@ if(a_ind . i==iK_load)
 		bps[0]._flags_tu=1;
 		}
 	}
-else if(a_ind . i==iK_bps)
+else if((a_ind . i==iK_bps)||(a_ind . i==iK_bps_v2))
 	{
-	if(a_ind . s_i==0)
+	if((a_ind . s_i==0)||(a_ind . s_i==3))
 		{
 		cntrl_stat_U=1022;
 		cntrl_stat_I=1022;
@@ -5163,7 +5163,7 @@ else if(a_ind . i==iK_bps)
 		bps[a_ind . s_i1]._flags_tu=0;
 		}
 
-	else if(a_ind . s_i==3)
+	else if(a_ind . s_i==6)
 		{
 		if(phase==0)
 			{

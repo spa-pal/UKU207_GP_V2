@@ -1516,9 +1516,9 @@ if(ind==iK_load)
 		bps[0]._flags_tu=1;
 		}
 	}
-else if(ind==iK_bps)
+else if((ind==iK_bps)||(ind==iK_bps_v2))
 	{
-	if(sub_ind==0)
+	if((sub_ind==0)||(sub_ind==3))
 		{
 		cntrl_stat_U=1022;
 		cntrl_stat_I=1022;
@@ -1581,7 +1581,7 @@ else if(ind==iK_bps)
 		bps[sub_ind1]._flags_tu=0;
 		}
 
-	else if(sub_ind==3)
+	else if(sub_ind==6)
 		{
 		if(phase==0)
 			{

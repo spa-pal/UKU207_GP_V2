@@ -3502,6 +3502,104 @@ int2lcdyx(MSG_IND2OUT_EN_SRC2,0,6,0); */
 //int2lcdyx(u_necc,0,19,0);  
 	 }
 
+else if(ind==iK_bps_v2)
+	{
+	
+	ptrs[0]=" Uист =    @В       ";
+	ptrs[1]=" откалибруйте Uист  ";
+	ptrs[2]="  нажатием љ или њ  ";
+	ptrs[3]=" Uнагр =   #В       ";
+	ptrs[4]=" откалибруйте Uнагр ";
+    ptrs[5]="  нажатием љ или њ  ";	  
+	ptrs[6]=" Iист =     %А      ";
+	if(phase==0)
+		{
+		ptrs[7]=	"   нажмите ¤ для    ";
+		ptrs[8]=	"калибровки нуля Iист";
+		}
+	else
+		{
+		ptrs[7]=	" откалибруйте Iист  ";
+		ptrs[8]=	"  нажатием љ или њ  ";     	
+		} 
+     	
+	ptrs[9]=" tист =   ^°C       ";    
+	ptrs[10]=" откалибруйте tист  ";
+	ptrs[11]="  нажатием љ или њ  ";
+	ptrs[12]=sm_exit;
+	ptrs[13]=sm_;
+	ptrs[14]=sm_;     	     	    
+	
+
+	if((sub_ind==0)||(sub_ind==1)||(sub_ind==2))index_set=0;
+	else if((sub_ind==3)||(sub_ind==4)||(sub_ind==5))index_set=3;
+	else if((sub_ind==6)||(sub_ind==7)||(sub_ind==8))index_set=6;
+	else if((sub_ind==9)||(sub_ind==10)||(sub_ind==11))index_set=9;
+	else if((sub_ind==12)||(sub_ind==13)||(sub_ind==14))index_set=12;	
+	else index_set=15;
+	
+	bgnd_par(" КАЛИБРОВКА БПС N! ",ptrs[index_set],ptrs[index_set+1],ptrs[index_set+2]);
+
+	pointer_set(1);	
+	int2lcd(sub_ind1+1,'!',0);
+	int2lcd(bps[sub_ind1]._Uii,'@',1);
+	int2lcd(bps[sub_ind1]._Uin,'#',1);
+	int2lcd(U_AVT,'$',1);
+	int2lcd(bps[sub_ind1]._Ii,'%',1);
+	int2lcd(bps[sub_ind1]._Ti,'^',0); 
+	 
+	
+	if((sub_ind==0)||(sub_ind==3))
+		{
+		mess_send(MESS2BPS_HNDL,PARAM_BPS_MASK_ON_OFF_AFTER_2SEC,(1<<sub_ind1),10);
+		mess_send(MESS2BAT_HNDL,PARAM_BAT_ALL_OFF_AFTER_2SEC,0,10);
+		mess_send(MESS2CNTRL_HNDL,PARAM_CNTRL_STAT_SET,1000,10);
+		}
+
+     if(sub_ind==6)
+		{
+		if(phase==0)
+			{
+          	mess_send(MESS2BPS_HNDL,PARAM_BPS_MASK_ON_OFF_AFTER_2SEC,~(1<<sub_ind1),10);
+          	}
+      	else if(phase==1)
+			{
+          	mess_send(MESS2BPS_HNDL,PARAM_BPS_MASK_ON_OFF_AFTER_2SEC,(1<<sub_ind1),10);
+			mess_send(MESS2BAT_HNDL,PARAM_BAT_ALL_OFF_AFTER_2SEC,0,10);
+          	}
+          mess_send(MESS2CNTRL_HNDL,PARAM_CNTRL_STAT_SET,1000,10);
+          }
+	
+    	if(sub_ind==12)
+		{
+          }	
+          
+          
+	if(mess_find( (MESS2IND_HNDL)) && (mess_data[0]==PARAM_U_AVT_GOOD) )
+		{
+		show_mess("     Установка      ",
+	          	"    напряжения      ",
+	          	" автономной работы  ",
+	          	"    произведена     ",3000);
+		}	     
+	     
+	//MSG_IND2PWM_SRC1=900;
+	//MSG_IND2PWM_SRC2=900;         
+/*int2lcdyx(sub_ind1,0,0,0);
+int2lcdyx(sub_ind,0,1,0);
+int2lcdyx(phase,0,2,0);
+int2lcdyx(MSG_IND2OUT_DIS_SRC1,0,3,0);
+int2lcdyx(MSG_IND2OUT_DIS_SRC2,0,4,0);  
+int2lcdyx(MSG_IND2OUT_EN_SRC1,0,5,0);
+int2lcdyx(MSG_IND2OUT_EN_SRC2,0,6,0); */
+
+//int2lcdyx(cntrl_stat1,0,19,0); 
+//int2lcdyx(load_U,0,5,0); 
+//int2lcdyx(cntrl_stat,0,10,0); 
+//int2lcdyx(bps[sub_ind1]._rotor,0,19,0); 
+//int2lcdyx(u_necc,0,19,0);  
+	 }
+
 else if(ind==iK_power_net)
 	{
 	ptrs[0]=" Uввод=    @В       ";
@@ -8962,7 +9060,7 @@ else if(ind==iK_bps_sel)
 		}	
 	else if((but==butE)&&(NUMIST)&&(sub_ind<NUMIST))
 		{
-		tree_up(iK_bps,0,0,sub_ind);	
+		tree_up(iK_bps_v2,0,0,sub_ind);	
 		
 		ret(1000);
 		}	
@@ -9095,6 +9193,123 @@ else if(ind==iK_bps)
 		}			
 	}		
 
+else if(ind==iK_bps_v2)
+	{
+	ret(1000);
+	if(but==butD)
+		{
+		sub_ind++;
+		if((sub_ind==1)||(sub_ind==2))sub_ind=3;
+		else if((sub_ind==4)||(sub_ind==5))sub_ind=6;
+		else if((sub_ind==7)||(sub_ind==8))sub_ind=9;
+		else if((sub_ind==10)||(sub_ind==11))sub_ind=12;
+		else if((sub_ind==13)||(sub_ind==14))sub_ind=15;
+		gran_char(&sub_ind,0,12);
+		phase=0;
+		}
+	else if(but==butU)
+		{
+		sub_ind--;
+		if((sub_ind==1)||(sub_ind==2))sub_ind=0;
+		else if((sub_ind==4)||(sub_ind==5))sub_ind=3;
+		else if((sub_ind==7)||(sub_ind==8))sub_ind=6;
+		else if((sub_ind==10)||(sub_ind==11))sub_ind=9;
+		else if((sub_ind==13)||(sub_ind==14))sub_ind=12;		
+		gran_char(&sub_ind,0,12);
+		phase=0;
+		}
+	else if(but==butD_)
+		{
+		sub_ind=12;
+		}
+	else if (sub_ind == 0)
+		{
+		if(but==butLR) can1_out(sub_ind1,sub_ind1,KLBR,(0*16)+1,(0*16)+1,0,0,0);
+	     else if(but==butR) can1_out(sub_ind1,sub_ind1,KLBR,(0*16)+2,(0*16)+2,0,0,0);
+		else if(but==butR_)	can1_out(sub_ind1,sub_ind1,KLBR,(0*16)+3,(0*16)+3,0,0,0);
+    		else if(but==butL) can1_out(sub_ind1,sub_ind1,KLBR,(0*16)+4,(0*16)+4,0,0,0); 
+		else if(but==butL_) can1_out(sub_ind1,sub_ind1,KLBR,(0*16)+5,(0*16)+5,0,0,0);
+		speed=1;
+		}	
+		
+	else if (sub_ind == 3)
+		{
+		if(but==butLR) can1_out(sub_ind1,sub_ind1,KLBR,(1*16)+1,(1*16)+1,0,0,0);
+	     else if(but==butR) can1_out(sub_ind1,sub_ind1,KLBR,(1*16)+2,(1*16)+2,0,0,0);
+		else if(but==butR_)	can1_out(sub_ind1,sub_ind1,KLBR,(1*16)+3,(1*16)+3,0,0,0);
+    		else if(but==butL) can1_out(sub_ind1,sub_ind1,KLBR,(1*16)+4,(1*16)+4,0,0,0); 
+		else if(but==butL_) can1_out(sub_ind1,sub_ind1,KLBR,(1*16)+5,(1*16)+5,0,0,0);
+		speed=1;
+		}		
+/*		
+	else if (sub_ind == 6)
+		{
+		temp_SS=lc640_read_int(EE_U_AVT);
+		if(but==butR)temp_SS++;
+		else if(but==butR_)temp_SS+=2;
+		else if(but==butL)temp_SS--;
+		else if(but==butL_)temp_SS-=2;
+		else if(but==butE_)can1_out(sub_ind1,sub_ind1,CMND,0xee,0xee,0,0,0);   
+		
+		#ifdef UKU206_220				
+		gran(&temp_SS,2000,3000);
+		#endif
+
+		#ifdef UKU206_24
+		gran(&temp_SS,200,300);
+		#endif
+
+		#ifdef UKU320
+		gran(&temp_SS,400,800);
+		#endif
+
+		#ifdef UKU320_24
+		gran(&temp_SS,200,300);
+		#endif
+
+		#ifdef UKU320_F
+		gran(&temp_SS,400,800);
+		#endif		
+		lc640_write_int(EE_U_AVT,temp_SS);
+		
+		speed=1;
+		}*/	
+		
+	else if (sub_ind == 6)
+		{
+		if(but==butE)
+			{
+			can1_out(sub_ind1,sub_ind1,KLBR,(2*16)+1,(2*16)+1,0,0,0);
+			phase=1;
+			}
+	     else if(but==butR) can1_out(sub_ind1,sub_ind1,KLBR,(2*16)+2,(2*16)+2,0,0,0);
+		else if(but==butR_)	can1_out(sub_ind1,sub_ind1,KLBR,(2*16)+3,(2*16)+3,0,0,0);
+    		else if(but==butL) can1_out(sub_ind1,sub_ind1,KLBR,(2*16)+4,(2*16)+4,0,0,0); 
+		else if(but==butL_) can1_out(sub_ind1,sub_ind1,KLBR,(2*16)+5,(2*16)+5,0,0,0);
+		speed=1;
+		}		
+		
+	else if (sub_ind == 9)
+		{
+		if(but==butR) can1_out(sub_ind1,sub_ind1,KLBR,(3*16)+2,(3*16)+2,0,0,0);
+		else if(but==butR_)	can1_out(sub_ind1,sub_ind1,KLBR,(3*16)+3,(3*16)+3,0,0,0);
+    		else if(but==butL) can1_out(sub_ind1,sub_ind1,KLBR,(3*16)+4,(3*16)+4,0,0,0); 
+		else if(but==butL_) can1_out(sub_ind1,sub_ind1,KLBR,(3*16)+5,(3*16)+5,0,0,0);
+		speed=1;
+		}								
+			
+
+	else if(sub_ind==12)
+		{
+		if(but==butE)
+			{
+			//a=b[--ptr_ind];
+			//sub_ind++;
+			tree_down(0,1);
+			ret(0);
+			}
+		}			
+	}		
 
 else if(ind==iK_load)
 	{

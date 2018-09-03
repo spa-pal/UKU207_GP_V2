@@ -1312,7 +1312,7 @@
 00066e  78c3              LDRB     r3,[r0,#3]  ; a_ind
 000670  7882              LDRB     r2,[r0,#2]  ; a_ind
 000672  7841              LDRB     r1,[r0,#1]  ; a_ind
-000674  2064              MOVS     r0,#0x64
+000674  2065              MOVS     r0,#0x65
 000676  f7fffffe          BL       tree_up
 ;;;689    ret((char)(m_sec/100));
 00067a  2064              MOVS     r0,#0x64

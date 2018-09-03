@@ -862,7 +862,7 @@ typedef enum {
 	iLoad,iSpc_prl_vz,iSpc_prl_ke,iKe,iVz,iAvz,iAVAR,
 	iStr,
 	iVrs,iApv,
-	iK_bps,iK_bps_sel,iK_bat,iK_bat_simple,iK_bat_sel,iK_load,iK_net,iK_net3,
+	iK_bps,iK_bps_v2,iK_bps_sel,iK_bat,iK_bat_simple,iK_bat_sel,iK_load,iK_net,iK_net3,
 	iTst_pwm,iDebug,iExtCtrl,
 	iDef,iDef_3U,iDef_RSTKM,iDef_GLONASS,iDef_KONTUR,iDef_6U,iDef_220,
 	iSet_st_prl,iK_pdp,iSet_T,
@@ -8453,6 +8453,104 @@ else if(a_ind . i==iK_bps)
 
 	 }
 
+else if(a_ind . i==iK_bps_v2)
+	{
+	
+	ptrs[0]=" Uист =    @В       ";
+	ptrs[1]=" откалибруйте Uист  ";
+	ptrs[2]="  нажатием љ или њ  ";
+	ptrs[3]=" Uнагр =   #В       ";
+	ptrs[4]=" откалибруйте Uнагр ";
+    ptrs[5]="  нажатием љ или њ  ";	  
+	ptrs[6]=" Iист =     %А      ";
+	if(phase==0)
+		{
+		ptrs[7]=	"   нажмите ¤ для    ";
+		ptrs[8]=	"калибровки нуля Iист";
+		}
+	else
+		{
+		ptrs[7]=	" откалибруйте Iист  ";
+		ptrs[8]=	"  нажатием љ или њ  ";     	
+		} 
+     	
+	ptrs[9]=" tист =   ^°C       ";    
+	ptrs[10]=" откалибруйте tист  ";
+	ptrs[11]="  нажатием љ или њ  ";
+	ptrs[12]=sm_exit;
+	ptrs[13]=sm_;
+	ptrs[14]=sm_;     	     	    
+	
+
+	if((a_ind . s_i==0)||(a_ind . s_i==1)||(a_ind . s_i==2))a_ind . i_s=0;
+	else if((a_ind . s_i==3)||(a_ind . s_i==4)||(a_ind . s_i==5))a_ind . i_s=3;
+	else if((a_ind . s_i==6)||(a_ind . s_i==7)||(a_ind . s_i==8))a_ind . i_s=6;
+	else if((a_ind . s_i==9)||(a_ind . s_i==10)||(a_ind . s_i==11))a_ind . i_s=9;
+	else if((a_ind . s_i==12)||(a_ind . s_i==13)||(a_ind . s_i==14))a_ind . i_s=12;	
+	else a_ind . i_s=15;
+	
+	bgnd_par(" КАЛИБРОВКА БПС N! ",ptrs[a_ind . i_s],ptrs[a_ind . i_s+1],ptrs[a_ind . i_s+2]);
+
+	pointer_set(1);	
+	int2lcd(a_ind . s_i1+1,'!',0);
+	int2lcd(bps[a_ind . s_i1]._Uii,'@',1);
+	int2lcd(bps[a_ind . s_i1]._Uin,'#',1);
+	int2lcd(U_AVT,'$',1);
+	int2lcd(bps[a_ind . s_i1]._Ii,'%',1);
+	int2lcd(bps[a_ind . s_i1]._Ti,'^',0); 
+	 
+	
+	if((a_ind . s_i==0)||(a_ind . s_i==3))
+		{
+		mess_send(205,208,(1<<a_ind . s_i1),10);
+		mess_send(200,201,0,10);
+		mess_send(225,229,1000,10);
+		}
+
+     if(a_ind . s_i==6)
+		{
+		if(phase==0)
+			{
+          	mess_send(205,208,~(1<<a_ind . s_i1),10);
+          	}
+      	else if(phase==1)
+			{
+          	mess_send(205,208,(1<<a_ind . s_i1),10);
+			mess_send(200,201,0,10);
+          	}
+          mess_send(225,229,1000,10);
+          }
+	
+    	if(a_ind . s_i==12)
+		{
+          }	
+          
+          
+	if(mess_find( (215)) && (mess_data[0]==217) )
+		{
+		show_mess("     Установка      ",
+	          	"    напряжения      ",
+	          	" автономной работы  ",
+	          	"    произведена     ",3000);
+		}	     
+	     
+	
+	
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+	 }
+
 else if(a_ind . i==iK_power_net)
 	{
 	ptrs[0]=" Uввод=    @В       ";
@@ -9364,12 +9462,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4422 "main.c"
+#line 4520 "main.c"
 
 
 
 
-#line 4444 "main.c"
+#line 4542 "main.c"
 
 
 
@@ -13891,7 +13989,7 @@ else if(a_ind . i==iK_bps_sel)
 		}	
 	else if((but==254)&&(NUMIST)&&(a_ind . s_i<NUMIST))
 		{
-		tree_up(iK_bps,0,0,a_ind . s_i);	
+		tree_up(iK_bps_v2,0,0,a_ind . s_i);	
 		
 		ret(1000);
 		}	
@@ -14024,6 +14122,123 @@ else if(a_ind . i==iK_bps)
 		}			
 	}		
 
+else if(a_ind . i==iK_bps_v2)
+	{
+	ret(1000);
+	if(but==251)
+		{
+		a_ind . s_i++;
+		if((a_ind . s_i==1)||(a_ind . s_i==2))a_ind . s_i=3;
+		else if((a_ind . s_i==4)||(a_ind . s_i==5))a_ind . s_i=6;
+		else if((a_ind . s_i==7)||(a_ind . s_i==8))a_ind . s_i=9;
+		else if((a_ind . s_i==10)||(a_ind . s_i==11))a_ind . s_i=12;
+		else if((a_ind . s_i==13)||(a_ind . s_i==14))a_ind . s_i=15;
+		gran_char(&a_ind . s_i,0,12);
+		phase=0;
+		}
+	else if(but==253)
+		{
+		a_ind . s_i--;
+		if((a_ind . s_i==1)||(a_ind . s_i==2))a_ind . s_i=0;
+		else if((a_ind . s_i==4)||(a_ind . s_i==5))a_ind . s_i=3;
+		else if((a_ind . s_i==7)||(a_ind . s_i==8))a_ind . s_i=6;
+		else if((a_ind . s_i==10)||(a_ind . s_i==11))a_ind . s_i=9;
+		else if((a_ind . s_i==13)||(a_ind . s_i==14))a_ind . s_i=12;		
+		gran_char(&a_ind . s_i,0,12);
+		phase=0;
+		}
+	else if(but==123)
+		{
+		a_ind . s_i=12;
+		}
+	else if (a_ind . s_i == 0)
+		{
+		if(but==231) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(0*16)+1,(0*16)+1,0,0,0);
+	     else if(but==239) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(0*16)+2,(0*16)+2,0,0,0);
+		else if(but==111)	mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(0*16)+3,(0*16)+3,0,0,0);
+    		else if(but==247) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(0*16)+4,(0*16)+4,0,0,0); 
+		else if(but==119) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(0*16)+5,(0*16)+5,0,0,0);
+		speed=1;
+		}	
+		
+	else if (a_ind . s_i == 3)
+		{
+		if(but==231) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(1*16)+1,(1*16)+1,0,0,0);
+	     else if(but==239) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(1*16)+2,(1*16)+2,0,0,0);
+		else if(but==111)	mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(1*16)+3,(1*16)+3,0,0,0);
+    		else if(but==247) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(1*16)+4,(1*16)+4,0,0,0); 
+		else if(but==119) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(1*16)+5,(1*16)+5,0,0,0);
+		speed=1;
+		}		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 	
+		
+	else if (a_ind . s_i == 6)
+		{
+		if(but==254)
+			{
+			mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(2*16)+1,(2*16)+1,0,0,0);
+			phase=1;
+			}
+	     else if(but==239) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(2*16)+2,(2*16)+2,0,0,0);
+		else if(but==111)	mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(2*16)+3,(2*16)+3,0,0,0);
+    		else if(but==247) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(2*16)+4,(2*16)+4,0,0,0); 
+		else if(but==119) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(2*16)+5,(2*16)+5,0,0,0);
+		speed=1;
+		}		
+		
+	else if (a_ind . s_i == 9)
+		{
+		if(but==239) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(3*16)+2,(3*16)+2,0,0,0);
+		else if(but==111)	mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(3*16)+3,(3*16)+3,0,0,0);
+    		else if(but==247) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(3*16)+4,(3*16)+4,0,0,0); 
+		else if(but==119) mcp2515_transmit(a_ind . s_i1,a_ind . s_i1,0xEE,(3*16)+5,(3*16)+5,0,0,0);
+		speed=1;
+		}								
+			
+
+	else if(a_ind . s_i==12)
+		{
+		if(but==254)
+			{
+			
+			
+			tree_down(0,1);
+			ret(0);
+			}
+		}			
+	}		
 
 else if(a_ind . i==iK_load)
 	{
@@ -16596,7 +16811,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11676 "main.c"
+#line 11891 "main.c"
 
 
 AUSW_MAIN_NUMBER=1000;
