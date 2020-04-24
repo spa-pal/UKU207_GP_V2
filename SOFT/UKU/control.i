@@ -3891,6 +3891,18 @@ temp_SL*=(signed long)Kiload1;
 temp_SL/=5000L;
 load_I_=(signed short)temp_SL;
 
+if(I_LOAD_MODE==0)
+	{
+	temp_SL=0;
+	for(i=0;i<NUMIST;i++)
+		{
+		temp_SL+=bps[i]._Ii;
+		}
+	
+	
+	load_I=(signed short)temp_SL;
+	load_I_=(signed short)temp_SL;
+	}
 
 if(load_I<0)load_I=0;
 
@@ -4766,6 +4778,25 @@ lc640_write_long(0x10+100+96,0);
 
 
 void start_GS(void) {
+
+	if(SK_START==2)
+		{
+		if(SK_START_LEV)
+			{
+			if(sk_in_drv_stat==1)
+				{
+				return;
+				}
+			}
+		if(!SK_START_LEV)
+			{
+			if(sk_in_drv_stat==-1)
+				{
+				return;
+				}
+			}
+		}
+
 	work_stat=wsGS;
 	time_proc=0;
 	time_proc_remain=T_PROC_GS;
@@ -4789,6 +4820,25 @@ void start_GS(void) {
 
 
 void start_PS(void) {
+
+	if(SK_START==2)
+		{
+		if(SK_START_LEV)
+			{
+			if(sk_in_drv_stat==1)
+				{
+				return;
+				}
+			}
+		if(!SK_START_LEV)
+			{
+			if(sk_in_drv_stat==-1)
+				{
+				return;
+				}
+			}
+		}
+
 	work_stat=wsPS;
 	time_proc=0;
 	time_proc_remain=T_PROC_PS;
@@ -5047,7 +5097,7 @@ if(sh_cnt0<10) {
 
 if(a_ind . i==iK_load)
 	{
-	if(a_ind . s_i==0)
+	if(a_ind . s_i==0)		 
 		{
 		cntrl_stat_U=1022;
 		cntrl_stat_I=1022;
@@ -6187,7 +6237,7 @@ else if(RELE_FUNC[1]==5)
 
 void rele_drv(void)
 {
-#line 2615 "control.c"
+#line 2665 "control.c"
 
 
 ((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 = ( (((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 & ~((0xffffffff>>(32-2))<<7*2)) | ((unsigned)0 << 7*2) );

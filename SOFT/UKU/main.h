@@ -579,8 +579,8 @@ extern signed short ETH_GW_4;
 extern signed short MODBUS_ADRESS;
 extern signed short MODBUS_BAUDRATE;
 extern signed short CURR_FADE_IN; //плавное нарастание тока. 0 - выкл, 1 - 500 - время нарастания в секундах
-extern signed short SK_START;	  //управление сухим контактом, 0 - выкл, 1 - вкл	
-extern signed short SK_START_LEV; //управление сухим контактом, 0 - включение размыканием, 1 - включение замыканием
+extern signed short SK_START;	  //управление сухим контактом, 0 - выкл, 1 - включение/выключение, 2- блокировка	
+extern signed short SK_START_LEV; //управление сухим контактом, 0 - включение(блокировка) размыканием, 1 - включение(блокировка) замыканием
 extern signed short ACH_OFF_EN;		//функция выключения заряда по амперчасам, включено-выключено
 extern signed short ACH_OFF_LEVEL;	//функция выключения заряда по амперчасам, предельный уровень (амперчасы), дискретность 0.1А*ч
 extern signed short CURR_OFF_EN;

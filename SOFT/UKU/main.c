@@ -224,8 +224,8 @@ signed short MODBUS_ADRESS;
 signed short MODBUS_BAUDRATE;
 
 signed short CURR_FADE_IN; //плавное нарастание тока. 0 - выкл, 1 - 500 - время нарастания в секундах
-signed short SK_START;	  //управление сухим контактом, 0 - выкл, 1 - вкл	
-signed short SK_START_LEV; //управление сухим контактом, 0 - включение размыканием, 1 - включение замыканием
+signed short SK_START;	  //управление сухим контактом, 0 - выкл, 1 - включение/выключение, 2- блокировка	
+signed short SK_START_LEV; //управление сухим контактом, 0 - включение(блокировка) размыканием, 1 - включение(блокировка) замыканием
 
 signed short ACH_OFF_EN;		//функция выключения заряда по амперчасам, включено-выключено
 signed short ACH_OFF_LEVEL;	//функция выключения заряда по амперчасам, предельный уровень (амперчасы), дискретность 0.1А*ч
@@ -2826,15 +2826,26 @@ else if (ind==iLan_set)
 
 else if(ind==iExtCtrl)
 	{
-	if(SK_START==1)
-	ptrs[0]=		" Активно            ";
-	else 
-	ptrs[0]=		" Неактивно          ";
+	ptrs[0]=					" Неактивно          ";
+	if(SK_START==1)ptrs[0]=		" Включение          ";
+	else if(SK_START==2)ptrs[0]=" Блокирование       ";
 
-	ptrs[1]=		" Включение       !  ";
-	ptrs[2]=	    	" Выход              ";
-	ptrs[3]=	    	"                    ";
-	ptrs[4]=	    	"                    ";
+	if(SK_START_LEV==1)	ptrs[1]=	"      замыканием    ";
+	else 				ptrs[1]=	"     размыканием    ";
+	ptrs[2]=	    				" Выход              ";
+	ptrs[3]=	    				"                    ";
+	ptrs[4]=	    				"                    ";	
+	
+	if(SK_START==0)
+		{ 
+		
+		ptrs[1]=	    " Выход              ";
+		ptrs[2]=	    "                    ";
+		ptrs[3]=	    "                    ";
+		}
+
+
+	
 
 	if(sub_ind<index_set) index_set=sub_ind;
 	else if((sub_ind-index_set)>1) index_set=sub_ind-1;
@@ -4452,7 +4463,7 @@ else if(sk_in_drv_cnt>=-10)sk_in_drv_stat=-1;
 
 if((sk_in_drv_stat!=sk_in_drv_stat_old)&&(main_cnt>2))
 	{
-	if(SK_START)
+	if(SK_START==1)
 		{
 		if(SK_START_LEV)
 			{
@@ -4498,6 +4509,23 @@ if((sk_in_drv_stat!=sk_in_drv_stat_old)&&(main_cnt>2))
 					}
 				}
 			else if(sk_in_drv_stat==1)
+				{
+				stop_proc();
+				}
+			}
+		}
+	else if(SK_START==2)
+		{
+		if(SK_START_LEV)
+			{
+			if(sk_in_drv_stat==1)
+				{
+				stop_proc();
+				}
+			}
+		if(!SK_START_LEV)
+			{
+			if(sk_in_drv_stat==-1)
 				{
 				stop_proc();
 				}
@@ -5052,9 +5080,9 @@ else if(ind==iMn)
 					}											//режим непрерывной работы снимается 
 				}												//(T_PROC_GS_MODE=0)
 	
-			else if(T_PROC_GS<30)
+			else if(T_PROC_GS<5)
 				{
-				T_PROC_GS=29;
+				T_PROC_GS=4;
 				if(T_PROC_GS_MODE!=1)
 					{
 					T_PROC_GS_MODE=1;
@@ -8816,11 +8844,13 @@ else if(ind==iExtCtrl)
 	if(but==butD)
 		{
 		sub_ind++;
+		if(SK_START==0)gran_char(&sub_ind,0,1);
 		gran_char(&sub_ind,0,2);
 		}
 	else if(but==butU)
 		{
 		sub_ind--;
+		if(SK_START==0)gran_char(&sub_ind,0,1);
 		gran_char(&sub_ind,0,2);
 		}
 	else if(but==butD_)
@@ -8828,22 +8858,24 @@ else if(ind==iExtCtrl)
 		sub_ind=2;
 		}
 
-    	else if(sub_ind==0)
+    else if(sub_ind==0)
 		{
 		if((but==butR)||(but==butR_))
 			{
-			SK_START=1;
+			SK_START++;
+			gran(&SK_START,0,2);
 			lc640_write_int(EE_SK_START,SK_START);
 			}
 		else if((but==butL)||(but==butL_))
 			{
-			SK_START=0;
+			SK_START--;
+			gran(&SK_START,0,2);
 			lc640_write_int(EE_SK_START,SK_START);
 			}
 		speed=0;
           }
 
-    	else if(sub_ind==1)
+    else if((sub_ind==1)&&(SK_START))
 		{
 		if((but==butR)||(but==butR_))
 			{
@@ -8856,15 +8888,15 @@ else if(ind==iExtCtrl)
 			lc640_write_int(EE_SK_START_LEV,SK_START_LEV);
 			}
 		speed=0;
-          }
+		}
 
-    	else if(sub_ind==2)
-	     {
-	     if(but==butE)
-	          {
-	          tree_down(0,0);
-	          }
-          }
+    else if((sub_ind==2)||((sub_ind==1)&&(!SK_START)))
+		{
+		if(but==butE)
+			{
+			tree_down(0,0);
+			}
+		}
 	}
 
 else if(ind==iTst_pwm)
@@ -11889,10 +11921,10 @@ FullCAN_SetFilter(1,0x18a);
 FullCAN_SetFilter(0,0x18e);
 #endif
 
-
+/*
 AUSW_MAIN_NUMBER=1000;
 AUSW_MAIN_NUMBER=1001;
-AUSW_MAIN_NUMBER=1002;
+AUSW_MAIN_NUMBER=1002; */
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);
 mac_adr[4]=*(((char*)&AUSW_MAIN_NUMBER)+1);
@@ -11986,6 +12018,24 @@ if(lc640_read_int(EE_RESTART_ENABLE)==reON)
 	plazma_restart=2;
 	if(lc640_read_long(EE_TIME_PROC_GS_RESTART))
 		{
+		if(SK_START==2)
+			{
+			if(SK_START_LEV)
+				{
+				if(sk_in_drv_stat==1)
+					{
+					return;
+					}
+				}
+			if(!SK_START_LEV)
+				{
+				if(sk_in_drv_stat==-1)
+					{
+					return;
+					}
+				}
+			}
+
 		plazma_restart=3;
 		time_proc=lc640_read_long(EE_TIME_PROC_GS_RESTART);
 		time_proc_remain=lc640_read_long(EE_T_PROC_GS)-time_proc;
@@ -12007,6 +12057,23 @@ if(lc640_read_int(EE_RESTART_ENABLE)==reON)
 		}
 	if(lc640_read_long(EE_TIME_PROC_PS_RESTART))
 		{
+		if(SK_START==2)
+			{
+			if(SK_START_LEV)
+				{
+				if(sk_in_drv_stat==1)
+					{
+					return;
+					}
+				}
+			if(!SK_START_LEV)
+				{
+				if(sk_in_drv_stat==-1)
+					{
+					return;
+					}
+				}
+			}
 		time_proc=lc640_read_long(EE_TIME_PROC_PS_RESTART);
 		time_proc_remain=lc640_read_long(EE_T_PROC_PS)-time_proc;
 		ind=iMn;
@@ -12058,6 +12125,7 @@ if (socket_tcp != 0)
 if(MODBUS_BAUDRATE==0xffff)MODBUS_BAUDRATE=3840;
 lc640_write_int(EE_MODBUS_BAUDRATE,MODBUS_BAUDRATE);
 
+bps[1]._flags_tu=1;
 		
 while (1)  
 	{

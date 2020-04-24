@@ -2835,7 +2835,7 @@ extern short modbus_plazma2;
 extern short modbus_plazma3;				
 extern char modbus_cmnd_cnt,modbus_cmnd,modbus_self_cmnd_cnt;
 
-extern char modbus_registers[200];
+extern char modbus_registers[300];
 
 
 unsigned short CRC16_2(char* buf, short len);
@@ -2843,6 +2843,8 @@ unsigned short CRC16_2(char* buf, short len);
 void modbus_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr,unsigned short reg_quantity);
 
 void modbus_hold_registers_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short reg_quantity, char prot);
+
+void modbus_hold_register_answer_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short answer);
 
 void modbus_register_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr);
 
@@ -7777,15 +7779,26 @@ else if (a_ind . i==iLan_set)
 
 else if(a_ind . i==iExtCtrl)
 	{
-	if(SK_START==1)
-	ptrs[0]=		" Активно            ";
-	else 
-	ptrs[0]=		" Неактивно          ";
+	ptrs[0]=					" Неактивно          ";
+	if(SK_START==1)ptrs[0]=		" Включение          ";
+	else if(SK_START==2)ptrs[0]=" Блокирование       ";
 
-	ptrs[1]=		" Включение       !  ";
-	ptrs[2]=	    	" Выход              ";
-	ptrs[3]=	    	"                    ";
-	ptrs[4]=	    	"                    ";
+	if(SK_START_LEV==1)	ptrs[1]=	"      замыканием    ";
+	else 				ptrs[1]=	"     размыканием    ";
+	ptrs[2]=	    				" Выход              ";
+	ptrs[3]=	    				"                    ";
+	ptrs[4]=	    				"                    ";	
+	
+	if(SK_START==0)
+		{ 
+		
+		ptrs[1]=	    " Выход              ";
+		ptrs[2]=	    "                    ";
+		ptrs[3]=	    "                    ";
+		}
+
+
+	
 
 	if(a_ind . s_i<a_ind . i_s) a_ind . i_s=a_ind . s_i;
 	else if((a_ind . s_i-a_ind . i_s)>1) a_ind . i_s=a_ind . s_i-1;
@@ -9403,7 +9416,7 @@ else if(sk_in_drv_cnt>=-10)sk_in_drv_stat=-1;
 
 if((sk_in_drv_stat!=sk_in_drv_stat_old)&&(main_cnt>2))
 	{
-	if(SK_START)
+	if(SK_START==1)
 		{
 		if(SK_START_LEV)
 			{
@@ -9454,6 +9467,23 @@ if((sk_in_drv_stat!=sk_in_drv_stat_old)&&(main_cnt>2))
 				}
 			}
 		}
+	else if(SK_START==2)
+		{
+		if(SK_START_LEV)
+			{
+			if(sk_in_drv_stat==1)
+				{
+				stop_proc();
+				}
+			}
+		if(!SK_START_LEV)
+			{
+			if(sk_in_drv_stat==-1)
+				{
+				stop_proc();
+				}
+			}
+		}
 	}
 sk_in_drv_stat_old=sk_in_drv_stat;
 
@@ -9462,12 +9492,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4520 "main.c"
+#line 4548 "main.c"
 
 
 
 
-#line 4542 "main.c"
+#line 4570 "main.c"
 
 
 
@@ -9981,9 +10011,9 @@ else if(a_ind . i==iMn)
 					}											
 				}												
 	
-			else if(T_PROC_GS<30)
+			else if(T_PROC_GS<5)
 				{
-				T_PROC_GS=29;
+				T_PROC_GS=4;
 				if(T_PROC_GS_MODE!=1)
 					{
 					T_PROC_GS_MODE=1;
@@ -13745,11 +13775,13 @@ else if(a_ind . i==iExtCtrl)
 	if(but==251)
 		{
 		a_ind . s_i++;
+		if(SK_START==0)gran_char(&a_ind . s_i,0,1);
 		gran_char(&a_ind . s_i,0,2);
 		}
 	else if(but==253)
 		{
 		a_ind . s_i--;
+		if(SK_START==0)gran_char(&a_ind . s_i,0,1);
 		gran_char(&a_ind . s_i,0,2);
 		}
 	else if(but==123)
@@ -13757,22 +13789,24 @@ else if(a_ind . i==iExtCtrl)
 		a_ind . s_i=2;
 		}
 
-    	else if(a_ind . s_i==0)
+    else if(a_ind . s_i==0)
 		{
 		if((but==239)||(but==111))
 			{
-			SK_START=1;
+			SK_START++;
+			gran(&SK_START,0,2);
 			lc640_write_int(0x10+100+166,SK_START);
 			}
 		else if((but==247)||(but==119))
 			{
-			SK_START=0;
+			SK_START--;
+			gran(&SK_START,0,2);
 			lc640_write_int(0x10+100+166,SK_START);
 			}
 		speed=0;
           }
 
-    	else if(a_ind . s_i==1)
+    else if((a_ind . s_i==1)&&(SK_START))
 		{
 		if((but==239)||(but==111))
 			{
@@ -13785,15 +13819,15 @@ else if(a_ind . i==iExtCtrl)
 			lc640_write_int(0x10+100+168,SK_START_LEV);
 			}
 		speed=0;
-          }
+		}
 
-    	else if(a_ind . s_i==2)
-	     {
-	     if(but==254)
-	          {
-	          tree_down(0,0);
-	          }
-          }
+    else if((a_ind . s_i==2)||((a_ind . s_i==1)&&(!SK_START)))
+		{
+		if(but==254)
+			{
+			tree_down(0,0);
+			}
+		}
 	}
 
 else if(a_ind . i==iTst_pwm)
@@ -16811,12 +16845,12 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11891 "main.c"
+#line 11923 "main.c"
 
 
-AUSW_MAIN_NUMBER=1000;
-AUSW_MAIN_NUMBER=1001;
-AUSW_MAIN_NUMBER=1002;
+
+
+ 
 
 mac_adr[5]=*((char*)&AUSW_MAIN_NUMBER);
 mac_adr[4]=*(((char*)&AUSW_MAIN_NUMBER)+1);
@@ -16910,6 +16944,24 @@ if(lc640_read_int(0x10+100+120)==reON)
 	plazma_restart=2;
 	if(lc640_read_long(0x10+100+92))
 		{
+		if(SK_START==2)
+			{
+			if(SK_START_LEV)
+				{
+				if(sk_in_drv_stat==1)
+					{
+					return;
+					}
+				}
+			if(!SK_START_LEV)
+				{
+				if(sk_in_drv_stat==-1)
+					{
+					return;
+					}
+				}
+			}
+
 		plazma_restart=3;
 		time_proc=lc640_read_long(0x10+100+92);
 		time_proc_remain=lc640_read_long(0x10+100+100)-time_proc;
@@ -16931,6 +16983,23 @@ if(lc640_read_int(0x10+100+120)==reON)
 		}
 	if(lc640_read_long(0x10+100+96))
 		{
+		if(SK_START==2)
+			{
+			if(SK_START_LEV)
+				{
+				if(sk_in_drv_stat==1)
+					{
+					return;
+					}
+				}
+			if(!SK_START_LEV)
+				{
+				if(sk_in_drv_stat==-1)
+					{
+					return;
+					}
+				}
+			}
 		time_proc=lc640_read_long(0x10+100+96);
 		time_proc_remain=lc640_read_long(0x10+100+104)-time_proc;
 		a_ind . i=iMn;
@@ -16982,6 +17051,7 @@ if (socket_tcp != 0)
 if(MODBUS_BAUDRATE==0xffff)MODBUS_BAUDRATE=3840;
 lc640_write_int(0x10+100+130,MODBUS_BAUDRATE);
 
+bps[1]._flags_tu=1;
 		
 while (1)  
 	{

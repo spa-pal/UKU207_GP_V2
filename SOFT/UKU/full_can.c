@@ -1033,6 +1033,23 @@ else if(RXBUFF[0]==90)
 		{
 		if(work_stat!=wsGS)
 			{
+			if(SK_START==2)
+				{
+				if(SK_START_LEV)
+					{
+					if(sk_in_drv_stat==1)
+						{
+						return;
+						}
+					}
+				if(!SK_START_LEV)
+					{
+					if(sk_in_drv_stat==-1)
+						{
+						return;
+						}
+					}
+				}
 			work_stat=wsGS;
 			time_proc=0;
 			time_proc_remain=T_PROC_GS;
@@ -1050,6 +1067,22 @@ else if(RXBUFF[0]==90)
 		{
 		if(work_stat!=wsPS)
 			{
+				{
+				if(SK_START_LEV)
+					{
+					if(sk_in_drv_stat==1)
+						{
+						return;
+						}
+					}
+				if(!SK_START_LEV)
+					{
+					if(sk_in_drv_stat==-1)
+						{
+						return;
+						}
+					}
+				}
 			work_stat=wsPS;
 			time_proc=0;
 			time_proc_remain=T_PROC_PS;
