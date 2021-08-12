@@ -1059,7 +1059,7 @@ if(work_stat==wsGS)
 				time_proc_phase=0;
 			}
 		} else if(proc_phase==ppFF_P_REW) {
-			if(time_proc_phase==0)REV_STAT=rsFF;
+			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsFF;
 			else REV_STAT=rsREW;
 			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
 				proc_phase=ppREW;	
@@ -1072,7 +1072,7 @@ if(work_stat==wsGS)
 				time_proc_phase=0;
 			}
 		} else if(proc_phase==ppREW_P_FF) {
-			if(time_proc_phase==0)REV_STAT=rsREW;
+			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsREW;
 			else REV_STAT=rsFF;
 			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
 				proc_phase=ppFF;	
@@ -1111,7 +1111,7 @@ if(work_stat==wsPS)
 				time_proc_phase=0;
 			}
 		} else if(proc_phase==ppFF_P_REW) {
-			if(time_proc_phase==0)REV_STAT=rsFF;
+			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsFF;
 			else REV_STAT=rsREW;
 			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
 				proc_phase=ppREW;	
@@ -1124,7 +1124,7 @@ if(work_stat==wsPS)
 				time_proc_phase=0;
 			}
 		} else if(proc_phase==ppREW_P_FF) {
-			if(time_proc_phase==0)REV_STAT=rsREW;
+			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsREW;
 			else REV_STAT=rsFF;
 			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
 				proc_phase=ppFF;	
@@ -2496,10 +2496,13 @@ SET_REG(LPC_PINCON->PINSEL0,0,4*2,2);
 SET_REG(LPC_GPIO0->FIODIR,1,4,1);
 //SET_REG(LPC_GPIO0->FIOSET,1,5,1);
 
-if(work_stat==wsCAP) {
+if(work_stat==wsCAP) 
+	{
 	if(bRAZR) SET_REG(LPC_GPIO0->FIOPIN,0,4,1);
 	else SET_REG(LPC_GPIO0->FIOPIN,1,4,1);
-} else {
+	} 
+else 
+	{
 	if(REV_STAT==rsREW)
 		{
 		SET_REG(LPC_GPIO0->FIOPIN,0,4,1);
@@ -2508,8 +2511,7 @@ if(work_stat==wsCAP) {
 		{
 		SET_REG(LPC_GPIO0->FIOPIN,1,4,1);
 		}
-}
-
+	}
 }
 
 //-----------------------------------------------

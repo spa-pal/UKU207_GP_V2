@@ -1384,27 +1384,25 @@
 ;;;1056   			REV_STAT=rsFF;
 0006be  4d84              LDR      r5,|L5.2256|
 0006c0  f8980000          LDRB     r0,[r8,#0]            ;1034  ; work_stat
+0006c4  f8dfa20c          LDR      r10,|L5.2260|
+0006c8  2601              MOVS     r6,#1                 ;1034
 ;;;1057   			if(time_proc_phase>=AVT_REV_TIME_FF) {
 ;;;1058   				proc_phase=ppFF_P_REW;	
 ;;;1059   				time_proc_phase=0;
 ;;;1060   			}
 ;;;1061   		} else if(proc_phase==ppFF_P_REW) {
-;;;1062   			if(time_proc_phase==0)REV_STAT=rsFF;
-;;;1063   			else REV_STAT=rsREW;
-;;;1064   			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
-0006c4  4f83              LDR      r7,|L5.2260|
-0006c6  f8df9210          LDR      r9,|L5.2264|
-0006ca  2601              MOVS     r6,#1                 ;1034
+;;;1062   			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsFF;
+0006ca  4f83              LDR      r7,|L5.2264|
 0006cc  2400              MOVS     r4,#0                 ;1041
-0006ce  f44f7a16          MOV      r10,#0x258            ;1037
+0006ce  f44f7916          MOV      r9,#0x258             ;1037
 0006d2  2801              CMP      r0,#1                 ;1034
-0006d4  d15e              BNE      |L5.1940|
+0006d4  d162              BNE      |L5.1948|
 0006d6  4881              LDR      r0,|L5.2268|
 0006d8  6801              LDR      r1,[r0,#0]            ;1036  ; time_proc
 0006da  1c49              ADDS     r1,r1,#1              ;1036
-0006dc  fb91f2fa          SDIV     r2,r1,r10             ;1037
+0006dc  fb91f2f9          SDIV     r2,r1,r9              ;1037
 0006e0  6001              STR      r1,[r0,#0]            ;1037  ; time_proc
-0006e2  fb0a1012          MLS      r0,r10,r2,r1          ;1037
+0006e2  fb091012          MLS      r0,r9,r2,r1           ;1037
 0006e6  b930              CBNZ     r0,|L5.1782|
 0006e8  487d              LDR      r0,|L5.2272|
 0006ea  7800              LDRB     r0,[r0,#0]            ;1037  ; restart_enable
@@ -1413,8 +1411,8 @@
 0006f0  20d0              MOVS     r0,#0xd0              ;1039
 0006f2  f7fffffe          BL       lc640_write_long
                   |L5.1782|
-0006f6  f8d91000          LDR      r1,[r9,#0]            ;1041  ; time_proc_remain
-0006fa  4648              MOV      r0,r9                 ;1041
+0006f6  f8da1000          LDR      r1,[r10,#0]           ;1041  ; time_proc_remain
+0006fa  4650              MOV      r0,r10                ;1041
 0006fc  b109              CBZ      r1,|L5.1794|
 0006fe  1e49              SUBS     r1,r1,#1              ;1043
 000700  6001              STR      r1,[r0,#0]            ;1043  ; time_proc_remain
@@ -1436,9 +1434,9 @@
                   |L5.1832|
 000728  486f              LDR      r0,|L5.2280|
 00072a  8800              LDRH     r0,[r0,#0]            ;1052  ; REV_IS_ON
-00072c  b390              CBZ      r0,|L5.1940|
+00072c  b388              CBZ      r0,|L5.1938|
 00072e  f8bb0000          LDRH     r0,[r11,#0]           ;1052  ; AVT_REV_IS_ON
-000732  b378              CBZ      r0,|L5.1940|
+000732  b370              CBZ      r0,|L5.1938|
 000734  4b6d              LDR      r3,|L5.2284|
 000736  8818              LDRH     r0,[r3,#0]            ;1053  ; time_proc_phase
 000738  1c40              ADDS     r0,r0,#1              ;1053
@@ -1449,12 +1447,14 @@
 000742  b132              CBZ      r2,|L5.1874|
 000744  2a01              CMP      r2,#1                 ;1061
 000746  d00b              BEQ      |L5.1888|
+;;;1063   			else REV_STAT=rsREW;
+;;;1064   			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
 ;;;1065   				proc_phase=ppREW;	
 ;;;1066   				time_proc_phase=0;
 ;;;1067   			}
 ;;;1068   		} else if(proc_phase==ppREW) {
 000748  2a02              CMP      r2,#2
-00074a  d013              BEQ      |L5.1908|
+00074a  d014              BEQ      |L5.1910|
 ;;;1069   			REV_STAT=rsREW;
 ;;;1070   			if(time_proc_phase>=AVT_REV_TIME_REW) {
 ;;;1071   				proc_phase=ppREW_P_FF;	
@@ -1462,54 +1462,59 @@
 ;;;1073   			}
 ;;;1074   		} else if(proc_phase==ppREW_P_FF) {
 00074c  2a03              CMP      r2,#3
-00074e  d019              BEQ      |L5.1924|
-000750  e020              B        |L5.1940|
+00074e  d01a              BEQ      |L5.1926|
+000750  e024              B        |L5.1948|
                   |L5.1874|
 000752  4a68              LDR      r2,|L5.2292|
 000754  702e              STRB     r6,[r5,#0]            ;1056
 000756  8812              LDRH     r2,[r2,#0]            ;1057  ; AVT_REV_TIME_FF
 000758  4291              CMP      r1,r2                 ;1057
-00075a  db1b              BLT      |L5.1940|
+00075a  db1f              BLT      |L5.1948|
 00075c  7006              STRB     r6,[r0,#0]            ;1058
-00075e  e018              B        |L5.1938|
+00075e  e01c              B        |L5.1946|
                   |L5.1888|
-000760  b131              CBZ      r1,|L5.1904|
-000762  702c              STRB     r4,[r5,#0]            ;1063
-                  |L5.1892|
-000764  f9b72000          LDRSH    r2,[r7,#0]            ;1064  ; AVT_REV_TIME_PAUSE
-000768  4291              CMP      r1,r2                 ;1064
-00076a  db13              BLT      |L5.1940|
-00076c  2102              MOVS     r1,#2                 ;1065
-00076e  e007              B        |L5.1920|
-                  |L5.1904|
-000770  702e              STRB     r6,[r5,#0]            ;1062
-000772  e7f7              B        |L5.1892|
-                  |L5.1908|
-000774  4a60              LDR      r2,|L5.2296|
-000776  702c              STRB     r4,[r5,#0]            ;1069
-000778  8812              LDRH     r2,[r2,#0]            ;1070  ; AVT_REV_TIME_REW
-00077a  4291              CMP      r1,r2                 ;1070
-00077c  db0a              BLT      |L5.1940|
-00077e  2103              MOVS     r1,#3                 ;1071
-                  |L5.1920|
-000780  7001              STRB     r1,[r0,#0]            ;1065
-000782  e006              B        |L5.1938|
-                  |L5.1924|
-;;;1075   			if(time_proc_phase==0)REV_STAT=rsREW;
-000784  b1a1              CBZ      r1,|L5.1968|
-;;;1076   			else REV_STAT=rsFF;
-000786  702e              STRB     r6,[r5,#0]
-                  |L5.1928|
-;;;1077   			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
-000788  f9b72000          LDRSH    r2,[r7,#0]  ; AVT_REV_TIME_PAUSE
-00078c  4291              CMP      r1,r2
-00078e  db01              BLT      |L5.1940|
-;;;1078   				proc_phase=ppFF;	
-000790  7004              STRB     r4,[r0,#0]
+000760  f9b72000          LDRSH    r2,[r7,#0]            ;1062  ; AVT_REV_TIME_PAUSE
+000764  4291              CMP      r1,r2                 ;1062
+000766  da01              BGE      |L5.1900|
+000768  702e              STRB     r6,[r5,#0]            ;1062
+00076a  e000              B        |L5.1902|
+                  |L5.1900|
+00076c  702c              STRB     r4,[r5,#0]            ;1063
+                  |L5.1902|
+00076e  db15              BLT      |L5.1948|
+000770  f04f0102          MOV      r1,#2                 ;1065
+000774  e005              B        |L5.1922|
+                  |L5.1910|
+000776  4a60              LDR      r2,|L5.2296|
+000778  702c              STRB     r4,[r5,#0]            ;1069
+00077a  8812              LDRH     r2,[r2,#0]            ;1070  ; AVT_REV_TIME_REW
+00077c  4291              CMP      r1,r2                 ;1070
+00077e  db0d              BLT      |L5.1948|
+000780  2103              MOVS     r1,#3                 ;1071
+                  |L5.1922|
+000782  7001              STRB     r1,[r0,#0]            ;1065
+000784  e009              B        |L5.1946|
+                  |L5.1926|
+;;;1075   			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsREW;
+000786  f9b72000          LDRSH    r2,[r7,#0]  ; AVT_REV_TIME_PAUSE
+00078a  4291              CMP      r1,r2
+00078c  da02              BGE      |L5.1940|
+00078e  702c              STRB     r4,[r5,#0]
+000790  e001              B        |L5.1942|
                   |L5.1938|
-;;;1079   				time_proc_phase=0;
-000792  801c              STRH     r4,[r3,#0]
+000792  e003              B        |L5.1948|
                   |L5.1940|
+;;;1076   			else REV_STAT=rsFF;
+000794  702e              STRB     r6,[r5,#0]
+                  |L5.1942|
+;;;1077   			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
+000796  db01              BLT      |L5.1948|
+;;;1078   				proc_phase=ppFF;	
+000798  7004              STRB     r4,[r0,#0]
+                  |L5.1946|
+;;;1079   				time_proc_phase=0;
+00079a  801c              STRH     r4,[r3,#0]
+                  |L5.1948|
 ;;;1080   			}
 ;;;1081   		}
 ;;;1082   	}
@@ -1517,146 +1522,138 @@
 ;;;1084   
 ;;;1085   
 ;;;1086   if(work_stat==wsPS)
-000794  f8980000          LDRB     r0,[r8,#0]  ; work_stat
-000798  2802              CMP      r0,#2
-00079a  d15c              BNE      |L5.2134|
+00079c  f8980000          LDRB     r0,[r8,#0]  ; work_stat
+0007a0  2802              CMP      r0,#2
+0007a2  d157              BNE      |L5.2132|
 ;;;1087   	{
 ;;;1088   	time_proc++;
-00079c  484f              LDR      r0,|L5.2268|
-00079e  6801              LDR      r1,[r0,#0]  ; time_proc
-0007a0  1c49              ADDS     r1,r1,#1
+0007a4  484d              LDR      r0,|L5.2268|
+0007a6  6801              LDR      r1,[r0,#0]  ; time_proc
+0007a8  1c49              ADDS     r1,r1,#1
 ;;;1089   	if(((time_proc%600L)==0)&&(restart_enable==reON))
-0007a2  fb91f2fa          SDIV     r2,r1,r10
-0007a6  6001              STR      r1,[r0,#0]  ; time_proc
-0007a8  fb0a1012          MLS      r0,r10,r2,r1
-0007ac  b110              CBZ      r0,|L5.1972|
-0007ae  e008              B        |L5.1986|
-                  |L5.1968|
-0007b0  702c              STRB     r4,[r5,#0]            ;1075
-0007b2  e7e9              B        |L5.1928|
-                  |L5.1972|
-0007b4  484a              LDR      r0,|L5.2272|
-0007b6  7800              LDRB     r0,[r0,#0]  ; restart_enable
-0007b8  2801              CMP      r0,#1
-0007ba  d102              BNE      |L5.1986|
+0007aa  fb91f2f9          SDIV     r2,r1,r9
+0007ae  6001              STR      r1,[r0,#0]  ; time_proc
+0007b0  fb091012          MLS      r0,r9,r2,r1
+0007b4  b930              CBNZ     r0,|L5.1988|
+0007b6  484a              LDR      r0,|L5.2272|
+0007b8  7800              LDRB     r0,[r0,#0]  ; restart_enable
+0007ba  2801              CMP      r0,#1
+0007bc  d102              BNE      |L5.1988|
 ;;;1090   		{
 ;;;1091   		lc640_write_long(EE_TIME_PROC_PS_RESTART,time_proc);
-0007bc  20d4              MOVS     r0,#0xd4
-0007be  f7fffffe          BL       lc640_write_long
-                  |L5.1986|
+0007be  20d4              MOVS     r0,#0xd4
+0007c0  f7fffffe          BL       lc640_write_long
+                  |L5.1988|
 ;;;1092   		}
 ;;;1093   	if(time_proc_remain)
-0007c2  f8d91000          LDR      r1,[r9,#0]  ; time_proc_remain
-0007c6  4648              MOV      r0,r9
-0007c8  b109              CBZ      r1,|L5.1998|
+0007c4  f8da1000          LDR      r1,[r10,#0]  ; time_proc_remain
+0007c8  4650              MOV      r0,r10
+0007ca  b109              CBZ      r1,|L5.2000|
 ;;;1094   		{
 ;;;1095   		time_proc_remain--;
-0007ca  1e49              SUBS     r1,r1,#1
-0007cc  6001              STR      r1,[r0,#0]  ; time_proc_remain
-                  |L5.1998|
+0007cc  1e49              SUBS     r1,r1,#1
+0007ce  6001              STR      r1,[r0,#0]  ; time_proc_remain
+                  |L5.2000|
 ;;;1096   		}
 ;;;1097   	if((!time_proc_remain)&&(!T_PROC_PS_MODE))
-0007ce  4608              MOV      r0,r1
-0007d0  494a              LDR      r1,|L5.2300|
-0007d2  f9b11000          LDRSH    r1,[r1,#0]  ; T_PROC_PS_MODE
-0007d6  4308              ORRS     r0,r0,r1
-0007d8  d10c              BNE      |L5.2036|
+0007d0  4608              MOV      r0,r1
+0007d2  494a              LDR      r1,|L5.2300|
+0007d4  f9b11000          LDRSH    r1,[r1,#0]  ; T_PROC_PS_MODE
+0007d8  4308              ORRS     r0,r0,r1
+0007da  d10c              BNE      |L5.2038|
 ;;;1098   		{
 ;;;1099   		work_stat=wsOFF;
-0007da  f8884000          STRB     r4,[r8,#0]
+0007dc  f8884000          STRB     r4,[r8,#0]
 ;;;1100   		restart_off();
-0007de  f7fffffe          BL       restart_off
+0007e0  f7fffffe          BL       restart_off
 ;;;1101   		tree_up(iProcIsComplete,0,0,0);
-0007e2  2300              MOVS     r3,#0
-0007e4  461a              MOV      r2,r3
-0007e6  4619              MOV      r1,r3
-0007e8  207a              MOVS     r0,#0x7a
-0007ea  f7fffffe          BL       tree_up
+0007e4  2300              MOVS     r3,#0
+0007e6  461a              MOV      r2,r3
+0007e8  4619              MOV      r1,r3
+0007ea  207a              MOVS     r0,#0x7a
+0007ec  f7fffffe          BL       tree_up
 ;;;1102   		ret(0);
-0007ee  2000              MOVS     r0,#0
-0007f0  f7fffffe          BL       ||ret||
-                  |L5.2036|
+0007f0  2000              MOVS     r0,#0
+0007f2  f7fffffe          BL       ||ret||
+                  |L5.2038|
 ;;;1103   		}
 ;;;1104   	if((REV_IS_ON)&&(AVT_REV_IS_ON)){
-0007f4  483c              LDR      r0,|L5.2280|
-0007f6  8800              LDRH     r0,[r0,#0]  ; REV_IS_ON
-0007f8  2800              CMP      r0,#0
-0007fa  d02c              BEQ      |L5.2134|
-0007fc  f8bb0000          LDRH     r0,[r11,#0]  ; AVT_REV_IS_ON
-000800  2800              CMP      r0,#0
-000802  d028              BEQ      |L5.2134|
+0007f6  483c              LDR      r0,|L5.2280|
+0007f8  8800              LDRH     r0,[r0,#0]  ; REV_IS_ON
+0007fa  2800              CMP      r0,#0
+0007fc  d02a              BEQ      |L5.2132|
+0007fe  f8bb0000          LDRH     r0,[r11,#0]  ; AVT_REV_IS_ON
+000802  2800              CMP      r0,#0
+000804  d026              BEQ      |L5.2132|
 ;;;1105   		time_proc_phase++;
-000804  4839              LDR      r0,|L5.2284|
-000806  8801              LDRH     r1,[r0,#0]  ; time_proc_phase
-000808  1c49              ADDS     r1,r1,#1
-00080a  b20a              SXTH     r2,r1
+000806  4839              LDR      r0,|L5.2284|
+000808  8801              LDRH     r1,[r0,#0]  ; time_proc_phase
+00080a  1c49              ADDS     r1,r1,#1
+00080c  b20a              SXTH     r2,r1
 ;;;1106   		
 ;;;1107   		if(proc_phase==ppFF) {
-00080c  4938              LDR      r1,|L5.2288|
-00080e  8002              STRH     r2,[r0,#0]            ;1105
-000810  780b              LDRB     r3,[r1,#0]  ; proc_phase
-000812  b16b              CBZ      r3,|L5.2096|
+00080e  4938              LDR      r1,|L5.2288|
+000810  8002              STRH     r2,[r0,#0]            ;1105
+000812  780b              LDRB     r3,[r1,#0]  ; proc_phase
+000814  b15b              CBZ      r3,|L5.2094|
 ;;;1108   			REV_STAT=rsFF;
 ;;;1109   			if(time_proc_phase>=AVT_REV_TIME_FF) {
 ;;;1110   				proc_phase=ppFF_P_REW;	
 ;;;1111   				time_proc_phase=0;
 ;;;1112   			}
 ;;;1113   		} else if(proc_phase==ppFF_P_REW) {
-000814  2b01              CMP      r3,#1
-000816  d012              BEQ      |L5.2110|
-;;;1114   			if(time_proc_phase==0)REV_STAT=rsFF;
+000816  2b01              CMP      r3,#1
+000818  d010              BEQ      |L5.2108|
+;;;1114   			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsFF;
 ;;;1115   			else REV_STAT=rsREW;
 ;;;1116   			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
 ;;;1117   				proc_phase=ppREW;	
 ;;;1118   				time_proc_phase=0;
 ;;;1119   			}
 ;;;1120   		} else if(proc_phase==ppREW) {
-000818  2b02              CMP      r3,#2
-00081a  d01e              BEQ      |L5.2138|
+00081a  2b02              CMP      r3,#2
+00081c  d01c              BEQ      |L5.2136|
 ;;;1121   			REV_STAT=rsREW;
 ;;;1122   			if(time_proc_phase>=AVT_REV_TIME_REW) {
 ;;;1123   				proc_phase=ppREW_P_FF;	
 ;;;1124   				time_proc_phase=0;
 ;;;1125   			}
 ;;;1126   		} else if(proc_phase==ppREW_P_FF) {
-00081c  2b03              CMP      r3,#3
-00081e  d11a              BNE      |L5.2134|
-;;;1127   			if(time_proc_phase==0)REV_STAT=rsREW;
-000820  b31a              CBZ      r2,|L5.2154|
-;;;1128   			else REV_STAT=rsFF;
-000822  702e              STRB     r6,[r5,#0]
-                  |L5.2084|
-;;;1129   			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
-000824  f9b73000          LDRSH    r3,[r7,#0]  ; AVT_REV_TIME_PAUSE
-000828  429a              CMP      r2,r3
-00082a  db14              BLT      |L5.2134|
-;;;1130   				proc_phase=ppFF;	
-00082c  700c              STRB     r4,[r1,#0]
-;;;1131   				time_proc_phase=0;
-00082e  e011              B        |L5.2132|
-                  |L5.2096|
-000830  4b30              LDR      r3,|L5.2292|
-000832  702e              STRB     r6,[r5,#0]            ;1108
-000834  881b              LDRH     r3,[r3,#0]            ;1109  ; AVT_REV_TIME_FF
-000836  429a              CMP      r2,r3                 ;1109
-000838  db0d              BLT      |L5.2134|
-00083a  700e              STRB     r6,[r1,#0]            ;1110
-00083c  e00a              B        |L5.2132|
-                  |L5.2110|
-00083e  b13a              CBZ      r2,|L5.2128|
-000840  f8854000          STRB.W   r4,[r5,#0]            ;1115
-                  |L5.2116|
-000844  f9b73000          LDRSH    r3,[r7,#0]            ;1116  ; AVT_REV_TIME_PAUSE
-000848  429a              CMP      r2,r3                 ;1116
-00084a  db04              BLT      |L5.2134|
-00084c  2202              MOVS     r2,#2                 ;1117
-00084e  e00a              B        |L5.2150|
-                  |L5.2128|
-000850  702e              STRB     r6,[r5,#0]            ;1114
-000852  e7f7              B        |L5.2116|
+00081e  2b03              CMP      r3,#3
+000820  d118              BNE      |L5.2132|
+;;;1127   			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsREW;
+000822  f9b73000          LDRSH    r3,[r7,#0]  ; AVT_REV_TIME_PAUSE
+000826  429a              CMP      r2,r3
+000828  da1e              BGE      |L5.2152|
+00082a  702c              STRB     r4,[r5,#0]
+00082c  e01d              B        |L5.2154|
+                  |L5.2094|
+00082e  4b31              LDR      r3,|L5.2292|
+000830  702e              STRB     r6,[r5,#0]            ;1108
+000832  881b              LDRH     r3,[r3,#0]            ;1109  ; AVT_REV_TIME_FF
+000834  429a              CMP      r2,r3                 ;1109
+000836  db0d              BLT      |L5.2132|
+000838  700e              STRB     r6,[r1,#0]            ;1110
+00083a  e00a              B        |L5.2130|
+                  |L5.2108|
+00083c  f9b73000          LDRSH    r3,[r7,#0]            ;1114  ; AVT_REV_TIME_PAUSE
+000840  429a              CMP      r2,r3                 ;1114
+000842  da01              BGE      |L5.2120|
+000844  702e              STRB     r6,[r5,#0]            ;1114
+000846  e000              B        |L5.2122|
+                  |L5.2120|
+000848  702c              STRB     r4,[r5,#0]            ;1115
+                  |L5.2122|
+00084a  db03              BLT      |L5.2132|
+00084c  f04f0202          MOV      r2,#2                 ;1117
+000850  e008              B        |L5.2148|
+                  |L5.2130|
+000852  8004              STRH     r4,[r0,#0]            ;1111
                   |L5.2132|
-000854  8004              STRH     r4,[r0,#0]            ;1111
-                  |L5.2134|
+;;;1128   			else REV_STAT=rsFF;
+;;;1129   			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
+;;;1130   				proc_phase=ppFF;	
+;;;1131   				time_proc_phase=0;
 ;;;1132   			}
 ;;;1133   		}
 ;;;1134   	}
@@ -1665,21 +1662,23 @@
 ;;;1137   
 ;;;1138   
 ;;;1139   }
-000856  e8bd9ff0          POP      {r4-r12,pc}
-                  |L5.2138|
-00085a  4b27              LDR      r3,|L5.2296|
-00085c  702c              STRB     r4,[r5,#0]            ;1121
-00085e  881b              LDRH     r3,[r3,#0]            ;1122  ; AVT_REV_TIME_REW
-000860  429a              CMP      r2,r3                 ;1122
-000862  dbf8              BLT      |L5.2134|
-000864  2203              MOVS     r2,#3                 ;1123
-                  |L5.2150|
-000866  700a              STRB     r2,[r1,#0]            ;1123
-000868  e7f4              B        |L5.2132|
+000854  e8bd9ff0          POP      {r4-r12,pc}
+                  |L5.2136|
+000858  4b27              LDR      r3,|L5.2296|
+00085a  702c              STRB     r4,[r5,#0]            ;1121
+00085c  881b              LDRH     r3,[r3,#0]            ;1122  ; AVT_REV_TIME_REW
+00085e  429a              CMP      r2,r3                 ;1122
+000860  dbf8              BLT      |L5.2132|
+000862  2203              MOVS     r2,#3                 ;1123
+                  |L5.2148|
+000864  700a              STRB     r2,[r1,#0]            ;1123
+000866  e7f4              B        |L5.2130|
+                  |L5.2152|
+000868  702e              STRB     r6,[r5,#0]            ;1128
                   |L5.2154|
-00086a  702c              STRB     r4,[r5,#0]            ;1127
-00086c  e7da              B        |L5.2084|
-00086e  0000              DCW      0x0000
+00086a  dbf3              BLT      |L5.2132|
+00086c  700c              STRB     r4,[r1,#0]            ;1130
+00086e  e7f0              B        |L5.2130|
                   |L5.2160|
                           DCD      ||area_number.25||
                   |L5.2164|
@@ -1731,9 +1730,9 @@
                   |L5.2256|
                           DCD      REV_STAT
                   |L5.2260|
-                          DCD      AVT_REV_TIME_PAUSE
-                  |L5.2264|
                           DCD      time_proc_remain
+                  |L5.2264|
+                          DCD      AVT_REV_TIME_PAUSE
                   |L5.2268|
                           DCD      time_proc
                   |L5.2272|
@@ -2542,7 +2541,7 @@
 ;;;1469   		}
 ;;;1470   	}
 ;;;1471   }
-000c9a  e5dc              B        |L5.2134|
+000c9a  e5db              B        |L5.2132|
 ;;;1472   
                           ENDP
 
@@ -5285,129 +5284,129 @@
                           ENDP
 
                   rele_hndl PROC
-;;;2515   //-----------------------------------------------
-;;;2516   void rele_hndl(void)
+;;;2517   //-----------------------------------------------
+;;;2518   void rele_hndl(void)
 001cb2  e92d4ff0          PUSH     {r4-r11,lr}
-;;;2517   {
-;;;2518   //Реле1
-;;;2519   if(RELE_FUNC[0]==0)rele_stat[0]=rsOFF; 		//Выключено
-;;;2520   else if(RELE_FUNC[0]==1)					//Реверс
-;;;2521   	{
-;;;2522   	if(work_stat==wsCAP) 
+;;;2519   {
+;;;2520   //Реле1
+;;;2521   if(RELE_FUNC[0]==0)rele_stat[0]=rsOFF; 		//Выключено
+;;;2522   else if(RELE_FUNC[0]==1)					//Реверс
+;;;2523   	{
+;;;2524   	if(work_stat==wsCAP) 
 001cb6  486d              LDR      r0,|L5.7788|
 001cb8  f8dfe1f8          LDR      lr,|L5.7860|
-;;;2523   		{
-;;;2524   		if(bRAZR) rele_stat[0]=rsOFF;
-;;;2525   		else 	rele_stat[0]=rsON;
-;;;2526   		} 
-;;;2527   	else 
-;;;2528   		{
-;;;2529   		if(REV_STAT==rsREW)	rele_stat[0]=rsOFF;
-;;;2530   		else 			rele_stat[0]=rsON;
-;;;2531   		}
-;;;2532   	}
-;;;2533   else if(RELE_FUNC[0]==2)					//Токоограничение
-;;;2534   	{
-;;;2535   	if(RELE_LOG_CURR==0)
+;;;2525   		{
+;;;2526   		if(bRAZR) rele_stat[0]=rsOFF;
+;;;2527   		else 	rele_stat[0]=rsON;
+;;;2528   		} 
+;;;2529   	else 
+;;;2530   		{
+;;;2531   		if(REV_STAT==rsREW)	rele_stat[0]=rsOFF;
+;;;2532   		else 			rele_stat[0]=rsON;
+;;;2533   		}
+;;;2534   	}
+;;;2535   else if(RELE_FUNC[0]==2)					//Токоограничение
+;;;2536   	{
+;;;2537   	if(RELE_LOG_CURR==0)
 001cbc  4b80              LDR      r3,|L5.7872|
-001cbe  f890c000          LDRB     r12,[r0,#0]           ;2522
+001cbe  f890c000          LDRB     r12,[r0,#0]           ;2524
 001cc2  487d              LDR      r0,|L5.7864|
 001cc4  f9b36000          LDRSH    r6,[r3,#0]
-;;;2536   		{
-;;;2537   		if(bCURRENT_STAB==0)	rele_stat[0]=rsON;
-;;;2538   		else 				rele_stat[0]=rsOFF;
-;;;2539   		}
-;;;2540   	else if(RELE_LOG_CURR==1)
-;;;2541   		{
-;;;2542   		if(bCURRENT_STAB==0)	rele_stat[0]=rsOFF;
-;;;2543   		else 				rele_stat[0]=rsON;
-;;;2544   		}
-;;;2545   	}									
-;;;2546   else if(RELE_FUNC[0]==3)					//Напряжение в норме
-;;;2547   	{
-;;;2548   	if(RELE_LOG_VOLT==0)
+;;;2538   		{
+;;;2539   		if(bCURRENT_STAB==0)	rele_stat[0]=rsON;
+;;;2540   		else 				rele_stat[0]=rsOFF;
+;;;2541   		}
+;;;2542   	else if(RELE_LOG_CURR==1)
+;;;2543   		{
+;;;2544   		if(bCURRENT_STAB==0)	rele_stat[0]=rsOFF;
+;;;2545   		else 				rele_stat[0]=rsON;
+;;;2546   		}
+;;;2547   	}									
+;;;2548   else if(RELE_FUNC[0]==3)					//Напряжение в норме
+;;;2549   	{
+;;;2550   	if(RELE_LOG_VOLT==0)
 001cc8  4b7e              LDR      r3,|L5.7876|
-001cca  7800              LDRB     r0,[r0,#0]            ;2524
-001ccc  f9be4000          LDRSH    r4,[lr,#0]            ;2519  ; RELE_FUNC
-001cd0  4682              MOV      r10,r0                ;2524
+001cca  7800              LDRB     r0,[r0,#0]            ;2526
+001ccc  f9be4000          LDRSH    r4,[lr,#0]            ;2521  ; RELE_FUNC
+001cd0  4682              MOV      r10,r0                ;2526
 001cd2  487a              LDR      r0,|L5.7868|
-001cd4  2201              MOVS     r2,#1                 ;2519
+001cd4  2201              MOVS     r2,#1                 ;2521
 001cd6  f9b33000          LDRSH    r3,[r3,#0]
-001cda  7800              LDRB     r0,[r0,#0]            ;2529
-001cdc  2100              MOVS     r1,#0                 ;2519
-001cde  4683              MOV      r11,r0                ;2529
+001cda  7800              LDRB     r0,[r0,#0]            ;2531
+001cdc  2100              MOVS     r1,#0                 ;2521
+001cde  4683              MOV      r11,r0                ;2531
 001ce0  4873              LDR      r0,|L5.7856|
-001ce2  7805              LDRB     r5,[r0,#0]            ;2537
-;;;2549   		{
-;;;2550   		if(bVOLT_IS_NORM==0)	rele_stat[0]=rsON;
+001ce2  7805              LDRB     r5,[r0,#0]            ;2539
+;;;2551   		{
+;;;2552   		if(bVOLT_IS_NORM==0)	rele_stat[0]=rsON;
 001ce4  f1ae0032          SUB      r0,lr,#0x32
 001ce8  7b87              LDRB     r7,[r0,#0xe]
-;;;2551   		else 				rele_stat[0]=rsOFF;
-;;;2552   		}
-;;;2553   	else if(RELE_LOG_VOLT==1)
-;;;2554   		{
-;;;2555   		if(bVOLT_IS_NORM==0)	rele_stat[0]=rsOFF;
-;;;2556   		else 				rele_stat[0]=rsON;
-;;;2557   		}
-;;;2558   	}
-;;;2559   else if(RELE_FUNC[0]==4)					//Напряжение не выше
-;;;2560   	{
-;;;2561   	if(RELE_LOG_VOLT==0)
-;;;2562   		{
-;;;2563   		if(bVOLT_IS_NOT_UP==0)	rele_stat[0]=rsON;
+;;;2553   		else 				rele_stat[0]=rsOFF;
+;;;2554   		}
+;;;2555   	else if(RELE_LOG_VOLT==1)
+;;;2556   		{
+;;;2557   		if(bVOLT_IS_NORM==0)	rele_stat[0]=rsOFF;
+;;;2558   		else 				rele_stat[0]=rsON;
+;;;2559   		}
+;;;2560   	}
+;;;2561   else if(RELE_FUNC[0]==4)					//Напряжение не выше
+;;;2562   	{
+;;;2563   	if(RELE_LOG_VOLT==0)
+;;;2564   		{
+;;;2565   		if(bVOLT_IS_NOT_UP==0)	rele_stat[0]=rsON;
 001cea  f890800d          LDRB     r8,[r0,#0xd]
-;;;2564   		else 				rele_stat[0]=rsOFF;
-;;;2565   		}
-;;;2566   	else if(RELE_LOG_VOLT==1)
-;;;2567   		{
-;;;2568   		if(bVOLT_IS_NOT_UP==0)	rele_stat[0]=rsOFF;
-;;;2569   		else 				rele_stat[0]=rsON;
-;;;2570   		}
-;;;2571   	}
-;;;2572   else if(RELE_FUNC[0]==5)					//Напряжение не ниже
-;;;2573   	{
-;;;2574   	if(RELE_LOG_VOLT==0)
-;;;2575   		{
-;;;2576   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[0]=rsON;
+;;;2566   		else 				rele_stat[0]=rsOFF;
+;;;2567   		}
+;;;2568   	else if(RELE_LOG_VOLT==1)
+;;;2569   		{
+;;;2570   		if(bVOLT_IS_NOT_UP==0)	rele_stat[0]=rsOFF;
+;;;2571   		else 				rele_stat[0]=rsON;
+;;;2572   		}
+;;;2573   	}
+;;;2574   else if(RELE_FUNC[0]==5)					//Напряжение не ниже
+;;;2575   	{
+;;;2576   	if(RELE_LOG_VOLT==0)
+;;;2577   		{
+;;;2578   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[0]=rsON;
 001cee  7b00              LDRB     r0,[r0,#0xc]
 001cf0  4681              MOV      r9,r0
-001cf2  f1ae0004          SUB      r0,lr,#4              ;2519
+001cf2  f1ae0004          SUB      r0,lr,#4              ;2521
 001cf6  b324              CBZ      r4,|L5.7490|
-001cf8  2c01              CMP      r4,#1                 ;2520
+001cf8  2c01              CMP      r4,#1                 ;2522
 001cfa  d00a              BEQ      |L5.7442|
-001cfc  2c02              CMP      r4,#2                 ;2533
+001cfc  2c02              CMP      r4,#2                 ;2535
 001cfe  d013              BEQ      |L5.7464|
-001d00  2c03              CMP      r4,#3                 ;2546
+001d00  2c03              CMP      r4,#3                 ;2548
 001d02  d019              BEQ      |L5.7480|
-001d04  2c04              CMP      r4,#4                 ;2559
+001d04  2c04              CMP      r4,#4                 ;2561
 001d06  d01f              BEQ      |L5.7496|
-001d08  2c05              CMP      r4,#5                 ;2572
+001d08  2c05              CMP      r4,#5                 ;2574
 001d0a  d029              BEQ      |L5.7520|
-;;;2577   		else 				rele_stat[0]=rsOFF;
-;;;2578   		}
-;;;2579   	else if(RELE_LOG_VOLT==1)
-;;;2580   		{
-;;;2581   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[0]=rsOFF;
-;;;2582   		else 				rele_stat[0]=rsON;
-;;;2583   		}
-;;;2584   	}
-;;;2585   else if(RELE_FUNC[0]==6)					//Внешнее управление
+;;;2579   		else 				rele_stat[0]=rsOFF;
+;;;2580   		}
+;;;2581   	else if(RELE_LOG_VOLT==1)
+;;;2582   		{
+;;;2583   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[0]=rsOFF;
+;;;2584   		else 				rele_stat[0]=rsON;
+;;;2585   		}
+;;;2586   	}
+;;;2587   else if(RELE_FUNC[0]==6)					//Внешнее управление
 001d0c  2c06              CMP      r4,#6
 001d0e  d033              BEQ      |L5.7544|
 001d10  e039              B        |L5.7558|
                   |L5.7442|
-001d12  f1bc0f03          CMP      r12,#3                ;2522
+001d12  f1bc0f03          CMP      r12,#3                ;2524
 001d16  d003              BEQ      |L5.7456|
-001d18  f1bb0f00          CMP      r11,#0                ;2529
+001d18  f1bb0f00          CMP      r11,#0                ;2531
 001d1c  d032              BEQ      |L5.7556|
 001d1e  e02f              B        |L5.7552|
                   |L5.7456|
-001d20  f1ba0f00          CMP      r10,#0                ;2524
+001d20  f1ba0f00          CMP      r10,#0                ;2526
 001d24  d12e              BNE      |L5.7556|
 001d26  e02b              B        |L5.7552|
                   |L5.7464|
 001d28  b116              CBZ      r6,|L5.7472|
-001d2a  2e01              CMP      r6,#1                 ;2540
+001d2a  2e01              CMP      r6,#1                 ;2542
 001d2c  d002              BEQ      |L5.7476|
 001d2e  e02a              B        |L5.7558|
                   |L5.7472|
@@ -5418,7 +5417,7 @@
 001d36  e023              B        |L5.7552|
                   |L5.7480|
 001d38  b113              CBZ      r3,|L5.7488|
-001d3a  2b01              CMP      r3,#1                 ;2553
+001d3a  2b01              CMP      r3,#1                 ;2555
 001d3c  d002              BEQ      |L5.7492|
 001d3e  e022              B        |L5.7558|
                   |L5.7488|
@@ -5430,34 +5429,34 @@
 001d46  e01b              B        |L5.7552|
                   |L5.7496|
 001d48  b113              CBZ      r3,|L5.7504|
-001d4a  2b01              CMP      r3,#1                 ;2566
+001d4a  2b01              CMP      r3,#1                 ;2568
 001d4c  d004              BEQ      |L5.7512|
 001d4e  e01a              B        |L5.7558|
                   |L5.7504|
-001d50  f1b80f00          CMP      r8,#0                 ;2563
+001d50  f1b80f00          CMP      r8,#0                 ;2565
 001d54  d014              BEQ      |L5.7552|
 001d56  e015              B        |L5.7556|
                   |L5.7512|
-001d58  f1b80f00          CMP      r8,#0                 ;2568
+001d58  f1b80f00          CMP      r8,#0                 ;2570
 001d5c  d012              BEQ      |L5.7556|
 001d5e  e00f              B        |L5.7552|
                   |L5.7520|
 001d60  b113              CBZ      r3,|L5.7528|
-001d62  2b01              CMP      r3,#1                 ;2579
+001d62  2b01              CMP      r3,#1                 ;2581
 001d64  d004              BEQ      |L5.7536|
 001d66  e00e              B        |L5.7558|
                   |L5.7528|
-001d68  f1b90f00          CMP      r9,#0                 ;2576
+001d68  f1b90f00          CMP      r9,#0                 ;2578
 001d6c  d008              BEQ      |L5.7552|
 001d6e  e009              B        |L5.7556|
                   |L5.7536|
-001d70  f1b90f00          CMP      r9,#0                 ;2581
+001d70  f1b90f00          CMP      r9,#0                 ;2583
 001d74  d006              BEQ      |L5.7556|
                   |L5.7542|
 001d76  e003              B        |L5.7552|
                   |L5.7544|
-;;;2586   	{
-;;;2587   	if(rele_ext_cntrl[0])	rele_stat[0]=rsON;
+;;;2588   	{
+;;;2589   	if(rele_ext_cntrl[0])	rele_stat[0]=rsON;
 001d78  4c4e              LDR      r4,|L5.7860|
 001d7a  1ea4              SUBS     r4,r4,#2
 001d7c  7824              LDRB     r4,[r4,#0]  ; rele_ext_cntrl
@@ -5466,234 +5465,234 @@
 001d80  7002              STRB     r2,[r0,#0]
 001d82  e000              B        |L5.7558|
                   |L5.7556|
-;;;2588   	else 				rele_stat[0]=rsOFF;
+;;;2590   	else 				rele_stat[0]=rsOFF;
 001d84  7001              STRB     r1,[r0,#0]
                   |L5.7558|
-;;;2589   	}											
-;;;2590   //Реле2
-;;;2591   if(RELE_FUNC[1]==0)rele_stat[1]=rsOFF; 		//Выключено
+;;;2591   	}											
+;;;2592   //Реле2
+;;;2593   if(RELE_FUNC[1]==0)rele_stat[1]=rsOFF; 		//Выключено
 001d86  f9be4002          LDRSH    r4,[lr,#2]  ; RELE_FUNC
 001d8a  b17c              CBZ      r4,|L5.7596|
-;;;2592   else if(RELE_FUNC[1]==1)					//Реверс
+;;;2594   else if(RELE_FUNC[1]==1)					//Реверс
 001d8c  2c01              CMP      r4,#1
 001d8e  d010              BEQ      |L5.7602|
-;;;2593   	{
-;;;2594   	if(work_stat==wsCAP) 
-;;;2595   		{
-;;;2596   		if(bRAZR) 		rele_stat[1]=rsOFF;
-;;;2597   		else 			rele_stat[1]=rsON;
-;;;2598   		} 
-;;;2599   	else 
-;;;2600   		{
-;;;2601   		if(REV_STAT==rsREW)	rele_stat[1]=rsOFF;
-;;;2602   		else 			rele_stat[1]=rsON;
-;;;2603   		}
-;;;2604   	}
-;;;2605   else if(RELE_FUNC[1]==2)					//Токоограничение
+;;;2595   	{
+;;;2596   	if(work_stat==wsCAP) 
+;;;2597   		{
+;;;2598   		if(bRAZR) 		rele_stat[1]=rsOFF;
+;;;2599   		else 			rele_stat[1]=rsON;
+;;;2600   		} 
+;;;2601   	else 
+;;;2602   		{
+;;;2603   		if(REV_STAT==rsREW)	rele_stat[1]=rsOFF;
+;;;2604   		else 			rele_stat[1]=rsON;
+;;;2605   		}
+;;;2606   	}
+;;;2607   else if(RELE_FUNC[1]==2)					//Токоограничение
 001d90  2c02              CMP      r4,#2
 001d92  d01a              BEQ      |L5.7626|
-;;;2606   	{
-;;;2607   	if(RELE_LOG_CURR==0)
-;;;2608   		{
-;;;2609   		if(bCURRENT_STAB==0)rele_stat[1]=rsON;
-;;;2610   		else 			rele_stat[1]=rsOFF;
-;;;2611   		}
-;;;2612   	else if(RELE_LOG_CURR==1)
-;;;2613   		{
-;;;2614   		if(bCURRENT_STAB==0)rele_stat[1]=rsOFF;
-;;;2615   		else 			rele_stat[1]=rsON;
-;;;2616   		}
-;;;2617   	}									
-;;;2618   else if(RELE_FUNC[1]==3)					//Напряжение в норме
+;;;2608   	{
+;;;2609   	if(RELE_LOG_CURR==0)
+;;;2610   		{
+;;;2611   		if(bCURRENT_STAB==0)rele_stat[1]=rsON;
+;;;2612   		else 			rele_stat[1]=rsOFF;
+;;;2613   		}
+;;;2614   	else if(RELE_LOG_CURR==1)
+;;;2615   		{
+;;;2616   		if(bCURRENT_STAB==0)rele_stat[1]=rsOFF;
+;;;2617   		else 			rele_stat[1]=rsON;
+;;;2618   		}
+;;;2619   	}									
+;;;2620   else if(RELE_FUNC[1]==3)					//Напряжение в норме
 001d94  2c03              CMP      r4,#3
 001d96  d021              BEQ      |L5.7644|
-;;;2619   	{
-;;;2620   	if(RELE_LOG_VOLT==0)
-;;;2621   		{
-;;;2622   		if(bVOLT_IS_NORM==0)	rele_stat[1]=rsON;
-;;;2623   		else 				rele_stat[1]=rsOFF;
-;;;2624   		}
-;;;2625   	else if(RELE_LOG_VOLT==1)
-;;;2626   		{
-;;;2627   		if(bVOLT_IS_NORM==0)	rele_stat[1]=rsOFF;
-;;;2628   		else 				rele_stat[1]=rsON;
-;;;2629   		}
-;;;2630   	}
-;;;2631   else if(RELE_FUNC[1]==4)					//Напряжение не выше
+;;;2621   	{
+;;;2622   	if(RELE_LOG_VOLT==0)
+;;;2623   		{
+;;;2624   		if(bVOLT_IS_NORM==0)	rele_stat[1]=rsON;
+;;;2625   		else 				rele_stat[1]=rsOFF;
+;;;2626   		}
+;;;2627   	else if(RELE_LOG_VOLT==1)
+;;;2628   		{
+;;;2629   		if(bVOLT_IS_NORM==0)	rele_stat[1]=rsOFF;
+;;;2630   		else 				rele_stat[1]=rsON;
+;;;2631   		}
+;;;2632   	}
+;;;2633   else if(RELE_FUNC[1]==4)					//Напряжение не выше
 001d98  2c04              CMP      r4,#4
 001d9a  d028              BEQ      |L5.7662|
-;;;2632   	{
-;;;2633   	if(RELE_LOG_VOLT==0)
-;;;2634   		{
-;;;2635   		if(bVOLT_IS_NOT_UP==0)	rele_stat[1]=rsON;
-;;;2636   		else 				rele_stat[1]=rsOFF;
-;;;2637   		}
-;;;2638   	else if(RELE_LOG_VOLT==1)
-;;;2639   		{
-;;;2640   		if(bVOLT_IS_NOT_UP==0)	rele_stat[1]=rsOFF;
-;;;2641   		else 				rele_stat[1]=rsON;
-;;;2642   		}
-;;;2643   	}
-;;;2644   else if(RELE_FUNC[1]==5)					//Напряжение не ниже
+;;;2634   	{
+;;;2635   	if(RELE_LOG_VOLT==0)
+;;;2636   		{
+;;;2637   		if(bVOLT_IS_NOT_UP==0)	rele_stat[1]=rsON;
+;;;2638   		else 				rele_stat[1]=rsOFF;
+;;;2639   		}
+;;;2640   	else if(RELE_LOG_VOLT==1)
+;;;2641   		{
+;;;2642   		if(bVOLT_IS_NOT_UP==0)	rele_stat[1]=rsOFF;
+;;;2643   		else 				rele_stat[1]=rsON;
+;;;2644   		}
+;;;2645   	}
+;;;2646   else if(RELE_FUNC[1]==5)					//Напряжение не ниже
 001d9c  2c05              CMP      r4,#5
 001d9e  d031              BEQ      |L5.7684|
-;;;2645   	{
-;;;2646   	if(RELE_LOG_VOLT==0)
-;;;2647   		{
-;;;2648   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[1]=rsON;
-;;;2649   		else 				rele_stat[1]=rsOFF;
-;;;2650   		}
-;;;2651   	else if(RELE_LOG_VOLT==1)
-;;;2652   		{
-;;;2653   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[1]=rsOFF;
-;;;2654   		else 				rele_stat[1]=rsON;
-;;;2655   		}
-;;;2656   	}
-;;;2657   else if(RELE_FUNC[1]==6)					//Внешнее управление
+;;;2647   	{
+;;;2648   	if(RELE_LOG_VOLT==0)
+;;;2649   		{
+;;;2650   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[1]=rsON;
+;;;2651   		else 				rele_stat[1]=rsOFF;
+;;;2652   		}
+;;;2653   	else if(RELE_LOG_VOLT==1)
+;;;2654   		{
+;;;2655   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[1]=rsOFF;
+;;;2656   		else 				rele_stat[1]=rsON;
+;;;2657   		}
+;;;2658   	}
+;;;2659   else if(RELE_FUNC[1]==6)					//Внешнее управление
 001da0  2c06              CMP      r4,#6
 001da2  d104              BNE      |L5.7598|
-;;;2658   	{
-;;;2659   	if(rele_ext_cntrl[1])	rele_stat[1]=rsON;
+;;;2660   	{
+;;;2661   	if(rele_ext_cntrl[1])	rele_stat[1]=rsON;
 001da4  4b43              LDR      r3,|L5.7860|
 001da6  1e9b              SUBS     r3,r3,#2
 001da8  785b              LDRB     r3,[r3,#1]  ; rele_ext_cntrl
 001daa  b943              CBNZ     r3,|L5.7614|
                   |L5.7596|
-001dac  7041              STRB     r1,[r0,#1]            ;2591
+001dac  7041              STRB     r1,[r0,#1]            ;2593
                   |L5.7598|
-;;;2660   	else 				rele_stat[1]=rsOFF;
-;;;2661   	}	
-;;;2662   
-;;;2663   //rele_stat[0]=rsON;
-;;;2664   //rele_stat[1]=rsON;
-;;;2665   										
-;;;2666   }
+;;;2662   	else 				rele_stat[1]=rsOFF;
+;;;2663   	}	
+;;;2664   
+;;;2665   //rele_stat[0]=rsON;
+;;;2666   //rele_stat[1]=rsON;
+;;;2667   										
+;;;2668   }
 001dae  e8bd8ff0          POP      {r4-r11,pc}
                   |L5.7602|
-001db2  f1bc0f03          CMP      r12,#3                ;2594
+001db2  f1bc0f03          CMP      r12,#3                ;2596
 001db6  d004              BEQ      |L5.7618|
-001db8  f1bb0f00          CMP      r11,#0                ;2601
+001db8  f1bb0f00          CMP      r11,#0                ;2603
 001dbc  d0f6              BEQ      |L5.7596|
                   |L5.7614|
-001dbe  7042              STRB     r2,[r0,#1]            ;2602
+001dbe  7042              STRB     r2,[r0,#1]            ;2604
 001dc0  e7f5              B        |L5.7598|
                   |L5.7618|
-001dc2  f1ba0f00          CMP      r10,#0                ;2596
+001dc2  f1ba0f00          CMP      r10,#0                ;2598
 001dc6  d1f1              BNE      |L5.7596|
 001dc8  e7f9              B        |L5.7614|
                   |L5.7626|
 001dca  b126              CBZ      r6,|L5.7638|
-001dcc  2e01              CMP      r6,#1                 ;2612
+001dcc  2e01              CMP      r6,#1                 ;2614
 001dce  d1ee              BNE      |L5.7598|
-001dd0  2d00              CMP      r5,#0                 ;2614
+001dd0  2d00              CMP      r5,#0                 ;2616
 001dd2  d1f4              BNE      |L5.7614|
 001dd4  e7ea              B        |L5.7596|
                   |L5.7638|
-001dd6  2d00              CMP      r5,#0                 ;2609
+001dd6  2d00              CMP      r5,#0                 ;2611
 001dd8  d0f1              BEQ      |L5.7614|
 001dda  e7e7              B        |L5.7596|
                   |L5.7644|
 001ddc  b123              CBZ      r3,|L5.7656|
-001dde  2b01              CMP      r3,#1                 ;2625
+001dde  2b01              CMP      r3,#1                 ;2627
 001de0  d1e5              BNE      |L5.7598|
-001de2  2f00              CMP      r7,#0                 ;2627
+001de2  2f00              CMP      r7,#0                 ;2629
 001de4  d1eb              BNE      |L5.7614|
 001de6  e7e1              B        |L5.7596|
                   |L5.7656|
-001de8  2f00              CMP      r7,#0                 ;2622
+001de8  2f00              CMP      r7,#0                 ;2624
 001dea  d0e8              BEQ      |L5.7614|
 001dec  e7de              B        |L5.7596|
                   |L5.7662|
 001dee  b12b              CBZ      r3,|L5.7676|
-001df0  2b01              CMP      r3,#1                 ;2638
+001df0  2b01              CMP      r3,#1                 ;2640
 001df2  d1dc              BNE      |L5.7598|
-001df4  f1b80f00          CMP      r8,#0                 ;2640
+001df4  f1b80f00          CMP      r8,#0                 ;2642
 001df8  d1e1              BNE      |L5.7614|
 001dfa  e7d7              B        |L5.7596|
                   |L5.7676|
-001dfc  f1b80f00          CMP      r8,#0                 ;2635
+001dfc  f1b80f00          CMP      r8,#0                 ;2637
 001e00  d0dd              BEQ      |L5.7614|
 001e02  e7d3              B        |L5.7596|
                   |L5.7684|
 001e04  b12b              CBZ      r3,|L5.7698|
-001e06  2b01              CMP      r3,#1                 ;2651
+001e06  2b01              CMP      r3,#1                 ;2653
 001e08  d1d1              BNE      |L5.7598|
-001e0a  f1b90f00          CMP      r9,#0                 ;2653
+001e0a  f1b90f00          CMP      r9,#0                 ;2655
 001e0e  d1d6              BNE      |L5.7614|
 001e10  e7cc              B        |L5.7596|
                   |L5.7698|
-001e12  f1b90f00          CMP      r9,#0                 ;2648
+001e12  f1b90f00          CMP      r9,#0                 ;2650
 001e16  d0d2              BEQ      |L5.7614|
 001e18  e7c8              B        |L5.7596|
-;;;2667    
+;;;2669    
                           ENDP
 
                   rele_drv PROC
-;;;2668   //-----------------------------------------------
-;;;2669   void rele_drv(void)
+;;;2670   //-----------------------------------------------
+;;;2671   void rele_drv(void)
 001e1a  492b              LDR      r1,|L5.7880|
-;;;2670   {
-;;;2671   #ifdef EXT_BOARD_V_1
-;;;2672   SET_REG(LPC_PINCON->PINSEL0,0,4*2,2);
-;;;2673   SET_REG(LPC_GPIO0->FIODIR,1,4,1);
-;;;2674   
-;;;2675   if(rele_stat[0]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,4,1);
-;;;2676   else SET_REG(LPC_GPIO0->FIOPIN,1,4,1);
-;;;2677   #endif
-;;;2678   
-;;;2679   #ifdef EXT_BOARD_V_2
-;;;2680   SET_REG(LPC_PINCON->PINSEL0,0,7*2,2);
+;;;2672   {
+;;;2673   #ifdef EXT_BOARD_V_1
+;;;2674   SET_REG(LPC_PINCON->PINSEL0,0,4*2,2);
+;;;2675   SET_REG(LPC_GPIO0->FIODIR,1,4,1);
+;;;2676   
+;;;2677   if(rele_stat[0]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,4,1);
+;;;2678   else SET_REG(LPC_GPIO0->FIOPIN,1,4,1);
+;;;2679   #endif
+;;;2680   
+;;;2681   #ifdef EXT_BOARD_V_2
+;;;2682   SET_REG(LPC_PINCON->PINSEL0,0,7*2,2);
 001e1c  6808              LDR      r0,[r1,#0]
 001e1e  f4204040          BIC      r0,r0,#0xc000
 001e22  6008              STR      r0,[r1,#0]
-;;;2681   SET_REG(LPC_GPIO0->FIODIR,1,7,1);
+;;;2683   SET_REG(LPC_GPIO0->FIODIR,1,7,1);
 001e24  4829              LDR      r0,|L5.7884|
 001e26  6802              LDR      r2,[r0,#0]
 001e28  f0420280          ORR      r2,r2,#0x80
 001e2c  6002              STR      r2,[r0,#0]
-;;;2682   
-;;;2683   if(rele_stat[0]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,7,1);
+;;;2684   
+;;;2685   if(rele_stat[0]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,7,1);
 001e2e  4a21              LDR      r2,|L5.7860|
 001e30  1f12              SUBS     r2,r2,#4
 001e32  7813              LDRB     r3,[r2,#0]  ; rele_stat
 001e34  2b01              CMP      r3,#1
-;;;2684   else SET_REG(LPC_GPIO0->FIOPIN,1,7,1);
+;;;2686   else SET_REG(LPC_GPIO0->FIOPIN,1,7,1);
 001e36  6943              LDR      r3,[r0,#0x14]
 001e38  d012              BEQ      |L5.7776|
 001e3a  f0430380          ORR      r3,r3,#0x80
                   |L5.7742|
 001e3e  6143              STR      r3,[r0,#0x14]
-;;;2685   #endif
-;;;2686   
-;;;2687   SET_REG(LPC_PINCON->PINSEL0,0,5*2,2);
+;;;2687   #endif
+;;;2688   
+;;;2689   SET_REG(LPC_PINCON->PINSEL0,0,5*2,2);
 001e40  680b              LDR      r3,[r1,#0]
 001e42  f4236340          BIC      r3,r3,#0xc00
 001e46  600b              STR      r3,[r1,#0]
-;;;2688   SET_REG(LPC_GPIO0->FIODIR,1,5,1);
+;;;2690   SET_REG(LPC_GPIO0->FIODIR,1,5,1);
 001e48  6801              LDR      r1,[r0,#0]
 001e4a  f0410120          ORR      r1,r1,#0x20
 001e4e  6001              STR      r1,[r0,#0]
-;;;2689   
-;;;2690   if(rele_stat[1]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
+;;;2691   
+;;;2692   if(rele_stat[1]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
 001e50  7851              LDRB     r1,[r2,#1]  ; rele_stat
 001e52  2901              CMP      r1,#1
-;;;2691   else SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
+;;;2693   else SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
 001e54  6941              LDR      r1,[r0,#0x14]
 001e56  d006              BEQ      |L5.7782|
 001e58  f0410120          ORR      r1,r1,#0x20
                   |L5.7772|
-001e5c  6141              STR      r1,[r0,#0x14]         ;2690
-;;;2692   
-;;;2693   
-;;;2694   }
+001e5c  6141              STR      r1,[r0,#0x14]         ;2692
+;;;2694   
+;;;2695   
+;;;2696   }
 001e5e  4770              BX       lr
                   |L5.7776|
-001e60  f0230380          BIC      r3,r3,#0x80           ;2683
+001e60  f0230380          BIC      r3,r3,#0x80           ;2685
 001e64  e7eb              B        |L5.7742|
                   |L5.7782|
-001e66  f0210120          BIC      r1,r1,#0x20           ;2690
+001e66  f0210120          BIC      r1,r1,#0x20           ;2692
 001e6a  e7f7              B        |L5.7772|
-;;;2695   
+;;;2697   
                           ENDP
 
                   |L5.7788|

@@ -4648,7 +4648,7 @@ if(work_stat==wsGS)
 				time_proc_phase=0;
 			}
 		} else if(proc_phase==ppFF_P_REW) {
-			if(time_proc_phase==0)REV_STAT=rsFF;
+			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsFF;
 			else REV_STAT=rsREW;
 			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
 				proc_phase=ppREW;	
@@ -4661,7 +4661,7 @@ if(work_stat==wsGS)
 				time_proc_phase=0;
 			}
 		} else if(proc_phase==ppREW_P_FF) {
-			if(time_proc_phase==0)REV_STAT=rsREW;
+			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsREW;
 			else REV_STAT=rsFF;
 			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
 				proc_phase=ppFF;	
@@ -4700,7 +4700,7 @@ if(work_stat==wsPS)
 				time_proc_phase=0;
 			}
 		} else if(proc_phase==ppFF_P_REW) {
-			if(time_proc_phase==0)REV_STAT=rsFF;
+			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsFF;
 			else REV_STAT=rsREW;
 			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
 				proc_phase=ppREW;	
@@ -4713,7 +4713,7 @@ if(work_stat==wsPS)
 				time_proc_phase=0;
 			}
 		} else if(proc_phase==ppREW_P_FF) {
-			if(time_proc_phase==0)REV_STAT=rsREW;
+			if(time_proc_phase<AVT_REV_TIME_PAUSE)REV_STAT=rsREW;
 			else REV_STAT=rsFF;
 			if(time_proc_phase>=AVT_REV_TIME_PAUSE) {
 				proc_phase=ppFF;	
@@ -6085,10 +6085,13 @@ void revers_hndl(void)
 ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIODIR = ( (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIODIR & ~((0xffffffff>>(32-1))<<4)) | ((unsigned)1 << 4) );
 
 
-if(work_stat==wsCAP) {
+if(work_stat==wsCAP) 
+	{
 	if(bRAZR) ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOPIN = ( (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOPIN & ~((0xffffffff>>(32-1))<<4)) | ((unsigned)0 << 4) );
 	else ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOPIN = ( (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOPIN & ~((0xffffffff>>(32-1))<<4)) | ((unsigned)1 << 4) );
-} else {
+	} 
+else 
+	{
 	if(REV_STAT==rsREW)
 		{
 		((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOPIN = ( (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOPIN & ~((0xffffffff>>(32-1))<<4)) | ((unsigned)0 << 4) );
@@ -6097,8 +6100,7 @@ if(work_stat==wsCAP) {
 		{
 		((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOPIN = ( (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOPIN & ~((0xffffffff>>(32-1))<<4)) | ((unsigned)1 << 4) );
 		}
-}
-
+	}
 }
 
 
@@ -6257,7 +6259,7 @@ else if(RELE_FUNC[1]==6)
 
 void rele_drv(void)
 {
-#line 2678 "control.c"
+#line 2680 "control.c"
 
 
 ((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 = ( (((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 & ~((0xffffffff>>(32-2))<<7*2)) | ((unsigned)0 << 7*2) );
