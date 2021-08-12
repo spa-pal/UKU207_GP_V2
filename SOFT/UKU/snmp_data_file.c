@@ -885,7 +885,50 @@ if(mode==MIB_WRITE)
 			break;
 			}
 
+		case SNMP_RELE1_ON:
+			{
+			snmp_command=COMMAND_INVALID;
+			if(RELE_FUNC[0]==6)
+				{
+				snmp_command=COMMAND_OK;
+				rele_ext_cntrl[0]=1;					
+				}
 
+			break;
+			}
+		case SNMP_RELE1_OFF:
+			{
+			snmp_command=COMMAND_INVALID;
+			if(RELE_FUNC[0]==6)
+				{
+				snmp_command=COMMAND_OK;
+				rele_ext_cntrl[0]=0;					
+				}
+
+			break;
+			}
+		case SNMP_RELE2_ON:
+			{
+			snmp_command=COMMAND_INVALID;
+			if(RELE_FUNC[1]==6)
+				{
+				snmp_command=COMMAND_OK;
+				rele_ext_cntrl[1]=1;					
+				}
+
+			break;
+			}
+		case SNMP_RELE2_OFF:
+			{
+			snmp_command=COMMAND_INVALID;
+			if(RELE_FUNC[1]==6)
+				{
+				snmp_command=COMMAND_OK;
+				rele_ext_cntrl[1]=0;					
+				}
+
+			break;
+			}
 		case SNMP_PROC_STOP:
 			{
 			snmp_command=COMMAND_OK;

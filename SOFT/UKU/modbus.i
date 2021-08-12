@@ -702,6 +702,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
+#line 155 "main.h"
 
 
 
@@ -744,12 +745,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-
-
-
-
-
-#line 222 "main.h"
+#line 225 "main.h"
 
 
 
@@ -768,11 +764,9 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 258 "main.h"
+#line 261 "main.h"
 
-#line 274 "main.h"
-
-
+#line 277 "main.h"
 
 
 
@@ -792,9 +786,11 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 308 "main.h"
 
-#line 322 "main.h"
+
+#line 311 "main.h"
+
+#line 325 "main.h"
 
 
 
@@ -1304,7 +1300,7 @@ extern signed short T_PROC_GS_MODE;
 extern signed long T_PROC_PS;			
 extern signed short T_PROC_PS_block_cnt;
 extern signed short T_PROC_PS_MODE;	
-extern signed long 	T_PROC_MAX;		
+extern unsigned short	T_PROC_MAX;		
 extern signed short TIME_VISION;		
 extern signed short TIME_VISION_PULT;	
 extern signed short I_MAX_IPS;		
@@ -1372,8 +1368,8 @@ typedef enum {rsREW=0,rsFF=1}enum_rev_stat;
 extern enum_rev_stat REV_STAT;
 extern short REV_IS_ON;
 extern short AVT_REV_IS_ON;
-extern short AVT_REV_TIME_FF;
-extern short AVT_REV_TIME_REW;
+extern unsigned short AVT_REV_TIME_FF;
+extern unsigned short AVT_REV_TIME_REW;
 extern short AVT_REV_TIME_PAUSE;
 extern short AVT_REV_I_NOM_FF;
 extern short AVT_REV_I_NOM_REW;
@@ -1447,6 +1443,8 @@ extern signed short pwm_i_reg;
 extern signed short pwm_t_reg;
 
 extern short plazma_umax;
+
+extern short modbus_tcp_plazma_pavlik[4];
 
 
  
@@ -2308,33 +2306,35 @@ extern __declspec(__nothrow) void __use_no_semihosting(void);
 
 #line 42 "eeprom_map.h"
 
-#line 136 "eeprom_map.h"
+#line 112 "eeprom_map.h"
+
+#line 137 "eeprom_map.h"
 
 
 
 
 
 
-#line 156 "eeprom_map.h"
+#line 157 "eeprom_map.h"
 
 
 
-#line 168 "eeprom_map.h"
+#line 169 "eeprom_map.h"
 
 
-#line 179 "eeprom_map.h"
+#line 180 "eeprom_map.h"
 
 
-#line 188 "eeprom_map.h"
-
-
-
-
+#line 189 "eeprom_map.h"
 
 
 
 
-#line 234 "eeprom_map.h"
+
+
+
+
+#line 235 "eeprom_map.h"
 
 
 
@@ -2374,6 +2374,8 @@ void gran_char(signed char *adr, signed char min, signed char max);
 void gran(signed short *adr, signed short min, signed short max);
 void gran_ring(signed short *adr, signed short min, signed short max);
 void gran_long(signed long *adr, signed long min, signed long max); 
+void gran_ring_long(signed long *adr, signed long min, signed long max);
+void gran_u(unsigned short *adr, unsigned short min, unsigned short max);
 #line 9 "modbus.c"
 #line 1 "uart0.h"
 
@@ -2608,6 +2610,11 @@ extern char bVOLT_IS_NORM;
 
 extern signed char net_in_drv_cnt_B,net_in_drv_cnt_C;
 extern char net_in_drv_stat_B, net_in_drv_stat_C;
+
+
+
+extern signed short RELE_FUNC[2];
+extern char rele_ext_cntrl[2];
 
 void zar_superviser_drv(void);
 void zar_superviser_start(void);
@@ -3910,77 +3917,81 @@ if(crc16_calculated==crc16_incapsulated)
 				{
 				if(modbus_rx_arg1==1)
 					{
-					if(work_stat!=wsPS)
-						{
-							if(SK_START==2)
-								{
-								if(SK_START_LEV)
-									{
-									if(sk_in_drv_stat==1)
-										{
-										return;
-										}
-									}
-								if(!SK_START_LEV)
-									{
-									if(sk_in_drv_stat==-1)
-										{
-										return;
-										}
-									}
-								}
-						work_stat=wsPS;
-						time_proc=0;
-						time_proc_remain=T_PROC_PS;
-						restart_on_PS();
-						lc640_write_int(0x10+100+118,mmmIN);
-						}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+					start_PS();
 					}
 				if(modbus_rx_arg1==0)
 					{
-					if(work_stat==wsPS)
-						{
-						work_stat=wsOFF;
-						restart_off();
-						}
+					
+
+
+
+ 
+					stop_proc();
 					}
 				}
 			if(modbus_rx_arg0==61)		
 				{
 				if(modbus_rx_arg1==1)
 					{
-					if(work_stat!=wsGS)
-						{
-							if(SK_START==2)
-								{
-								if(SK_START_LEV)
-									{
-									if(sk_in_drv_stat==1)
-										{
-										return;
-										}
-									}
-								if(!SK_START_LEV)
-									{
-									if(sk_in_drv_stat==-1)
-										{
-										return;
-										}
-									}
-								}
-						work_stat=wsGS;
-						time_proc=0;
-						time_proc_remain=T_PROC_GS;
-						lc640_write_int(0x10+100+118,mmmIT);
-						}
+					
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+					start_GS();
 					}
 				if(modbus_rx_arg1==0)
 					{
-					if(work_stat==wsGS)
-						{
-						work_stat=wsOFF;
-						restart_off();
-						}
+					
+
+
+
+ 
+					stop_proc();
 					}
 				}
 
@@ -4010,7 +4021,7 @@ if(crc16_calculated==crc16_incapsulated)
 				if(work_stat==wsOFF)
 					{
 					AVT_REV_TIME_FF=modbus_rx_arg1;
-					gran(&AVT_REV_TIME_FF,30,T_PROC_MAX);
+					gran_u (&AVT_REV_TIME_FF,30,T_PROC_MAX);
 					lc640_write_int(0x10+100+150,AVT_REV_TIME_FF);	
 					}
 				}
@@ -4019,8 +4030,8 @@ if(crc16_calculated==crc16_incapsulated)
 				if(work_stat==wsOFF)
 					{
 					AVT_REV_TIME_REW=modbus_rx_arg1;
-					gran(&AVT_REV_TIME_REW,30,T_PROC_MAX);
-					lc640_write_int(0x10+100+152,AVT_REV_TIME_REW);	
+					gran_u (&AVT_REV_TIME_REW,30,T_PROC_MAX);
+					lc640_write_int(0x10+100+202,AVT_REV_TIME_REW);	
 					}
 				}
 			if(modbus_rx_arg0==66)		
@@ -4261,6 +4272,34 @@ if(crc16_calculated==crc16_incapsulated)
 						}
 					}
 
+				if(modbus_rx_arg1==0x80)
+					{
+					if(RELE_FUNC[0]==6)
+						{
+						rele_ext_cntrl[0]=0;					
+						}
+					}
+				if(modbus_rx_arg1==0x81)
+					{
+					if(RELE_FUNC[0]==6)
+						{
+						rele_ext_cntrl[0]=1;					
+						}
+					}
+				if(modbus_rx_arg1==0x82)
+					{
+					if(RELE_FUNC[1]==6)
+						{
+						rele_ext_cntrl[1]=0;					
+						}
+					}
+				if(modbus_rx_arg1==0x83)
+					{
+					if(RELE_FUNC[1]==6)
+						{
+						rele_ext_cntrl[1]=1;					
+						}
+					}
 				}
 
 			if(modbus_rx_arg0==80)		
@@ -4921,8 +4960,10 @@ char modbus_tx_buff[100];
 unsigned short crc_temp;
 char i;
 
+I_ug=50;
 modbus_registers[0]=(char)(I_ug/256);					
 modbus_registers[1]=(char)(I_ug%256);
+U_up=51;
 modbus_registers[2]=(char)(U_up/256);					
 modbus_registers[3]=(char)(U_up%256);
 modbus_registers[4]=(char)(U_maxg/256);					
@@ -4944,15 +4985,19 @@ modbus_registers[19]=(char)((T_PROC_PS/3600)%256);
 modbus_registers[20]=0;								
 modbus_registers[21]=0;
 if(work_stat==wsPS)modbus_registers[21]=1;
+
 modbus_registers[22]=0;								
 modbus_registers[23]=0;
 if(work_stat==wsGS)modbus_registers[23]=1;
+
 modbus_registers[24]=0;								
 modbus_registers[25]=0;
 if(REV_STAT==rsREW)modbus_registers[25]=1;
+
 modbus_registers[26]=0;								
 modbus_registers[27]=0;
 if(AVT_REV_IS_ON)modbus_registers[27]=1;
+
 modbus_registers[28]=(char)((AVT_REV_TIME_FF)/256);		
 modbus_registers[29]=(char)((AVT_REV_TIME_FF)%256);
 modbus_registers[30]=(char)((AVT_REV_TIME_REW)/256);		
@@ -4979,8 +5024,12 @@ modbus_registers[50]=(char)((CAP_MAX_VOLT)/256);
 modbus_registers[51]=(char)((CAP_MAX_VOLT)%256);
 modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			
 modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
-modbus_registers[60]=(char)((REV_IS_ON)/256);				
-modbus_registers[61]=(char)((REV_IS_ON)%256);
+modbus_registers[58]=(char)((REV_IS_ON)/256);				
+modbus_registers[59]=(char)((REV_IS_ON)%256);
+proc_phase=7;
+modbus_registers[60]=(char)((proc_phase)/256);				
+modbus_registers[61]=(char)((proc_phase)%256);
+
 
 modbus_tx_buff[0]=adr;
 modbus_tx_buff[1]=func;
@@ -5173,6 +5222,12 @@ modbus_registers[50]=(char)((CAP_MAX_VOLT)/256);
 modbus_registers[51]=(char)((CAP_MAX_VOLT)%256);
 modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			
 modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
+modbus_registers[56]=(char)((proc_phase)/256);				
+modbus_registers[57]=(char)((proc_phase)%256);
+modbus_registers[58]=(char)((REV_IS_ON)/256);				
+modbus_registers[59]=(char)((REV_IS_ON)%256);
+
+
 
 modbus_registers[60]=(char)((pwm_u_reg)/256);			
 modbus_registers[61]=(char)((pwm_u_reg)%256);

@@ -188,33 +188,35 @@ void snmp_data (void);
 
 #line 42 "eeprom_map.h"
 
-#line 136 "eeprom_map.h"
+#line 112 "eeprom_map.h"
+
+#line 137 "eeprom_map.h"
 
 
 
 
 
 
-#line 156 "eeprom_map.h"
+#line 157 "eeprom_map.h"
 
 
 
-#line 168 "eeprom_map.h"
+#line 169 "eeprom_map.h"
 
 
-#line 179 "eeprom_map.h"
+#line 180 "eeprom_map.h"
 
 
-#line 188 "eeprom_map.h"
-
-
-
-
+#line 189 "eeprom_map.h"
 
 
 
 
-#line 234 "eeprom_map.h"
+
+
+
+
+#line 235 "eeprom_map.h"
 
 
 
@@ -661,6 +663,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
+#line 155 "main.h"
 
 
 
@@ -703,12 +706,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-
-
-
-
-
-#line 222 "main.h"
+#line 225 "main.h"
 
 
 
@@ -727,11 +725,9 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 258 "main.h"
+#line 261 "main.h"
 
-#line 274 "main.h"
-
-
+#line 277 "main.h"
 
 
 
@@ -751,9 +747,11 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 308 "main.h"
 
-#line 322 "main.h"
+
+#line 311 "main.h"
+
+#line 325 "main.h"
 
 
 
@@ -1263,7 +1261,7 @@ extern signed short T_PROC_GS_MODE;
 extern signed long T_PROC_PS;			
 extern signed short T_PROC_PS_block_cnt;
 extern signed short T_PROC_PS_MODE;	
-extern signed long 	T_PROC_MAX;		
+extern unsigned short	T_PROC_MAX;		
 extern signed short TIME_VISION;		
 extern signed short TIME_VISION_PULT;	
 extern signed short I_MAX_IPS;		
@@ -1331,8 +1329,8 @@ typedef enum {rsREW=0,rsFF=1}enum_rev_stat;
 extern enum_rev_stat REV_STAT;
 extern short REV_IS_ON;
 extern short AVT_REV_IS_ON;
-extern short AVT_REV_TIME_FF;
-extern short AVT_REV_TIME_REW;
+extern unsigned short AVT_REV_TIME_FF;
+extern unsigned short AVT_REV_TIME_REW;
 extern short AVT_REV_TIME_PAUSE;
 extern short AVT_REV_I_NOM_FF;
 extern short AVT_REV_I_NOM_REW;
@@ -1406,6 +1404,8 @@ extern signed short pwm_i_reg;
 extern signed short pwm_t_reg;
 
 extern short plazma_umax;
+
+extern short modbus_tcp_plazma_pavlik[4];
 
 
  
@@ -1944,6 +1944,11 @@ extern char bVOLT_IS_NORM;
 
 extern signed char net_in_drv_cnt_B,net_in_drv_cnt_C;
 extern char net_in_drv_stat_B, net_in_drv_stat_C;
+
+
+
+extern signed short RELE_FUNC[2];
+extern char rele_ext_cntrl[2];
 
 void zar_superviser_drv(void);
 void zar_superviser_start(void);
@@ -4494,6 +4499,8 @@ void gran_char(signed char *adr, signed char min, signed char max);
 void gran(signed short *adr, signed short min, signed short max);
 void gran_ring(signed short *adr, signed short min, signed short max);
 void gran_long(signed long *adr, signed long min, signed long max); 
+void gran_ring_long(signed long *adr, signed long min, signed long max);
+void gran_u(unsigned short *adr, unsigned short min, unsigned short max);
 #line 12 "snmp_data_file.c"
 
 char snmp_community[10];
@@ -5285,7 +5292,7 @@ void snmp_avtoreverse_rew_time_write(int mode)
 {
 if(mode==1)
 	{
- 	lc640_write_int(0x10+100+152,snmp_avtoreverse_rew_time);
+ 	lc640_write_int(0x10+100+202,snmp_avtoreverse_rew_time);
 	}
 }
 
@@ -5371,7 +5378,50 @@ if(mode==1)
 			break;
 			}
 
+		case 0x81:
+			{
+			snmp_command=0xeeee;
+			if(RELE_FUNC[0]==6)
+				{
+				snmp_command=0x5555;
+				rele_ext_cntrl[0]=1;					
+				}
 
+			break;
+			}
+		case 0x80:
+			{
+			snmp_command=0xeeee;
+			if(RELE_FUNC[0]==6)
+				{
+				snmp_command=0x5555;
+				rele_ext_cntrl[0]=0;					
+				}
+
+			break;
+			}
+		case 0x83:
+			{
+			snmp_command=0xeeee;
+			if(RELE_FUNC[1]==6)
+				{
+				snmp_command=0x5555;
+				rele_ext_cntrl[1]=1;					
+				}
+
+			break;
+			}
+		case 0x82:
+			{
+			snmp_command=0xeeee;
+			if(RELE_FUNC[1]==6)
+				{
+				snmp_command=0x5555;
+				rele_ext_cntrl[1]=0;					
+				}
+
+			break;
+			}
 		case 6:
 			{
 			snmp_command=0x5555;

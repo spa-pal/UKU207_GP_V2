@@ -148,7 +148,10 @@
 #define SNMP_GS_START		4
 #define SNMP_CAP_START		5
 #define SNMP_PROC_STOP		6
-
+#define SNMP_RELE1_OFF		0x80
+#define SNMP_RELE1_ON		0x81
+#define SNMP_RELE2_OFF		0x82
+#define SNMP_RELE2_ON		0x83
 
 #define DISPLAY_LOG					9
 #define DISPLAY_LOG_ENTRY_EVENTS 			1,1
@@ -828,7 +831,7 @@ extern signed short T_PROC_GS_MODE;	//режим времени для источника тока, если 1 т
 extern signed long T_PROC_PS;			//установленное время для источника напряжения, секунды
 extern signed short T_PROC_PS_block_cnt;
 extern signed short T_PROC_PS_MODE;	//режим времени для источника напряжения, если 1 то непрерывно
-extern signed long 	T_PROC_MAX;		//максималное время для установок времен процессов, секунды
+extern unsigned short	T_PROC_MAX;		//максималное время для установок времен процессов, секунды
 extern signed short TIME_VISION;		//способ отображения времени процесса на экране - прямое(с начала) или обратное(до конца)
 extern signed short TIME_VISION_PULT;	//способ отображения времени на пульте - часы-минуты или минуты-секунды
 extern signed short I_MAX_IPS;		//максимальный ток всего источника, =I_MAX*NUMIST
@@ -896,8 +899,8 @@ typedef enum {rsREW=0,rsFF=1}enum_rev_stat;
 extern enum_rev_stat REV_STAT;
 extern short REV_IS_ON;
 extern short AVT_REV_IS_ON;
-extern short AVT_REV_TIME_FF;
-extern short AVT_REV_TIME_REW;
+extern unsigned short AVT_REV_TIME_FF;
+extern unsigned short AVT_REV_TIME_REW;
 extern short AVT_REV_TIME_PAUSE;
 extern short AVT_REV_I_NOM_FF;
 extern short AVT_REV_I_NOM_REW;
@@ -971,6 +974,8 @@ extern signed short pwm_i_reg;
 extern signed short pwm_t_reg;
 
 extern short plazma_umax;
+
+extern short modbus_tcp_plazma_pavlik[4];
 /*----------------------------------------------------------------------------
  * end of file
  *---------------------------------------------------------------------------*/

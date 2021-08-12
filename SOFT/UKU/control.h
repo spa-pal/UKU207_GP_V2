@@ -136,6 +136,11 @@ extern char bVOLT_IS_NORM;
 extern signed char net_in_drv_cnt_B,net_in_drv_cnt_C;
 extern char net_in_drv_stat_B, net_in_drv_stat_C;
 
+//***********************************************
+//”правление реле
+extern signed short RELE_FUNC[2];
+extern char rele_ext_cntrl[2];
+
 void zar_superviser_drv(void);
 void zar_superviser_start(void);
 void current_stab_hndl(void);

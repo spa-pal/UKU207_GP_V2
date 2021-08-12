@@ -300,7 +300,7 @@ switch (evt)
 				if(work_stat==wsOFF)
 					{
 					AVT_REV_TIME_FF=modbus_tcp_rx_arg1;
-					gran(&AVT_REV_TIME_FF,30,T_PROC_MAX);
+					gran_u/*long*/(&AVT_REV_TIME_FF,30,T_PROC_MAX);
 					lc640_write_int(EE_AVT_REV_TIME_FF,AVT_REV_TIME_FF);	
 					}
 				}
@@ -309,7 +309,7 @@ switch (evt)
 				if(work_stat==wsOFF)
 					{
 					AVT_REV_TIME_REW=modbus_tcp_rx_arg1;
-					gran(&AVT_REV_TIME_REW,30,T_PROC_MAX);
+					gran_u/*long*/(&AVT_REV_TIME_REW,30,T_PROC_MAX);
 					lc640_write_int(EE_AVT_REV_TIME_REW,AVT_REV_TIME_REW);	
 					}
 				}
@@ -420,6 +420,8 @@ switch (evt)
 
 			if(modbus_tcp_rx_arg0==77)		//Регистр для записи команд 
 				{
+				modbus_tcp_plazma_pavlik[0]++;
+				modbus_tcp_plazma_pavlik[1]=modbus_tcp_rx_arg1;
 				if(modbus_tcp_rx_arg1==0x11)
 					{
 					start_CAP();
@@ -448,6 +450,8 @@ switch (evt)
 					}
 				if(modbus_tcp_rx_arg1==0x22)
 					{
+					modbus_tcp_plazma_pavlik[2]++;
+					modbus_tcp_plazma_pavlik[3]=modbus_tcp_rx_arg1;
 					if(work_stat==wsOFF)
 						{
 						CAP_ZAR_TIME--;
@@ -550,7 +554,42 @@ switch (evt)
 						lc640_write_int(EE_CAP_WRK_CURR,CAP_WRK_CURR);					
 						}
 					}
-
+				if(modbus_tcp_rx_arg1==0x80)
+					{
+					
+					modbus_tcp_plazma_pavlik[3]=modbus_tcp_rx_arg1;
+					if(RELE_FUNC[0]==6)
+						{modbus_tcp_plazma_pavlik[2]++;
+						rele_ext_cntrl[0]=0;					
+						}
+					}
+				if(modbus_tcp_rx_arg1==0x81)
+					{
+					
+					modbus_tcp_plazma_pavlik[3]=modbus_tcp_rx_arg1;
+					if(RELE_FUNC[0]==6)
+						{modbus_tcp_plazma_pavlik[2]++;
+						rele_ext_cntrl[0]=1;					
+						}
+					}
+				if(modbus_tcp_rx_arg1==0x82)
+					{
+					
+					modbus_tcp_plazma_pavlik[3]=modbus_tcp_rx_arg1;
+					if(RELE_FUNC[1]==6)
+						{modbus_tcp_plazma_pavlik[2]++;
+						rele_ext_cntrl[1]=0;					
+						}
+					}
+				if(modbus_tcp_rx_arg1==0x83)
+					{
+					
+					modbus_tcp_plazma_pavlik[3]=modbus_tcp_rx_arg1;
+					if(RELE_FUNC[1]==6)
+						{modbus_tcp_plazma_pavlik[2]++;
+						rele_ext_cntrl[1]=1;					
+						}
+					}
 				}
 
 			else if(modbus_tcp_rx_arg0==90)		//ток стабилизации для режима стабилизации тока, в ОЗУ
@@ -838,7 +877,7 @@ switch (evt)
 					if(work_stat==wsOFF)
 						{
 						AVT_REV_TIME_FF=modbus_tcp_write_args[i];
-						gran(&AVT_REV_TIME_FF,30,T_PROC_MAX);
+						gran_u/*long*/(&AVT_REV_TIME_FF,30,T_PROC_MAX);
 						lc640_write_int(EE_AVT_REV_TIME_FF,AVT_REV_TIME_FF);	
 						}
 					}
@@ -847,7 +886,7 @@ switch (evt)
 					if(work_stat==wsOFF)
 						{
 						AVT_REV_TIME_REW=modbus_tcp_write_args[i];
-						gran(&AVT_REV_TIME_REW,30,T_PROC_MAX);
+						gran_u/*long*/(&AVT_REV_TIME_REW,30,T_PROC_MAX);
 						lc640_write_int(EE_AVT_REV_TIME_REW,AVT_REV_TIME_REW);	
 						}
 					}

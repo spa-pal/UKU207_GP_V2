@@ -444,6 +444,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
+#line 155 "main.h"
 
 
 
@@ -486,12 +487,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-
-
-
-
-
-#line 222 "main.h"
+#line 225 "main.h"
 
 
 
@@ -510,11 +506,9 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 258 "main.h"
+#line 261 "main.h"
 
-#line 274 "main.h"
-
-
+#line 277 "main.h"
 
 
 
@@ -534,9 +528,11 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 308 "main.h"
 
-#line 322 "main.h"
+
+#line 311 "main.h"
+
+#line 325 "main.h"
 
 
 
@@ -1046,7 +1042,7 @@ extern signed short T_PROC_GS_MODE;
 extern signed long T_PROC_PS;			
 extern signed short T_PROC_PS_block_cnt;
 extern signed short T_PROC_PS_MODE;	
-extern signed long 	T_PROC_MAX;		
+extern unsigned short	T_PROC_MAX;		
 extern signed short TIME_VISION;		
 extern signed short TIME_VISION_PULT;	
 extern signed short I_MAX_IPS;		
@@ -1114,8 +1110,8 @@ typedef enum {rsREW=0,rsFF=1}enum_rev_stat;
 extern enum_rev_stat REV_STAT;
 extern short REV_IS_ON;
 extern short AVT_REV_IS_ON;
-extern short AVT_REV_TIME_FF;
-extern short AVT_REV_TIME_REW;
+extern unsigned short AVT_REV_TIME_FF;
+extern unsigned short AVT_REV_TIME_REW;
 extern short AVT_REV_TIME_PAUSE;
 extern short AVT_REV_I_NOM_FF;
 extern short AVT_REV_I_NOM_REW;
@@ -1189,6 +1185,8 @@ extern signed short pwm_i_reg;
 extern signed short pwm_t_reg;
 
 extern short plazma_umax;
+
+extern short modbus_tcp_plazma_pavlik[4];
 
 
  

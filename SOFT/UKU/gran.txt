@@ -88,25 +88,76 @@
 ;;;32     
                           ENDP
 
-                  gran_long PROC
+                  gran_u PROC
 ;;;33     //-----------------------------------------------
-;;;34     void gran_long(signed long *adr, signed long min, signed long max)
-000058  6803              LDR      r3,[r0,#0]
+;;;34     void gran_u(unsigned short *adr, unsigned short min, unsigned short max)
+000058  8803              LDRH     r3,[r0,#0]
 ;;;35     {
 ;;;36     if (*adr<min) *adr=min;
 00005a  428b              CMP      r3,r1
-00005c  db01              BLT      |L1.98|
+00005c  d200              BCS      |L1.96|
+00005e  8001              STRH     r1,[r0,#0]
+                  |L1.96|
 ;;;37     if (*adr>max) *adr=max; 
-00005e  4619              MOV      r1,r3
-000060  e000              B        |L1.100|
-                  |L1.98|
-000062  6001              STR      r1,[r0,#0]            ;36
-                  |L1.100|
-000064  4291              CMP      r1,r2
-000066  dd00              BLE      |L1.106|
-000068  6002              STR      r2,[r0,#0]
-                  |L1.106|
+000060  8801              LDRH     r1,[r0,#0]
+000062  4291              CMP      r1,r2
+000064  d900              BLS      |L1.104|
+000066  8002              STRH     r2,[r0,#0]
+                  |L1.104|
 ;;;38     } 
-00006a  4770              BX       lr
+000068  4770              BX       lr
+;;;39     
+                          ENDP
+
+
+                          AREA ||area_number.2||, CODE, READONLY, ALIGN=1
+
+                          EXPORTAS ||area_number.2||, ||.text||
+                  gran_long PROC
+;;;40     //-----------------------------------------------
+;;;41     void gran_long(signed long *adr, signed long min, signed long max)
+000000  6803              LDR      r3,[r0,#0]
+;;;42     {
+;;;43     if (*adr<min) *adr=min;
+000002  428b              CMP      r3,r1
+000004  db01              BLT      |L2.10|
+;;;44     if (*adr>max) *adr=max; 
+000006  4619              MOV      r1,r3
+000008  e000              B        |L2.12|
+                  |L2.10|
+00000a  6001              STR      r1,[r0,#0]            ;43
+                  |L2.12|
+00000c  4291              CMP      r1,r2
+00000e  dd00              BLE      |L2.18|
+000010  6002              STR      r2,[r0,#0]
+                  |L2.18|
+;;;45     } 
+000012  4770              BX       lr
+;;;46     
+                          ENDP
+
+
+                          AREA ||area_number.3||, CODE, READONLY, ALIGN=1
+
+                          EXPORTAS ||area_number.3||, ||.text||
+                  gran_ring_long PROC
+;;;40     //-----------------------------------------------
+;;;41     void gran_long(signed long *adr, signed long min, signed long max)
+000000  6803              LDR      r3,[r0,#0]
+;;;42     {
+;;;43     if (*adr<min) *adr=min;
+000002  428b              CMP      r3,r1
+000004  da00              BGE      |L3.8|
+;;;44     if (*adr>max) *adr=max; 
+000006  6002              STR      r2,[r0,#0]
+                  |L3.8|
+000008  6803              LDR      r3,[r0,#0]            ;43
+00000a  4293              CMP      r3,r2                 ;43
+00000c  dd00              BLE      |L3.16|
+00000e  6001              STR      r1,[r0,#0]
+                  |L3.16|
+000010  4770              BX       lr
+;;;45     } 
+;;;46     
                           ENDP
 

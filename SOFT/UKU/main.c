@@ -365,7 +365,7 @@ extern char RXBUFF[40],TXBUFF[40];
 //Работа с кнопками
 char speed,l_but,n_but;
 char speed__;
-char speed__old;
+//char speed__old;
 signed short speed_cnt;
 
 //***********************************************
@@ -566,7 +566,7 @@ signed short 	T_PROC_GS_MODE;	//режим времени для источника тока, если 1 то непр
 signed long 	T_PROC_PS;		//установленное время для источника напряжения, секунды
 signed short 	T_PROC_PS_block_cnt;
 signed short 	T_PROC_PS_MODE;	//режим времени для источника напряжения, если 1 то непрерывно
-signed long T_PROC_MAX;			//максималное время для установок времен процессов, секунды
+unsigned short T_PROC_MAX;			//максималное время для установок времен процессов, секунды
 signed short TIME_VISION;	//способ отображения времени процесса на экране - прямое(с начала) или обратное(до конца)
 signed short TIME_VISION_PULT;//способ отображения времени на пульте - часы-минуты или минуты-секунды
 signed short I_MAX_IPS;		//максимальный ток всего источника, =I_MAX*NUMIST
@@ -635,8 +635,8 @@ short main_cnt;
 enum_rev_stat REV_STAT=rsFF;
 short REV_IS_ON;
 short AVT_REV_IS_ON;
-short AVT_REV_TIME_FF;
-short AVT_REV_TIME_REW;
+unsigned short AVT_REV_TIME_FF;
+unsigned short AVT_REV_TIME_REW;
 short AVT_REV_TIME_PAUSE;
 short AVT_REV_I_NOM_FF;
 short AVT_REV_I_NOM_REW;
@@ -663,7 +663,7 @@ short CAP_TIME_HOUR;
 char  bOFF;
 char bRAZR;
 
-signed short RELE_FUNC[2];
+
 
 U8 socket_tcp;
 
@@ -702,6 +702,9 @@ short plazma_umax;
 signed short pwm_u_reg;
 signed short pwm_i_reg;
 signed short pwm_t_reg;
+
+
+short modbus_tcp_plazma_pavlik[4];
 
 //-----------------------------------------------
 void rtc_init (void) 
@@ -1273,9 +1276,9 @@ if(ind==iMn)
 	 		ptrs[0]=		" Источник тока  ^   ";
 			
 			if(REV_IS_ON) {
-				if(AVT_REV_IS_ON) {
+			/*	if(AVT_REV_IS_ON) {
 					ptrs[0]=		" Источник тока  ^   ";
-				} else {
+				} else */{
 					if(REV_STAT==rsFF) ptrs[0]=		" Источник тока  ^>>>";
 					if(REV_STAT==rsREW) ptrs[0]=		" Источник тока  ^<<<";
 				}
@@ -1430,9 +1433,9 @@ if(ind==iMn)
 	 		ptrs[0]=		" Источник напр. ^   ";
 			
 			if(REV_IS_ON) {
-				if(AVT_REV_IS_ON) {
+			/*	if(AVT_REV_IS_ON) {
 					ptrs[0]=		" Источник напр. ^   ";
-				} else {
+				} else */{
 					if(REV_STAT==rsFF) ptrs[0]=		" Источник напр. ^>>>";
 					if(REV_STAT==rsREW) ptrs[0]=		" Источник напр. ^<<<";
 				}
@@ -1617,9 +1620,9 @@ if(ind==iMn)
 	 		ptrs[0]=		" Источник тока  ^   ";
 			
 			if(REV_IS_ON) {
-				if(AVT_REV_IS_ON) {
+		/*		if(AVT_REV_IS_ON) {
 					ptrs[0]=		" Источник тока  ^>>>";
-				} else {
+				} else */{
 					if(REV_STAT==rsFF) ptrs[0]=		" Источник тока  ^>>>";
 					if(REV_STAT!=rsFF) ptrs[0]=		" Источник тока  ^<<<";
 				}
@@ -1656,9 +1659,9 @@ if(ind==iMn)
 	 		ptrs[4]=		" Источник напр. ^   ";
 			
 			if(REV_IS_ON) {
-				if(AVT_REV_IS_ON) {
+			/*	if(AVT_REV_IS_ON) {
 					ptrs[4]=		" Источник напр. ^>>>";
-				} else {
+				} else */{
 					if(REV_STAT==rsFF) ptrs[4]=		" Источник напр. ^>>>";
 					if(REV_STAT!=rsFF) ptrs[4]=		" Источник напр. ^<<<";
 				}
@@ -1849,18 +1852,23 @@ if(ind==iMn)
 	else 
 		{
 
-		if(work_stat!=wsPS)	{	 	
+		if(work_stat!=wsPS)	
+			{	 	
 	 		ptrs[0]=		" Источник напр. ^   ";
 			
-			if(REV_IS_ON) {
-				if(AVT_REV_IS_ON) {
+			if(REV_IS_ON) 
+				{
+				/*if(AVT_REV_IS_ON) 
+					{
 					ptrs[0]=		" Источник напр. ^>>>";
-				} else {
+					} 
+				else */
+					{
 					if(REV_STAT==rsFF) ptrs[0]=		" Источник напр. ^>>>";
 					if(REV_STAT!=rsFF) ptrs[0]=		" Источник напр. ^<<<";
+					}
 				}
 			}
-		}
 		else if(work_stat==wsPS)	{		ptrs[0]=	" Источник напр.     ";
 			if(((REV_IS_ON)&&(REV_STAT==rsFF))/*||(!REV_IS_ON)*/) {
 				if(ind_fl_cnt==0)	  	ptrs[0]=	" Источник напр. ^>  ";
@@ -1894,9 +1902,9 @@ if(ind==iMn)
 	 		ptrs[4]=		" Источник тока  ^   ";
 			
 			if(REV_IS_ON) {
-				if(AVT_REV_IS_ON) {
+			/*	if(AVT_REV_IS_ON) {
 					ptrs[4]=		" Источник тока  ^>>>";
-				} else {
+				} else */{
 					if(REV_STAT==rsFF) ptrs[4]=		" Источник тока  ^>>>";
 					if(REV_STAT!=rsFF) ptrs[4]=		" Источник тока  ^<<<";
 				}
@@ -2133,7 +2141,14 @@ if(ind==iMn)
 	temp_SL_U=lc640_read_int(SEKTOR_KURVE_U+(temp_SL_U*2));
 
 	int2lcdyx(temp_SL_U,0,12,0); */
-	//int2lcdyx(bps[0]._rotor,0,19,0);	
+/*	int2lcdyx(rele_ext_cntrl[0],0,16,0);
+	int2lcdyx(rele_ext_cntrl[1],0,19,0);
+	int2lcdyx(rele_stat[0],0,10,0);
+	int2lcdyx(rele_stat[1],0,13,0);	
+	int2lcdyx(modbus_tcp_plazma_pavlik[0],0,3,0);
+	int2lcdyx(modbus_tcp_plazma_pavlik[1],0,7,0);
+	int2lcdyx(modbus_tcp_plazma_pavlik[2],1,3,0);
+	int2lcdyx(modbus_tcp_plazma_pavlik[3],1,7,0);  */
 /*	int2lcdyx(lc640_read_long(EE_TIME_PROC_PS_RESTART),0,10,0);	*/
 
 
@@ -2165,8 +2180,8 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	//int2lcdyx(modbusTimeoutInMills,0,16,0);			
 /*	int2lcdyx(curr_off_start_cnt,0,19,0);
 	int2lcdyx(curr_off_stop_cnt,0,14,0);
-	int2lcdyx(modbus_plazma2,0,9,0);
-	int2lcdyx(modbus_plazma3,0,4,0);*/	
+	int2lcdyx(modbus_plazma2,0,9,0); */
+	//int2lcdyx(REV_STAT,0,4,0);	
 
 	}
 
@@ -2365,7 +2380,11 @@ else if(ind==iAvtRev)
 	int2lcd(AVT_REV_I_NOM_REW,'@',1);
 	int2lcd(AVT_REV_U_NOM_FF,'#',1);
 	int2lcd(AVT_REV_U_NOM_REW,'$',1);
-	   
+	
+	//int2lcdyx(speed,0,19,0);  
+	//int2lcdyx(speed__,0,16,0); 
+	//long2lcdyx_mmm(T_PROC_MAX,0,19,0);
+	//long2lcdyx_mmm(AVT_REV_TIME_FF,0,10,0);
 	}
 
 else if(ind==iAvt)
@@ -2971,8 +2990,9 @@ else if (ind==iRele_set)
 	ptrs[3]=		" Напряжение в норме ";
 	ptrs[4]=		" Напряжение не выше ";
 	ptrs[5]=		" Напряжение не ниже ";
-	ptrs[6]=  	" Выход              ";
-	ptrs[7]=  	"                    ";
+	ptrs[6]=		" Внешнее управление ";
+	ptrs[7]=  		" Выход              ";
+	ptrs[8]=  		"                    ";
 
 	if(bFL2)
 		{
@@ -4604,7 +4624,7 @@ but_n=((LPC_GPIO1->FIOPIN|(~((1<<22)|(1<<23)|(1<<24)|(1<<25)|(1<<26))))>>22)/*&0
 if((but_n==1023UL)||(but_n!=but_s))
  	{
 	speed=0;
- 
+ 	speed__=0;
    	if (((but0_cnt>=BUT_ON)||(but1_cnt!=0))&&(!l_but))
   		{
    	     n_but=1;
@@ -7431,7 +7451,7 @@ else if(ind==iSet)
 			T_PROC_MAX=(((T_PROC_MAX/60L)-5L)*60L);
 			speed=1;
 			}						
-		gran_long(&T_PROC_MAX,300L,86400L);
+		gran_u/*_long*/(&T_PROC_MAX,300U,57600U/*86400L*/);
 		lc640_write_long(EE_T_PROC_MAX,T_PROC_MAX);
 		
 		}					
@@ -10234,16 +10254,16 @@ else if(ind==iRele_set)
 	if(but==butD)
 		{
 		sub_ind++;
-		gran_char(&sub_ind,0,6);
+		gran_char(&sub_ind,0,7);
 		}
 	else if(but==butU)
 		{
 		sub_ind--;
-		gran_char(&sub_ind,0,6);
+		gran_char(&sub_ind,0,7);
 		}
 	else if(but==butE)
 		{
-		if(sub_ind==6)
+		if(sub_ind==7)
 			{
 			tree_down(0,0);
 			}
@@ -11036,36 +11056,47 @@ else if(ind==iAvtRev)
 			}
 		else if(but==butR_)
 			{
-			speed__++;
+			if(speed__<100)speed__++;
 			if(speed__<20)
 				{
-				AVT_REV_TIME_FF=(((AVT_REV_TIME_FF/10L)+1L)*10L);
+				AVT_REV_TIME_FF=(((AVT_REV_TIME_FF/10U)+1U)*10U);
 				}
-			else 
+			else if(speed__<100)
 				{
-				AVT_REV_TIME_FF=(((AVT_REV_TIME_FF/60L)+1L)*60L);
+				AVT_REV_TIME_FF=(((AVT_REV_TIME_FF/60U)+1U)*60U);
 				}
+			else
+				{
+				AVT_REV_TIME_FF=(((AVT_REV_TIME_FF/600U)+1U)*600U);
+								}
 			speed=1;
 			}
 		else if(but==butL)
 			{
 			AVT_REV_TIME_FF--;
+			speed__=0;
 			}
 		else if(but==butL_)
 			{
-			speed__++;
+			if(speed__<100)speed__++;
 			if(speed__<20)
 				{
-				AVT_REV_TIME_FF=(((AVT_REV_TIME_FF/10L)-1L)*10L);
+				AVT_REV_TIME_FF=(((AVT_REV_TIME_FF/10U)-1U)*10U);
+				}
+			else if(speed__<100)
+				{
+				if(AVT_REV_TIME_FF>=60U)  AVT_REV_TIME_FF=(((AVT_REV_TIME_FF/60U)-1U)*60U);
+				else 					  AVT_REV_TIME_FF=0;
 				}
 			else 
 				{
-				AVT_REV_TIME_FF=(((AVT_REV_TIME_FF/60L)-1L)*60L);
+				if(AVT_REV_TIME_FF>=600U) AVT_REV_TIME_FF=(((AVT_REV_TIME_FF/600U)-1U)*600U);
+				else 					  AVT_REV_TIME_FF=0;
 				}
 			speed=1;
 			}
 
-		gran(&AVT_REV_TIME_FF,30,T_PROC_MAX);
+		gran_u/*long*/(&AVT_REV_TIME_FF,30U,T_PROC_MAX);
 		if(AVT_REV_TIME_FF!=lc640_read_int(EE_AVT_REV_TIME_FF))lc640_write_int(EE_AVT_REV_TIME_FF,AVT_REV_TIME_FF);	
 		}
 
@@ -11078,14 +11109,18 @@ else if(ind==iAvtRev)
 			}
 		else if(but==butR_)
 			{
-			speed__++;
+			if(speed__<100)speed__++;
 			if(speed__<20)
 				{
-				AVT_REV_TIME_REW=(((AVT_REV_TIME_REW/10L)+1L)*10L);
+				AVT_REV_TIME_REW=(((AVT_REV_TIME_REW/10U)+1U)*10U);
 				}
-			else 
+			else if(speed__<100)
 				{
-				AVT_REV_TIME_REW=(((AVT_REV_TIME_REW/60L)+1L)*60L);
+				AVT_REV_TIME_REW=(((AVT_REV_TIME_REW/60U)+1U)*60U);
+				}
+			else
+				{
+				AVT_REV_TIME_REW=(((AVT_REV_TIME_REW/600U)+1U)*600U);
 				}
 			speed=1;
 			}
@@ -11095,19 +11130,25 @@ else if(ind==iAvtRev)
 			}
 		else if(but==butL_)
 			{
-			speed__++;
+			if(speed__<100)speed__++;
 			if(speed__<20)
 				{
-				AVT_REV_TIME_REW=(((AVT_REV_TIME_REW/10L)-1L)*10L);
+				AVT_REV_TIME_REW=(((AVT_REV_TIME_REW/10U)-1U)*10U);
+				}
+			else if(speed__<100)
+				{
+				if(AVT_REV_TIME_REW>=60U)  AVT_REV_TIME_REW=(((AVT_REV_TIME_REW/60U)-1U)*60U);
+				else 					   AVT_REV_TIME_REW=0;
 				}
 			else 
 				{
-				AVT_REV_TIME_REW=(((AVT_REV_TIME_REW/60L)-1L)*60L);
+				if(AVT_REV_TIME_REW>=600U) AVT_REV_TIME_REW=(((AVT_REV_TIME_REW/600U)-1U)*600U);
+				else 					   AVT_REV_TIME_REW=0;
 				}
 			speed=1;
 			}
 
-		gran(&AVT_REV_TIME_REW,30,T_PROC_MAX);
+		gran_u/*long*/(&AVT_REV_TIME_REW,30U,T_PROC_MAX);
 		if(AVT_REV_TIME_REW!=lc640_read_int(EE_AVT_REV_TIME_REW))lc640_write_int(EE_AVT_REV_TIME_REW,AVT_REV_TIME_REW);	
 		}
 	else if(sub_ind==3)
@@ -12247,7 +12288,7 @@ while (1)
 		mess_hndl();
 		ret_hndl();
 		//cntrl_hndl();
-		if(speed__==speed__old)
+/*		if(speed__==speed__old)
 			{
 			speed_cnt++;
 			if(speed_cnt>5)
@@ -12258,7 +12299,7 @@ while (1)
 				}
 			}
 		
-		speed__old=speed__;
+		speed__old=speed__;	*/
 
 		viz_hndl();
 		current_stab_hndl();

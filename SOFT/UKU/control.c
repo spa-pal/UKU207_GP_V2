@@ -220,6 +220,11 @@ char net_in_drv_stat_B, net_in_drv_stat_C;
 
 signed long temp_temp_SL;
 
+//***********************************************
+//Управление реле
+signed short RELE_FUNC[2];
+char rele_ext_cntrl[2];
+
 //-----------------------------------------------
 void kb_init(void)
 {
@@ -2577,7 +2582,11 @@ else if(RELE_FUNC[0]==5)					//Напряжение не ниже
 		else 				rele_stat[0]=rsON;
 		}
 	}
-											
+else if(RELE_FUNC[0]==6)					//Внешнее управление
+	{
+	if(rele_ext_cntrl[0])	rele_stat[0]=rsON;
+	else 				rele_stat[0]=rsOFF;
+	}											
 //Реле2
 if(RELE_FUNC[1]==0)rele_stat[1]=rsOFF; 		//Выключено
 else if(RELE_FUNC[1]==1)					//Реверс
@@ -2645,7 +2654,11 @@ else if(RELE_FUNC[1]==5)					//Напряжение не ниже
 		else 				rele_stat[1]=rsON;
 		}
 	}
-	
+else if(RELE_FUNC[1]==6)					//Внешнее управление
+	{
+	if(rele_ext_cntrl[1])	rele_stat[1]=rsON;
+	else 				rele_stat[1]=rsOFF;
+	}	
 
 //rele_stat[0]=rsON;
 //rele_stat[1]=rsON;

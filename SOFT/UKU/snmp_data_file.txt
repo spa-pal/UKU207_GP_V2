@@ -72,8 +72,8 @@
 000024  8800              LDRH     r0,[r0,#0]            ;218  ; NUMIST
 000026  8070              STRH     r0,[r6,#2]            ;218
 000028  48f9              LDR      r0,|L1.1040|
-00002a  6800              LDR      r0,[r0,#0]            ;219  ; T_PROC_MAX
-00002c  fb90f0f1          SDIV     r0,r0,r1              ;219
+00002a  8800              LDRH     r0,[r0,#0]            ;219  ; T_PROC_MAX
+00002c  fbb0f0f1          UDIV     r0,r0,r1              ;219
 000030  80b0              STRH     r0,[r6,#4]            ;219
 000032  48f8              LDR      r0,|L1.1044|
 ;;;225    else snmp_restart_enabled=0; 
@@ -869,7 +869,7 @@
 0003d2  291e              CMP      r1,#0x1e              ;577
 0003d4  db76              BLT      |L1.1220|
 0003d6  4a0e              LDR      r2,|L1.1040|
-0003d8  6812              LDR      r2,[r2,#0]            ;577  ; T_PROC_MAX
+0003d8  8812              LDRH     r2,[r2,#0]            ;577  ; T_PROC_MAX
 0003da  4291              CMP      r1,r2                 ;577
 0003dc  dd75              BLE      |L1.1226|
 0003de  1c52              ADDS     r2,r2,#1              ;580
@@ -1035,18 +1035,18 @@
 0004ec  d125              BNE      |L1.1338|
 ;;;603    	{
 ;;;604    	if((snmp_time_g<30)||(snmp_time_g>T_PROC_MAX))
-0004ee  4863              LDR      r0,|L1.1660|
+0004ee  487d              LDR      r0,|L1.1764|
 ;;;605    		{
 ;;;606    		if(snmp_time_g<30)snmp_time_g=29;
 ;;;607    		else if(snmp_time_g>T_PROC_MAX)snmp_time_g=T_PROC_MAX+1;
 ;;;608    		lc640_write_int(EE_T_PROC_GS,snmp_time_g);
 ;;;609    		if(T_PROC_GS_MODE!=1)
-0004f0  4c63              LDR      r4,|L1.1664|
+0004f0  4c7d              LDR      r4,|L1.1768|
 0004f2  6d81              LDR      r1,[r0,#0x58]         ;604  ; snmp_time_g
 0004f4  291e              CMP      r1,#0x1e              ;604
 0004f6  db0f              BLT      |L1.1304|
-0004f8  4a62              LDR      r2,|L1.1668|
-0004fa  6812              LDR      r2,[r2,#0]            ;604  ; T_PROC_MAX
+0004f8  4a7c              LDR      r2,|L1.1772|
+0004fa  8812              LDRH     r2,[r2,#0]            ;604  ; T_PROC_MAX
 0004fc  4291              CMP      r1,r2                 ;604
 0004fe  dd0e              BLE      |L1.1310|
 000500  1c52              ADDS     r2,r2,#1              ;607
@@ -1248,7 +1248,7 @@
 000554  d105              BNE      |L1.1378|
 ;;;729    	{
 ;;;730         lc640_write_int(EE_IMAX,snmp_max_current);
-000556  4849              LDR      r0,|L1.1660|
+000556  4863              LDR      r0,|L1.1764|
 000558  f9b0104c          LDRSH    r1,[r0,#0x4c]  ; snmp_max_current
 00055c  208c              MOVS     r0,#0x8c
 00055e  f7ffbffe          B.W      lc640_write_int
@@ -1294,7 +1294,7 @@
 00056a  d105              BNE      |L1.1400|
 ;;;756    	{
 ;;;757         lc640_write_int(EE_TZAS,snmp_powerup_psu_timeout);
-00056c  4843              LDR      r0,|L1.1660|
+00056c  485d              LDR      r0,|L1.1764|
 00056e  f9b0104e          LDRSH    r1,[r0,#0x4e]  ; snmp_powerup_psu_timeout
 000572  2096              MOVS     r0,#0x96
 000574  f7ffbffe          B.W      lc640_write_int
@@ -1340,7 +1340,7 @@
 000580  d106              BNE      |L1.1424|
 ;;;783    	{
 ;;;784     	lc640_write_int(EE_AVT_REV_IS_ON,snmp_avtoreverse_enable);
-000582  483e              LDR      r0,|L1.1660|
+000582  4858              LDR      r0,|L1.1764|
 000584  f9b0101c          LDRSH    r1,[r0,#0x1c]  ; snmp_avtoreverse_enable
 000588  f44f7084          MOV      r0,#0x108
 00058c  f7ffbffe          B.W      lc640_write_int
@@ -1360,7 +1360,7 @@
 000594  d106              BNE      |L1.1444|
 ;;;792    	{
 ;;;793     	lc640_write_int(EE_AVT_REV_TIME_FF,snmp_avtoreverse_ff_time);
-000596  4839              LDR      r0,|L1.1660|
+000596  4853              LDR      r0,|L1.1764|
 000598  f9b0101e          LDRSH    r1,[r0,#0x1e]  ; snmp_avtoreverse_ff_time
 00059c  f44f7085          MOV      r0,#0x10a
 0005a0  f7ffbffe          B.W      lc640_write_int
@@ -1380,9 +1380,9 @@
 0005a8  d106              BNE      |L1.1464|
 ;;;801    	{
 ;;;802     	lc640_write_int(EE_AVT_REV_TIME_REW,snmp_avtoreverse_rew_time);
-0005aa  4834              LDR      r0,|L1.1660|
+0005aa  484e              LDR      r0,|L1.1764|
 0005ac  f9b01020          LDRSH    r1,[r0,#0x20]  ; snmp_avtoreverse_rew_time
-0005b0  f44f7086          MOV      r0,#0x10c
+0005b0  f44f709f          MOV      r0,#0x13e
 0005b4  f7ffbffe          B.W      lc640_write_int
                   |L1.1464|
 ;;;803    	}
@@ -1400,7 +1400,7 @@
 0005bc  d106              BNE      |L1.1484|
 ;;;810    	{
 ;;;811     	lc640_write_int(EE_AVT_REV_TIME_PAUSE,snmp_avtoreverse_pause_time);	
-0005be  482f              LDR      r0,|L1.1660|
+0005be  4849              LDR      r0,|L1.1764|
 0005c0  f9b01022          LDRSH    r1,[r0,#0x22]  ; snmp_avtoreverse_pause_time
 0005c4  f44f7087          MOV      r0,#0x10e
 0005c8  f7ffbffe          B.W      lc640_write_int
@@ -1420,7 +1420,7 @@
 0005d0  d106              BNE      |L1.1504|
 ;;;819    	{
 ;;;820     	lc640_write_int(EE_AVT_REV_I_NOM_FF,snmp_avtoreverse_ff_i);
-0005d2  482a              LDR      r0,|L1.1660|
+0005d2  4844              LDR      r0,|L1.1764|
 0005d4  f9b01024          LDRSH    r1,[r0,#0x24]  ; snmp_avtoreverse_ff_i
 0005d8  f44f7088          MOV      r0,#0x110
 0005dc  f7ffbffe          B.W      lc640_write_int
@@ -1440,7 +1440,7 @@
 0005e4  d106              BNE      |L1.1524|
 ;;;828    	{
 ;;;829     	lc640_write_int(EE_AVT_REV_I_NOM_REW,snmp_avtoreverse_rew_i);
-0005e6  4825              LDR      r0,|L1.1660|
+0005e6  483f              LDR      r0,|L1.1764|
 0005e8  f9b01026          LDRSH    r1,[r0,#0x26]  ; snmp_avtoreverse_rew_i
 0005ec  f44f7089          MOV      r0,#0x112
 0005f0  f7ffbffe          B.W      lc640_write_int
@@ -1460,7 +1460,7 @@
 0005f8  d106              BNE      |L1.1544|
 ;;;837    	{
 ;;;838     	lc640_write_int(EE_AVT_REV_U_NOM_FF,snmp_avtoreverse_ff_u);
-0005fa  4820              LDR      r0,|L1.1660|
+0005fa  483a              LDR      r0,|L1.1764|
 0005fc  f9b01028          LDRSH    r1,[r0,#0x28]  ; snmp_avtoreverse_ff_u
 000600  f44f708a          MOV      r0,#0x114
 000604  f7ffbffe          B.W      lc640_write_int
@@ -1480,7 +1480,7 @@
 00060c  d106              BNE      |L1.1564|
 ;;;846    	{
 ;;;847     	lc640_write_int(EE_AVT_REV_U_NOM_REW,snmp_avtoreverse_rew_u);
-00060e  481b              LDR      r0,|L1.1660|
+00060e  4835              LDR      r0,|L1.1764|
 000610  f9b0102a          LDRSH    r1,[r0,#0x2a]  ; snmp_avtoreverse_rew_u
 000614  f44f708b          MOV      r0,#0x116
 000618  f7ffbffe          B.W      lc640_write_int
@@ -1494,31 +1494,21 @@
                   snmp_command_execute PROC
 ;;;851    //-----------------------------------------------
 ;;;852    void snmp_command_execute (int mode)
-00061e  b510              PUSH     {r4,lr}
+00061e  e92d41f0          PUSH     {r4-r8,lr}
 ;;;853    {
 ;;;854    if(mode==MIB_WRITE)
-000620  2801              CMP      r0,#1
-000622  d110              BNE      |L1.1606|
+000622  2801              CMP      r0,#1
+000624  d122              BNE      |L1.1644|
 ;;;855    	{
 ;;;856    	
 ;;;857    	//snmp_command=0x5555;
 ;;;858    
 ;;;859    	switch (snmp_command)
-000624  4815              LDR      r0,|L1.1660|
+000626  482f              LDR      r0,|L1.1764|
 ;;;860    		{
 ;;;861    		case SNMP_PS_START:
 ;;;862    			{
 ;;;863    			snmp_command=COMMAND_OK;
-000626  f2455155          MOV      r1,#0x5555
-00062a  f9b0204a          LDRSH    r2,[r0,#0x4a]         ;859  ; snmp_command
-00062e  2a03              CMP      r2,#3                 ;859
-000630  d00a              BEQ      |L1.1608|
-000632  2a04              CMP      r2,#4                 ;859
-000634  d00e              BEQ      |L1.1620|
-000636  2a05              CMP      r2,#5                 ;859
-000638  d012              BEQ      |L1.1632|
-00063a  2a06              CMP      r2,#6                 ;859
-00063c  d016              BEQ      |L1.1644|
 ;;;864    
 ;;;865    			start_PS();
 ;;;866    			
@@ -1543,121 +1533,227 @@
 ;;;885    			break;
 ;;;886    			}
 ;;;887    
-;;;888    
-;;;889    		case SNMP_PROC_STOP:
-;;;890    			{
-;;;891    			snmp_command=COMMAND_OK;
-;;;892    			
-;;;893    			stop_CAP();
-;;;894    			stop_proc();
-;;;895    			break;
-;;;896    			}
-;;;897    
-;;;898    
-;;;899    		default:
+;;;888    		case SNMP_RELE1_ON:
+;;;889    			{
+;;;890    			snmp_command=COMMAND_INVALID;
+;;;891    			if(RELE_FUNC[0]==6)
+000628  4c32              LDR      r4,|L1.1780|
+00062a  4a31              LDR      r2,|L1.1776|
+00062c  f9b0504a          LDRSH    r5,[r0,#0x4a]         ;859  ; snmp_command
+;;;892    				{
+;;;893    				snmp_command=COMMAND_OK;
+;;;894    				rele_ext_cntrl[0]=1;					
+000630  4b31              LDR      r3,|L1.1784|
+;;;895    				}
+;;;896    
+;;;897    			break;
+;;;898    			}
+;;;899    		case SNMP_RELE1_OFF:
 ;;;900    			{
 ;;;901    			snmp_command=COMMAND_INVALID;
-00063e  f64e61ee          MOV      r1,#0xeeee
-000642  f8a0104a          STRH     r1,[r0,#0x4a]
-                  |L1.1606|
-;;;902    			break;
-;;;903    			}
-;;;904    		}
-;;;905    /*		else if((UIB2[1]==0x52)&&(UIB2[4]==5)&&(UIB2[5]==5)&&(UIB2[6])&&(UIB2[6]<=NUMIST)&&(UIB2[6]==UIB2[7])) 	//Выключение источника 
-;;;906    		{
-;;;907    	
-;;;908    		if((UIB2[6]==1)&&(UIB2[7]==1)) 
-;;;909    			{
-;;;910    			St_[0]|=0x20;
-;;;911    			St_[1]&=0xdf;
-;;;912    			St&=0xfb;
-;;;913    			cnt_src[1]=10;
-;;;914    			}
-;;;915    			
-;;;916    		else if((UIB2[6]==2)&&(UIB2[7]==2))
-;;;917    			{
-;;;918    			St_[1]|=0x20;
-;;;919    			St_[0]&=0xdf;
-;;;920    			St&=0xfb;
-;;;921    			cnt_src[0]=10;
-;;;922    			}	
-;;;923    		
-;;;924         	memo_out2[0]=0x33;
-;;;925         	memo_out2[1]=0x62;
-;;;926         	memo_out2[2]=4;
-;;;927         	memo_out2[3]=0x03;
-;;;928         	
-;;;929         	memo_out2[4]=5;
-;;;930         	memo_out2[5]=5;
-;;;931         	memo_out2[6]=UIB2[6];
-;;;932         	memo_out2[7]=UIB2[6];
-;;;933             	memo_out2[8]=crc_87(memo_out2,8);
-;;;934    		memo_out2[9]=crc_95(memo_out2,8);
-;;;935         	uart_out_adr2(memo_out2,10); 		
-;;;936    		} */
-;;;937    
-;;;938    
-;;;939    
-;;;940    	}
-;;;941    }
-000646  bd10              POP      {r4,pc}
-                  |L1.1608|
-000648  f8a0104a          STRH     r1,[r0,#0x4a]         ;863
-00064c  e8bd4010          POP      {r4,lr}               ;865
-000650  f7ffbffe          B.W      start_PS
+;;;902    			if(RELE_FUNC[0]==6)
+;;;903    				{
+;;;904    				snmp_command=COMMAND_OK;
+;;;905    				rele_ext_cntrl[0]=0;					
+000632  2600              MOVS     r6,#0
+000634  f9b44000          LDRSH    r4,[r4,#0]            ;891
+000638  f2455155          MOV      r1,#0x5555            ;863
+00063c  2d80              CMP      r5,#0x80              ;859
+00063e  d031              BEQ      |L1.1700|
+000640  dc08              BGT      |L1.1620|
+000642  2d03              CMP      r5,#3                 ;859
+000644  d014              BEQ      |L1.1648|
+000646  2d04              CMP      r5,#4                 ;859
+000648  d018              BEQ      |L1.1660|
+00064a  2d05              CMP      r5,#5                 ;859
+00064c  d01c              BEQ      |L1.1672|
+00064e  2d06              CMP      r5,#6                 ;859
+000650  d10a              BNE      |L1.1640|
+000652  e03f              B        |L1.1748|
                   |L1.1620|
-000654  f8a0104a          STRH     r1,[r0,#0x4a]         ;872
-000658  e8bd4010          POP      {r4,lr}               ;874
-00065c  f7ffbffe          B.W      start_GS
-                  |L1.1632|
-000660  f8a0104a          STRH     r1,[r0,#0x4a]         ;881
-000664  e8bd4010          POP      {r4,lr}               ;883
-000668  f7ffbffe          B.W      start_CAP
+000654  2701              MOVS     r7,#1                 ;853
+000656  2d81              CMP      r5,#0x81              ;859
+000658  d01c              BEQ      |L1.1684|
+00065a  4c26              LDR      r4,|L1.1780|
+00065c  2d82              CMP      r5,#0x82              ;859
+;;;906    				}
+;;;907    
+;;;908    			break;
+;;;909    			}
+;;;910    		case SNMP_RELE2_ON:
+;;;911    			{
+;;;912    			snmp_command=COMMAND_INVALID;
+;;;913    			if(RELE_FUNC[1]==6)
+00065e  f9b44002          LDRSH    r4,[r4,#2]
+000662  d02f              BEQ      |L1.1732|
+000664  2d83              CMP      r5,#0x83              ;859
+000666  d025              BEQ      |L1.1716|
+                  |L1.1640|
+;;;914    				{
+;;;915    				snmp_command=COMMAND_OK;
+;;;916    				rele_ext_cntrl[1]=1;					
+;;;917    				}
+;;;918    
+;;;919    			break;
+;;;920    			}
+;;;921    		case SNMP_RELE2_OFF:
+;;;922    			{
+;;;923    			snmp_command=COMMAND_INVALID;
+;;;924    			if(RELE_FUNC[1]==6)
+;;;925    				{
+;;;926    				snmp_command=COMMAND_OK;
+;;;927    				rele_ext_cntrl[1]=0;					
+;;;928    				}
+;;;929    
+;;;930    			break;
+;;;931    			}
+;;;932    		case SNMP_PROC_STOP:
+;;;933    			{
+;;;934    			snmp_command=COMMAND_OK;
+;;;935    			
+;;;936    			stop_CAP();
+;;;937    			stop_proc();
+;;;938    			break;
+;;;939    			}
+;;;940    
+;;;941    
+;;;942    		default:
+;;;943    			{
+;;;944    			snmp_command=COMMAND_INVALID;
+000668  f8a0204a          STRH     r2,[r0,#0x4a]
                   |L1.1644|
-00066c  f8a0104a          STRH     r1,[r0,#0x4a]         ;891
-000670  f7fffffe          BL       stop_CAP
-000674  e8bd4010          POP      {r4,lr}               ;894
-000678  f7ffbffe          B.W      stop_proc
-;;;942    
+;;;945    			break;
+;;;946    			}
+;;;947    		}
+;;;948    /*		else if((UIB2[1]==0x52)&&(UIB2[4]==5)&&(UIB2[5]==5)&&(UIB2[6])&&(UIB2[6]<=NUMIST)&&(UIB2[6]==UIB2[7])) 	//Выключение источника 
+;;;949    		{
+;;;950    	
+;;;951    		if((UIB2[6]==1)&&(UIB2[7]==1)) 
+;;;952    			{
+;;;953    			St_[0]|=0x20;
+;;;954    			St_[1]&=0xdf;
+;;;955    			St&=0xfb;
+;;;956    			cnt_src[1]=10;
+;;;957    			}
+;;;958    			
+;;;959    		else if((UIB2[6]==2)&&(UIB2[7]==2))
+;;;960    			{
+;;;961    			St_[1]|=0x20;
+;;;962    			St_[0]&=0xdf;
+;;;963    			St&=0xfb;
+;;;964    			cnt_src[0]=10;
+;;;965    			}	
+;;;966    		
+;;;967         	memo_out2[0]=0x33;
+;;;968         	memo_out2[1]=0x62;
+;;;969         	memo_out2[2]=4;
+;;;970         	memo_out2[3]=0x03;
+;;;971         	
+;;;972         	memo_out2[4]=5;
+;;;973         	memo_out2[5]=5;
+;;;974         	memo_out2[6]=UIB2[6];
+;;;975         	memo_out2[7]=UIB2[6];
+;;;976             	memo_out2[8]=crc_87(memo_out2,8);
+;;;977    		memo_out2[9]=crc_95(memo_out2,8);
+;;;978         	uart_out_adr2(memo_out2,10); 		
+;;;979    		} */
+;;;980    
+;;;981    
+;;;982    
+;;;983    	}
+;;;984    }
+00066c  e8bd81f0          POP      {r4-r8,pc}
+                  |L1.1648|
+000670  f8a0104a          STRH     r1,[r0,#0x4a]         ;863
+000674  e8bd41f0          POP      {r4-r8,lr}            ;865
+000678  f7ffbffe          B.W      start_PS
+                  |L1.1660|
+00067c  f8a0104a          STRH     r1,[r0,#0x4a]         ;872
+000680  e8bd41f0          POP      {r4-r8,lr}            ;874
+000684  f7ffbffe          B.W      start_GS
+                  |L1.1672|
+000688  f8a0104a          STRH     r1,[r0,#0x4a]         ;881
+00068c  e8bd41f0          POP      {r4-r8,lr}            ;883
+000690  f7ffbffe          B.W      start_CAP
+                  |L1.1684|
+000694  f8a0204a          STRH     r2,[r0,#0x4a]         ;890
+000698  2c06              CMP      r4,#6                 ;891
+00069a  d1e7              BNE      |L1.1644|
+00069c  f8a0104a          STRH     r1,[r0,#0x4a]         ;893
+0006a0  701f              STRB     r7,[r3,#0]            ;894
+0006a2  e7e3              B        |L1.1644|
+                  |L1.1700|
+0006a4  f8a0204a          STRH     r2,[r0,#0x4a]         ;901
+0006a8  2c06              CMP      r4,#6                 ;902
+0006aa  d1df              BNE      |L1.1644|
+0006ac  f8a0104a          STRH     r1,[r0,#0x4a]         ;904
+0006b0  701e              STRB     r6,[r3,#0]            ;905
+0006b2  e7db              B        |L1.1644|
+                  |L1.1716|
+0006b4  f8a0204a          STRH     r2,[r0,#0x4a]         ;912
+0006b8  2c06              CMP      r4,#6                 ;913
+0006ba  d1d7              BNE      |L1.1644|
+0006bc  f8a0104a          STRH     r1,[r0,#0x4a]         ;915
+0006c0  705f              STRB     r7,[r3,#1]            ;916
+0006c2  e7d3              B        |L1.1644|
+                  |L1.1732|
+0006c4  f8a0204a          STRH     r2,[r0,#0x4a]         ;923
+0006c8  2c06              CMP      r4,#6                 ;924
+0006ca  d1cf              BNE      |L1.1644|
+0006cc  f8a0104a          STRH     r1,[r0,#0x4a]         ;926
+0006d0  705e              STRB     r6,[r3,#1]            ;927
+0006d2  e7cb              B        |L1.1644|
+                  |L1.1748|
+0006d4  f8a0104a          STRH     r1,[r0,#0x4a]         ;934
+0006d8  f7fffffe          BL       stop_CAP
+0006dc  e8bd41f0          POP      {r4-r8,lr}            ;937
+0006e0  f7ffbffe          B.W      stop_proc
+;;;985    
                           ENDP
 
-                  |L1.1660|
+                  |L1.1764|
                           DCD      ||area_number.12||
-                  |L1.1664|
+                  |L1.1768|
                           DCD      T_PROC_GS_MODE
-                  |L1.1668|
+                  |L1.1772|
                           DCD      T_PROC_MAX
+                  |L1.1776|
+                          DCD      0xffffeeee
+                  |L1.1780|
+                          DCD      RELE_FUNC
+                  |L1.1784|
+                          DCD      rele_ext_cntrl
 
                           AREA ||area_number.2||, CODE, READONLY, ALIGN=1
 
                           EXPORTAS ||area_number.2||, ||.text||
                   snmp_sernum_write PROC
-;;;943    //-----------------------------------------------
-;;;944    char* datatime2str(char day,char month,char year, char hour, char min, char sec)
+;;;986    //-----------------------------------------------
+;;;987    char* datatime2str(char day,char month,char year, char hour, char min, char sec)
 000000  4770              BX       lr
-;;;945    {
-;;;946    
-;;;947    memcpy(temp_str,"00/янв/00  00:00:00       ",20);
-;;;948    
-;;;949    temp_str[1]=(day%10)+0x30;
-;;;950    temp_str[0]=(day/10)+0x30;
-;;;951    
-;;;952    memcpy(&temp_str[3],sm_mont[month],3);
-;;;953    
-;;;954    temp_str[8]=(year%10)+0x30;
-;;;955    temp_str[7]=(year/10)+0x30;
-;;;956    
-;;;957    temp_str[12]=(hour%10)+0x30;
-;;;958    temp_str[11]=(hour/10)+0x30;
-;;;959    
-;;;960    temp_str[15]=(min%10)+0x30;
-;;;961    temp_str[14]=(min/10)+0x30;
-;;;962    
-;;;963    temp_str[18]=(sec%10)+0x30;
-;;;964    temp_str[17]=(sec/10)+0x30;
-;;;965    return temp_str;
-;;;966    }
-;;;967    
+;;;988    {
+;;;989    
+;;;990    memcpy(temp_str,"00/янв/00  00:00:00       ",20);
+;;;991    
+;;;992    temp_str[1]=(day%10)+0x30;
+;;;993    temp_str[0]=(day/10)+0x30;
+;;;994    
+;;;995    memcpy(&temp_str[3],sm_mont[month],3);
+;;;996    
+;;;997    temp_str[8]=(year%10)+0x30;
+;;;998    temp_str[7]=(year/10)+0x30;
+;;;999    
+;;;1000   temp_str[12]=(hour%10)+0x30;
+;;;1001   temp_str[11]=(hour/10)+0x30;
+;;;1002   
+;;;1003   temp_str[15]=(min%10)+0x30;
+;;;1004   temp_str[14]=(min/10)+0x30;
+;;;1005   
+;;;1006   temp_str[18]=(sec%10)+0x30;
+;;;1007   temp_str[17]=(sec/10)+0x30;
+;;;1008   return temp_str;
+;;;1009   }
+;;;1010   
                           ENDP
 
 
@@ -1665,32 +1761,32 @@
 
                           EXPORTAS ||area_number.3||, ||.text||
                   snmp_location_write PROC
-;;;943    //-----------------------------------------------
-;;;944    char* datatime2str(char day,char month,char year, char hour, char min, char sec)
+;;;986    //-----------------------------------------------
+;;;987    char* datatime2str(char day,char month,char year, char hour, char min, char sec)
 000000  4770              BX       lr
-;;;945    {
-;;;946    
-;;;947    memcpy(temp_str,"00/янв/00  00:00:00       ",20);
-;;;948    
-;;;949    temp_str[1]=(day%10)+0x30;
-;;;950    temp_str[0]=(day/10)+0x30;
-;;;951    
-;;;952    memcpy(&temp_str[3],sm_mont[month],3);
-;;;953    
-;;;954    temp_str[8]=(year%10)+0x30;
-;;;955    temp_str[7]=(year/10)+0x30;
-;;;956    
-;;;957    temp_str[12]=(hour%10)+0x30;
-;;;958    temp_str[11]=(hour/10)+0x30;
-;;;959    
-;;;960    temp_str[15]=(min%10)+0x30;
-;;;961    temp_str[14]=(min/10)+0x30;
-;;;962    
-;;;963    temp_str[18]=(sec%10)+0x30;
-;;;964    temp_str[17]=(sec/10)+0x30;
-;;;965    return temp_str;
-;;;966    }
-;;;967    
+;;;988    {
+;;;989    
+;;;990    memcpy(temp_str,"00/янв/00  00:00:00       ",20);
+;;;991    
+;;;992    temp_str[1]=(day%10)+0x30;
+;;;993    temp_str[0]=(day/10)+0x30;
+;;;994    
+;;;995    memcpy(&temp_str[3],sm_mont[month],3);
+;;;996    
+;;;997    temp_str[8]=(year%10)+0x30;
+;;;998    temp_str[7]=(year/10)+0x30;
+;;;999    
+;;;1000   temp_str[12]=(hour%10)+0x30;
+;;;1001   temp_str[11]=(hour/10)+0x30;
+;;;1002   
+;;;1003   temp_str[15]=(min%10)+0x30;
+;;;1004   temp_str[14]=(min/10)+0x30;
+;;;1005   
+;;;1006   temp_str[18]=(sec%10)+0x30;
+;;;1007   temp_str[17]=(sec/10)+0x30;
+;;;1008   return temp_str;
+;;;1009   }
+;;;1010   
                           ENDP
 
 
@@ -1698,34 +1794,34 @@
 
                           EXPORTAS ||area_number.4||, ||.text||
                   datatime2str PROC
-;;;943    //-----------------------------------------------
-;;;944    char* datatime2str(char day,char month,char year, char hour, char min, char sec)
+;;;986    //-----------------------------------------------
+;;;987    char* datatime2str(char day,char month,char year, char hour, char min, char sec)
 000000  e92d47f0          PUSH     {r4-r10,lr}
-;;;945    {
+;;;988    {
 000004  4607              MOV      r7,r0
 000006  e9dd8908          LDRD     r8,r9,[sp,#0x20]
 00000a  460c              MOV      r4,r1
 00000c  4615              MOV      r5,r2
 00000e  461e              MOV      r6,r3
-;;;946    
-;;;947    memcpy(temp_str,"00/янв/00  00:00:00       ",20);
+;;;989    
+;;;990    memcpy(temp_str,"00/янв/00  00:00:00       ",20);
 000010  2214              MOVS     r2,#0x14
 000012  a11d              ADR      r1,|L4.136|
 000014  4823              LDR      r0,|L4.164|
 000016  f7fffffe          BL       __aeabi_memcpy
-;;;948    
-;;;949    temp_str[1]=(day%10)+0x30;
+;;;991    
+;;;992    temp_str[1]=(day%10)+0x30;
 00001a  210a              MOVS     r1,#0xa
 00001c  fbb7f2f1          UDIV     r2,r7,r1
 000020  fb017312          MLS      r3,r1,r2,r7
 000024  481f              LDR      r0,|L4.164|
 000026  3330              ADDS     r3,r3,#0x30
-;;;950    temp_str[0]=(day/10)+0x30;
+;;;993    temp_str[0]=(day/10)+0x30;
 000028  3230              ADDS     r2,r2,#0x30
-00002a  7043              STRB     r3,[r0,#1]            ;949
+00002a  7043              STRB     r3,[r0,#1]            ;992
 00002c  7002              STRB     r2,[r0,#0]
-;;;951    
-;;;952    memcpy(&temp_str[3],sm_mont[month],3);
+;;;994    
+;;;995    memcpy(&temp_str[3],sm_mont[month],3);
 00002e  4a1e              LDR      r2,|L4.168|
 000030  f1a0033c          SUB      r3,r0,#0x3c
 000034  eb020284          ADD      r2,r2,r4,LSL #2
@@ -1733,46 +1829,46 @@
 00003a  f8a3403f          STRH     r4,[r3,#0x3f]
 00003e  7892              LDRB     r2,[r2,#2]
 000040  f8832041          STRB     r2,[r3,#0x41]
-;;;953    
-;;;954    temp_str[8]=(year%10)+0x30;
+;;;996    
+;;;997    temp_str[8]=(year%10)+0x30;
 000044  fbb5f2f1          UDIV     r2,r5,r1
 000048  fb015312          MLS      r3,r1,r2,r5
 00004c  3330              ADDS     r3,r3,#0x30
 00004e  7203              STRB     r3,[r0,#8]
-;;;955    temp_str[7]=(year/10)+0x30;
+;;;998    temp_str[7]=(year/10)+0x30;
 000050  3230              ADDS     r2,r2,#0x30
 000052  71c2              STRB     r2,[r0,#7]
-;;;956    
-;;;957    temp_str[12]=(hour%10)+0x30;
+;;;999    
+;;;1000   temp_str[12]=(hour%10)+0x30;
 000054  fbb6f2f1          UDIV     r2,r6,r1
 000058  fb016312          MLS      r3,r1,r2,r6
 00005c  3330              ADDS     r3,r3,#0x30
 00005e  7303              STRB     r3,[r0,#0xc]
-;;;958    temp_str[11]=(hour/10)+0x30;
+;;;1001   temp_str[11]=(hour/10)+0x30;
 000060  3230              ADDS     r2,r2,#0x30
 000062  72c2              STRB     r2,[r0,#0xb]
-;;;959    
-;;;960    temp_str[15]=(min%10)+0x30;
+;;;1002   
+;;;1003   temp_str[15]=(min%10)+0x30;
 000064  fbb8f2f1          UDIV     r2,r8,r1
 000068  fb018312          MLS      r3,r1,r2,r8
 00006c  3330              ADDS     r3,r3,#0x30
 00006e  73c3              STRB     r3,[r0,#0xf]
-;;;961    temp_str[14]=(min/10)+0x30;
+;;;1004   temp_str[14]=(min/10)+0x30;
 000070  3230              ADDS     r2,r2,#0x30
 000072  7382              STRB     r2,[r0,#0xe]
-;;;962    
-;;;963    temp_str[18]=(sec%10)+0x30;
+;;;1005   
+;;;1006   temp_str[18]=(sec%10)+0x30;
 000074  fbb9f2f1          UDIV     r2,r9,r1
 000078  fb019112          MLS      r1,r1,r2,r9
 00007c  3130              ADDS     r1,r1,#0x30
 00007e  7481              STRB     r1,[r0,#0x12]
-;;;964    temp_str[17]=(sec/10)+0x30;
+;;;1007   temp_str[17]=(sec/10)+0x30;
 000080  3230              ADDS     r2,r2,#0x30
 000082  7442              STRB     r2,[r0,#0x11]
-;;;965    return temp_str;
-;;;966    }
+;;;1008   return temp_str;
+;;;1009   }
 000084  e8bd87f0          POP      {r4-r10,pc}
-;;;967    
+;;;1010   
                           ENDP
 
                   |L4.136|
@@ -1793,32 +1889,32 @@
 
                           EXPORTAS ||area_number.5||, ||.text||
                   event2snmp PROC
-;;;943    //-----------------------------------------------
-;;;944    char* datatime2str(char day,char month,char year, char hour, char min, char sec)
+;;;986    //-----------------------------------------------
+;;;987    char* datatime2str(char day,char month,char year, char hour, char min, char sec)
 000000  4770              BX       lr
-;;;945    {
-;;;946    
-;;;947    memcpy(temp_str,"00/янв/00  00:00:00       ",20);
-;;;948    
-;;;949    temp_str[1]=(day%10)+0x30;
-;;;950    temp_str[0]=(day/10)+0x30;
-;;;951    
-;;;952    memcpy(&temp_str[3],sm_mont[month],3);
-;;;953    
-;;;954    temp_str[8]=(year%10)+0x30;
-;;;955    temp_str[7]=(year/10)+0x30;
-;;;956    
-;;;957    temp_str[12]=(hour%10)+0x30;
-;;;958    temp_str[11]=(hour/10)+0x30;
-;;;959    
-;;;960    temp_str[15]=(min%10)+0x30;
-;;;961    temp_str[14]=(min/10)+0x30;
-;;;962    
-;;;963    temp_str[18]=(sec%10)+0x30;
-;;;964    temp_str[17]=(sec/10)+0x30;
-;;;965    return temp_str;
-;;;966    }
-;;;967    
+;;;988    {
+;;;989    
+;;;990    memcpy(temp_str,"00/янв/00  00:00:00       ",20);
+;;;991    
+;;;992    temp_str[1]=(day%10)+0x30;
+;;;993    temp_str[0]=(day/10)+0x30;
+;;;994    
+;;;995    memcpy(&temp_str[3],sm_mont[month],3);
+;;;996    
+;;;997    temp_str[8]=(year%10)+0x30;
+;;;998    temp_str[7]=(year/10)+0x30;
+;;;999    
+;;;1000   temp_str[12]=(hour%10)+0x30;
+;;;1001   temp_str[11]=(hour/10)+0x30;
+;;;1002   
+;;;1003   temp_str[15]=(min%10)+0x30;
+;;;1004   temp_str[14]=(min/10)+0x30;
+;;;1005   
+;;;1006   temp_str[18]=(sec%10)+0x30;
+;;;1007   temp_str[17]=(sec/10)+0x30;
+;;;1008   return temp_str;
+;;;1009   }
+;;;1010   
                           ENDP
 
 
@@ -1826,24 +1922,24 @@
 
                           EXPORTAS ||area_number.6||, ||.text||
                   snmp_trap_send PROC
-;;;943    //-----------------------------------------------
-;;;944    char* datatime2str(char day,char month,char year, char hour, char min, char sec)
+;;;986    //-----------------------------------------------
+;;;987    char* datatime2str(char day,char month,char year, char hour, char min, char sec)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;945    {
+;;;988    {
 000004  4c79              LDR      r4,|L6.492|
 000006  2700              MOVS     r7,#0
 000008  f8dfc1e4          LDR      r12,|L6.496|
 00000c  7027              STRB     r7,[r4,#0]
                   |L6.14|
 00000e  7825              LDRB     r5,[r4,#0]  ; snmp_trap_send_i
-;;;946    
-;;;947    memcpy(temp_str,"00/янв/00  00:00:00       ",20);
+;;;989    
+;;;990    memcpy(temp_str,"00/янв/00  00:00:00       ",20);
 000010  f80c7005          STRB     r7,[r12,r5]
 000014  1c6d              ADDS     r5,r5,#1
 000016  b2ed              UXTB     r5,r5
 000018  7025              STRB     r5,[r4,#0]
-;;;948    
-;;;949    temp_str[1]=(day%10)+0x30;
+;;;991    
+;;;992    temp_str[1]=(day%10)+0x30;
 00001a  2d64              CMP      r5,#0x64
 00001c  d3f7              BCC      |L6.14|
 00001e  4d74              LDR      r5,|L6.496|
@@ -1851,12 +1947,12 @@
 000022  2601              MOVS     r6,#1
 000024  802f              STRH     r7,[r5,#0]
 000026  7066              STRB     r6,[r4,#1]
-;;;950    temp_str[0]=(day/10)+0x30;
+;;;993    temp_str[0]=(day/10)+0x30;
 000028  b1a0              CBZ      r0,|L6.84|
-00002a  802e              STRH     r6,[r5,#0]            ;949
+00002a  802e              STRH     r6,[r5,#0]            ;992
 00002c  7027              STRB     r7,[r4,#0]
-;;;951    
-;;;952    memcpy(&temp_str[3],sm_mont[month],3);
+;;;994    
+;;;995    memcpy(&temp_str[3],sm_mont[month],3);
 00002e  e006              B        |L6.62|
                   |L6.48|
 000030  f80ce007          STRB     lr,[r12,r7]
@@ -1868,50 +1964,50 @@
                   |L6.62|
 00003e  b2ff              UXTB     r7,r7
 000040  f810e007          LDRB     lr,[r0,r7]
-;;;953    
-;;;954    temp_str[8]=(year%10)+0x30;
+;;;996    
+;;;997    temp_str[8]=(year%10)+0x30;
 000044  f1be0f00          CMP      lr,#0
 000048  d1f2              BNE      |L6.48|
                   |L6.74|
 00004a  2007              MOVS     r0,#7
 00004c  f8250016          STRH     r0,[r5,r6,LSL #1]
-;;;955    temp_str[7]=(year/10)+0x30;
+;;;998    temp_str[7]=(year/10)+0x30;
 000050  1c76              ADDS     r6,r6,#1
 000052  7066              STRB     r6,[r4,#1]
                   |L6.84|
-;;;956    
-;;;957    temp_str[12]=(hour%10)+0x30;
+;;;999    
+;;;1000   temp_str[12]=(hour%10)+0x30;
 000054  f64f76ff          MOV      r6,#0xffff
 000058  42b1              CMP      r1,r6
 00005a  d009              BEQ      |L6.112|
 00005c  8828              LDRH     r0,[r5,#0]  ; obj
 00005e  1c40              ADDS     r0,r0,#1
-;;;958    temp_str[11]=(hour/10)+0x30;
+;;;1001   temp_str[11]=(hour/10)+0x30;
 000060  8028              STRH     r0,[r5,#0]
 000062  86a1              STRH     r1,[r4,#0x34]
-;;;959    
-;;;960    temp_str[15]=(min%10)+0x30;
+;;;1002   
+;;;1003   temp_str[15]=(min%10)+0x30;
 000064  7860              LDRB     r0,[r4,#1]  ; snmp_trap_send_ii
 000066  2108              MOVS     r1,#8
 000068  f8251010          STRH     r1,[r5,r0,LSL #1]
 00006c  1c40              ADDS     r0,r0,#1
 00006e  7060              STRB     r0,[r4,#1]
                   |L6.112|
-;;;961    temp_str[14]=(min/10)+0x30;
+;;;1004   temp_str[14]=(min/10)+0x30;
 000070  42b2              CMP      r2,r6
 000072  d009              BEQ      |L6.136|
-;;;962    
-;;;963    temp_str[18]=(sec%10)+0x30;
+;;;1005   
+;;;1006   temp_str[18]=(sec%10)+0x30;
 000074  8828              LDRH     r0,[r5,#0]  ; obj
 000076  2109              MOVS     r1,#9
 000078  1c40              ADDS     r0,r0,#1
 00007a  8028              STRH     r0,[r5,#0]
 00007c  86e2              STRH     r2,[r4,#0x36]
 00007e  7860              LDRB     r0,[r4,#1]  ; snmp_trap_send_ii
-;;;964    temp_str[17]=(sec/10)+0x30;
+;;;1007   temp_str[17]=(sec/10)+0x30;
 000080  f8251010          STRH     r1,[r5,r0,LSL #1]
-;;;965    return temp_str;
-;;;966    }
+;;;1008   return temp_str;
+;;;1009   }
 000084  1c40              ADDS     r0,r0,#1
 000086  7060              STRB     r0,[r4,#1]
                   |L6.136|
@@ -2070,7 +2166,7 @@
 0001e2  f7ffbffe          B.W      snmp_trap
                   |L6.486|
 0001e6  e8bd81f0          POP      {r4-r8,pc}
-;;;967    
+;;;1010   
                           ENDP
 
 0001ea  0000              DCW      0x0000

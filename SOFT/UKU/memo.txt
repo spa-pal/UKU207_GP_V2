@@ -136,8 +136,8 @@
 0000e0  20e0              MOVS     r0,#0xe0
 0000e2  f7fffffe          BL       lc640_read_long
 0000e6  49df              LDR      r1,|L1.1124|
+0000e8  8008              STRH     r0,[r1,#0]
 ;;;41     TIME_VISION=lc640_read_int(EE_TIME_VISION);
-0000e8  6008              STR      r0,[r1,#0]  ; T_PROC_MAX
 0000ea  20e4              MOVS     r0,#0xe4
 0000ec  f7fffffe          BL       lc640_read_int
 0000f0  49dd              LDR      r1,|L1.1128|
@@ -249,7 +249,7 @@
 0001d6  49b9              LDR      r1,|L1.1212|
 0001d8  8008              STRH     r0,[r1,#0]
 ;;;64     AVT_REV_TIME_REW=lc640_read_int(EE_AVT_REV_TIME_REW);
-0001da  f44f7086          MOV      r0,#0x10c
+0001da  f44f709f          MOV      r0,#0x13e
 0001de  f7fffffe          BL       lc640_read_int
 0001e2  49b7              LDR      r1,|L1.1216|
 0001e4  8008              STRH     r0,[r1,#0]
@@ -807,23 +807,23 @@
 ;;;167    BAT_YEAR_OF_ON[0]=lc640_read_int(EE_BAT1_YEAR_OF_ON);
 00060e  f44f70d3          MOV      r0,#0x1a6
 000612  f7fffffe          BL       lc640_read_int
-000616  49e6              LDR      r1,|L1.2480|
-000618  8008              STRH     r0,[r1,#0]
+000616  4ee6              LDR      r6,|L1.2480|
+000618  8030              STRH     r0,[r6,#0]
 ;;;168    BAT_C_REAL[0]=lc640_read_int(EE_BAT1_C_REAL);
 00061a  f44f70d4          MOV      r0,#0x1a8
 00061e  f7fffffe          BL       lc640_read_int
-000622  4ee4              LDR      r6,|L1.2484|
-000624  8030              STRH     r0,[r6,#0]
+000622  49e4              LDR      r1,|L1.2484|
+000624  8008              STRH     r0,[r1,#0]
 ;;;169    BAT_C_NOM[0]=lc640_read_int(EE_BAT1_C_NOM);
 000626  f44f70d8          MOV      r0,#0x1b0
 00062a  f7fffffe          BL       lc640_read_int
-00062e  f8df9388          LDR      r9,|L1.2488|
-000632  f8a90000          STRH     r0,[r9,#0]
+00062e  4fe2              LDR      r7,|L1.2488|
+000630  8038              STRH     r0,[r7,#0]
 ;;;170    BAT_RESURS[0]=lc640_read_int(EE_BAT1_RESURS);
-000636  f44f70d5          MOV      r0,#0x1aa
-00063a  f7fffffe          BL       lc640_read_int
-00063e  4fdf              LDR      r7,|L1.2492|
-000640  8038              STRH     r0,[r7,#0]
+000632  f44f70d5          MOV      r0,#0x1aa
+000636  f7fffffe          BL       lc640_read_int
+00063a  f8df9380          LDR      r9,|L1.2492|
+00063e  f8a90000          STRH     r0,[r9,#0]
 ;;;171    
 ;;;172    BAT_DAY_OF_ON[1]=lc640_read_int(EE_BAT2_DAY_OF_ON);
 000642  f44f70e0          MOV      r0,#0x1c0
@@ -836,20 +836,20 @@
 ;;;174    BAT_YEAR_OF_ON[1]=lc640_read_int(EE_BAT2_YEAR_OF_ON);
 000656  f44f70e2          MOV      r0,#0x1c4
 00065a  f7fffffe          BL       lc640_read_int
-00065e  49d4              LDR      r1,|L1.2480|
-000660  8048              STRH     r0,[r1,#2]
+00065e  8070              STRH     r0,[r6,#2]
 ;;;175    BAT_C_REAL[1]=lc640_read_int(EE_BAT2_C_REAL);
-000662  f44f70e3          MOV      r0,#0x1c6
-000666  f7fffffe          BL       lc640_read_int
-00066a  8070              STRH     r0,[r6,#2]
+000660  f44f70e3          MOV      r0,#0x1c6
+000664  f7fffffe          BL       lc640_read_int
+000668  49d2              LDR      r1,|L1.2484|
+00066a  8048              STRH     r0,[r1,#2]
 ;;;176    BAT_C_NOM[1]=lc640_read_int(EE_BAT2_C_NOM);
 00066c  f44f70e8          MOV      r0,#0x1d0
 000670  f7fffffe          BL       lc640_read_int
-000674  f8a90002          STRH     r0,[r9,#2]
+000674  8078              STRH     r0,[r7,#2]
 ;;;177    BAT_RESURS[1]=lc640_read_int(EE_BAT2_RESURS);
-000678  f44f70e4          MOV      r0,#0x1c8
-00067c  f7fffffe          BL       lc640_read_int
-000680  8078              STRH     r0,[r7,#2]
+000676  f44f70e4          MOV      r0,#0x1c8
+00067a  f7fffffe          BL       lc640_read_int
+00067e  f8a90002          STRH     r0,[r9,#2]
 ;;;178    
 ;;;179    CAP_ZAR_TIME=lc640_read_int(EE_CAP_ZAR_TIME);
 000682  f44f70e9          MOV      r0,#0x1d2
