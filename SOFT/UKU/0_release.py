@@ -24,6 +24,7 @@ build_year_re = re.compile(build_year_string.format('(\d+)'))
 build_month_re = re.compile(build_month_string.format('(\d+)'))
 build_day_re = re.compile(build_day_string.format('(\d+)'))
 
+os.system("pause")
 
 with open(source_file) as f:
     for line in f:

@@ -5757,12 +5757,13 @@ if (bps[in]._device!=dSRC) return;
 temp=bps[in]._flags_tm;
 if(temp&(1<<1))
 	{
-	if(bps[in]._temp_av_cnt<1200) 
+	if(bps[in]._temp_av_cnt<10) 
 		{
 		bps[in]._temp_av_cnt++;
-		if(bps[in]._temp_av_cnt>=1200)
+		if(bps[in]._temp_av_cnt>=10)
 			{
-			bps[in]._temp_av_cnt=1200;
+			bps[in]._temp_av_cnt=10;
+			bps[in]._av|=(1<<0);
 		   	
 			}
 		}
@@ -5775,6 +5776,7 @@ else if(!(temp&(1<<1)))
 		bps[in]._temp_av_cnt--;
 		if(!bps[in]._temp_av_cnt)
 			{
+			bps[in]._av&=~(1<<0);
 			
 			}
 		} 	
@@ -5789,6 +5791,7 @@ if((temp&(1<<3)))
 		if(bps[in]._umax_av_cnt>=10)
 			{ 
 			bps[in]._umax_av_cnt=10;
+			bps[in]._av|=(1<<1);
 			
 		  	
 
@@ -5810,6 +5813,7 @@ else if(!(temp&(1<<3)))
 		if(bps[in]._umax_av_cnt==0)
 			{
 			bps[in]._umax_av_cnt=0;
+			bps[in]._av&=~(1<<1);
 			
 	 
 	
@@ -5827,6 +5831,7 @@ if(temp&(1<<4))
 		if(bps[in]._umin_av_cnt>=10)
 			{ 
 			bps[in]._umin_av_cnt=10;
+			bps[in]._av|=(1<<2);
 			
 		  	
 
@@ -5848,6 +5853,7 @@ else if(!(temp&(1<<4)))
 		if(bps[in]._umin_av_cnt==0)
 			{
 			bps[in]._umin_av_cnt=0;
+			bps[in]._av&=~(1<<2);
 		
 		
 		
@@ -5945,9 +5951,16 @@ else if (bps[in]._cnt<20)				bps[in]._state=bsWRK;
   
 
 
-if(bps[in]._cnt>=10) bps[in]._flags_tu|=(((0x10000000) | 0x10000000>>3 | 0x10000000>>6 | 0x10000000>>9) & 0xf | ((0x10000000) | 0x10000000>>3 | 0x10000000>>6 | 0x10000000>>9)>>12 & 0xf0);
-else bps[in]._flags_tu&=(((0x1111111) | 0x1111111>>3 | 0x1111111>>6 | 0x1111111>>9) & 0xf | ((0x1111111) | 0x1111111>>3 | 0x1111111>>6 | 0x1111111>>9)>>12 & 0xf0);
-	
+if(bps[in]._cnt>=10) 
+	{
+	bps[in]._flags_tu|=(((0x10000000) | 0x10000000>>3 | 0x10000000>>6 | 0x10000000>>9) & 0xf | ((0x10000000) | 0x10000000>>3 | 0x10000000>>6 | 0x10000000>>9)>>12 & 0xf0);
+	bps[in]._av|=(1<<3);
+	}
+else 
+	{
+	bps[in]._flags_tu&=(((0x1111111) | 0x1111111>>3 | 0x1111111>>6 | 0x1111111>>9) & 0xf | ((0x1111111) | 0x1111111>>3 | 0x1111111>>6 | 0x1111111>>9)>>12 & 0xf0);
+	bps[in]._av&=~(1<<3);
+	}
 bps[in]._vol_u=cntrl_stat_U;	
 bps[in]._vol_i=cntrl_stat_I;
  
@@ -6259,7 +6272,7 @@ else if(RELE_FUNC[1]==6)
 
 void rele_drv(void)
 {
-#line 2680 "control.c"
+#line 2693 "control.c"
 
 
 ((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 = ( (((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 & ~((0xffffffff>>(32-2))<<7*2)) | ((unsigned)0 << 7*2) );

@@ -4306,26 +4306,26 @@
                   |L5.5906|
 001712  4642              MOV      r2,r8                 ;2064
 001714  4629              MOV      r1,r5                 ;2064
-001716  48fe              LDR      r0,|L5.6928|
+001716  48f8              LDR      r0,|L5.6904|
 001718  f7fffffe          BL       gran
 00171c  2232              MOVS     r2,#0x32              ;2065
 00171e  4251              RSBS     r1,r2,#0              ;2065
-001720  48fc              LDR      r0,|L5.6932|
+001720  48f6              LDR      r0,|L5.6908|
 001722  f7fffffe          BL       gran
                   |L5.5926|
-001726  48fc              LDR      r0,|L5.6936|
+001726  48f6              LDR      r0,|L5.6912|
 001728  f24271ec          MOV      r1,#0x27ec            ;2070
 00172c  f9b00000          LDRSH    r0,[r0,#0]            ;2070  ; CAP_MAX_VOLT
 001730  4348              MULS     r0,r1,r0              ;2070
-001732  49fa              LDR      r1,|L5.6940|
+001732  49f4              LDR      r1,|L5.6916|
 001734  f9b11000          LDRSH    r1,[r1,#0]            ;2071  ; U_MAX
 001738  fb90f0f1          SDIV     r0,r0,r1              ;2071
 00173c  9000              STR      r0,[sp,#0]            ;2075
-00173e  48f8              LDR      r0,|L5.6944|
+00173e  48f2              LDR      r0,|L5.6920|
 001740  f24271ec          MOV      r1,#0x27ec            ;2075
 001744  f9b00000          LDRSH    r0,[r0,#0]            ;2075  ; CAP_WRK_CURR
 001748  4348              MULS     r0,r1,r0              ;2075
-00174a  49f6              LDR      r1,|L5.6948|
+00174a  49f0              LDR      r1,|L5.6924|
 00174c  f9b11000          LDRSH    r1,[r1,#0]            ;2076  ; I_MAX_IPS
 001750  fb90f0f1          SDIV     r0,r0,r1              ;2076
 001754  9001              STR      r0,[sp,#4]            ;2078
@@ -4334,7 +4334,7 @@
 00175c  f5a0412b          SUB      r1,r0,#0xab00         ;2078
 001760  39cd              SUBS     r1,r1,#0xcd           ;2078
 001762  d10a              BNE      |L5.6010|
-001764  48ec              LDR      r0,|L5.6936|
+001764  48e6              LDR      r0,|L5.6912|
 001766  8800              LDRH     r0,[r0,#0]            ;2080  ; CAP_MAX_VOLT
 001768  eb000080          ADD      r0,r0,r0,LSL #2       ;2080
 00176c  0040              LSLS     r0,r0,#1              ;2080
@@ -4348,7 +4348,7 @@
 001780  f5a0412b          SUB      r1,r0,#0xab00         ;2083
 001784  39cd              SUBS     r1,r1,#0xcd           ;2083
 001786  d10a              BNE      |L5.6046|
-001788  48e5              LDR      r0,|L5.6944|
+001788  48df              LDR      r0,|L5.6920|
 00178a  8800              LDRH     r0,[r0,#0]            ;2085  ; CAP_WRK_CURR
 00178c  eb000080          ADD      r0,r0,r0,LSL #2       ;2085
 001790  0040              LSLS     r0,r0,#1              ;2085
@@ -4361,7 +4361,7 @@
 0017a0  f9b71000          LDRSH    r1,[r7,#0]            ;1529
 0017a4  e035              B        |L5.6162|
                   |L5.6054|
-0017a6  4ae0              LDR      r2,|L5.6952|
+0017a6  4ada              LDR      r2,|L5.6928|
 0017a8  7812              LDRB     r2,[r2,#0]            ;2092  ; bOFF
 0017aa  b152              CBZ      r2,|L5.6082|
 0017ac  ebc002c0          RSB      r2,r0,r0,LSL #3       ;2093
@@ -4437,7 +4437,7 @@
 ;;;2123   //gran(&bps[0]._vol_i,10,1010);
 ;;;2124   
 ;;;2125   if(pwm_t_reg)
-00183c  49bb              LDR      r1,|L5.6956|
+00183c  49b5              LDR      r1,|L5.6932|
 00183e  f9b10000          LDRSH    r0,[r1,#0]  ; pwm_t_reg
 001842  b1e8              CBZ      r0,|L5.6272|
 ;;;2126   	{
@@ -4447,9 +4447,9 @@
 001848  8008              STRH     r0,[r1,#0]
 ;;;2128   		{
 ;;;2129   		pwm_u_reg=0;
-00184a  4ab9              LDR      r2,|L5.6960|
+00184a  4ab3              LDR      r2,|L5.6936|
 ;;;2130   		pwm_i_reg=0;
-00184c  49b9              LDR      r1,|L5.6964|
+00184c  49b3              LDR      r1,|L5.6940|
 00184e  b908              CBNZ     r0,|L5.6228|
 001850  8015              STRH     r5,[r2,#0]            ;2129
 001852  800d              STRH     r5,[r1,#0]
@@ -4527,1223 +4527,1261 @@
 ;;;2165   char temp;
 ;;;2166   
 ;;;2167   if (bps[in]._device!=dSRC) return;
-0018ba  499f              LDR      r1,|L5.6968|
-0018bc  b510              PUSH     {r4,lr}               ;2164
-0018be  eb000040          ADD      r0,r0,r0,LSL #1
-0018c2  f8112020          LDRB     r2,[r1,r0,LSL #2]
+0018ba  eb000140          ADD      r1,r0,r0,LSL #1
+0018be  4898              LDR      r0,|L5.6944|
+0018c0  b510              PUSH     {r4,lr}               ;2164
+0018c2  f8102021          LDRB     r2,[r0,r1,LSL #2]
 0018c6  2a03              CMP      r2,#3
-0018c8  d17d              BNE      |L5.6598|
+0018c8  d17e              BNE      |L5.6600|
 ;;;2168   temp=bps[in]._flags_tm;
-0018ca  eb010080          ADD      r0,r1,r0,LSL #2
-0018ce  f890103e          LDRB     r1,[r0,#0x3e]
+0018ca  eb000081          ADD      r0,r0,r1,LSL #2
 ;;;2169   if(temp&(1<<AV_T))
-0018d2  078a              LSLS     r2,r1,#30
 ;;;2170   	{
-;;;2171   	if(bps[in]._temp_av_cnt<1200) 
+;;;2171   	if(bps[in]._temp_av_cnt<10) 
 ;;;2172   		{
 ;;;2173   		bps[in]._temp_av_cnt++;
-;;;2174   		if(bps[in]._temp_av_cnt>=1200)
+;;;2174   		if(bps[in]._temp_av_cnt>=10)
 ;;;2175   			{
-;;;2176   			bps[in]._temp_av_cnt=1200;
-;;;2177   		   	//if(!(bps[in]._av&(1<<0)))avar_bps_hndl(in,0,1);
-;;;2178   			}
-;;;2179   		}
-;;;2180   	}
-;;;2181   
-;;;2182   else if(!(temp&(1<<AV_T)))
-;;;2183   	{
-;;;2184   	if(bps[in]._temp_av_cnt) 
-0018d4  f9b02042          LDRSH    r2,[r0,#0x42]
-0018d8  d50c              BPL      |L5.6388|
-0018da  f44f6396          MOV      r3,#0x4b0             ;2171
-0018de  429a              CMP      r2,r3                 ;2171
-0018e0  da0d              BGE      |L5.6398|
-0018e2  1c52              ADDS     r2,r2,#1              ;2173
-0018e4  b212              SXTH     r2,r2                 ;2173
-0018e6  f8a02042          STRH     r2,[r0,#0x42]         ;2173
-0018ea  429a              CMP      r2,r3                 ;2174
-0018ec  db07              BLT      |L5.6398|
-0018ee  f8a03042          STRH     r3,[r0,#0x42]         ;2176
-0018f2  e004              B        |L5.6398|
-                  |L5.6388|
-0018f4  b11a              CBZ      r2,|L5.6398|
-;;;2185   		{
-;;;2186   		bps[in]._temp_av_cnt--;
-0018f6  f1a20201          SUB      r2,r2,#1
-0018fa  f8a02042          STRH     r2,[r0,#0x42]
-                  |L5.6398|
-;;;2187   		if(!bps[in]._temp_av_cnt)
-;;;2188   			{
-;;;2189   			//if(bps[in]._av&(1<<0))avar_bps_hndl(in,0,0);
-;;;2190   			}
-;;;2191   		} 	
-;;;2192   
-;;;2193   	}
+;;;2176   			bps[in]._temp_av_cnt=10;
+0018ce  f04f010a          MOV      r1,#0xa
+0018d2  f890203e          LDRB     r2,[r0,#0x3e]         ;2168
+0018d6  0793              LSLS     r3,r2,#30             ;2169
+;;;2177   			bps[in]._av|=(1<<0);
+;;;2178   		   	//if(!(bps[in]._av&(1<<0)))avar_bps_hndl(in,0,1);
+;;;2179   			}
+;;;2180   		}
+;;;2181   	}
+;;;2182   
+;;;2183   else if(!(temp&(1<<AV_T)))
+;;;2184   	{
+;;;2185   	if(bps[in]._temp_av_cnt) 
+0018d8  f9b03042          LDRSH    r3,[r0,#0x42]
+0018dc  d50d              BPL      |L5.6394|
+0018de  2b0a              CMP      r3,#0xa               ;2171
+0018e0  da16              BGE      |L5.6416|
+0018e2  1c5b              ADDS     r3,r3,#1              ;2173
+0018e4  b21b              SXTH     r3,r3                 ;2173
+0018e6  f8a03042          STRH     r3,[r0,#0x42]         ;2173
+0018ea  2b0a              CMP      r3,#0xa               ;2174
+0018ec  db10              BLT      |L5.6416|
+0018ee  f8a01042          STRH     r1,[r0,#0x42]         ;2176
+0018f2  7843              LDRB     r3,[r0,#1]            ;2177
+0018f4  f0430301          ORR      r3,r3,#1              ;2177
+0018f8  e009              B        |L5.6414|
+                  |L5.6394|
+0018fa  b14b              CBZ      r3,|L5.6416|
+;;;2186   		{
+;;;2187   		bps[in]._temp_av_cnt--;
+0018fc  f1a30301          SUB      r3,r3,#1
+001900  b21b              SXTH     r3,r3
+001902  f8a03042          STRH     r3,[r0,#0x42]
+;;;2188   		if(!bps[in]._temp_av_cnt)
+001906  b91b              CBNZ     r3,|L5.6416|
+;;;2189   			{
+;;;2190   			bps[in]._av&=~(1<<0);
+001908  7843              LDRB     r3,[r0,#1]
+00190a  f0230301          BIC      r3,r3,#1
+                  |L5.6414|
+00190e  7043              STRB     r3,[r0,#1]
+                  |L5.6416|
+;;;2191   			//if(bps[in]._av&(1<<0))avar_bps_hndl(in,0,0);
+;;;2192   			}
+;;;2193   		} 	
 ;;;2194   
-;;;2195   if((temp&(1<<AVUMAX)))
-0018fe  070a              LSLS     r2,r1,#28
-;;;2196   	{
-;;;2197   	if(bps[in]._umax_av_cnt<10) 
-;;;2198   		{
-;;;2199   		bps[in]._umax_av_cnt++;
-;;;2200   		if(bps[in]._umax_av_cnt>=10)
-;;;2201   			{ 
-;;;2202   			bps[in]._umax_av_cnt=10;
-;;;2203   			//if(!(bps[in]._av&(1<<1)))avar_bps_hndl(in,1,1);
-;;;2204   		  	/*if((K[APV]!=ON)||((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afOFF)))avar_s_hndl(in,1,1);
-;;;2205   			if((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afON))
-;;;2206   				{
-;;;2207   				apv_cnt[in,0]=APV_INIT;
-;;;2208   				apv_cnt[in,1]=APV_INIT;
-;;;2209   				apv_cnt[in,2]=APV_INIT;
-;;;2210   				apv_flags[in]=afOFF;
-;;;2211   				}				*/
-;;;2212   						
-;;;2213   			}
-;;;2214   		} 
-;;;2215   	}		
-;;;2216   else if(!(temp&(1<<AVUMAX)))
-;;;2217   	{
-;;;2218   	if(bps[in]._umax_av_cnt>0) 
-001900  f9b02044          LDRSH    r2,[r0,#0x44]
-001904  f04f030a          MOV      r3,#0xa               ;2202
-001908  f04f0400          MOV      r4,#0                 ;2171
-00190c  d50a              BPL      |L5.6436|
-00190e  2a0a              CMP      r2,#0xa               ;2197
-001910  da13              BGE      |L5.6458|
-001912  1c52              ADDS     r2,r2,#1              ;2199
-001914  b212              SXTH     r2,r2                 ;2199
-001916  f8a02044          STRH     r2,[r0,#0x44]         ;2199
-00191a  2a0a              CMP      r2,#0xa               ;2200
-00191c  db0d              BLT      |L5.6458|
-00191e  f8a03044          STRH     r3,[r0,#0x44]         ;2202
-001922  e00a              B        |L5.6458|
-                  |L5.6436|
-001924  2a00              CMP      r2,#0
-001926  dd05              BLE      |L5.6452|
-;;;2219   		{
-;;;2220   		bps[in]._umax_av_cnt--;
-001928  f1a20201          SUB      r2,r2,#1
-00192c  b212              SXTH     r2,r2
-00192e  f8a02044          STRH     r2,[r0,#0x44]
-;;;2221   		if(bps[in]._umax_av_cnt==0)
-001932  e002              B        |L5.6458|
-                  |L5.6452|
-;;;2222   			{
-;;;2223   			bps[in]._umax_av_cnt=0;
-;;;2224   			//avar_bps_hndl(in,1,0);
-;;;2225   	 //		apv_cnt[in,0]=0;
-;;;2226   	//		apv_cnt[in,1]=0;
-;;;2227   	 //		apv_cnt[in,2]=0;			
-;;;2228   			}
-;;;2229   		}
-;;;2230   	else if(bps[in]._umax_av_cnt<0) bps[in]._umax_av_cnt=0;		 
-001934  da01              BGE      |L5.6458|
-001936  f8a04044          STRH     r4,[r0,#0x44]
-                  |L5.6458|
-;;;2231   	}
-;;;2232   
-;;;2233   if(temp&(1<<AVUMIN))
-00193a  06ca              LSLS     r2,r1,#27
-;;;2234   	{
-;;;2235   	if(bps[in]._umin_av_cnt<10) 
-;;;2236   		{
-;;;2237   		bps[in]._umin_av_cnt++;
-;;;2238   		if(bps[in]._umin_av_cnt>=10)
-;;;2239   			{ 
-;;;2240   			bps[in]._umin_av_cnt=10;
-;;;2241   			//if(!(bps[in]._av&(1<<2)))avar_bps_hndl(in,2,1);
-;;;2242   		  	/*	if((K[APV]!=ON)||((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afOFF)))avar_s_hndl(in,2,1);
-;;;2243   			if((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afON))
-;;;2244   				{
-;;;2245   				apv_cnt[in,0]=APV_INIT;
-;;;2246   				apv_cnt[in,1]=APV_INIT;
-;;;2247   				apv_cnt[in,2]=APV_INIT;
-;;;2248   				apv_flags[in]=afOFF;
-;;;2249   				}*/				
-;;;2250   			}
-;;;2251   		} 
-;;;2252   	}	
-;;;2253   	
-;;;2254   else if(!(temp&(1<<AVUMIN)))
-;;;2255   	{
-;;;2256   	if(bps[in]._umin_av_cnt) 
-00193c  f9b02046          LDRSH    r2,[r0,#0x46]
-001940  d50a              BPL      |L5.6488|
-001942  2a0a              CMP      r2,#0xa               ;2235
-001944  da0d              BGE      |L5.6498|
-001946  1c52              ADDS     r2,r2,#1              ;2237
-001948  b212              SXTH     r2,r2                 ;2237
-00194a  f8a02046          STRH     r2,[r0,#0x46]         ;2237
-00194e  2a0a              CMP      r2,#0xa               ;2238
-001950  db07              BLT      |L5.6498|
-001952  f8a03046          STRH     r3,[r0,#0x46]         ;2240
-001956  e004              B        |L5.6498|
+;;;2195   	}
+;;;2196   
+;;;2197   if((temp&(1<<AVUMAX)))
+001910  0713              LSLS     r3,r2,#28
+;;;2198   	{
+;;;2199   	if(bps[in]._umax_av_cnt<10) 
+;;;2200   		{
+;;;2201   		bps[in]._umax_av_cnt++;
+;;;2202   		if(bps[in]._umax_av_cnt>=10)
+;;;2203   			{ 
+;;;2204   			bps[in]._umax_av_cnt=10;
+;;;2205   			bps[in]._av|=(1<<1);
+;;;2206   			//if(!(bps[in]._av&(1<<1)))avar_bps_hndl(in,1,1);
+;;;2207   		  	/*if((K[APV]!=ON)||((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afOFF)))avar_s_hndl(in,1,1);
+;;;2208   			if((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afON))
+;;;2209   				{
+;;;2210   				apv_cnt[in,0]=APV_INIT;
+;;;2211   				apv_cnt[in,1]=APV_INIT;
+;;;2212   				apv_cnt[in,2]=APV_INIT;
+;;;2213   				apv_flags[in]=afOFF;
+;;;2214   				}				*/
+;;;2215   						
+;;;2216   			}
+;;;2217   		} 
+;;;2218   	}		
+;;;2219   else if(!(temp&(1<<AVUMAX)))
+;;;2220   	{
+;;;2221   	if(bps[in]._umax_av_cnt>0) 
+001912  f9b03044          LDRSH    r3,[r0,#0x44]
+001916  f04f0400          MOV      r4,#0                 ;2171
+00191a  d50d              BPL      |L5.6456|
+00191c  2b0a              CMP      r3,#0xa               ;2199
+00191e  da1b              BGE      |L5.6488|
+001920  1c5b              ADDS     r3,r3,#1              ;2201
+001922  b21b              SXTH     r3,r3                 ;2201
+001924  f8a03044          STRH     r3,[r0,#0x44]         ;2201
+001928  2b0a              CMP      r3,#0xa               ;2202
+00192a  db15              BLT      |L5.6488|
+00192c  f8a01044          STRH     r1,[r0,#0x44]         ;2204
+001930  7843              LDRB     r3,[r0,#1]            ;2205
+001932  f0430302          ORR      r3,r3,#2              ;2205
+001936  e00a              B        |L5.6478|
+                  |L5.6456|
+001938  2b00              CMP      r3,#0
+00193a  dd0a              BLE      |L5.6482|
+;;;2222   		{
+;;;2223   		bps[in]._umax_av_cnt--;
+00193c  f1a30301          SUB      r3,r3,#1
+001940  b21b              SXTH     r3,r3
+001942  f8a03044          STRH     r3,[r0,#0x44]
+;;;2224   		if(bps[in]._umax_av_cnt==0)
+001946  b93b              CBNZ     r3,|L5.6488|
+;;;2225   			{
+;;;2226   			bps[in]._umax_av_cnt=0;
+;;;2227   			bps[in]._av&=~(1<<1);
+001948  7843              LDRB     r3,[r0,#1]
+00194a  f0230302          BIC      r3,r3,#2
+                  |L5.6478|
+00194e  7043              STRB     r3,[r0,#1]
+001950  e002              B        |L5.6488|
+                  |L5.6482|
+;;;2228   			//avar_bps_hndl(in,1,0);
+;;;2229   	 //		apv_cnt[in,0]=0;
+;;;2230   	//		apv_cnt[in,1]=0;
+;;;2231   	 //		apv_cnt[in,2]=0;			
+;;;2232   			}
+;;;2233   		}
+;;;2234   	else if(bps[in]._umax_av_cnt<0) bps[in]._umax_av_cnt=0;		 
+001952  da01              BGE      |L5.6488|
+001954  f8a04044          STRH     r4,[r0,#0x44]
                   |L5.6488|
-001958  b11a              CBZ      r2,|L5.6498|
-;;;2257   		{
-;;;2258   		bps[in]._umin_av_cnt--;
-00195a  1e52              SUBS     r2,r2,#1
-00195c  b212              SXTH     r2,r2
-00195e  f8a02046          STRH     r2,[r0,#0x46]
-                  |L5.6498|
-;;;2259   		if(bps[in]._umin_av_cnt==0)
-;;;2260   			{
-;;;2261   			bps[in]._umin_av_cnt=0;
-;;;2262   		//	avar_bps_hndl(in,2,0);
-;;;2263   		//	apv_cnt[in,0]=0;
-;;;2264   		//	apv_cnt[in,1]=0;
-;;;2265   		//	apv_cnt[in,2]=0;
-;;;2266   			}
-;;;2267   		}
-;;;2268   	else if(bps[in]._umin_av_cnt>10)bps[in]._umin_av_cnt--;	 
-;;;2269   	}
-;;;2270   
-;;;2271   //bps[in]._state=bsOFF;
-;;;2272   
-;;;2273   
-;;;2274   if(((work_stat==wsGS) || (work_stat==wsPS))&&(UOUT_OFF_EN))
-001962  4a76              LDR      r2,|L5.6972|
-001964  7813              LDRB     r3,[r2,#0]  ; work_stat
-001966  2b01              CMP      r3,#1
-001968  d001              BEQ      |L5.6510|
-00196a  2b02              CMP      r3,#2
-00196c  d135              BNE      |L5.6618|
-                  |L5.6510|
-00196e  4a74              LDR      r2,|L5.6976|
-001970  8812              LDRH     r2,[r2,#0]  ; UOUT_OFF_EN
-001972  b34a              CBZ      r2,|L5.6600|
-;;;2275   	{
-;;;2276   	short tempU;
-;;;2277   	long tempL;
+;;;2235   	}
+;;;2236   
+;;;2237   if(temp&(1<<AVUMIN))
+001958  06d3              LSLS     r3,r2,#27
+00195a  d50f              BPL      |L5.6524|
+;;;2238   	{
+;;;2239   	if(bps[in]._umin_av_cnt<10) 
+00195c  f9b03046          LDRSH    r3,[r0,#0x46]
+001960  2b0a              CMP      r3,#0xa
+001962  da17              BGE      |L5.6548|
+;;;2240   		{
+;;;2241   		bps[in]._umin_av_cnt++;
+001964  1c5b              ADDS     r3,r3,#1
+001966  b21b              SXTH     r3,r3
+001968  f8a03046          STRH     r3,[r0,#0x46]
+;;;2242   		if(bps[in]._umin_av_cnt>=10)
+00196c  2b0a              CMP      r3,#0xa
+00196e  db11              BLT      |L5.6548|
+;;;2243   			{ 
+;;;2244   			bps[in]._umin_av_cnt=10;
+001970  f8a01046          STRH     r1,[r0,#0x46]
+;;;2245   			bps[in]._av|=(1<<2);
+001974  7841              LDRB     r1,[r0,#1]
+001976  f0410104          ORR      r1,r1,#4
+00197a  e00a              B        |L5.6546|
+                  |L5.6524|
+;;;2246   			//if(!(bps[in]._av&(1<<2)))avar_bps_hndl(in,2,1);
+;;;2247   		  	/*	if((K[APV]!=ON)||((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afOFF)))avar_s_hndl(in,2,1);
+;;;2248   			if((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afON))
+;;;2249   				{
+;;;2250   				apv_cnt[in,0]=APV_INIT;
+;;;2251   				apv_cnt[in,1]=APV_INIT;
+;;;2252   				apv_cnt[in,2]=APV_INIT;
+;;;2253   				apv_flags[in]=afOFF;
+;;;2254   				}*/				
+;;;2255   			}
+;;;2256   		} 
+;;;2257   	}	
+;;;2258   	
+;;;2259   else if(!(temp&(1<<AVUMIN)))
+;;;2260   	{
+;;;2261   	if(bps[in]._umin_av_cnt) 
+00197c  f9b01046          LDRSH    r1,[r0,#0x46]
+001980  b141              CBZ      r1,|L5.6548|
+;;;2262   		{
+;;;2263   		bps[in]._umin_av_cnt--;
+001982  1e49              SUBS     r1,r1,#1
+001984  b209              SXTH     r1,r1
+001986  f8a01046          STRH     r1,[r0,#0x46]
+;;;2264   		if(bps[in]._umin_av_cnt==0)
+00198a  b919              CBNZ     r1,|L5.6548|
+;;;2265   			{
+;;;2266   			bps[in]._umin_av_cnt=0;
+;;;2267   			bps[in]._av&=~(1<<2);
+00198c  7841              LDRB     r1,[r0,#1]
+00198e  f0210104          BIC      r1,r1,#4
+                  |L5.6546|
+001992  7041              STRB     r1,[r0,#1]
+                  |L5.6548|
+;;;2268   		//	avar_bps_hndl(in,2,0);
+;;;2269   		//	apv_cnt[in,0]=0;
+;;;2270   		//	apv_cnt[in,1]=0;
+;;;2271   		//	apv_cnt[in,2]=0;
+;;;2272   			}
+;;;2273   		}
+;;;2274   	else if(bps[in]._umin_av_cnt>10)bps[in]._umin_av_cnt--;	 
+;;;2275   	}
+;;;2276   
+;;;2277   //bps[in]._state=bsOFF;
 ;;;2278   
-;;;2279   	tempU= U_maxg;
-001974  4a73              LDR      r2,|L5.6980|
-;;;2280   	if(work_stat==wsPS)tempU= U_up_temp;
-001976  2b02              CMP      r3,#2
-001978  f9b22000          LDRSH    r2,[r2,#0]            ;2279  ; U_maxg
-00197c  d102              BNE      |L5.6532|
-00197e  4a72              LDR      r2,|L5.6984|
-001980  f9b22000          LDRSH    r2,[r2,#0]  ; U_up_temp
-                  |L5.6532|
-;;;2281   
-;;;2282   	tempL=((long)tempU)*((long)(100+UOUT_OFF_LEVEL));
-001984  4b71              LDR      r3,|L5.6988|
-001986  f9b33000          LDRSH    r3,[r3,#0]  ; UOUT_OFF_LEVEL
-00198a  3364              ADDS     r3,r3,#0x64
-00198c  435a              MULS     r2,r3,r2
-;;;2283   	tempL/=100L;
-00198e  2364              MOVS     r3,#0x64
-001990  fb92f2f3          SDIV     r2,r2,r3
+;;;2279   
+;;;2280   if(((work_stat==wsGS) || (work_stat==wsPS))&&(UOUT_OFF_EN))
+001994  4963              LDR      r1,|L5.6948|
+001996  780b              LDRB     r3,[r1,#0]  ; work_stat
+001998  2b01              CMP      r3,#1
+00199a  d001              BEQ      |L5.6560|
+00199c  2b02              CMP      r3,#2
+00199e  d134              BNE      |L5.6666|
+                  |L5.6560|
+0019a0  4961              LDR      r1,|L5.6952|
+0019a2  8809              LDRH     r1,[r1,#0]  ; UOUT_OFF_EN
+0019a4  b361              CBZ      r1,|L5.6656|
+;;;2281   	{
+;;;2282   	short tempU;
+;;;2283   	long tempL;
 ;;;2284   
-;;;2285   	tempU=(short)tempL;
-;;;2286   	plazma_umax=tempU;
-001994  4b6e              LDR      r3,|L5.6992|
-001996  b212              SXTH     r2,r2                 ;2285
-001998  801a              STRH     r2,[r3,#0]
+;;;2285   	tempU= U_maxg;
+0019a6  4961              LDR      r1,|L5.6956|
+;;;2286   	if(work_stat==wsPS)tempU= U_up_temp;
+0019a8  2b02              CMP      r3,#2
+0019aa  f9b11000          LDRSH    r1,[r1,#0]            ;2285  ; U_maxg
+0019ae  d102              BNE      |L5.6582|
+0019b0  495f              LDR      r1,|L5.6960|
+0019b2  f9b11000          LDRSH    r1,[r1,#0]  ; U_up_temp
+                  |L5.6582|
 ;;;2287   
-;;;2288   	if(bps[in]._Uii>tempU)
-00199a  6983              LDR      r3,[r0,#0x18]
-00199c  4293              CMP      r3,r2
-;;;2289   		{
-;;;2290   		if(bps[in]._uout_avar_cnt<(UOUT_OFF_DELAY*10))
-;;;2291   			{
-;;;2292   			bps[in]._uout_avar_cnt++;
-;;;2293   			if(bps[in]._uout_avar_cnt>=(UOUT_OFF_DELAY*10))
-;;;2294   				{
-;;;2295   				bps[in]._av|=0x80;
-;;;2296   				}
-;;;2297   			}
-;;;2298   		}
-;;;2299   	else 
-;;;2300   		{
-;;;2301   		if(bps[in]._uout_avar_cnt) bps[in]._uout_avar_cnt--;
-00199e  f8902052          LDRB     r2,[r0,#0x52]
-0019a2  dd16              BLE      |L5.6610|
-0019a4  4b6b              LDR      r3,|L5.6996|
-0019a6  f9b33000          LDRSH    r3,[r3,#0]            ;2290  ; UOUT_OFF_DELAY
-0019aa  eb030383          ADD      r3,r3,r3,LSL #2       ;2290
-0019ae  ebb20f43          CMP      r2,r3,LSL #1          ;2290
-0019b2  da12              BGE      |L5.6618|
-0019b4  1c52              ADDS     r2,r2,#1              ;2292
-0019b6  b2d2              UXTB     r2,r2                 ;2292
-0019b8  f8802052          STRB     r2,[r0,#0x52]         ;2292
-0019bc  ebb20f43          CMP      r2,r3,LSL #1          ;2293
-0019c0  db0b              BLT      |L5.6618|
-0019c2  7842              LDRB     r2,[r0,#1]            ;2295
-0019c4  e001              B        |L5.6602|
-                  |L5.6598|
-0019c6  e032              B        |L5.6702|
+;;;2288   	tempL=((long)tempU)*((long)(100+UOUT_OFF_LEVEL));
+0019b6  4b5f              LDR      r3,|L5.6964|
+0019b8  f9b33000          LDRSH    r3,[r3,#0]  ; UOUT_OFF_LEVEL
+0019bc  3364              ADDS     r3,r3,#0x64
+0019be  4359              MULS     r1,r3,r1
+;;;2289   	tempL/=100L;
+0019c0  2364              MOVS     r3,#0x64
+0019c2  fb91f1f3          SDIV     r1,r1,r3
+;;;2290   
+;;;2291   	tempU=(short)tempL;
+0019c6  e000              B        |L5.6602|
                   |L5.6600|
-0019c8  e007              B        |L5.6618|
+0019c8  e050              B        |L5.6764|
                   |L5.6602|
-0019ca  f0420280          ORR      r2,r2,#0x80           ;2295
-0019ce  7042              STRB     r2,[r0,#1]            ;2295
-0019d0  e003              B        |L5.6618|
-                  |L5.6610|
-0019d2  b112              CBZ      r2,|L5.6618|
-0019d4  1e52              SUBS     r2,r2,#1
-0019d6  f8802052          STRB     r2,[r0,#0x52]
-                  |L5.6618|
-;;;2302   		}
-;;;2303   
-;;;2304   
-;;;2305   
-;;;2306   
-;;;2307   
-;;;2308   	}
+;;;2292   	plazma_umax=tempU;
+0019ca  4b5b              LDR      r3,|L5.6968|
+0019cc  b209              SXTH     r1,r1                 ;2291
+0019ce  8019              STRH     r1,[r3,#0]
+;;;2293   
+;;;2294   	if(bps[in]._Uii>tempU)
+0019d0  6983              LDR      r3,[r0,#0x18]
+0019d2  428b              CMP      r3,r1
+;;;2295   		{
+;;;2296   		if(bps[in]._uout_avar_cnt<(UOUT_OFF_DELAY*10))
+;;;2297   			{
+;;;2298   			bps[in]._uout_avar_cnt++;
+;;;2299   			if(bps[in]._uout_avar_cnt>=(UOUT_OFF_DELAY*10))
+;;;2300   				{
+;;;2301   				bps[in]._av|=0x80;
+;;;2302   				}
+;;;2303   			}
+;;;2304   		}
+;;;2305   	else 
+;;;2306   		{
+;;;2307   		if(bps[in]._uout_avar_cnt) bps[in]._uout_avar_cnt--;
+0019d4  f8901052          LDRB     r1,[r0,#0x52]
+0019d8  dd13              BLE      |L5.6658|
+0019da  4b58              LDR      r3,|L5.6972|
+0019dc  f9b33000          LDRSH    r3,[r3,#0]            ;2296  ; UOUT_OFF_DELAY
+0019e0  eb030383          ADD      r3,r3,r3,LSL #2       ;2296
+0019e4  ebb10f43          CMP      r1,r3,LSL #1          ;2296
+0019e8  da0f              BGE      |L5.6666|
+0019ea  1c49              ADDS     r1,r1,#1              ;2298
+0019ec  b2c9              UXTB     r1,r1                 ;2298
+0019ee  f8801052          STRB     r1,[r0,#0x52]         ;2298
+0019f2  ebb10f43          CMP      r1,r3,LSL #1          ;2299
+0019f6  db08              BLT      |L5.6666|
+0019f8  7841              LDRB     r1,[r0,#1]            ;2301
+0019fa  f0410180          ORR      r1,r1,#0x80           ;2301
+0019fe  7041              STRB     r1,[r0,#1]            ;2301
+                  |L5.6656|
+001a00  e003              B        |L5.6666|
+                  |L5.6658|
+001a02  b111              CBZ      r1,|L5.6666|
+001a04  1e49              SUBS     r1,r1,#1
+001a06  f8801052          STRB     r1,[r0,#0x52]
+                  |L5.6666|
+;;;2308   		}
 ;;;2309   
 ;;;2310   
 ;;;2311   
-;;;2312   if (bps[in]._av&0x8f)					bps[in]._state=bsAV;
-0019da  7842              LDRB     r2,[r0,#1]
-0019dc  f0120f8f          TST      r2,#0x8f
-0019e0  d001              BEQ      |L5.6630|
-0019e2  2104              MOVS     r1,#4
-0019e4  e00f              B        |L5.6662|
-                  |L5.6630|
-;;;2313   else if ( (net_av) && (bps[in]._cnt>20)/*&& 
-0019e6  4a5c              LDR      r2,|L5.7000|
-0019e8  7812              LDRB     r2,[r2,#0]  ; net_av
-0019ea  b122              CBZ      r2,|L5.6646|
-0019ec  78c2              LDRB     r2,[r0,#3]
-0019ee  2a14              CMP      r2,#0x14
-0019f0  d901              BLS      |L5.6646|
-;;;2314   		(bps[in]._Uii<200)*/)				bps[in]._state=bsOFF_AV_NET;
-0019f2  2105              MOVS     r1,#5
-0019f4  e007              B        |L5.6662|
-                  |L5.6646|
-;;;2315   else if (bps[in]._flags_tm&BIN8(100000))	bps[in]._state=bsRDY;
-0019f6  0689              LSLS     r1,r1,#26
-0019f8  d501              BPL      |L5.6654|
-0019fa  2102              MOVS     r1,#2
-0019fc  e003              B        |L5.6662|
-                  |L5.6654|
-;;;2316   else if (bps[in]._cnt<20)				bps[in]._state=bsWRK;
-0019fe  78c1              LDRB     r1,[r0,#3]
-001a00  2914              CMP      r1,#0x14
-001a02  d201              BCS      |L5.6664|
-001a04  2101              MOVS     r1,#1
-                  |L5.6662|
-001a06  7081              STRB     r1,[r0,#2]
-                  |L5.6664|
+;;;2312   
+;;;2313   
+;;;2314   	}
+;;;2315   
+;;;2316   
 ;;;2317   
-;;;2318   
-;;;2319   
-;;;2320   //else if(bps[in]._flags_tm&BIN8(100000)) bps[in]._state=ssBL;
-;;;2321   //else if((!(bps[in]._flags_tm&BIN8(100000)))&&(net_U>100))bps[in]._state=ssWRK;
-;;;2322   //else bps[0]._state=ssNOT;
-;;;2323   
-;;;2324   //bps[in]._is_ready=0;
-;;;2325   //bps[in]._is_wrk=0;
-;;;2326   //if(bps[in]._av_net) bps[in]._flags_bp='N';// не подключен
-;;;2327   //else if(bps[in]._av_u_max) bps[in]._flags_bp='P';// завышено напряжение(u_.av_.bAS1T)) bps_state[0]=ssAV;
-;;;2328   //else if(bps[in]._av_u_min) bps[in]._flags_bp='M';// занижено напряжение
-;;;2329   //else if(bps[in]._av_temper) bps[in]._flags_bp='T';// температура
-;;;2330   //else if(bps[in]._flags_tm&BIN8(100000)) 
-;;;2331   //	{
-;;;2332   //	bps[in]._flags_bp='B';// заблокирован
-;;;2333   //	bps[in]._is_ready=1;
-;;;2334   //	}
-;;;2335   //else if((!(bps[in]._flags_tm&BIN8(100000)))&&(net_U>100))
-;;;2336   //     {
-;;;2337   //     bps[in]._flags_bp='W';// работает
-;;;2338   //     bps[in]._is_ready=1;
-;;;2339   //     bps[in]._is_wrk=1;
-;;;2340        
-;;;2341   //     }
-;;;2342   //else bps[in]._is_ready=1;     
-;;;2343   
-;;;2344   
-;;;2345   
-;;;2346   
-;;;2347   
-;;;2348   /*
-;;;2349   bps[in]._flags_tu&=BIN8(11111110);
-;;;2350   if(bps[in]._ist_blok_cnt)
-;;;2351   	{
-;;;2352   	bps[in]._ist_blok_cnt--;
-;;;2353   	bps[in]._flags_tu|=BIN8(1);
-;;;2354   	}
-;;;2355   
-;;;2356   	   */ 
-;;;2357   
-;;;2358   //Пересброс БПСа при потере связи
-;;;2359   if(bps[in]._cnt>=10) bps[in]._flags_tu|=BIN8(10000000);
-001a08  78c1              LDRB     r1,[r0,#3]
-001a0a  290a              CMP      r1,#0xa
-;;;2360   else bps[in]._flags_tu&=BIN8(1111111);
-001a0c  f8901028          LDRB     r1,[r0,#0x28]
-001a10  d302              BCC      |L5.6680|
-001a12  f0410180          ORR      r1,r1,#0x80           ;2359
-001a16  e001              B        |L5.6684|
-                  |L5.6680|
-001a18  f001017f          AND      r1,r1,#0x7f
-                  |L5.6684|
-001a1c  f8801028          STRB     r1,[r0,#0x28]
-;;;2361   	
-;;;2362   bps[in]._vol_u=cntrl_stat_U;	
-001a20  494e              LDR      r1,|L5.7004|
-001a22  f9b12014          LDRSH    r2,[r1,#0x14]  ; cntrl_stat_U
-;;;2363   bps[in]._vol_i=cntrl_stat_I;
-001a26  62c2              STR      r2,[r0,#0x2c]
-001a28  f9b11016          LDRSH    r1,[r1,#0x16]  ; cntrl_stat_I
-001a2c  6301              STR      r1,[r0,#0x30]
+;;;2318   if (bps[in]._av&0x8f)					bps[in]._state=bsAV;
+001a0a  7841              LDRB     r1,[r0,#1]
+001a0c  f0110f8f          TST      r1,#0x8f
+001a10  d001              BEQ      |L5.6678|
+001a12  2204              MOVS     r2,#4
+001a14  e00f              B        |L5.6710|
+                  |L5.6678|
+;;;2319   else if ( (net_av) && (bps[in]._cnt>20)/*&& 
+001a16  4b4a              LDR      r3,|L5.6976|
+001a18  781b              LDRB     r3,[r3,#0]  ; net_av
+001a1a  b123              CBZ      r3,|L5.6694|
+001a1c  78c3              LDRB     r3,[r0,#3]
+001a1e  2b14              CMP      r3,#0x14
+001a20  d901              BLS      |L5.6694|
+;;;2320   		(bps[in]._Uii<200)*/)				bps[in]._state=bsOFF_AV_NET;
+001a22  2205              MOVS     r2,#5
+001a24  e007              B        |L5.6710|
+                  |L5.6694|
+;;;2321   else if (bps[in]._flags_tm&BIN8(100000))	bps[in]._state=bsRDY;
+001a26  0692              LSLS     r2,r2,#26
+001a28  d501              BPL      |L5.6702|
+001a2a  2202              MOVS     r2,#2
+001a2c  e003              B        |L5.6710|
                   |L5.6702|
-;;;2364    
-;;;2365   }
-001a2e  bd10              POP      {r4,pc}
-;;;2366   
+;;;2322   else if (bps[in]._cnt<20)				bps[in]._state=bsWRK;
+001a2e  78c2              LDRB     r2,[r0,#3]
+001a30  2a14              CMP      r2,#0x14
+001a32  d201              BCS      |L5.6712|
+001a34  2201              MOVS     r2,#1
+                  |L5.6710|
+001a36  7082              STRB     r2,[r0,#2]
+                  |L5.6712|
+;;;2323   
+;;;2324   
+;;;2325   
+;;;2326   //else if(bps[in]._flags_tm&BIN8(100000)) bps[in]._state=ssBL;
+;;;2327   //else if((!(bps[in]._flags_tm&BIN8(100000)))&&(net_U>100))bps[in]._state=ssWRK;
+;;;2328   //else bps[0]._state=ssNOT;
+;;;2329   
+;;;2330   //bps[in]._is_ready=0;
+;;;2331   //bps[in]._is_wrk=0;
+;;;2332   //if(bps[in]._av_net) bps[in]._flags_bp='N';// не подключен
+;;;2333   //else if(bps[in]._av_u_max) bps[in]._flags_bp='P';// завышено напряжение(u_.av_.bAS1T)) bps_state[0]=ssAV;
+;;;2334   //else if(bps[in]._av_u_min) bps[in]._flags_bp='M';// занижено напряжение
+;;;2335   //else if(bps[in]._av_temper) bps[in]._flags_bp='T';// температура
+;;;2336   //else if(bps[in]._flags_tm&BIN8(100000)) 
+;;;2337   //	{
+;;;2338   //	bps[in]._flags_bp='B';// заблокирован
+;;;2339   //	bps[in]._is_ready=1;
+;;;2340   //	}
+;;;2341   //else if((!(bps[in]._flags_tm&BIN8(100000)))&&(net_U>100))
+;;;2342   //     {
+;;;2343   //     bps[in]._flags_bp='W';// работает
+;;;2344   //     bps[in]._is_ready=1;
+;;;2345   //     bps[in]._is_wrk=1;
+;;;2346        
+;;;2347   //     }
+;;;2348   //else bps[in]._is_ready=1;     
+;;;2349   
+;;;2350   
+;;;2351   
+;;;2352   
+;;;2353   
+;;;2354   /*
+;;;2355   bps[in]._flags_tu&=BIN8(11111110);
+;;;2356   if(bps[in]._ist_blok_cnt)
+;;;2357   	{
+;;;2358   	bps[in]._ist_blok_cnt--;
+;;;2359   	bps[in]._flags_tu|=BIN8(1);
+;;;2360   	}
+;;;2361   
+;;;2362   	   */ 
+;;;2363   
+;;;2364   //Пересброс БПСа при потере связи
+;;;2365   if(bps[in]._cnt>=10) 
+001a38  78c2              LDRB     r2,[r0,#3]
+001a3a  2a0a              CMP      r2,#0xa
+;;;2366   	{
+;;;2367   	bps[in]._flags_tu|=BIN8(10000000);
+;;;2368   	bps[in]._av|=(1<<3);
+;;;2369   	}
+;;;2370   else 
+;;;2371   	{
+;;;2372   	bps[in]._flags_tu&=BIN8(1111111);
+001a3c  f8902028          LDRB     r2,[r0,#0x28]
+001a40  d306              BCC      |L5.6736|
+001a42  f0420280          ORR      r2,r2,#0x80           ;2367
+001a46  f8802028          STRB     r2,[r0,#0x28]         ;2367
+001a4a  f0410108          ORR      r1,r1,#8              ;2368
+001a4e  e005              B        |L5.6748|
+                  |L5.6736|
+001a50  f002027f          AND      r2,r2,#0x7f
+001a54  f8802028          STRB     r2,[r0,#0x28]
+;;;2373   	bps[in]._av&=~(1<<3);
+001a58  f0210108          BIC      r1,r1,#8
+                  |L5.6748|
+001a5c  7041              STRB     r1,[r0,#1]
+;;;2374   	}
+;;;2375   bps[in]._vol_u=cntrl_stat_U;	
+001a5e  4939              LDR      r1,|L5.6980|
+001a60  f9b12014          LDRSH    r2,[r1,#0x14]  ; cntrl_stat_U
+;;;2376   bps[in]._vol_i=cntrl_stat_I;
+001a64  62c2              STR      r2,[r0,#0x2c]
+001a66  f9b11016          LDRSH    r1,[r1,#0x16]  ; cntrl_stat_I
+001a6a  6301              STR      r1,[r0,#0x30]
+                  |L5.6764|
+;;;2377    
+;;;2378   }
+001a6c  bd10              POP      {r4,pc}
+;;;2379   
                           ENDP
 
                   volt_contr_hndl PROC
-;;;2379   //-----------------------------------------------
-;;;2380   void volt_contr_hndl(void)
-001a30  e92d47f0          PUSH     {r4-r10,lr}
-;;;2381   {
-;;;2382   if(work_stat==wsOFF)
-001a34  4841              LDR      r0,|L5.6972|
-;;;2383   	{
-;;;2384   	cnt_volt_contr=0;
-;;;2385   	}
-;;;2386   else 
-;;;2387   	{
-;;;2388   	if(cnt_volt_contr<(T_DEL_REL_VOLT_START*10))
-001a36  4e4a              LDR      r6,|L5.7008|
-001a38  4c48              LDR      r4,|L5.7004|
-001a3a  7800              LDRB     r0,[r0,#0]            ;2382  ; work_stat
-001a3c  2500              MOVS     r5,#0                 ;2382
-001a3e  b310              CBZ      r0,|L5.6790|
-001a40  f9b60000          LDRSH    r0,[r6,#0]  ; T_DEL_REL_VOLT_START
-001a44  eb000180          ADD      r1,r0,r0,LSL #2
-001a48  f9b40028          LDRSH    r0,[r4,#0x28]  ; cnt_volt_contr
-001a4c  ebb00f41          CMP      r0,r1,LSL #1
-001a50  da01              BGE      |L5.6742|
-;;;2389   		{
-;;;2390   		cnt_volt_contr++;
-001a52  1c40              ADDS     r0,r0,#1
-001a54  8520              STRH     r0,[r4,#0x28]
-                  |L5.6742|
-;;;2391   		}
-;;;2392   	}
-;;;2393   
-;;;2394   	
-;;;2395   	if(load_U>REL_VOLT_UMIN*10)
-001a56  4843              LDR      r0,|L5.7012|
-001a58  f8df810c          LDR      r8,|L5.7016|
-;;;2396   		{
-;;;2397   		cnt_rel_volt_umin++;
-;;;2398   		gran(&cnt_rel_volt_umin,0,30000);
-001a5c  f2475a30          MOV      r10,#0x7530
-001a60  f9b00000          LDRSH    r0,[r0,#0]            ;2395  ; REL_VOLT_UMIN
-001a64  eb000180          ADD      r1,r0,r0,LSL #2       ;2395
-001a68  f9b80000          LDRSH    r0,[r8,#0]            ;2395  ; load_U
-001a6c  ebb00f41          CMP      r0,r1,LSL #1          ;2395
-001a70  dd0b              BLE      |L5.6794|
-001a72  8d60              LDRH     r0,[r4,#0x2a]         ;2397  ; cnt_rel_volt_umin
-001a74  4652              MOV      r2,r10
-001a76  1c40              ADDS     r0,r0,#1              ;2397
-001a78  8560              STRH     r0,[r4,#0x2a]         ;2397
-001a7a  4838              LDR      r0,|L5.7004|
-001a7c  2100              MOVS     r1,#0
-001a7e  302a              ADDS     r0,r0,#0x2a
-001a80  f7fffffe          BL       gran
-001a84  e002              B        |L5.6796|
-                  |L5.6790|
-001a86  8525              STRH     r5,[r4,#0x28]         ;2384
-001a88  e7e5              B        |L5.6742|
-                  |L5.6794|
-;;;2399   		}
-;;;2400   	else cnt_rel_volt_umin=0;
-001a8a  8565              STRH     r5,[r4,#0x2a]
-                  |L5.6796|
-;;;2401   	if((cnt_rel_volt_umin>=T_DEL_REL_VOLT_WRK*10)&&(cnt_volt_contr>=(T_DEL_REL_VOLT_START*10))) 	bVOLT_IS_NOT_DOWN=1;
-001a8c  f8df90dc          LDR      r9,|L5.7020|
-001a90  2701              MOVS     r7,#1
-001a92  f9b90000          LDRSH    r0,[r9,#0]  ; T_DEL_REL_VOLT_WRK
-001a96  eb000180          ADD      r1,r0,r0,LSL #2
-001a9a  f9b4002a          LDRSH    r0,[r4,#0x2a]  ; cnt_rel_volt_umin
-001a9e  ebb00f41          CMP      r0,r1,LSL #1
-001aa2  db0a              BLT      |L5.6842|
-001aa4  f9b61000          LDRSH    r1,[r6,#0]  ; T_DEL_REL_VOLT_START
-001aa8  f9b42028          LDRSH    r2,[r4,#0x28]  ; cnt_volt_contr
-001aac  eb010181          ADD      r1,r1,r1,LSL #2
-001ab0  ebb20f41          CMP      r2,r1,LSL #1
-001ab4  db01              BLT      |L5.6842|
-001ab6  7327              STRB     r7,[r4,#0xc]
-001ab8  e001              B        |L5.6846|
-                  |L5.6842|
-;;;2402   	else if(cnt_rel_volt_umin==0)							  							bVOLT_IS_NOT_DOWN=0;
-001aba  b900              CBNZ     r0,|L5.6846|
-001abc  7325              STRB     r5,[r4,#0xc]
-                  |L5.6846|
-;;;2403   
-;;;2404   	if(load_U<REL_VOLT_UMAX*10)
-001abe  482c              LDR      r0,|L5.7024|
-001ac0  f9b00000          LDRSH    r0,[r0,#0]  ; REL_VOLT_UMAX
-001ac4  eb000180          ADD      r1,r0,r0,LSL #2
-001ac8  f9b80000          LDRSH    r0,[r8,#0]  ; load_U
-001acc  ebb00f41          CMP      r0,r1,LSL #1
-001ad0  da09              BGE      |L5.6886|
-;;;2405   		{
-;;;2406   		cnt_rel_volt_umax++;
-001ad2  8da0              LDRH     r0,[r4,#0x2c]  ; cnt_rel_volt_umax
-;;;2407   		gran(&cnt_rel_volt_umax,0,30000);
-001ad4  4652              MOV      r2,r10
-001ad6  1c40              ADDS     r0,r0,#1              ;2406
-001ad8  85a0              STRH     r0,[r4,#0x2c]         ;2406
-001ada  4820              LDR      r0,|L5.7004|
-001adc  2100              MOVS     r1,#0
-001ade  302c              ADDS     r0,r0,#0x2c
-001ae0  f7fffffe          BL       gran
-001ae4  e000              B        |L5.6888|
-                  |L5.6886|
-;;;2408   		}
-;;;2409   	else cnt_rel_volt_umax=0;
-001ae6  85a5              STRH     r5,[r4,#0x2c]
-                  |L5.6888|
-;;;2410   	if((cnt_rel_volt_umax>=T_DEL_REL_VOLT_WRK*10)&&(cnt_volt_contr>=(T_DEL_REL_VOLT_START*10))) 	bVOLT_IS_NOT_UP=1;
-001ae8  f9b90000          LDRSH    r0,[r9,#0]  ; T_DEL_REL_VOLT_WRK
-001aec  eb000180          ADD      r1,r0,r0,LSL #2
-001af0  f9b4002c          LDRSH    r0,[r4,#0x2c]  ; cnt_rel_volt_umax
-001af4  ebb00f41          CMP      r0,r1,LSL #1
-001af8  db3c              BLT      |L5.7028|
-001afa  f9b61000          LDRSH    r1,[r6,#0]  ; T_DEL_REL_VOLT_START
-001afe  f9b42028          LDRSH    r2,[r4,#0x28]  ; cnt_volt_contr
-001b02  eb010181          ADD      r1,r1,r1,LSL #2
-001b06  ebb20f41          CMP      r2,r1,LSL #1
-001b0a  db33              BLT      |L5.7028|
-001b0c  7367              STRB     r7,[r4,#0xd]
-001b0e  e034              B        |L5.7034|
-                  |L5.6928|
+;;;2392   //-----------------------------------------------
+;;;2393   void volt_contr_hndl(void)
+001a6e  e92d47f0          PUSH     {r4-r10,lr}
+;;;2394   {
+;;;2395   if(work_stat==wsOFF)
+001a72  482c              LDR      r0,|L5.6948|
+;;;2396   	{
+;;;2397   	cnt_volt_contr=0;
+;;;2398   	}
+;;;2399   else 
+;;;2400   	{
+;;;2401   	if(cnt_volt_contr<(T_DEL_REL_VOLT_START*10))
+001a74  4e34              LDR      r6,|L5.6984|
+001a76  4c33              LDR      r4,|L5.6980|
+001a78  7800              LDRB     r0,[r0,#0]            ;2395  ; work_stat
+001a7a  2500              MOVS     r5,#0                 ;2395
+001a7c  b310              CBZ      r0,|L5.6852|
+001a7e  f9b60000          LDRSH    r0,[r6,#0]  ; T_DEL_REL_VOLT_START
+001a82  eb000180          ADD      r1,r0,r0,LSL #2
+001a86  f9b40028          LDRSH    r0,[r4,#0x28]  ; cnt_volt_contr
+001a8a  ebb00f41          CMP      r0,r1,LSL #1
+001a8e  da01              BGE      |L5.6804|
+;;;2402   		{
+;;;2403   		cnt_volt_contr++;
+001a90  1c40              ADDS     r0,r0,#1
+001a92  8520              STRH     r0,[r4,#0x28]
+                  |L5.6804|
+;;;2404   		}
+;;;2405   	}
+;;;2406   
+;;;2407   	
+;;;2408   	if(load_U>REL_VOLT_UMIN*10)
+001a94  482d              LDR      r0,|L5.6988|
+001a96  f8df80b8          LDR      r8,|L5.6992|
+;;;2409   		{
+;;;2410   		cnt_rel_volt_umin++;
+;;;2411   		gran(&cnt_rel_volt_umin,0,30000);
+001a9a  f2475a30          MOV      r10,#0x7530
+001a9e  f9b00000          LDRSH    r0,[r0,#0]            ;2408  ; REL_VOLT_UMIN
+001aa2  eb000180          ADD      r1,r0,r0,LSL #2       ;2408
+001aa6  f9b80000          LDRSH    r0,[r8,#0]            ;2408  ; load_U
+001aaa  ebb00f41          CMP      r0,r1,LSL #1          ;2408
+001aae  dd0b              BLE      |L5.6856|
+001ab0  8d60              LDRH     r0,[r4,#0x2a]         ;2410  ; cnt_rel_volt_umin
+001ab2  4652              MOV      r2,r10
+001ab4  1c40              ADDS     r0,r0,#1              ;2410
+001ab6  8560              STRH     r0,[r4,#0x2a]         ;2410
+001ab8  4822              LDR      r0,|L5.6980|
+001aba  2100              MOVS     r1,#0
+001abc  302a              ADDS     r0,r0,#0x2a
+001abe  f7fffffe          BL       gran
+001ac2  e002              B        |L5.6858|
+                  |L5.6852|
+001ac4  8525              STRH     r5,[r4,#0x28]         ;2397
+001ac6  e7e5              B        |L5.6804|
+                  |L5.6856|
+;;;2412   		}
+;;;2413   	else cnt_rel_volt_umin=0;
+001ac8  8565              STRH     r5,[r4,#0x2a]
+                  |L5.6858|
+;;;2414   	if((cnt_rel_volt_umin>=T_DEL_REL_VOLT_WRK*10)&&(cnt_volt_contr>=(T_DEL_REL_VOLT_START*10))) 	bVOLT_IS_NOT_DOWN=1;
+001aca  f8df9088          LDR      r9,|L5.6996|
+001ace  2701              MOVS     r7,#1
+001ad0  f9b90000          LDRSH    r0,[r9,#0]  ; T_DEL_REL_VOLT_WRK
+001ad4  eb000180          ADD      r1,r0,r0,LSL #2
+001ad8  f9b4002a          LDRSH    r0,[r4,#0x2a]  ; cnt_rel_volt_umin
+001adc  ebb00f41          CMP      r0,r1,LSL #1
+001ae0  db3a              BLT      |L5.7000|
+001ae2  f9b61000          LDRSH    r1,[r6,#0]  ; T_DEL_REL_VOLT_START
+001ae6  f9b42028          LDRSH    r2,[r4,#0x28]  ; cnt_volt_contr
+001aea  eb010181          ADD      r1,r1,r1,LSL #2
+001aee  ebb20f41          CMP      r2,r1,LSL #1
+001af2  db31              BLT      |L5.7000|
+001af4  7327              STRB     r7,[r4,#0xc]
+001af6  e031              B        |L5.7004|
+                  |L5.6904|
                           DCD      _x_
-                  |L5.6932|
+                  |L5.6908|
                           DCD      _xu_
-                  |L5.6936|
+                  |L5.6912|
                           DCD      CAP_MAX_VOLT
-                  |L5.6940|
+                  |L5.6916|
                           DCD      U_MAX
-                  |L5.6944|
+                  |L5.6920|
                           DCD      CAP_WRK_CURR
-                  |L5.6948|
+                  |L5.6924|
                           DCD      I_MAX_IPS
-                  |L5.6952|
+                  |L5.6928|
                           DCD      bOFF
-                  |L5.6956|
+                  |L5.6932|
                           DCD      pwm_t_reg
-                  |L5.6960|
+                  |L5.6936|
                           DCD      pwm_u_reg
-                  |L5.6964|
+                  |L5.6940|
                           DCD      pwm_i_reg
-                  |L5.6968|
+                  |L5.6944|
                           DCD      bps
-                  |L5.6972|
+                  |L5.6948|
                           DCD      work_stat
-                  |L5.6976|
+                  |L5.6952|
                           DCD      UOUT_OFF_EN
-                  |L5.6980|
+                  |L5.6956|
                           DCD      U_maxg
-                  |L5.6984|
+                  |L5.6960|
                           DCD      U_up_temp
-                  |L5.6988|
+                  |L5.6964|
                           DCD      UOUT_OFF_LEVEL
-                  |L5.6992|
+                  |L5.6968|
                           DCD      plazma_umax
-                  |L5.6996|
+                  |L5.6972|
                           DCD      UOUT_OFF_DELAY
-                  |L5.7000|
+                  |L5.6976|
                           DCD      net_av
-                  |L5.7004|
+                  |L5.6980|
                           DCD      ||area_number.25||
-                  |L5.7008|
+                  |L5.6984|
                           DCD      T_DEL_REL_VOLT_START
-                  |L5.7012|
+                  |L5.6988|
                           DCD      REL_VOLT_UMIN
-                  |L5.7016|
+                  |L5.6992|
                           DCD      load_U
-                  |L5.7020|
+                  |L5.6996|
                           DCD      T_DEL_REL_VOLT_WRK
-                  |L5.7024|
-                          DCD      REL_VOLT_UMAX
-                  |L5.7028|
-;;;2411   	else if(cnt_rel_volt_umax==0)							  							bVOLT_IS_NOT_UP=0;
-001b74  b130              CBZ      r0,|L5.7044|
-;;;2412   	
-;;;2413   	if(bVOLT_IS_NOT_UP && bVOLT_IS_NOT_DOWN) bVOLT_IS_NORM=1;
-001b76  7b60              LDRB     r0,[r4,#0xd]  ; bVOLT_IS_NOT_UP
-001b78  b128              CBZ      r0,|L5.7046|
-                  |L5.7034|
-001b7a  7b20              LDRB     r0,[r4,#0xc]  ; bVOLT_IS_NOT_DOWN
-001b7c  b118              CBZ      r0,|L5.7046|
-001b7e  73a7              STRB     r7,[r4,#0xe]
-                  |L5.7040|
-;;;2414   	else bVOLT_IS_NORM=0;
-;;;2415   
+                  |L5.7000|
+;;;2415   	else if(cnt_rel_volt_umin==0)							  							bVOLT_IS_NOT_DOWN=0;
+001b58  b900              CBNZ     r0,|L5.7004|
+001b5a  7325              STRB     r5,[r4,#0xc]
+                  |L5.7004|
 ;;;2416   
-;;;2417   }
-001b80  e8bd87f0          POP      {r4-r10,pc}
+;;;2417   	if(load_U<REL_VOLT_UMAX*10)
+001b5c  48d2              LDR      r0,|L5.7848|
+001b5e  f9b00000          LDRSH    r0,[r0,#0]  ; REL_VOLT_UMAX
+001b62  eb000180          ADD      r1,r0,r0,LSL #2
+001b66  f9b80000          LDRSH    r0,[r8,#0]  ; load_U
+001b6a  ebb00f41          CMP      r0,r1,LSL #1
+001b6e  da08              BGE      |L5.7042|
+;;;2418   		{
+;;;2419   		cnt_rel_volt_umax++;
+001b70  8da0              LDRH     r0,[r4,#0x2c]  ; cnt_rel_volt_umax
+;;;2420   		gran(&cnt_rel_volt_umax,0,30000);
+001b72  4652              MOV      r2,r10
+001b74  1c40              ADDS     r0,r0,#1              ;2419
+001b76  85a0              STRH     r0,[r4,#0x2c]         ;2419
+001b78  2100              MOVS     r1,#0
+001b7a  48cc              LDR      r0,|L5.7852|
+001b7c  f7fffffe          BL       gran
+001b80  e000              B        |L5.7044|
+                  |L5.7042|
+;;;2421   		}
+;;;2422   	else cnt_rel_volt_umax=0;
+001b82  85a5              STRH     r5,[r4,#0x2c]
                   |L5.7044|
-001b84  7365              STRB     r5,[r4,#0xd]          ;2411
-                  |L5.7046|
-001b86  73a5              STRB     r5,[r4,#0xe]          ;2414
-001b88  e7fa              B        |L5.7040|
-;;;2418   
+;;;2423   	if((cnt_rel_volt_umax>=T_DEL_REL_VOLT_WRK*10)&&(cnt_volt_contr>=(T_DEL_REL_VOLT_START*10))) 	bVOLT_IS_NOT_UP=1;
+001b84  f9b90000          LDRSH    r0,[r9,#0]  ; T_DEL_REL_VOLT_WRK
+001b88  eb000180          ADD      r1,r0,r0,LSL #2
+001b8c  f9b4002c          LDRSH    r0,[r4,#0x2c]  ; cnt_rel_volt_umax
+001b90  ebb00f41          CMP      r0,r1,LSL #1
+001b94  db0a              BLT      |L5.7084|
+001b96  f9b61000          LDRSH    r1,[r6,#0]  ; T_DEL_REL_VOLT_START
+001b9a  f9b42028          LDRSH    r2,[r4,#0x28]  ; cnt_volt_contr
+001b9e  eb010181          ADD      r1,r1,r1,LSL #2
+001ba2  ebb20f41          CMP      r2,r1,LSL #1
+001ba6  db01              BLT      |L5.7084|
+001ba8  7367              STRB     r7,[r4,#0xd]
+001baa  e002              B        |L5.7090|
+                  |L5.7084|
+;;;2424   	else if(cnt_rel_volt_umax==0)							  							bVOLT_IS_NOT_UP=0;
+001bac  b130              CBZ      r0,|L5.7100|
+;;;2425   	
+;;;2426   	if(bVOLT_IS_NOT_UP && bVOLT_IS_NOT_DOWN) bVOLT_IS_NORM=1;
+001bae  7b60              LDRB     r0,[r4,#0xd]  ; bVOLT_IS_NOT_UP
+001bb0  b128              CBZ      r0,|L5.7102|
+                  |L5.7090|
+001bb2  7b20              LDRB     r0,[r4,#0xc]  ; bVOLT_IS_NOT_DOWN
+001bb4  b118              CBZ      r0,|L5.7102|
+001bb6  73a7              STRB     r7,[r4,#0xe]
+                  |L5.7096|
+;;;2427   	else bVOLT_IS_NORM=0;
+;;;2428   
+;;;2429   
+;;;2430   }
+001bb8  e8bd87f0          POP      {r4-r10,pc}
+                  |L5.7100|
+001bbc  7365              STRB     r5,[r4,#0xd]          ;2424
+                  |L5.7102|
+001bbe  73a5              STRB     r5,[r4,#0xe]          ;2427
+001bc0  e7fa              B        |L5.7096|
+;;;2431   
                           ENDP
 
                   current_stab_hndl PROC
-;;;2419   //-----------------------------------------------
-;;;2420   void current_stab_hndl(void)
-001b8a  e92d5ff0          PUSH     {r4-r12,lr}
-;;;2421   {
-;;;2422   
-;;;2423   if(work_stat==wsPS)
-001b8e  48b7              LDR      r0,|L5.7788|
-;;;2424   	{
-;;;2425   	delta_U_abs=abs_pal(load_U-U_up);
-001b90  f8df82e0          LDR      r8,|L5.7796|
-;;;2426   	delta_U_rel=(delta_U_abs*100)/U_up;
-;;;2427   
-;;;2428   	delta_I_abs=abs_pal(load_I-I_maxp);
-001b94  f8dfb2e0          LDR      r11,|L5.7800|
-001b98  7801              LDRB     r1,[r0,#0]            ;2423  ; work_stat
-001b9a  48b5              LDR      r0,|L5.7792|
-001b9c  f8dfa2dc          LDR      r10,|L5.7804|
-001ba0  4db7              LDR      r5,|L5.7808|
-001ba2  f9b00000          LDRSH    r0,[r0,#0]            ;2425
-;;;2429   	delta_I_rel=(delta_I_abs*100)/I_maxp;
-001ba6  4eb7              LDR      r6,|L5.7812|
-;;;2430   	}
-;;;2431   
-;;;2432   else if(work_stat==wsGS)
-;;;2433   	{
-;;;2434   	delta_U_abs=abs_pal(load_U-U_maxg);
-;;;2435   	delta_U_rel=(delta_U_abs*100)/U_maxg;
-;;;2436   
-;;;2437   	delta_I_abs=abs_pal(load_I-I_ug_temp);
-;;;2438   	delta_I_rel=(delta_I_abs*100)/I_ug_temp;
-;;;2439   	}
-;;;2440   else 
-;;;2441   	{
-;;;2442   	cnt_del_rel=0;
-001ba8  2700              MOVS     r7,#0
-001baa  4cb7              LDR      r4,|L5.7816|
-001bac  2902              CMP      r1,#2                 ;2423
-001bae  d011              BEQ      |L5.7124|
-001bb0  2901              CMP      r1,#1                 ;2432
-001bb2  d025              BEQ      |L5.7168|
-001bb4  8027              STRH     r7,[r4,#0]
-                  |L5.7094|
+;;;2432   //-----------------------------------------------
+;;;2433   void current_stab_hndl(void)
+001bc2  e92d5ff0          PUSH     {r4-r12,lr}
+;;;2434   {
+;;;2435   
+;;;2436   if(work_stat==wsPS)
+001bc6  48ba              LDR      r0,|L5.7856|
+;;;2437   	{
+;;;2438   	delta_U_abs=abs_pal(load_U-U_up);
+001bc8  f8df82ec          LDR      r8,|L5.7864|
+;;;2439   	delta_U_rel=(delta_U_abs*100)/U_up;
+;;;2440   
+;;;2441   	delta_I_abs=abs_pal(load_I-I_maxp);
+001bcc  f8dfb2ec          LDR      r11,|L5.7868|
+001bd0  7801              LDRB     r1,[r0,#0]            ;2436  ; work_stat
+001bd2  48b8              LDR      r0,|L5.7860|
+001bd4  f8dfa2e8          LDR      r10,|L5.7872|
+001bd8  4dba              LDR      r5,|L5.7876|
+001bda  f9b00000          LDRSH    r0,[r0,#0]            ;2438
+;;;2442   	delta_I_rel=(delta_I_abs*100)/I_maxp;
+001bde  4eba              LDR      r6,|L5.7880|
 ;;;2443   	}
 ;;;2444   
-;;;2445   if((delta_U_rel>DELT_REL_CURR_U)&&(delta_I_rel<DELT_REL_CURR_I))
-001bb6  49b5              LDR      r1,|L5.7820|
-001bb8  6828              LDR      r0,[r5,#0]  ; delta_U_rel
-001bba  f9b11000          LDRSH    r1,[r1,#0]  ; DELT_REL_CURR_U
-001bbe  4288              CMP      r0,r1
-001bc0  dd43              BLE      |L5.7242|
-001bc2  49b3              LDR      r1,|L5.7824|
-001bc4  6830              LDR      r0,[r6,#0]  ; delta_I_rel
-001bc6  f9b11000          LDRSH    r1,[r1,#0]  ; DELT_REL_CURR_I
-001bca  4288              CMP      r0,r1
-001bcc  da3d              BGE      |L5.7242|
+;;;2445   else if(work_stat==wsGS)
 ;;;2446   	{
-;;;2447   	cnt_del_rel++;
-001bce  8820              LDRH     r0,[r4,#0]  ; cnt_del_rel
-001bd0  1c40              ADDS     r0,r0,#1
-001bd2  e03c              B        |L5.7246|
-                  |L5.7124|
-001bd4  f8df92bc          LDR      r9,|L5.7828|
-001bd8  f8b91000          LDRH     r1,[r9,#0]            ;2425  ; U_up
-001bdc  1a40              SUBS     r0,r0,r1              ;2425
-001bde  b200              SXTH     r0,r0                 ;2425
-001be0  f7fffffe          BL       abs_pal
-001be4  f8c80000          STR      r0,[r8,#0]            ;2426  ; delta_U_abs
-001be8  2164              MOVS     r1,#0x64              ;2426
-001bea  4348              MULS     r0,r1,r0              ;2426
-001bec  f9b91000          LDRSH    r1,[r9,#0]            ;2426  ; U_up
-001bf0  f8df82a4          LDR      r8,|L5.7832|
-001bf4  fb90f0f1          SDIV     r0,r0,r1              ;2426
-001bf8  6028              STR      r0,[r5,#0]            ;2428  ; delta_U_rel
-001bfa  f8bb1000          LDRH     r1,[r11,#0]           ;2428  ; load_I
-001bfe  e014              B        |L5.7210|
-                  |L5.7168|
-001c00  f8df9298          LDR      r9,|L5.7836|
-001c04  f8b91000          LDRH     r1,[r9,#0]            ;2434  ; U_maxg
-001c08  1a40              SUBS     r0,r0,r1              ;2434
-001c0a  b200              SXTH     r0,r0                 ;2434
-001c0c  f7fffffe          BL       abs_pal
-001c10  f8c80000          STR      r0,[r8,#0]            ;2435  ; delta_U_abs
-001c14  2164              MOVS     r1,#0x64              ;2435
-001c16  4348              MULS     r0,r1,r0              ;2435
-001c18  f9b91000          LDRSH    r1,[r9,#0]            ;2435  ; U_maxg
-001c1c  f8df8280          LDR      r8,|L5.7840|
-001c20  fb90f0f1          SDIV     r0,r0,r1              ;2435
-001c24  6028              STR      r0,[r5,#0]            ;2437  ; delta_U_rel
-001c26  f8bb1000          LDRH     r1,[r11,#0]           ;2437  ; load_I
-                  |L5.7210|
-001c2a  f8b80000          LDRH     r0,[r8,#0]            ;2437  ; I_ug_temp
-001c2e  1a08              SUBS     r0,r1,r0              ;2437
-001c30  b200              SXTH     r0,r0                 ;2437
-001c32  f7fffffe          BL       abs_pal
-001c36  2164              MOVS     r1,#0x64              ;2438
-001c38  f8ca0000          STR      r0,[r10,#0]           ;2438  ; delta_I_abs
-001c3c  4348              MULS     r0,r1,r0              ;2438
-001c3e  f9b81000          LDRSH    r1,[r8,#0]            ;2438  ; I_ug_temp
-001c42  fb90f0f1          SDIV     r0,r0,r1              ;2438
-001c46  6030              STR      r0,[r6,#0]            ;2438  ; delta_I_rel
-001c48  e7b5              B        |L5.7094|
-                  |L5.7242|
-;;;2448   	}
-;;;2449   else
-;;;2450   	{
-;;;2451   	cnt_del_rel--;
-001c4a  8820              LDRH     r0,[r4,#0]  ; cnt_del_rel
-001c4c  1e40              SUBS     r0,r0,#1
-                  |L5.7246|
+;;;2447   	delta_U_abs=abs_pal(load_U-U_maxg);
+;;;2448   	delta_U_rel=(delta_U_abs*100)/U_maxg;
+;;;2449   
+;;;2450   	delta_I_abs=abs_pal(load_I-I_ug_temp);
+;;;2451   	delta_I_rel=(delta_I_abs*100)/I_ug_temp;
 ;;;2452   	}
-;;;2453   
-;;;2454   gran(&cnt_del_rel,0,(T_DEL_REL_CURR_WRK*10)+10);
-001c4e  4d95              LDR      r5,|L5.7844|
-001c50  8020              STRH     r0,[r4,#0]            ;2451
-001c52  210a              MOVS     r1,#0xa
-001c54  8828              LDRH     r0,[r5,#0]  ; T_DEL_REL_CURR_WRK
-001c56  eb000080          ADD      r0,r0,r0,LSL #2
-001c5a  eb010040          ADD      r0,r1,r0,LSL #1
-001c5e  b202              SXTH     r2,r0
-001c60  2100              MOVS     r1,#0
-001c62  4889              LDR      r0,|L5.7816|
-001c64  f7fffffe          BL       gran
-;;;2455   
-;;;2456   if(work_stat==wsOFF) cnt_del_rel=0;
-001c68  4880              LDR      r0,|L5.7788|
-001c6a  7800              LDRB     r0,[r0,#0]  ; work_stat
-001c6c  b900              CBNZ     r0,|L5.7280|
-001c6e  8027              STRH     r7,[r4,#0]
-                  |L5.7280|
+;;;2453   else 
+;;;2454   	{
+;;;2455   	cnt_del_rel=0;
+001be0  2700              MOVS     r7,#0
+001be2  4cba              LDR      r4,|L5.7884|
+001be4  2902              CMP      r1,#2                 ;2436
+001be6  d011              BEQ      |L5.7180|
+001be8  2901              CMP      r1,#1                 ;2445
+001bea  d025              BEQ      |L5.7224|
+001bec  8027              STRH     r7,[r4,#0]
+                  |L5.7150|
+;;;2456   	}
 ;;;2457   
-;;;2458   
-;;;2459   if ( (time_proc>=(T_DEL_REL_CURR_START)) &&
-001c70  488d              LDR      r0,|L5.7848|
-001c72  498e              LDR      r1,|L5.7852|
-;;;2460   	(cnt_del_rel>(T_DEL_REL_CURR_WRK*10)) )
-;;;2461   	{
-;;;2462   	bCURRENT_STAB=1;
-001c74  4a8e              LDR      r2,|L5.7856|
-001c76  6800              LDR      r0,[r0,#0]            ;2459  ; time_proc
-001c78  f9b11000          LDRSH    r1,[r1,#0]            ;2459  ; T_DEL_REL_CURR_START
-001c7c  4288              CMP      r0,r1                 ;2459
-001c7e  db0a              BLT      |L5.7318|
-001c80  f9b53000          LDRSH    r3,[r5,#0]            ;2460  ; T_DEL_REL_CURR_WRK
-001c84  f9b46000          LDRSH    r6,[r4,#0]            ;2460  ; cnt_del_rel
-001c88  eb030383          ADD      r3,r3,r3,LSL #2       ;2460
-001c8c  ebb60f43          CMP      r6,r3,LSL #1          ;2460
-001c90  dd01              BLE      |L5.7318|
-001c92  2301              MOVS     r3,#1
-001c94  7013              STRB     r3,[r2,#0]
-                  |L5.7318|
-;;;2463   	}
-;;;2464   if ( (time_proc<(T_DEL_REL_CURR_START)) ||
-001c96  4288              CMP      r0,r1
-001c98  db08              BLT      |L5.7340|
-;;;2465   	(cnt_del_rel<=(T_DEL_REL_CURR_WRK*10)) )
-001c9a  f9b50000          LDRSH    r0,[r5,#0]  ; T_DEL_REL_CURR_WRK
-001c9e  f9b41000          LDRSH    r1,[r4,#0]  ; cnt_del_rel
-001ca2  eb000080          ADD      r0,r0,r0,LSL #2
-001ca6  ebb10f40          CMP      r1,r0,LSL #1
-001caa  dc00              BGT      |L5.7342|
-                  |L5.7340|
-;;;2466   	{
-;;;2467   	bCURRENT_STAB=0;
-001cac  7017              STRB     r7,[r2,#0]
-                  |L5.7342|
-;;;2468   	}
-;;;2469   
-;;;2470   /*
-;;;2471   SET_REG(LPC_PINCON->PINSEL0,0,5*2,2);
-;;;2472   SET_REG(LPC_GPIO0->FIODIR,1,5,1);
-;;;2473   //SET_REG(LPC_GPIO0->FIOSET,1,5,1);
-;;;2474   
-;;;2475   if(RELE_LOG_CURR==0)
-;;;2476   	{
-;;;2477   	SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
-;;;2478   	}
-;;;2479   else if(RELE_LOG_CURR==1)
-;;;2480   	{
-;;;2481   	if(bCURRENT_STAB==0)SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
-;;;2482   	else SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
-;;;2483   	}
-;;;2484   else
-;;;2485   	{
-;;;2486   	if(bCURRENT_STAB==0)SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
-;;;2487   	else SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
-;;;2488   	}*/
-;;;2489   
-;;;2490   }
-001cae  e8bd9ff0          POP      {r4-r12,pc}
-;;;2491   
+;;;2458   if((delta_U_rel>DELT_REL_CURR_U)&&(delta_I_rel<DELT_REL_CURR_I))
+001bee  49b8              LDR      r1,|L5.7888|
+001bf0  6828              LDR      r0,[r5,#0]  ; delta_U_rel
+001bf2  f9b11000          LDRSH    r1,[r1,#0]  ; DELT_REL_CURR_U
+001bf6  4288              CMP      r0,r1
+001bf8  dd43              BLE      |L5.7298|
+001bfa  49b6              LDR      r1,|L5.7892|
+001bfc  6830              LDR      r0,[r6,#0]  ; delta_I_rel
+001bfe  f9b11000          LDRSH    r1,[r1,#0]  ; DELT_REL_CURR_I
+001c02  4288              CMP      r0,r1
+001c04  da3d              BGE      |L5.7298|
+;;;2459   	{
+;;;2460   	cnt_del_rel++;
+001c06  8820              LDRH     r0,[r4,#0]  ; cnt_del_rel
+001c08  1c40              ADDS     r0,r0,#1
+001c0a  e03c              B        |L5.7302|
+                  |L5.7180|
+001c0c  f8df92c8          LDR      r9,|L5.7896|
+001c10  f8b91000          LDRH     r1,[r9,#0]            ;2438  ; U_up
+001c14  1a40              SUBS     r0,r0,r1              ;2438
+001c16  b200              SXTH     r0,r0                 ;2438
+001c18  f7fffffe          BL       abs_pal
+001c1c  f8c80000          STR      r0,[r8,#0]            ;2439  ; delta_U_abs
+001c20  2164              MOVS     r1,#0x64              ;2439
+001c22  4348              MULS     r0,r1,r0              ;2439
+001c24  f9b91000          LDRSH    r1,[r9,#0]            ;2439  ; U_up
+001c28  f8df82b0          LDR      r8,|L5.7900|
+001c2c  fb90f0f1          SDIV     r0,r0,r1              ;2439
+001c30  6028              STR      r0,[r5,#0]            ;2441  ; delta_U_rel
+001c32  f8bb1000          LDRH     r1,[r11,#0]           ;2441  ; load_I
+001c36  e014              B        |L5.7266|
+                  |L5.7224|
+001c38  f8df92a4          LDR      r9,|L5.7904|
+001c3c  f8b91000          LDRH     r1,[r9,#0]            ;2447  ; U_maxg
+001c40  1a40              SUBS     r0,r0,r1              ;2447
+001c42  b200              SXTH     r0,r0                 ;2447
+001c44  f7fffffe          BL       abs_pal
+001c48  f8c80000          STR      r0,[r8,#0]            ;2448  ; delta_U_abs
+001c4c  2164              MOVS     r1,#0x64              ;2448
+001c4e  4348              MULS     r0,r1,r0              ;2448
+001c50  f9b91000          LDRSH    r1,[r9,#0]            ;2448  ; U_maxg
+001c54  f8df828c          LDR      r8,|L5.7908|
+001c58  fb90f0f1          SDIV     r0,r0,r1              ;2448
+001c5c  6028              STR      r0,[r5,#0]            ;2450  ; delta_U_rel
+001c5e  f8bb1000          LDRH     r1,[r11,#0]           ;2450  ; load_I
+                  |L5.7266|
+001c62  f8b80000          LDRH     r0,[r8,#0]            ;2450  ; I_ug_temp
+001c66  1a08              SUBS     r0,r1,r0              ;2450
+001c68  b200              SXTH     r0,r0                 ;2450
+001c6a  f7fffffe          BL       abs_pal
+001c6e  2164              MOVS     r1,#0x64              ;2451
+001c70  f8ca0000          STR      r0,[r10,#0]           ;2451  ; delta_I_abs
+001c74  4348              MULS     r0,r1,r0              ;2451
+001c76  f9b81000          LDRSH    r1,[r8,#0]            ;2451  ; I_ug_temp
+001c7a  fb90f0f1          SDIV     r0,r0,r1              ;2451
+001c7e  6030              STR      r0,[r6,#0]            ;2451  ; delta_I_rel
+001c80  e7b5              B        |L5.7150|
+                  |L5.7298|
+;;;2461   	}
+;;;2462   else
+;;;2463   	{
+;;;2464   	cnt_del_rel--;
+001c82  8820              LDRH     r0,[r4,#0]  ; cnt_del_rel
+001c84  1e40              SUBS     r0,r0,#1
+                  |L5.7302|
+;;;2465   	}
+;;;2466   
+;;;2467   gran(&cnt_del_rel,0,(T_DEL_REL_CURR_WRK*10)+10);
+001c86  4d98              LDR      r5,|L5.7912|
+001c88  8020              STRH     r0,[r4,#0]            ;2464
+001c8a  210a              MOVS     r1,#0xa
+001c8c  8828              LDRH     r0,[r5,#0]  ; T_DEL_REL_CURR_WRK
+001c8e  eb000080          ADD      r0,r0,r0,LSL #2
+001c92  eb010040          ADD      r0,r1,r0,LSL #1
+001c96  b202              SXTH     r2,r0
+001c98  2100              MOVS     r1,#0
+001c9a  488c              LDR      r0,|L5.7884|
+001c9c  f7fffffe          BL       gran
+;;;2468   
+;;;2469   if(work_stat==wsOFF) cnt_del_rel=0;
+001ca0  4883              LDR      r0,|L5.7856|
+001ca2  7800              LDRB     r0,[r0,#0]  ; work_stat
+001ca4  b900              CBNZ     r0,|L5.7336|
+001ca6  8027              STRH     r7,[r4,#0]
+                  |L5.7336|
+;;;2470   
+;;;2471   
+;;;2472   if ( (time_proc>=(T_DEL_REL_CURR_START)) &&
+001ca8  4890              LDR      r0,|L5.7916|
+001caa  4991              LDR      r1,|L5.7920|
+;;;2473   	(cnt_del_rel>(T_DEL_REL_CURR_WRK*10)) )
+;;;2474   	{
+;;;2475   	bCURRENT_STAB=1;
+001cac  4a91              LDR      r2,|L5.7924|
+001cae  6800              LDR      r0,[r0,#0]            ;2472  ; time_proc
+001cb0  f9b11000          LDRSH    r1,[r1,#0]            ;2472  ; T_DEL_REL_CURR_START
+001cb4  4288              CMP      r0,r1                 ;2472
+001cb6  db0a              BLT      |L5.7374|
+001cb8  f9b53000          LDRSH    r3,[r5,#0]            ;2473  ; T_DEL_REL_CURR_WRK
+001cbc  f9b46000          LDRSH    r6,[r4,#0]            ;2473  ; cnt_del_rel
+001cc0  eb030383          ADD      r3,r3,r3,LSL #2       ;2473
+001cc4  ebb60f43          CMP      r6,r3,LSL #1          ;2473
+001cc8  dd01              BLE      |L5.7374|
+001cca  2301              MOVS     r3,#1
+001ccc  7013              STRB     r3,[r2,#0]
+                  |L5.7374|
+;;;2476   	}
+;;;2477   if ( (time_proc<(T_DEL_REL_CURR_START)) ||
+001cce  4288              CMP      r0,r1
+001cd0  db08              BLT      |L5.7396|
+;;;2478   	(cnt_del_rel<=(T_DEL_REL_CURR_WRK*10)) )
+001cd2  f9b50000          LDRSH    r0,[r5,#0]  ; T_DEL_REL_CURR_WRK
+001cd6  f9b41000          LDRSH    r1,[r4,#0]  ; cnt_del_rel
+001cda  eb000080          ADD      r0,r0,r0,LSL #2
+001cde  ebb10f40          CMP      r1,r0,LSL #1
+001ce2  dc00              BGT      |L5.7398|
+                  |L5.7396|
+;;;2479   	{
+;;;2480   	bCURRENT_STAB=0;
+001ce4  7017              STRB     r7,[r2,#0]
+                  |L5.7398|
+;;;2481   	}
+;;;2482   
+;;;2483   /*
+;;;2484   SET_REG(LPC_PINCON->PINSEL0,0,5*2,2);
+;;;2485   SET_REG(LPC_GPIO0->FIODIR,1,5,1);
+;;;2486   //SET_REG(LPC_GPIO0->FIOSET,1,5,1);
+;;;2487   
+;;;2488   if(RELE_LOG_CURR==0)
+;;;2489   	{
+;;;2490   	SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
+;;;2491   	}
+;;;2492   else if(RELE_LOG_CURR==1)
+;;;2493   	{
+;;;2494   	if(bCURRENT_STAB==0)SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
+;;;2495   	else SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
+;;;2496   	}
+;;;2497   else
+;;;2498   	{
+;;;2499   	if(bCURRENT_STAB==0)SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
+;;;2500   	else SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
+;;;2501   	}*/
+;;;2502   
+;;;2503   }
+001ce6  e8bd9ff0          POP      {r4-r12,pc}
+;;;2504   
                           ENDP
 
                   rele_hndl PROC
-;;;2517   //-----------------------------------------------
-;;;2518   void rele_hndl(void)
-001cb2  e92d4ff0          PUSH     {r4-r11,lr}
-;;;2519   {
-;;;2520   //Реле1
-;;;2521   if(RELE_FUNC[0]==0)rele_stat[0]=rsOFF; 		//Выключено
-;;;2522   else if(RELE_FUNC[0]==1)					//Реверс
-;;;2523   	{
-;;;2524   	if(work_stat==wsCAP) 
-001cb6  486d              LDR      r0,|L5.7788|
-001cb8  f8dfe1f8          LDR      lr,|L5.7860|
-;;;2525   		{
-;;;2526   		if(bRAZR) rele_stat[0]=rsOFF;
-;;;2527   		else 	rele_stat[0]=rsON;
-;;;2528   		} 
-;;;2529   	else 
-;;;2530   		{
-;;;2531   		if(REV_STAT==rsREW)	rele_stat[0]=rsOFF;
-;;;2532   		else 			rele_stat[0]=rsON;
-;;;2533   		}
-;;;2534   	}
-;;;2535   else if(RELE_FUNC[0]==2)					//Токоограничение
+;;;2530   //-----------------------------------------------
+;;;2531   void rele_hndl(void)
+001cea  e92d4ff0          PUSH     {r4-r11,lr}
+;;;2532   {
+;;;2533   //Реле1
+;;;2534   if(RELE_FUNC[0]==0)rele_stat[0]=rsOFF; 		//Выключено
+;;;2535   else if(RELE_FUNC[0]==1)					//Реверс
 ;;;2536   	{
-;;;2537   	if(RELE_LOG_CURR==0)
-001cbc  4b80              LDR      r3,|L5.7872|
-001cbe  f890c000          LDRB     r12,[r0,#0]           ;2524
-001cc2  487d              LDR      r0,|L5.7864|
-001cc4  f9b36000          LDRSH    r6,[r3,#0]
+;;;2537   	if(work_stat==wsCAP) 
+001cee  4870              LDR      r0,|L5.7856|
+001cf0  f8dfe1b8          LDR      lr,|L5.7852|
 ;;;2538   		{
-;;;2539   		if(bCURRENT_STAB==0)	rele_stat[0]=rsON;
-;;;2540   		else 				rele_stat[0]=rsOFF;
-;;;2541   		}
-;;;2542   	else if(RELE_LOG_CURR==1)
+;;;2539   		if(bRAZR) rele_stat[0]=rsOFF;
+;;;2540   		else 	rele_stat[0]=rsON;
+;;;2541   		} 
+;;;2542   	else 
 ;;;2543   		{
-;;;2544   		if(bCURRENT_STAB==0)	rele_stat[0]=rsOFF;
-;;;2545   		else 				rele_stat[0]=rsON;
+;;;2544   		if(REV_STAT==rsREW)	rele_stat[0]=rsOFF;
+;;;2545   		else 			rele_stat[0]=rsON;
 ;;;2546   		}
-;;;2547   	}									
-;;;2548   else if(RELE_FUNC[0]==3)					//Напряжение в норме
+;;;2547   	}
+;;;2548   else if(RELE_FUNC[0]==2)					//Токоограничение
 ;;;2549   	{
-;;;2550   	if(RELE_LOG_VOLT==0)
-001cc8  4b7e              LDR      r3,|L5.7876|
-001cca  7800              LDRB     r0,[r0,#0]            ;2526
-001ccc  f9be4000          LDRSH    r4,[lr,#0]            ;2521  ; RELE_FUNC
-001cd0  4682              MOV      r10,r0                ;2526
-001cd2  487a              LDR      r0,|L5.7868|
-001cd4  2201              MOVS     r2,#1                 ;2521
-001cd6  f9b33000          LDRSH    r3,[r3,#0]
-001cda  7800              LDRB     r0,[r0,#0]            ;2531
-001cdc  2100              MOVS     r1,#0                 ;2521
-001cde  4683              MOV      r11,r0                ;2531
-001ce0  4873              LDR      r0,|L5.7856|
-001ce2  7805              LDRB     r5,[r0,#0]            ;2539
+;;;2550   	if(RELE_LOG_CURR==0)
+001cf4  4b82              LDR      r3,|L5.7936|
+001cf6  f890c000          LDRB     r12,[r0,#0]           ;2537
+001cfa  487f              LDR      r0,|L5.7928|
+001cfc  f10e0e06          ADD      lr,lr,#6              ;2534
+001d00  f9b36000          LDRSH    r6,[r3,#0]
+001d04  7800              LDRB     r0,[r0,#0]            ;2539
 ;;;2551   		{
-;;;2552   		if(bVOLT_IS_NORM==0)	rele_stat[0]=rsON;
-001ce4  f1ae0032          SUB      r0,lr,#0x32
-001ce8  7b87              LDRB     r7,[r0,#0xe]
+;;;2552   		if(bCURRENT_STAB==0)	rele_stat[0]=rsON;
 ;;;2553   		else 				rele_stat[0]=rsOFF;
 ;;;2554   		}
-;;;2555   	else if(RELE_LOG_VOLT==1)
+;;;2555   	else if(RELE_LOG_CURR==1)
 ;;;2556   		{
-;;;2557   		if(bVOLT_IS_NORM==0)	rele_stat[0]=rsOFF;
+;;;2557   		if(bCURRENT_STAB==0)	rele_stat[0]=rsOFF;
 ;;;2558   		else 				rele_stat[0]=rsON;
 ;;;2559   		}
-;;;2560   	}
-;;;2561   else if(RELE_FUNC[0]==4)					//Напряжение не выше
+;;;2560   	}									
+;;;2561   else if(RELE_FUNC[0]==3)					//Напряжение в норме
 ;;;2562   	{
 ;;;2563   	if(RELE_LOG_VOLT==0)
+001d06  4b7f              LDR      r3,|L5.7940|
+001d08  4682              MOV      r10,r0                ;2539
+001d0a  487c              LDR      r0,|L5.7932|
+001d0c  f9be4000          LDRSH    r4,[lr,#0]            ;2534  ; RELE_FUNC
+001d10  2201              MOVS     r2,#1                 ;2534
+001d12  7800              LDRB     r0,[r0,#0]            ;2544
+001d14  f9b33000          LDRSH    r3,[r3,#0]
+001d18  4683              MOV      r11,r0                ;2544
+001d1a  4876              LDR      r0,|L5.7924|
+001d1c  2100              MOVS     r1,#0                 ;2534
+001d1e  7805              LDRB     r5,[r0,#0]            ;2552
 ;;;2564   		{
-;;;2565   		if(bVOLT_IS_NOT_UP==0)	rele_stat[0]=rsON;
-001cea  f890800d          LDRB     r8,[r0,#0xd]
+;;;2565   		if(bVOLT_IS_NORM==0)	rele_stat[0]=rsON;
+001d20  f1ae0032          SUB      r0,lr,#0x32
+001d24  7b87              LDRB     r7,[r0,#0xe]
 ;;;2566   		else 				rele_stat[0]=rsOFF;
 ;;;2567   		}
 ;;;2568   	else if(RELE_LOG_VOLT==1)
 ;;;2569   		{
-;;;2570   		if(bVOLT_IS_NOT_UP==0)	rele_stat[0]=rsOFF;
+;;;2570   		if(bVOLT_IS_NORM==0)	rele_stat[0]=rsOFF;
 ;;;2571   		else 				rele_stat[0]=rsON;
 ;;;2572   		}
 ;;;2573   	}
-;;;2574   else if(RELE_FUNC[0]==5)					//Напряжение не ниже
+;;;2574   else if(RELE_FUNC[0]==4)					//Напряжение не выше
 ;;;2575   	{
 ;;;2576   	if(RELE_LOG_VOLT==0)
 ;;;2577   		{
-;;;2578   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[0]=rsON;
-001cee  7b00              LDRB     r0,[r0,#0xc]
-001cf0  4681              MOV      r9,r0
-001cf2  f1ae0004          SUB      r0,lr,#4              ;2521
-001cf6  b324              CBZ      r4,|L5.7490|
-001cf8  2c01              CMP      r4,#1                 ;2522
-001cfa  d00a              BEQ      |L5.7442|
-001cfc  2c02              CMP      r4,#2                 ;2535
-001cfe  d013              BEQ      |L5.7464|
-001d00  2c03              CMP      r4,#3                 ;2548
-001d02  d019              BEQ      |L5.7480|
-001d04  2c04              CMP      r4,#4                 ;2561
-001d06  d01f              BEQ      |L5.7496|
-001d08  2c05              CMP      r4,#5                 ;2574
-001d0a  d029              BEQ      |L5.7520|
+;;;2578   		if(bVOLT_IS_NOT_UP==0)	rele_stat[0]=rsON;
+001d26  f890800d          LDRB     r8,[r0,#0xd]
 ;;;2579   		else 				rele_stat[0]=rsOFF;
 ;;;2580   		}
 ;;;2581   	else if(RELE_LOG_VOLT==1)
 ;;;2582   		{
-;;;2583   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[0]=rsOFF;
+;;;2583   		if(bVOLT_IS_NOT_UP==0)	rele_stat[0]=rsOFF;
 ;;;2584   		else 				rele_stat[0]=rsON;
 ;;;2585   		}
 ;;;2586   	}
-;;;2587   else if(RELE_FUNC[0]==6)					//Внешнее управление
-001d0c  2c06              CMP      r4,#6
-001d0e  d033              BEQ      |L5.7544|
-001d10  e039              B        |L5.7558|
-                  |L5.7442|
-001d12  f1bc0f03          CMP      r12,#3                ;2524
-001d16  d003              BEQ      |L5.7456|
-001d18  f1bb0f00          CMP      r11,#0                ;2531
-001d1c  d032              BEQ      |L5.7556|
-001d1e  e02f              B        |L5.7552|
-                  |L5.7456|
-001d20  f1ba0f00          CMP      r10,#0                ;2526
-001d24  d12e              BNE      |L5.7556|
-001d26  e02b              B        |L5.7552|
-                  |L5.7464|
-001d28  b116              CBZ      r6,|L5.7472|
-001d2a  2e01              CMP      r6,#1                 ;2542
-001d2c  d002              BEQ      |L5.7476|
-001d2e  e02a              B        |L5.7558|
-                  |L5.7472|
-001d30  b30d              CBZ      r5,|L5.7542|
-001d32  e027              B        |L5.7556|
-                  |L5.7476|
-001d34  b12d              CBZ      r5,|L5.7490|
-001d36  e023              B        |L5.7552|
-                  |L5.7480|
-001d38  b113              CBZ      r3,|L5.7488|
-001d3a  2b01              CMP      r3,#1                 ;2555
-001d3c  d002              BEQ      |L5.7492|
-001d3e  e022              B        |L5.7558|
-                  |L5.7488|
-001d40  b1cf              CBZ      r7,|L5.7542|
-                  |L5.7490|
-001d42  e01f              B        |L5.7556|
-                  |L5.7492|
-001d44  b1f7              CBZ      r7,|L5.7556|
-001d46  e01b              B        |L5.7552|
-                  |L5.7496|
-001d48  b113              CBZ      r3,|L5.7504|
-001d4a  2b01              CMP      r3,#1                 ;2568
-001d4c  d004              BEQ      |L5.7512|
-001d4e  e01a              B        |L5.7558|
-                  |L5.7504|
-001d50  f1b80f00          CMP      r8,#0                 ;2565
-001d54  d014              BEQ      |L5.7552|
-001d56  e015              B        |L5.7556|
-                  |L5.7512|
-001d58  f1b80f00          CMP      r8,#0                 ;2570
-001d5c  d012              BEQ      |L5.7556|
-001d5e  e00f              B        |L5.7552|
-                  |L5.7520|
-001d60  b113              CBZ      r3,|L5.7528|
-001d62  2b01              CMP      r3,#1                 ;2581
-001d64  d004              BEQ      |L5.7536|
-001d66  e00e              B        |L5.7558|
-                  |L5.7528|
-001d68  f1b90f00          CMP      r9,#0                 ;2578
-001d6c  d008              BEQ      |L5.7552|
-001d6e  e009              B        |L5.7556|
-                  |L5.7536|
-001d70  f1b90f00          CMP      r9,#0                 ;2583
-001d74  d006              BEQ      |L5.7556|
-                  |L5.7542|
-001d76  e003              B        |L5.7552|
-                  |L5.7544|
+;;;2587   else if(RELE_FUNC[0]==5)					//Напряжение не ниже
 ;;;2588   	{
-;;;2589   	if(rele_ext_cntrl[0])	rele_stat[0]=rsON;
-001d78  4c4e              LDR      r4,|L5.7860|
-001d7a  1ea4              SUBS     r4,r4,#2
-001d7c  7824              LDRB     r4,[r4,#0]  ; rele_ext_cntrl
-001d7e  b10c              CBZ      r4,|L5.7556|
+;;;2589   	if(RELE_LOG_VOLT==0)
+;;;2590   		{
+;;;2591   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[0]=rsON;
+001d2a  7b00              LDRB     r0,[r0,#0xc]
+001d2c  4681              MOV      r9,r0
+001d2e  f1ae0004          SUB      r0,lr,#4              ;2534
+001d32  b324              CBZ      r4,|L5.7550|
+001d34  2c01              CMP      r4,#1                 ;2535
+001d36  d00a              BEQ      |L5.7502|
+001d38  2c02              CMP      r4,#2                 ;2548
+001d3a  d013              BEQ      |L5.7524|
+001d3c  2c03              CMP      r4,#3                 ;2561
+001d3e  d019              BEQ      |L5.7540|
+001d40  2c04              CMP      r4,#4                 ;2574
+001d42  d01f              BEQ      |L5.7556|
+001d44  2c05              CMP      r4,#5                 ;2587
+001d46  d029              BEQ      |L5.7580|
+;;;2592   		else 				rele_stat[0]=rsOFF;
+;;;2593   		}
+;;;2594   	else if(RELE_LOG_VOLT==1)
+;;;2595   		{
+;;;2596   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[0]=rsOFF;
+;;;2597   		else 				rele_stat[0]=rsON;
+;;;2598   		}
+;;;2599   	}
+;;;2600   else if(RELE_FUNC[0]==6)					//Внешнее управление
+001d48  2c06              CMP      r4,#6
+001d4a  d033              BEQ      |L5.7604|
+001d4c  e039              B        |L5.7618|
+                  |L5.7502|
+001d4e  f1bc0f03          CMP      r12,#3                ;2537
+001d52  d003              BEQ      |L5.7516|
+001d54  f1bb0f00          CMP      r11,#0                ;2544
+001d58  d032              BEQ      |L5.7616|
+001d5a  e02f              B        |L5.7612|
+                  |L5.7516|
+001d5c  f1ba0f00          CMP      r10,#0                ;2539
+001d60  d12e              BNE      |L5.7616|
+001d62  e02b              B        |L5.7612|
+                  |L5.7524|
+001d64  b116              CBZ      r6,|L5.7532|
+001d66  2e01              CMP      r6,#1                 ;2555
+001d68  d002              BEQ      |L5.7536|
+001d6a  e02a              B        |L5.7618|
+                  |L5.7532|
+001d6c  b30d              CBZ      r5,|L5.7602|
+001d6e  e027              B        |L5.7616|
+                  |L5.7536|
+001d70  b12d              CBZ      r5,|L5.7550|
+001d72  e023              B        |L5.7612|
+                  |L5.7540|
+001d74  b113              CBZ      r3,|L5.7548|
+001d76  2b01              CMP      r3,#1                 ;2568
+001d78  d002              BEQ      |L5.7552|
+001d7a  e022              B        |L5.7618|
+                  |L5.7548|
+001d7c  b1cf              CBZ      r7,|L5.7602|
+                  |L5.7550|
+001d7e  e01f              B        |L5.7616|
                   |L5.7552|
-001d80  7002              STRB     r2,[r0,#0]
-001d82  e000              B        |L5.7558|
+001d80  b1f7              CBZ      r7,|L5.7616|
+001d82  e01b              B        |L5.7612|
                   |L5.7556|
-;;;2590   	else 				rele_stat[0]=rsOFF;
-001d84  7001              STRB     r1,[r0,#0]
-                  |L5.7558|
-;;;2591   	}											
-;;;2592   //Реле2
-;;;2593   if(RELE_FUNC[1]==0)rele_stat[1]=rsOFF; 		//Выключено
-001d86  f9be4002          LDRSH    r4,[lr,#2]  ; RELE_FUNC
-001d8a  b17c              CBZ      r4,|L5.7596|
-;;;2594   else if(RELE_FUNC[1]==1)					//Реверс
-001d8c  2c01              CMP      r4,#1
-001d8e  d010              BEQ      |L5.7602|
-;;;2595   	{
-;;;2596   	if(work_stat==wsCAP) 
-;;;2597   		{
-;;;2598   		if(bRAZR) 		rele_stat[1]=rsOFF;
-;;;2599   		else 			rele_stat[1]=rsON;
-;;;2600   		} 
-;;;2601   	else 
-;;;2602   		{
-;;;2603   		if(REV_STAT==rsREW)	rele_stat[1]=rsOFF;
-;;;2604   		else 			rele_stat[1]=rsON;
-;;;2605   		}
-;;;2606   	}
-;;;2607   else if(RELE_FUNC[1]==2)					//Токоограничение
-001d90  2c02              CMP      r4,#2
-001d92  d01a              BEQ      |L5.7626|
+001d84  b113              CBZ      r3,|L5.7564|
+001d86  2b01              CMP      r3,#1                 ;2581
+001d88  d004              BEQ      |L5.7572|
+001d8a  e01a              B        |L5.7618|
+                  |L5.7564|
+001d8c  f1b80f00          CMP      r8,#0                 ;2578
+001d90  d014              BEQ      |L5.7612|
+001d92  e015              B        |L5.7616|
+                  |L5.7572|
+001d94  f1b80f00          CMP      r8,#0                 ;2583
+001d98  d012              BEQ      |L5.7616|
+001d9a  e00f              B        |L5.7612|
+                  |L5.7580|
+001d9c  b113              CBZ      r3,|L5.7588|
+001d9e  2b01              CMP      r3,#1                 ;2594
+001da0  d004              BEQ      |L5.7596|
+001da2  e00e              B        |L5.7618|
+                  |L5.7588|
+001da4  f1b90f00          CMP      r9,#0                 ;2591
+001da8  d008              BEQ      |L5.7612|
+001daa  e009              B        |L5.7616|
+                  |L5.7596|
+001dac  f1b90f00          CMP      r9,#0                 ;2596
+001db0  d006              BEQ      |L5.7616|
+                  |L5.7602|
+001db2  e003              B        |L5.7612|
+                  |L5.7604|
+;;;2601   	{
+;;;2602   	if(rele_ext_cntrl[0])	rele_stat[0]=rsON;
+001db4  4c3d              LDR      r4,|L5.7852|
+001db6  1d24              ADDS     r4,r4,#4
+001db8  7824              LDRB     r4,[r4,#0]  ; rele_ext_cntrl
+001dba  b10c              CBZ      r4,|L5.7616|
+                  |L5.7612|
+001dbc  7002              STRB     r2,[r0,#0]
+001dbe  e000              B        |L5.7618|
+                  |L5.7616|
+;;;2603   	else 				rele_stat[0]=rsOFF;
+001dc0  7001              STRB     r1,[r0,#0]
+                  |L5.7618|
+;;;2604   	}											
+;;;2605   //Реле2
+;;;2606   if(RELE_FUNC[1]==0)rele_stat[1]=rsOFF; 		//Выключено
+001dc2  f9be4002          LDRSH    r4,[lr,#2]  ; RELE_FUNC
+001dc6  b17c              CBZ      r4,|L5.7656|
+;;;2607   else if(RELE_FUNC[1]==1)					//Реверс
+001dc8  2c01              CMP      r4,#1
+001dca  d010              BEQ      |L5.7662|
 ;;;2608   	{
-;;;2609   	if(RELE_LOG_CURR==0)
+;;;2609   	if(work_stat==wsCAP) 
 ;;;2610   		{
-;;;2611   		if(bCURRENT_STAB==0)rele_stat[1]=rsON;
-;;;2612   		else 			rele_stat[1]=rsOFF;
-;;;2613   		}
-;;;2614   	else if(RELE_LOG_CURR==1)
+;;;2611   		if(bRAZR) 		rele_stat[1]=rsOFF;
+;;;2612   		else 			rele_stat[1]=rsON;
+;;;2613   		} 
+;;;2614   	else 
 ;;;2615   		{
-;;;2616   		if(bCURRENT_STAB==0)rele_stat[1]=rsOFF;
+;;;2616   		if(REV_STAT==rsREW)	rele_stat[1]=rsOFF;
 ;;;2617   		else 			rele_stat[1]=rsON;
 ;;;2618   		}
-;;;2619   	}									
-;;;2620   else if(RELE_FUNC[1]==3)					//Напряжение в норме
-001d94  2c03              CMP      r4,#3
-001d96  d021              BEQ      |L5.7644|
+;;;2619   	}
+;;;2620   else if(RELE_FUNC[1]==2)					//Токоограничение
+001dcc  2c02              CMP      r4,#2
+001dce  d01a              BEQ      |L5.7686|
 ;;;2621   	{
-;;;2622   	if(RELE_LOG_VOLT==0)
+;;;2622   	if(RELE_LOG_CURR==0)
 ;;;2623   		{
-;;;2624   		if(bVOLT_IS_NORM==0)	rele_stat[1]=rsON;
-;;;2625   		else 				rele_stat[1]=rsOFF;
+;;;2624   		if(bCURRENT_STAB==0)rele_stat[1]=rsON;
+;;;2625   		else 			rele_stat[1]=rsOFF;
 ;;;2626   		}
-;;;2627   	else if(RELE_LOG_VOLT==1)
+;;;2627   	else if(RELE_LOG_CURR==1)
 ;;;2628   		{
-;;;2629   		if(bVOLT_IS_NORM==0)	rele_stat[1]=rsOFF;
-;;;2630   		else 				rele_stat[1]=rsON;
+;;;2629   		if(bCURRENT_STAB==0)rele_stat[1]=rsOFF;
+;;;2630   		else 			rele_stat[1]=rsON;
 ;;;2631   		}
-;;;2632   	}
-;;;2633   else if(RELE_FUNC[1]==4)					//Напряжение не выше
-001d98  2c04              CMP      r4,#4
-001d9a  d028              BEQ      |L5.7662|
+;;;2632   	}									
+;;;2633   else if(RELE_FUNC[1]==3)					//Напряжение в норме
+001dd0  2c03              CMP      r4,#3
+001dd2  d021              BEQ      |L5.7704|
 ;;;2634   	{
 ;;;2635   	if(RELE_LOG_VOLT==0)
 ;;;2636   		{
-;;;2637   		if(bVOLT_IS_NOT_UP==0)	rele_stat[1]=rsON;
+;;;2637   		if(bVOLT_IS_NORM==0)	rele_stat[1]=rsON;
 ;;;2638   		else 				rele_stat[1]=rsOFF;
 ;;;2639   		}
 ;;;2640   	else if(RELE_LOG_VOLT==1)
 ;;;2641   		{
-;;;2642   		if(bVOLT_IS_NOT_UP==0)	rele_stat[1]=rsOFF;
+;;;2642   		if(bVOLT_IS_NORM==0)	rele_stat[1]=rsOFF;
 ;;;2643   		else 				rele_stat[1]=rsON;
 ;;;2644   		}
 ;;;2645   	}
-;;;2646   else if(RELE_FUNC[1]==5)					//Напряжение не ниже
-001d9c  2c05              CMP      r4,#5
-001d9e  d031              BEQ      |L5.7684|
+;;;2646   else if(RELE_FUNC[1]==4)					//Напряжение не выше
+001dd4  2c04              CMP      r4,#4
+001dd6  d028              BEQ      |L5.7722|
 ;;;2647   	{
 ;;;2648   	if(RELE_LOG_VOLT==0)
 ;;;2649   		{
-;;;2650   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[1]=rsON;
+;;;2650   		if(bVOLT_IS_NOT_UP==0)	rele_stat[1]=rsON;
 ;;;2651   		else 				rele_stat[1]=rsOFF;
 ;;;2652   		}
 ;;;2653   	else if(RELE_LOG_VOLT==1)
 ;;;2654   		{
-;;;2655   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[1]=rsOFF;
+;;;2655   		if(bVOLT_IS_NOT_UP==0)	rele_stat[1]=rsOFF;
 ;;;2656   		else 				rele_stat[1]=rsON;
 ;;;2657   		}
 ;;;2658   	}
-;;;2659   else if(RELE_FUNC[1]==6)					//Внешнее управление
-001da0  2c06              CMP      r4,#6
-001da2  d104              BNE      |L5.7598|
+;;;2659   else if(RELE_FUNC[1]==5)					//Напряжение не ниже
+001dd8  2c05              CMP      r4,#5
+001dda  d031              BEQ      |L5.7744|
 ;;;2660   	{
-;;;2661   	if(rele_ext_cntrl[1])	rele_stat[1]=rsON;
-001da4  4b43              LDR      r3,|L5.7860|
-001da6  1e9b              SUBS     r3,r3,#2
-001da8  785b              LDRB     r3,[r3,#1]  ; rele_ext_cntrl
-001daa  b943              CBNZ     r3,|L5.7614|
-                  |L5.7596|
-001dac  7041              STRB     r1,[r0,#1]            ;2593
-                  |L5.7598|
-;;;2662   	else 				rele_stat[1]=rsOFF;
-;;;2663   	}	
-;;;2664   
-;;;2665   //rele_stat[0]=rsON;
-;;;2666   //rele_stat[1]=rsON;
-;;;2667   										
-;;;2668   }
-001dae  e8bd8ff0          POP      {r4-r11,pc}
-                  |L5.7602|
-001db2  f1bc0f03          CMP      r12,#3                ;2596
-001db6  d004              BEQ      |L5.7618|
-001db8  f1bb0f00          CMP      r11,#0                ;2603
-001dbc  d0f6              BEQ      |L5.7596|
-                  |L5.7614|
-001dbe  7042              STRB     r2,[r0,#1]            ;2604
-001dc0  e7f5              B        |L5.7598|
-                  |L5.7618|
-001dc2  f1ba0f00          CMP      r10,#0                ;2598
-001dc6  d1f1              BNE      |L5.7596|
-001dc8  e7f9              B        |L5.7614|
-                  |L5.7626|
-001dca  b126              CBZ      r6,|L5.7638|
-001dcc  2e01              CMP      r6,#1                 ;2614
-001dce  d1ee              BNE      |L5.7598|
-001dd0  2d00              CMP      r5,#0                 ;2616
-001dd2  d1f4              BNE      |L5.7614|
-001dd4  e7ea              B        |L5.7596|
-                  |L5.7638|
-001dd6  2d00              CMP      r5,#0                 ;2611
-001dd8  d0f1              BEQ      |L5.7614|
-001dda  e7e7              B        |L5.7596|
-                  |L5.7644|
-001ddc  b123              CBZ      r3,|L5.7656|
-001dde  2b01              CMP      r3,#1                 ;2627
-001de0  d1e5              BNE      |L5.7598|
-001de2  2f00              CMP      r7,#0                 ;2629
-001de4  d1eb              BNE      |L5.7614|
-001de6  e7e1              B        |L5.7596|
+;;;2661   	if(RELE_LOG_VOLT==0)
+;;;2662   		{
+;;;2663   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[1]=rsON;
+;;;2664   		else 				rele_stat[1]=rsOFF;
+;;;2665   		}
+;;;2666   	else if(RELE_LOG_VOLT==1)
+;;;2667   		{
+;;;2668   		if(bVOLT_IS_NOT_DOWN==0)	rele_stat[1]=rsOFF;
+;;;2669   		else 				rele_stat[1]=rsON;
+;;;2670   		}
+;;;2671   	}
+;;;2672   else if(RELE_FUNC[1]==6)					//Внешнее управление
+001ddc  2c06              CMP      r4,#6
+001dde  d104              BNE      |L5.7658|
+;;;2673   	{
+;;;2674   	if(rele_ext_cntrl[1])	rele_stat[1]=rsON;
+001de0  4b32              LDR      r3,|L5.7852|
+001de2  1d1b              ADDS     r3,r3,#4
+001de4  785b              LDRB     r3,[r3,#1]  ; rele_ext_cntrl
+001de6  b943              CBNZ     r3,|L5.7674|
                   |L5.7656|
-001de8  2f00              CMP      r7,#0                 ;2624
-001dea  d0e8              BEQ      |L5.7614|
-001dec  e7de              B        |L5.7596|
+001de8  7041              STRB     r1,[r0,#1]            ;2606
+                  |L5.7658|
+;;;2675   	else 				rele_stat[1]=rsOFF;
+;;;2676   	}	
+;;;2677   
+;;;2678   //rele_stat[0]=rsON;
+;;;2679   //rele_stat[1]=rsON;
+;;;2680   										
+;;;2681   }
+001dea  e8bd8ff0          POP      {r4-r11,pc}
                   |L5.7662|
-001dee  b12b              CBZ      r3,|L5.7676|
-001df0  2b01              CMP      r3,#1                 ;2640
-001df2  d1dc              BNE      |L5.7598|
-001df4  f1b80f00          CMP      r8,#0                 ;2642
-001df8  d1e1              BNE      |L5.7614|
-001dfa  e7d7              B        |L5.7596|
-                  |L5.7676|
-001dfc  f1b80f00          CMP      r8,#0                 ;2637
-001e00  d0dd              BEQ      |L5.7614|
-001e02  e7d3              B        |L5.7596|
-                  |L5.7684|
-001e04  b12b              CBZ      r3,|L5.7698|
-001e06  2b01              CMP      r3,#1                 ;2653
-001e08  d1d1              BNE      |L5.7598|
-001e0a  f1b90f00          CMP      r9,#0                 ;2655
-001e0e  d1d6              BNE      |L5.7614|
-001e10  e7cc              B        |L5.7596|
+001dee  f1bc0f03          CMP      r12,#3                ;2609
+001df2  d004              BEQ      |L5.7678|
+001df4  f1bb0f00          CMP      r11,#0                ;2616
+001df8  d0f6              BEQ      |L5.7656|
+                  |L5.7674|
+001dfa  7042              STRB     r2,[r0,#1]            ;2617
+001dfc  e7f5              B        |L5.7658|
+                  |L5.7678|
+001dfe  f1ba0f00          CMP      r10,#0                ;2611
+001e02  d1f1              BNE      |L5.7656|
+001e04  e7f9              B        |L5.7674|
+                  |L5.7686|
+001e06  b126              CBZ      r6,|L5.7698|
+001e08  2e01              CMP      r6,#1                 ;2627
+001e0a  d1ee              BNE      |L5.7658|
+001e0c  2d00              CMP      r5,#0                 ;2629
+001e0e  d1f4              BNE      |L5.7674|
+001e10  e7ea              B        |L5.7656|
                   |L5.7698|
-001e12  f1b90f00          CMP      r9,#0                 ;2650
-001e16  d0d2              BEQ      |L5.7614|
-001e18  e7c8              B        |L5.7596|
-;;;2669    
+001e12  2d00              CMP      r5,#0                 ;2624
+001e14  d0f1              BEQ      |L5.7674|
+001e16  e7e7              B        |L5.7656|
+                  |L5.7704|
+001e18  b123              CBZ      r3,|L5.7716|
+001e1a  2b01              CMP      r3,#1                 ;2640
+001e1c  d1e5              BNE      |L5.7658|
+001e1e  2f00              CMP      r7,#0                 ;2642
+001e20  d1eb              BNE      |L5.7674|
+001e22  e7e1              B        |L5.7656|
+                  |L5.7716|
+001e24  2f00              CMP      r7,#0                 ;2637
+001e26  d0e8              BEQ      |L5.7674|
+001e28  e7de              B        |L5.7656|
+                  |L5.7722|
+001e2a  b12b              CBZ      r3,|L5.7736|
+001e2c  2b01              CMP      r3,#1                 ;2653
+001e2e  d1dc              BNE      |L5.7658|
+001e30  f1b80f00          CMP      r8,#0                 ;2655
+001e34  d1e1              BNE      |L5.7674|
+001e36  e7d7              B        |L5.7656|
+                  |L5.7736|
+001e38  f1b80f00          CMP      r8,#0                 ;2650
+001e3c  d0dd              BEQ      |L5.7674|
+001e3e  e7d3              B        |L5.7656|
+                  |L5.7744|
+001e40  b12b              CBZ      r3,|L5.7758|
+001e42  2b01              CMP      r3,#1                 ;2666
+001e44  d1d1              BNE      |L5.7658|
+001e46  f1b90f00          CMP      r9,#0                 ;2668
+001e4a  d1d6              BNE      |L5.7674|
+001e4c  e7cc              B        |L5.7656|
+                  |L5.7758|
+001e4e  f1b90f00          CMP      r9,#0                 ;2663
+001e52  d0d2              BEQ      |L5.7674|
+001e54  e7c8              B        |L5.7656|
+;;;2682    
                           ENDP
 
                   rele_drv PROC
-;;;2670   //-----------------------------------------------
-;;;2671   void rele_drv(void)
-001e1a  492b              LDR      r1,|L5.7880|
-;;;2672   {
-;;;2673   #ifdef EXT_BOARD_V_1
-;;;2674   SET_REG(LPC_PINCON->PINSEL0,0,4*2,2);
-;;;2675   SET_REG(LPC_GPIO0->FIODIR,1,4,1);
-;;;2676   
-;;;2677   if(rele_stat[0]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,4,1);
-;;;2678   else SET_REG(LPC_GPIO0->FIOPIN,1,4,1);
-;;;2679   #endif
-;;;2680   
-;;;2681   #ifdef EXT_BOARD_V_2
-;;;2682   SET_REG(LPC_PINCON->PINSEL0,0,7*2,2);
-001e1c  6808              LDR      r0,[r1,#0]
-001e1e  f4204040          BIC      r0,r0,#0xc000
-001e22  6008              STR      r0,[r1,#0]
-;;;2683   SET_REG(LPC_GPIO0->FIODIR,1,7,1);
-001e24  4829              LDR      r0,|L5.7884|
-001e26  6802              LDR      r2,[r0,#0]
-001e28  f0420280          ORR      r2,r2,#0x80
-001e2c  6002              STR      r2,[r0,#0]
-;;;2684   
-;;;2685   if(rele_stat[0]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,7,1);
-001e2e  4a21              LDR      r2,|L5.7860|
-001e30  1f12              SUBS     r2,r2,#4
-001e32  7813              LDRB     r3,[r2,#0]  ; rele_stat
-001e34  2b01              CMP      r3,#1
-;;;2686   else SET_REG(LPC_GPIO0->FIOPIN,1,7,1);
-001e36  6943              LDR      r3,[r0,#0x14]
-001e38  d012              BEQ      |L5.7776|
-001e3a  f0430380          ORR      r3,r3,#0x80
-                  |L5.7742|
-001e3e  6143              STR      r3,[r0,#0x14]
-;;;2687   #endif
-;;;2688   
-;;;2689   SET_REG(LPC_PINCON->PINSEL0,0,5*2,2);
-001e40  680b              LDR      r3,[r1,#0]
-001e42  f4236340          BIC      r3,r3,#0xc00
-001e46  600b              STR      r3,[r1,#0]
-;;;2690   SET_REG(LPC_GPIO0->FIODIR,1,5,1);
-001e48  6801              LDR      r1,[r0,#0]
-001e4a  f0410120          ORR      r1,r1,#0x20
-001e4e  6001              STR      r1,[r0,#0]
-;;;2691   
-;;;2692   if(rele_stat[1]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
-001e50  7851              LDRB     r1,[r2,#1]  ; rele_stat
-001e52  2901              CMP      r1,#1
-;;;2693   else SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
-001e54  6941              LDR      r1,[r0,#0x14]
-001e56  d006              BEQ      |L5.7782|
-001e58  f0410120          ORR      r1,r1,#0x20
-                  |L5.7772|
-001e5c  6141              STR      r1,[r0,#0x14]         ;2692
-;;;2694   
-;;;2695   
-;;;2696   }
-001e5e  4770              BX       lr
-                  |L5.7776|
-001e60  f0230380          BIC      r3,r3,#0x80           ;2685
-001e64  e7eb              B        |L5.7742|
-                  |L5.7782|
-001e66  f0210120          BIC      r1,r1,#0x20           ;2692
-001e6a  e7f7              B        |L5.7772|
+;;;2683   //-----------------------------------------------
+;;;2684   void rele_drv(void)
+001e56  492c              LDR      r1,|L5.7944|
+;;;2685   {
+;;;2686   #ifdef EXT_BOARD_V_1
+;;;2687   SET_REG(LPC_PINCON->PINSEL0,0,4*2,2);
+;;;2688   SET_REG(LPC_GPIO0->FIODIR,1,4,1);
+;;;2689   
+;;;2690   if(rele_stat[0]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,4,1);
+;;;2691   else SET_REG(LPC_GPIO0->FIOPIN,1,4,1);
+;;;2692   #endif
+;;;2693   
+;;;2694   #ifdef EXT_BOARD_V_2
+;;;2695   SET_REG(LPC_PINCON->PINSEL0,0,7*2,2);
+001e58  6808              LDR      r0,[r1,#0]
+001e5a  f4204040          BIC      r0,r0,#0xc000
+001e5e  6008              STR      r0,[r1,#0]
+;;;2696   SET_REG(LPC_GPIO0->FIODIR,1,7,1);
+001e60  482a              LDR      r0,|L5.7948|
+001e62  6802              LDR      r2,[r0,#0]
+001e64  f0420280          ORR      r2,r2,#0x80
+001e68  6002              STR      r2,[r0,#0]
 ;;;2697   
+;;;2698   if(rele_stat[0]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,7,1);
+001e6a  4a10              LDR      r2,|L5.7852|
+001e6c  1c92              ADDS     r2,r2,#2
+001e6e  7813              LDRB     r3,[r2,#0]  ; rele_stat
+001e70  2b01              CMP      r3,#1
+;;;2699   else SET_REG(LPC_GPIO0->FIOPIN,1,7,1);
+001e72  6943              LDR      r3,[r0,#0x14]
+001e74  d012              BEQ      |L5.7836|
+001e76  f0430380          ORR      r3,r3,#0x80
+                  |L5.7802|
+001e7a  6143              STR      r3,[r0,#0x14]
+;;;2700   #endif
+;;;2701   
+;;;2702   SET_REG(LPC_PINCON->PINSEL0,0,5*2,2);
+001e7c  680b              LDR      r3,[r1,#0]
+001e7e  f4236340          BIC      r3,r3,#0xc00
+001e82  600b              STR      r3,[r1,#0]
+;;;2703   SET_REG(LPC_GPIO0->FIODIR,1,5,1);
+001e84  6801              LDR      r1,[r0,#0]
+001e86  f0410120          ORR      r1,r1,#0x20
+001e8a  6001              STR      r1,[r0,#0]
+;;;2704   
+;;;2705   if(rele_stat[1]==rsON) SET_REG(LPC_GPIO0->FIOPIN,0,5,1);
+001e8c  7851              LDRB     r1,[r2,#1]  ; rele_stat
+001e8e  2901              CMP      r1,#1
+;;;2706   else SET_REG(LPC_GPIO0->FIOPIN,1,5,1);
+001e90  6941              LDR      r1,[r0,#0x14]
+001e92  d006              BEQ      |L5.7842|
+001e94  f0410120          ORR      r1,r1,#0x20
+                  |L5.7832|
+001e98  6141              STR      r1,[r0,#0x14]         ;2705
+;;;2707   
+;;;2708   
+;;;2709   }
+001e9a  4770              BX       lr
+                  |L5.7836|
+001e9c  f0230380          BIC      r3,r3,#0x80           ;2698
+001ea0  e7eb              B        |L5.7802|
+                  |L5.7842|
+001ea2  f0210120          BIC      r1,r1,#0x20           ;2705
+001ea6  e7f7              B        |L5.7832|
+;;;2710   
                           ENDP
 
-                  |L5.7788|
-                          DCD      work_stat
-                  |L5.7792|
-                          DCD      load_U
-                  |L5.7796|
-                          DCD      delta_U_abs
-                  |L5.7800|
-                          DCD      load_I
-                  |L5.7804|
-                          DCD      delta_I_abs
-                  |L5.7808|
-                          DCD      delta_U_rel
-                  |L5.7812|
-                          DCD      delta_I_rel
-                  |L5.7816|
-                          DCD      cnt_del_rel
-                  |L5.7820|
-                          DCD      DELT_REL_CURR_U
-                  |L5.7824|
-                          DCD      DELT_REL_CURR_I
-                  |L5.7828|
-                          DCD      U_up
-                  |L5.7832|
-                          DCD      I_maxp
-                  |L5.7836|
-                          DCD      U_maxg
-                  |L5.7840|
-                          DCD      I_ug_temp
-                  |L5.7844|
-                          DCD      T_DEL_REL_CURR_WRK
                   |L5.7848|
-                          DCD      time_proc
+                          DCD      REL_VOLT_UMAX
                   |L5.7852|
-                          DCD      T_DEL_REL_CURR_START
+                          DCD      ||area_number.25||+0x2c
                   |L5.7856|
-                          DCD      bCURRENT_STAB
+                          DCD      work_stat
                   |L5.7860|
-                          DCD      ||area_number.25||+0x32
+                          DCD      load_U
                   |L5.7864|
-                          DCD      bRAZR
+                          DCD      delta_U_abs
                   |L5.7868|
-                          DCD      REV_STAT
+                          DCD      load_I
                   |L5.7872|
-                          DCD      RELE_LOG_CURR
+                          DCD      delta_I_abs
                   |L5.7876|
-                          DCD      RELE_LOG_VOLT
+                          DCD      delta_U_rel
                   |L5.7880|
-                          DCD      0x4002c000
+                          DCD      delta_I_rel
                   |L5.7884|
+                          DCD      cnt_del_rel
+                  |L5.7888|
+                          DCD      DELT_REL_CURR_U
+                  |L5.7892|
+                          DCD      DELT_REL_CURR_I
+                  |L5.7896|
+                          DCD      U_up
+                  |L5.7900|
+                          DCD      I_maxp
+                  |L5.7904|
+                          DCD      U_maxg
+                  |L5.7908|
+                          DCD      I_ug_temp
+                  |L5.7912|
+                          DCD      T_DEL_REL_CURR_WRK
+                  |L5.7916|
+                          DCD      time_proc
+                  |L5.7920|
+                          DCD      T_DEL_REL_CURR_START
+                  |L5.7924|
+                          DCD      bCURRENT_STAB
+                  |L5.7928|
+                          DCD      bRAZR
+                  |L5.7932|
+                          DCD      REV_STAT
+                  |L5.7936|
+                          DCD      RELE_LOG_CURR
+                  |L5.7940|
+                          DCD      RELE_LOG_VOLT
+                  |L5.7944|
+                          DCD      0x4002c000
+                  |L5.7948|
                           DCD      0x2009c000
 
                           AREA ||area_number.6||, CODE, READONLY, ALIGN=2

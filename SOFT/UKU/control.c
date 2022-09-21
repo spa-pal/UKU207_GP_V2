@@ -2168,12 +2168,13 @@ if (bps[in]._device!=dSRC) return;
 temp=bps[in]._flags_tm;
 if(temp&(1<<AV_T))
 	{
-	if(bps[in]._temp_av_cnt<1200) 
+	if(bps[in]._temp_av_cnt<10) 
 		{
 		bps[in]._temp_av_cnt++;
-		if(bps[in]._temp_av_cnt>=1200)
+		if(bps[in]._temp_av_cnt>=10)
 			{
-			bps[in]._temp_av_cnt=1200;
+			bps[in]._temp_av_cnt=10;
+			bps[in]._av|=(1<<0);
 		   	//if(!(bps[in]._av&(1<<0)))avar_bps_hndl(in,0,1);
 			}
 		}
@@ -2186,6 +2187,7 @@ else if(!(temp&(1<<AV_T)))
 		bps[in]._temp_av_cnt--;
 		if(!bps[in]._temp_av_cnt)
 			{
+			bps[in]._av&=~(1<<0);
 			//if(bps[in]._av&(1<<0))avar_bps_hndl(in,0,0);
 			}
 		} 	
@@ -2200,6 +2202,7 @@ if((temp&(1<<AVUMAX)))
 		if(bps[in]._umax_av_cnt>=10)
 			{ 
 			bps[in]._umax_av_cnt=10;
+			bps[in]._av|=(1<<1);
 			//if(!(bps[in]._av&(1<<1)))avar_bps_hndl(in,1,1);
 		  	/*if((K[APV]!=ON)||((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afOFF)))avar_s_hndl(in,1,1);
 			if((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afON))
@@ -2221,6 +2224,7 @@ else if(!(temp&(1<<AVUMAX)))
 		if(bps[in]._umax_av_cnt==0)
 			{
 			bps[in]._umax_av_cnt=0;
+			bps[in]._av&=~(1<<1);
 			//avar_bps_hndl(in,1,0);
 	 //		apv_cnt[in,0]=0;
 	//		apv_cnt[in,1]=0;
@@ -2238,6 +2242,7 @@ if(temp&(1<<AVUMIN))
 		if(bps[in]._umin_av_cnt>=10)
 			{ 
 			bps[in]._umin_av_cnt=10;
+			bps[in]._av|=(1<<2);
 			//if(!(bps[in]._av&(1<<2)))avar_bps_hndl(in,2,1);
 		  	/*	if((K[APV]!=ON)||((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afOFF)))avar_s_hndl(in,2,1);
 			if((apv_cnt[in,0]==0)&&(apv_cnt[in,1]==0)&&(apv_cnt[in,2]==0)&&(apv_flags[in]==afON))
@@ -2259,6 +2264,7 @@ else if(!(temp&(1<<AVUMIN)))
 		if(bps[in]._umin_av_cnt==0)
 			{
 			bps[in]._umin_av_cnt=0;
+			bps[in]._av&=~(1<<2);
 		//	avar_bps_hndl(in,2,0);
 		//	apv_cnt[in,0]=0;
 		//	apv_cnt[in,1]=0;
@@ -2356,9 +2362,16 @@ if(bps[in]._ist_blok_cnt)
 	   */ 
 
 //Пересброс БПСа при потере связи
-if(bps[in]._cnt>=10) bps[in]._flags_tu|=BIN8(10000000);
-else bps[in]._flags_tu&=BIN8(1111111);
-	
+if(bps[in]._cnt>=10) 
+	{
+	bps[in]._flags_tu|=BIN8(10000000);
+	bps[in]._av|=(1<<3);
+	}
+else 
+	{
+	bps[in]._flags_tu&=BIN8(1111111);
+	bps[in]._av&=~(1<<3);
+	}
 bps[in]._vol_u=cntrl_stat_U;	
 bps[in]._vol_i=cntrl_stat_I;
  
