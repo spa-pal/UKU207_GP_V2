@@ -3322,7 +3322,7 @@ void spi1_config(void)
 
  
 
-((LPC_SPI_TypeDef *) ((0x40000000UL) + 0x20000) )->SPCCR=8;
+((LPC_SPI_TypeDef *) ((0x40000000UL) + 0x20000) )->SPCCR=32;
 ((LPC_SPI_TypeDef *) ((0x40000000UL) + 0x20000) )->SPCR=0x20;
 }
 

@@ -4394,8 +4394,7 @@ else if(ind==iAvz)
 	
 	}
 
-else if(ind==iFWabout)
-	{
+/*	{
 	bgnd_par(	" Версия             ",
 				" Сборка  0000.00.00 ",
 				"                    ",
@@ -4405,8 +4404,25 @@ else if(ind==iFWabout)
 	int2lcdyx(BUILD_DAY,1,18,0);
 	
 	sprintf(&lcd_buffer[9],"%d.%d.%d",HARDWARE_VERSION,SOFT_VERSION,BUILD);
-	}
+	}*/
 
+else if(ind==iFWabout)
+	{
+	bgnd_par(	" Версия             ",
+				" Сборка  0000.00.00 ",
+				#ifdef WG12232A
+				" WG12232A           ",
+				#endif
+				#ifdef WG12232L3
+				" WG12232L3          ",
+				#endif
+				"                    ");
+	int2lcdyx(BUILD_YEAR,1,12,0);
+	int2lcdyx(BUILD_MONTH,1,15,0);
+	int2lcdyx(BUILD_DAY,1,18,0);
+	
+	sprintf(&lcd_buffer[9],"%d.%d.%d",HARDWARE_VERSION,SOFT_VERSION,BUILD);
+	}
 
 #endif
 /*

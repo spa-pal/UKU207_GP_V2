@@ -9354,11 +9354,28 @@ else if(a_ind . i==iAvz)
 	
 	}
 
+
+
+
+
+
+
+
+
+
+
+ 
+
 else if(a_ind . i==iFWabout)
 	{
 	bgnd_par(	" Версия             ",
 				" Сборка  0000.00.00 ",
-				"                    ",
+
+
+
+
+				" WG12232L3          ",
+
 				"                    ");
 	int2lcdyx(BUILD_YEAR,1,12,0);
 	int2lcdyx(BUILD_MONTH,1,15,0);
@@ -9366,7 +9383,6 @@ else if(a_ind . i==iFWabout)
 	
 	sprintf(&lcd_buffer[9],"%d.%d.%d",HARDWARE_VERSION,SOFT_VERSION,BUILD);
 	}
-
 
 
 
@@ -9519,12 +9535,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4568 "main.c"
+#line 4584 "main.c"
 
 
 
 
-#line 4590 "main.c"
+#line 4606 "main.c"
 
 
 
@@ -16893,7 +16909,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11964 "main.c"
+#line 11980 "main.c"
 
 
 
