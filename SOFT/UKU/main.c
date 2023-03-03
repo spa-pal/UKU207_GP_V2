@@ -7638,7 +7638,7 @@ else if(ind==iSet)
 			#ifdef SC16IS740_UART
 			sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
 			#endif
-	     	}
+	     	} 
           }
 	else if(sub_ind==22)
 	    	{

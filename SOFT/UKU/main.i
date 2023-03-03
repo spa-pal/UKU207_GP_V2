@@ -12542,41 +12542,41 @@ else if(a_ind . i==iSet)
           }
      else if(a_ind . s_i==20)
 	     {
-	     if((but==239)||(but==111))
-	     	{
-			if(MODBUS_BAUDRATE==120)MODBUS_BAUDRATE=240;
-			else if(MODBUS_BAUDRATE==240)MODBUS_BAUDRATE=480;
-	     	else if(MODBUS_BAUDRATE==480)MODBUS_BAUDRATE=960;
-			else if(MODBUS_BAUDRATE==960)MODBUS_BAUDRATE=1920;
-			else if(MODBUS_BAUDRATE==1920)MODBUS_BAUDRATE=3840;
-			
-			else if(MODBUS_BAUDRATE==3840)MODBUS_BAUDRATE=5760;
-			else if(MODBUS_BAUDRATE==5760)MODBUS_BAUDRATE=11520;
-			else MODBUS_BAUDRATE=960;
-	     	gran(&MODBUS_BAUDRATE,120,11520);
-	     	lc640_write_int(0x10+100+130,MODBUS_BAUDRATE);
 
-			sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
 
-	     	}
-	     
-	     else if((but==247)||(but==119))
-	     	{
-			if(MODBUS_BAUDRATE==120)MODBUS_BAUDRATE=5760;
-			else if(MODBUS_BAUDRATE==240)MODBUS_BAUDRATE=120;
-	     	else if(MODBUS_BAUDRATE==480)MODBUS_BAUDRATE=240;
-			else if(MODBUS_BAUDRATE==960)MODBUS_BAUDRATE=480;
-			else if(MODBUS_BAUDRATE==1920)MODBUS_BAUDRATE=960;
-			else if(MODBUS_BAUDRATE==3840)MODBUS_BAUDRATE=1920;
-			
-			else if(MODBUS_BAUDRATE==5760)MODBUS_BAUDRATE=3840;
-			else MODBUS_BAUDRATE=960;
-	     	gran(&MODBUS_BAUDRATE,120,5760);
-	     	lc640_write_int(0x10+100+130,MODBUS_BAUDRATE);
 
-			sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
 
-	     	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
           }
 	else if(a_ind . s_i==22)
 	    	{
