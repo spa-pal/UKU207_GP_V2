@@ -580,7 +580,7 @@ extern signed short ETH_GW_2;
 extern signed short ETH_GW_3;
 extern signed short ETH_GW_4;
 extern signed short MODBUS_ADRESS;
-extern signed short MODBUS_BAUDRATE;
+extern signed short MODBUS_BAUDRATE, MODBUS_BAUDRATEA, MODBUS_BAUDRATEB;
 extern signed short CURR_FADE_IN; //плавное нарастание тока. 0 - выкл, 1 - 500 - время нарастания в секундах
 extern signed short SK_START;	  //управление сухим контактом, 0 - выкл, 1 - включение/выключение, 2- блокировка	
 extern signed short SK_START_LEV; //управление сухим контактом, 0 - включение(блокировка) размыканием, 1 - включение(блокировка) замыканием

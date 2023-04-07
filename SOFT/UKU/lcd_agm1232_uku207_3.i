@@ -2858,7 +2858,7 @@ extern signed short ETH_GW_2;
 extern signed short ETH_GW_3;
 extern signed short ETH_GW_4;
 extern signed short MODBUS_ADRESS;
-extern signed short MODBUS_BAUDRATE;
+extern signed short MODBUS_BAUDRATE, MODBUS_BAUDRATEA, MODBUS_BAUDRATEB;
 extern signed short CURR_FADE_IN; 
 extern signed short SK_START;	  
 extern signed short SK_START_LEV; 

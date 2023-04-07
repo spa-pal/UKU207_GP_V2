@@ -221,7 +221,7 @@ signed short ETH_GW_3;
 signed short ETH_GW_4;
 
 signed short MODBUS_ADRESS;
-signed short MODBUS_BAUDRATE;
+signed short MODBUS_BAUDRATE, MODBUS_BAUDRATEA, MODBUS_BAUDRATEB;
 
 signed short CURR_FADE_IN; //плавное нарастание тока. 0 - выкл, 1 - 500 - время нарастания в секундах
 signed short SK_START;	  //управление сухим контактом, 0 - выкл, 1 - включение/выключение, 2- блокировка	
@@ -2668,7 +2668,10 @@ else if(ind==iSet)
 
 	long2lcd_mmm(AUSW_MAIN_NUMBER,'w',0);
 	//int2lcdyx(sub_ind,0,4,0);
-	//int2lcdyx(index_set,0,8,0);
+	//int2lcdyx(index_set,0,8,0);MODBUS_BAUDRATEA
+	/*int2lcdyx(MODBUS_BAUDRATE,0,5,0);
+	int2lcdyx(MODBUS_BAUDRATEA,0,11,0);
+	int2lcdyx(MODBUS_BAUDRATEB,0,19,0);	*/
 	}
 
 
@@ -7617,6 +7620,8 @@ else if(ind==iSet)
 			else MODBUS_BAUDRATE=960;
 	     	gran(&MODBUS_BAUDRATE,120,11520);
 	     	lc640_write_int(EE_MODBUS_BAUDRATE,MODBUS_BAUDRATE);
+			lc640_write_int(EE_MODBUS_BAUDRATEA,MODBUS_BAUDRATE);
+			lc640_write_int(EE_MODBUS_BAUDRATEB,MODBUS_BAUDRATE);
 			#ifdef SC16IS740_UART
 			sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
 			#endif
@@ -7635,6 +7640,8 @@ else if(ind==iSet)
 			else MODBUS_BAUDRATE=960;
 	     	gran(&MODBUS_BAUDRATE,120,5760);
 	     	lc640_write_int(EE_MODBUS_BAUDRATE,MODBUS_BAUDRATE);
+			lc640_write_int(EE_MODBUS_BAUDRATEA,MODBUS_BAUDRATE);
+			lc640_write_int(EE_MODBUS_BAUDRATEB,MODBUS_BAUDRATE);
 			#ifdef SC16IS740_UART
 			sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
 			#endif

@@ -1080,7 +1080,7 @@ extern signed short ETH_GW_2;
 extern signed short ETH_GW_3;
 extern signed short ETH_GW_4;
 extern signed short MODBUS_ADRESS;
-extern signed short MODBUS_BAUDRATE;
+extern signed short MODBUS_BAUDRATE, MODBUS_BAUDRATEA, MODBUS_BAUDRATEB;
 extern signed short CURR_FADE_IN; 
 extern signed short SK_START;	  
 extern signed short SK_START_LEV; 
@@ -1877,37 +1877,40 @@ void ret_hndl(void);
 
 
 
-#line 42 "eeprom_map.h"
 
-#line 112 "eeprom_map.h"
+#line 43 "eeprom_map.h"
 
-#line 137 "eeprom_map.h"
+#line 113 "eeprom_map.h"
 
-
-
-
-
-
-#line 157 "eeprom_map.h"
-
-
-
-#line 169 "eeprom_map.h"
-
-
-#line 180 "eeprom_map.h"
-
-
-#line 189 "eeprom_map.h"
+#line 138 "eeprom_map.h"
 
 
 
 
 
 
+#line 158 "eeprom_map.h"
 
 
-#line 235 "eeprom_map.h"
+
+#line 170 "eeprom_map.h"
+
+
+#line 181 "eeprom_map.h"
+
+
+#line 190 "eeprom_map.h"
+
+
+
+
+
+
+
+
+#line 236 "eeprom_map.h"
+
+
 
 
 
@@ -3370,7 +3373,7 @@ signed short ETH_GW_3;
 signed short ETH_GW_4;
 
 signed short MODBUS_ADRESS;
-signed short MODBUS_BAUDRATE;
+signed short MODBUS_BAUDRATE, MODBUS_BAUDRATEA, MODBUS_BAUDRATEB;
 
 signed short CURR_FADE_IN; 
 signed short SK_START;	  
@@ -7629,6 +7632,9 @@ else if(a_ind . i==iSet)
 	long2lcd_mmm(AUSW_MAIN_NUMBER,'w',0);
 	
 	
+	
+
+ 
 	}
 
 
@@ -9371,10 +9377,10 @@ else if(a_ind . i==iFWabout)
 	bgnd_par(	" Версия             ",
 				" Сборка  0000.00.00 ",
 
+				" WG12232A           ",
 
 
 
-				" WG12232L3          ",
 
 				"                    ");
 	int2lcdyx(BUILD_YEAR,1,12,0);
@@ -9535,12 +9541,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4584 "main.c"
+#line 4587 "main.c"
 
 
 
 
-#line 4606 "main.c"
+#line 4609 "main.c"
 
 
 
@@ -12542,41 +12548,45 @@ else if(a_ind . i==iSet)
           }
      else if(a_ind . s_i==20)
 	     {
+	     if((but==239)||(but==111))
+	     	{
+			if(MODBUS_BAUDRATE==120)MODBUS_BAUDRATE=240;
+			else if(MODBUS_BAUDRATE==240)MODBUS_BAUDRATE=480;
+	     	else if(MODBUS_BAUDRATE==480)MODBUS_BAUDRATE=960;
+			else if(MODBUS_BAUDRATE==960)MODBUS_BAUDRATE=1920;
+			else if(MODBUS_BAUDRATE==1920)MODBUS_BAUDRATE=3840;
+			
+			else if(MODBUS_BAUDRATE==3840)MODBUS_BAUDRATE=5760;
+			else if(MODBUS_BAUDRATE==5760)MODBUS_BAUDRATE=11520;
+			else MODBUS_BAUDRATE=960;
+	     	gran(&MODBUS_BAUDRATE,120,11520);
+	     	lc640_write_int(0x10+100+130,MODBUS_BAUDRATE);
+			lc640_write_int(0x0b,MODBUS_BAUDRATE);
+			lc640_write_int(3000-4,MODBUS_BAUDRATE);
 
+			sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
 
+	     	}
+	     
+	     else if((but==247)||(but==119))
+	     	{
+			if(MODBUS_BAUDRATE==120)MODBUS_BAUDRATE=5760;
+			else if(MODBUS_BAUDRATE==240)MODBUS_BAUDRATE=120;
+	     	else if(MODBUS_BAUDRATE==480)MODBUS_BAUDRATE=240;
+			else if(MODBUS_BAUDRATE==960)MODBUS_BAUDRATE=480;
+			else if(MODBUS_BAUDRATE==1920)MODBUS_BAUDRATE=960;
+			else if(MODBUS_BAUDRATE==3840)MODBUS_BAUDRATE=1920;
+			
+			else if(MODBUS_BAUDRATE==5760)MODBUS_BAUDRATE=3840;
+			else MODBUS_BAUDRATE=960;
+	     	gran(&MODBUS_BAUDRATE,120,5760);
+	     	lc640_write_int(0x10+100+130,MODBUS_BAUDRATE);
+			lc640_write_int(0x0b,MODBUS_BAUDRATE);
+			lc640_write_int(3000-4,MODBUS_BAUDRATE);
 
+			sc16is700_init((uint32_t)(MODBUS_BAUDRATE*10UL));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
+	     	} 
           }
 	else if(a_ind . s_i==22)
 	    	{
@@ -16909,7 +16919,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11980 "main.c"
+#line 11987 "main.c"
 
 
 

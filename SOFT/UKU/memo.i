@@ -39,37 +39,40 @@ void memo_read (void);
 
 
 
-#line 42 "eeprom_map.h"
 
-#line 112 "eeprom_map.h"
+#line 43 "eeprom_map.h"
 
-#line 137 "eeprom_map.h"
+#line 113 "eeprom_map.h"
 
-
-
-
-
-
-#line 157 "eeprom_map.h"
-
-
-
-#line 169 "eeprom_map.h"
-
-
-#line 180 "eeprom_map.h"
-
-
-#line 189 "eeprom_map.h"
+#line 138 "eeprom_map.h"
 
 
 
 
 
 
+#line 158 "eeprom_map.h"
 
 
-#line 235 "eeprom_map.h"
+
+#line 170 "eeprom_map.h"
+
+
+#line 181 "eeprom_map.h"
+
+
+#line 190 "eeprom_map.h"
+
+
+
+
+
+
+
+
+#line 236 "eeprom_map.h"
+
+
 
 
 
@@ -863,7 +866,7 @@ extern signed short ETH_GW_2;
 extern signed short ETH_GW_3;
 extern signed short ETH_GW_4;
 extern signed short MODBUS_ADRESS;
-extern signed short MODBUS_BAUDRATE;
+extern signed short MODBUS_BAUDRATE, MODBUS_BAUDRATEA, MODBUS_BAUDRATEB;
 extern signed short CURR_FADE_IN; 
 extern signed short SK_START;	  
 extern signed short SK_START_LEV; 
@@ -1471,7 +1474,17 @@ T_PROC_GS_MODE=lc640_read_long(0x10+100+122);
 T_PROC_PS_MODE=lc640_read_long(0x10+100+124);
 MODBUS_ADRESS=lc640_read_int(0x10+100+128);
 MODBUS_BAUDRATE=lc640_read_int(0x10+100+130);
-MODBUS_BAUDRATE=960;
+MODBUS_BAUDRATEA=lc640_read_int(0x0b);
+MODBUS_BAUDRATEB=lc640_read_int(3000-4);
+
+if(MODBUS_BAUDRATE!=MODBUS_BAUDRATEA)
+	{
+	if(MODBUS_BAUDRATE!=MODBUS_BAUDRATEB)
+		{
+		if(MODBUS_BAUDRATEA==MODBUS_BAUDRATEB)MODBUS_BAUDRATE=MODBUS_BAUDRATEA;
+		}
+	}  
+
 RELE_LOG_CURR=lc640_read_int(0x10+100+174);
 RELE_LOG_VOLT=lc640_read_int(0x10+100+176);
 T_DEL_REL_CURR_START=lc640_read_int(0x10+100+134);		
