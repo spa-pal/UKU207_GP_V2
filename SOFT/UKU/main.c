@@ -4414,10 +4414,12 @@ else if(ind==iFWabout)
 	bgnd_par(	" Версия             ",
 				" Сборка  0000.00.00 ",
 				#ifdef WG12232A
-				" WG12232A           ",
+				/*" WG12232A           ",*/
+				"                    ",
 				#endif
 				#ifdef WG12232L3
 				" WG12232L3          ",
+				
 				#endif
 				"                    ");
 	int2lcdyx(BUILD_YEAR,1,12,0);
@@ -4621,7 +4623,7 @@ LPC_PINCON->PINMODE3&=~((1<<12)|(1<<13)|(1<<14)|(1<<15)|(1<<16)|(1<<17)|(1<<18)|
 
 LPC_GPIO2->FIODIR|=(1<<8);
 LPC_GPIO2->FIOPIN&=~(1<<8);
-for(i=0;i<200;i++)
+/*for(i=0;i<200;i++)
 {
 __nop();
 __nop();
@@ -4631,8 +4633,8 @@ __nop();
 __nop();
 __nop();
 __nop();
-}
-
+}*/
+delay_us(300);
 			LPC_GPIO2->FIODIR|=(1<<8);
 			LPC_GPIO2->FIOPIN|=(1<<8);
 

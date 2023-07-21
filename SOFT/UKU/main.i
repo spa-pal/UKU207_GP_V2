@@ -9377,7 +9377,9 @@ else if(a_ind . i==iFWabout)
 	bgnd_par(	" Версия             ",
 				" Сборка  0000.00.00 ",
 
-				" WG12232A           ",
+				 
+				"                    ",
+
 
 
 
@@ -9541,12 +9543,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4587 "main.c"
+#line 4589 "main.c"
 
 
 
 
-#line 4609 "main.c"
+#line 4611 "main.c"
 
 
 
@@ -9562,18 +9564,18 @@ char i;
 
 ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00040) )->FIODIR|=(1<<8);
 ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00040) )->FIOPIN&=~(1<<8);
-for(i=0;i<200;i++)
-{
-__nop();
-__nop();
-__nop();
-__nop();
-__nop();
-__nop();
-__nop();
-__nop();
-}
 
+
+
+
+
+
+
+
+
+
+ 
+{long xx; xx=(unsigned long)300 * 12UL; while(xx)xx--;};
 			((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00040) )->FIODIR|=(1<<8);
 			((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00040) )->FIOPIN|=(1<<8);
 
@@ -16919,7 +16921,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 11987 "main.c"
+#line 11989 "main.c"
 
 
 

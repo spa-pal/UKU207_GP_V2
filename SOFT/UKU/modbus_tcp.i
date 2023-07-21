@@ -4109,6 +4109,22 @@ switch (evt)
 					}
 				}
 
+			else if(modbus_tcp_rx_arg0==80)		
+				{
+				pwm_u_reg = modbus_tcp_rx_arg1;
+				}
+
+			else if(modbus_tcp_rx_arg0==81)		
+				{
+				pwm_i_reg = modbus_tcp_rx_arg1;
+				}
+
+			else if(modbus_tcp_rx_arg0==82)		
+				{
+				pwm_t_reg = modbus_tcp_rx_arg1*10;
+				}
+
+
 			else if(modbus_tcp_rx_arg0==90)		
 				{
 				I_ug_ram=modbus_tcp_rx_arg1;
