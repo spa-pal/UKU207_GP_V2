@@ -1727,3 +1727,29 @@
 
                   mem
 000000  00                DCB      0x00
+
+;*** Start embedded assembler ***
+
+#line 1 "lcd_WG12232L3.c"
+	AREA ||.emb_text||, CODE, READONLY
+	THUMB
+	EXPORT |__asm___15_lcd_WG12232L3_c_6c37cc07____REV16|
+#line 112 "C:\\Keil\\ARM\\CMSIS\\Include\\core_cmInstr.h"
+|__asm___15_lcd_WG12232L3_c_6c37cc07____REV16| PROC
+#line 113
+
+ rev16 r0, r0
+ bx lr
+	ENDP
+	AREA ||.emb_text||, CODE, READONLY
+	THUMB
+	EXPORT |__asm___15_lcd_WG12232L3_c_6c37cc07____REVSH|
+#line 130
+|__asm___15_lcd_WG12232L3_c_6c37cc07____REVSH| PROC
+#line 131
+
+ revsh r0, r0
+ bx lr
+	ENDP
+
+;*** End   embedded assembler ***

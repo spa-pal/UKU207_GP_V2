@@ -1164,6 +1164,47 @@ if((RXBUFF[1]==PUTTM2)&&((RXBUFF[0]&0x1f)>=0)&&((RXBUFF[0]&0x1f)<32))
      }
 
 
+if((RXBUFF[1]==PUTTM31)&&((RXBUFF[0]&0x1f)>=0)&&((RXBUFF[0]&0x1f)<32))
+ 	{
+     slave_num=RXBUFF[0]&0x1f;  
+
+	//plazma_PUTTM31++;
+
+    if((RXBUFF[0]&0xe0)==0)bps[slave_num]._device=dSRC;
+    else if((RXBUFF[0]&0xe0)==0x40)bps[slave_num]._device=dINV;
+     
+	bps[slave_num]._hardvare_version=RXBUFF[3]+(RXBUFF[2]*256); 
+	bps[slave_num]._soft_version=RXBUFF[5]+(RXBUFF[4]*256); 
+	bps[slave_num]._build=RXBUFF[7]+(RXBUFF[6]*256); 
+
+	bps[slave_num]._cnt=0;
+	bps[slave_num]._is_on_cnt=10; 
+
+   	//if((src[slave_num]._cnt==0)&&(src[slave_num]._av_net)) avar_s_hndl(slave_num,3,0); 
+	can_reset_cnt=0;
+   	}
+
+if((RXBUFF[1]==PUTTM32)&&((RXBUFF[0]&0x1f)>=0)&&((RXBUFF[0]&0x1f)<32))
+ 	{
+     slave_num=RXBUFF[0]&0x1f;
+	 
+	//plazma_PUTTM32++;  
+
+    if((RXBUFF[0]&0xe0)==0)bps[slave_num]._device=dSRC;
+    else if((RXBUFF[0]&0xe0)==0x40)bps[slave_num]._device=dINV;
+     
+	bps[slave_num]._build_year=RXBUFF[3]+(RXBUFF[2]*256); 
+	bps[slave_num]._build_month=RXBUFF[5]+(RXBUFF[4]*256); 
+	bps[slave_num]._build_day=RXBUFF[7]+(RXBUFF[6]*256); 
+
+	bps[slave_num]._cnt=0;
+	bps[slave_num]._is_on_cnt=10; 
+
+   	//if((src[slave_num]._cnt==0)&&(src[slave_num]._av_net)) avar_s_hndl(slave_num,3,0); 
+	can_reset_cnt=0;
+   	}
+
+
 if( ((RXBUFF[0]&0x1f)==8)&&((RXBUFF[1])==PUTTM) )
      {
      adc_buff_ext_[0]=*((short*)&RXBUFF[2]);

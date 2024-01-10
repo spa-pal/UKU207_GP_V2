@@ -10,7 +10,7 @@ extern const short BUILD_DAY;
 
 const short HARDWARE_VERSION = 10;
 const short SOFT_VERSION = 1;
-const short BUILD = 499;
-const short BUILD_YEAR = 2023;
-const short BUILD_MONTH = 7;
-const short BUILD_DAY = 20;
+const short BUILD = 513;
+const short BUILD_YEAR = 2024;
+const short BUILD_MONTH = 1;
+const short BUILD_DAY = 10;

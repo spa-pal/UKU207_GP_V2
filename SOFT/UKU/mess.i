@@ -615,7 +615,7 @@ typedef enum {
 	iK_max_param,iCurr_contr_set,iVolt_contr_set,
 	iAch_off,iCurr_off,iUout_avar_control,
 	iProcIsComplete,
-	iFWabout}i_enum;
+	iFW_UKU,iFW_IPS,iFW_IPS_SEL}i_enum;
 
 typedef struct  
 {
@@ -880,6 +880,12 @@ typedef struct
 	char _last_avar; 
 	signed short _xu_;
 	char _uout_avar_cnt;
+	signed short _build_year;
+	signed short _build_month;
+	signed short _build_day;
+	signed short _hardvare_version;
+	signed short _soft_version;
+	signed short _build;
    	} BPS_STAT; 
 extern BPS_STAT bps[32];
 

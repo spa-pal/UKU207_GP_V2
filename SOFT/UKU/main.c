@@ -907,8 +907,20 @@ if(cnt_net_drv<=32) // с 1 по 32 посылки адресные
 	//bps[0]._vol_i=400;
 
 			   
-	if(!bCAN_OFF)can1_out(cnt_net_drv,cnt_net_drv,GETTM,bps[cnt_net_drv]._flags_tu,*((char*)(&bps[cnt_net_drv]._vol_u)),*((char*)((&bps[cnt_net_drv]._vol_u))+1),*((char*)(&bps[cnt_net_drv]._vol_i)),*((char*)((&bps[cnt_net_drv]._vol_i))+1));
-     
+	if(!bCAN_OFF)//can1_out(cnt_net_drv,cnt_net_drv,GETTM,bps[cnt_net_drv]._flags_tu,*((char*)(&bps[cnt_net_drv]._vol_u)),*((char*)((&bps[cnt_net_drv]._vol_u))+1),*((char*)(&bps[cnt_net_drv]._vol_i)),*((char*)((&bps[cnt_net_drv]._vol_i))+1));
+			{	
+			char GETTM_tr=GETTM;
+
+			if(ind==iFW_IPS)
+				{
+				static char gettm_cnt[32];
+				if(++gettm_cnt[cnt_net_drv]>=3)gettm_cnt[cnt_net_drv]=0;
+				if(gettm_cnt[cnt_net_drv]==1) GETTM_tr=GETTM1;
+				if(gettm_cnt[cnt_net_drv]==2) GETTM_tr=GETTM2; 
+				}
+			can1_out(cnt_net_drv,cnt_net_drv,GETTM_tr,bps[cnt_net_drv]._flags_tu,*((char*)(&bps[cnt_net_drv]._vol_u)),*((char*)((&bps[cnt_net_drv]._vol_u))+1),*((char*)(&bps[cnt_net_drv]._vol_i)),*((char*)((&bps[cnt_net_drv]._vol_i))+1));
+
+			}     
 	if(cnt_net_drv<32)
 	     {
 	     if(bps[cnt_net_drv]._cnt<CNT_SRC_MAX)
@@ -1326,7 +1338,8 @@ if(ind==iMn)
 	   	ptrs[6]=		" Выход              ";
 		ptrs[7]=		" Установки          ";
 	   	ptrs[8]=		" Выпрямители        ";	
-		ptrs[9]=  		" Версия ПО          ";
+		ptrs[9]=  		" Версия ПО УКУ      ";
+		ptrs[10]=  		" Версия ПО БПС      ";
 	
 		if(sub_ind-index_set>3)index_set=sub_ind-3;
 		else if (sub_ind<index_set)index_set=sub_ind;
@@ -1483,7 +1496,8 @@ if(ind==iMn)
 	   	ptrs[6]=		" Выход              ";
 		ptrs[7]=		" Установки          ";
 	   	ptrs[8]=		" Выпрямители        ";	
-		ptrs[9]=  		" Версия ПО          ";
+		ptrs[9]=  		" Версия ПО УКУ      ";
+		ptrs[10]=  		" Версия ПО БПС      ";
 	
 		if(sub_ind-index_set>3)index_set=sub_ind-3;
 		else if (sub_ind<index_set)index_set=sub_ind;
@@ -1701,7 +1715,8 @@ if(ind==iMn)
 	   	ptrs[11]=		" Выход              ";
 		ptrs[12]=		" Установки          ";
 	   	ptrs[13]=		" Выпрямители        ";
-		ptrs[14]=  		" Версия ПО          ";	
+		ptrs[14]=  		" Версия ПО УКУ      ";
+		ptrs[15]=  		" Версия ПО БПС      ";
 	
 		if(sub_ind-index_set>3)index_set=sub_ind-3;
 		else if (sub_ind<index_set)index_set=sub_ind;
@@ -1941,7 +1956,8 @@ if(ind==iMn)
 	   	ptrs[11]=		" Выход              ";
 		ptrs[12]=		" Установки          ";
 	   	ptrs[13]=		" Выпрямители        ";
-		ptrs[14]=  		" Версия ПО          ";
+		ptrs[14]=  		" Версия ПО УКУ      ";
+		ptrs[15]=  		" Версия ПО БПС      ";
 
 	
 	
@@ -2185,7 +2201,49 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 
 	}
 
+ else if(ind==iFW_IPS_SEL)
+	{
+/*	ptrs[0]=" БПС!               ";
+	ptrs[0]=" БПС!               ";
+	ptrs[0]=" БПС!               ";*/
+	if(NUMIST==1) 
+		{
+		bgnd_par(		"    ВЕРСИЯ ПО БПС   ",
+						" БПС!               ",
+						" Выход              ",
+						"                    ");
+		}
+	else if(NUMIST==2) 
+		{
+		bgnd_par(		"    ВЕРСИЯ ПО БПС   ",
+						" БПС!               ",
+						" БПС@               ",
+						" Выход              ");
+		}
+	else  
+		{
+		if(index_set<(NUMIST-2))
+		bgnd_par(		"    ВЕРСИЯ ПО БПС   ",
+						" БПС!               ",
+						" БПС@               ",
+						" БПС#               ");
+		else
+		bgnd_par(		"    ВЕРСИЯ ПО БПС   ",
+						" БПС!               ",
+						" БПС@               ",
+						" Выход              ");
+		}
 
+		int2lcd(index_set+1,'!',0);
+		int2lcd(index_set+2,'@',0);
+		int2lcd(index_set+3,'#',0);
+
+		if(sub_ind-index_set>2)index_set=sub_ind-2;
+		else if (sub_ind<index_set)index_set=sub_ind;
+
+		/*if(sub_ind>=simax)*/	pointer_set(1);								
+										
+     }  
 
 
  else if(ind==iBps)
@@ -2298,6 +2356,24 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 
 	//int2lcdyx(sub_ind,0,19,0);
      }  
+
+else if(ind==iFW_IPS)
+	{
+	bgnd_par(	"      ПО БПС N!     ",
+				" Версия             ",
+				" Сборка  0000.00.00 ",
+				"                    ");
+	int2lcd(sub_ind1+1,'!',0);
+	int2lcdyx(bps[sub_ind1]._build_year,2,12,0);
+	int2lcdyx(bps[sub_ind1]._build_month,2,15,0);
+	int2lcdyx(bps[sub_ind1]._build_day,2,18,0);
+	
+	sprintf(&lcd_buffer[29],"%d.%d.%d",bps[sub_ind1]._hardvare_version,bps[sub_ind1]._soft_version,bps[sub_ind1]._build);
+
+	//int2lcdyx(plazma_PUTTM31,3,4,0);
+	//int2lcdyx(plazma_PUTTM32,3,10,0);
+	//int2lcdyx(sub_ind1,3,19,0);
+	}
 
 else if(ind==iLoad)
 	{
@@ -4409,7 +4485,7 @@ else if(ind==iAvz)
 	sprintf(&lcd_buffer[9],"%d.%d.%d",HARDWARE_VERSION,SOFT_VERSION,BUILD);
 	}*/
 
-else if(ind==iFWabout)
+else if(ind==iFW_UKU)
 	{
 	bgnd_par(	" Версия             ",
 				" Сборка  0000.00.00 ",
@@ -4860,7 +4936,7 @@ else if(ind==iMn)
 				sub_ind++;
 				}
 	
-			gran_char(&sub_ind,0,9);
+			gran_char(&sub_ind,0,10);
 			}
 			
 		else if(but==butU)
@@ -4871,7 +4947,7 @@ else if(ind==iMn)
 				sub_ind--;
 				}
 	
-			gran_char(&sub_ind,0,9);
+			gran_char(&sub_ind,0,10);
 			}	
 		
 		else if(sub_ind==0)
@@ -5220,7 +5296,14 @@ else if(ind==iMn)
 			{
 			if(but==butE)
 		     	{
-		     	tree_up(iFWabout,0,0,0);
+		     	tree_up(iFW_UKU,0,0,0);
+		     	}
+			}
+		else if(sub_ind==10)
+			{
+			if(but==butE)
+		     	{
+		     	tree_up(iFW_IPS_SEL,0,0,0);
 		     	}
 			}
 		}
@@ -5235,7 +5318,7 @@ else if(ind==iMn)
 				sub_ind++;
 				}
 	
-			gran_char(&sub_ind,0,9);
+			gran_char(&sub_ind,0,10);
 			}
 			
 		else if(but==butU)
@@ -5246,7 +5329,7 @@ else if(ind==iMn)
 				sub_ind--;
 				}
 		
-			gran_char(&sub_ind,0,9);
+			gran_char(&sub_ind,0,10);
 			}	
 	
 	
@@ -5594,7 +5677,14 @@ else if(ind==iMn)
 			{
 			if(but==butE)
 		     	{
-		     	tree_up(iFWabout,0,0,0);
+		     	tree_up(iFW_UKU,0,0,0);
+		     	}
+			}
+		else if(sub_ind==10)
+			{
+			if(but==butE)
+		     	{
+		     	tree_up(iFW_IPS_SEL,0,0,0);
 		     	}
 			}
 		}
@@ -5613,7 +5703,7 @@ else if(ind==iMn)
 				sub_ind++;
 				}
 			
-			gran_char(&sub_ind,0,14);
+			gran_char(&sub_ind,0,15);
 			}
 			
 		else if(but==butU)
@@ -5629,7 +5719,7 @@ else if(ind==iMn)
 				sub_ind--;
 				}
 						
-			gran_char(&sub_ind,0,14);
+			gran_char(&sub_ind,0,15);
 			}	
 	
 	
@@ -6240,7 +6330,14 @@ else if(ind==iMn)
 			{
 			if(but==butE)
 		     	{
-		     	tree_up(iFWabout,0,0,0);
+		     	tree_up(iFW_UKU,0,0,0);
+		     	}
+			}
+		else if(sub_ind==15)
+			{
+			if(but==butE)
+		     	{
+		     	tree_up(iFW_IPS_SEL,0,0,0);
 		     	}
 			}
 		}
@@ -6259,7 +6356,7 @@ else if(ind==iMn)
 				sub_ind++;
 				}
 			
-			gran_char(&sub_ind,0,14);
+			gran_char(&sub_ind,0,15);
 			}
 			
 		else if(but==butU)
@@ -6275,7 +6372,7 @@ else if(ind==iMn)
 				sub_ind--;
 				}
 						
-			gran_char(&sub_ind,0,14);
+			gran_char(&sub_ind,0,15);
 			}	
 	
 	
@@ -6882,7 +6979,14 @@ else if(ind==iMn)
 			{
 			if(but==butE)
 		     	{
-		     	tree_up(iFWabout,0,0,0);
+		     	tree_up(iFW_UKU,0,0,0);
+		     	}
+			}
+		else if(sub_ind==15)
+			{
+			if(but==butE)
+		     	{
+		     	tree_up(iFW_IPS_SEL,0,0,0);
 		     	}
 			}
 		}
@@ -11705,7 +11809,7 @@ else if (ind==iProcIsComplete)
 	{
 	tree_down(0,0);
 	}
-else if(ind==iFWabout)
+else if(ind==iFW_UKU)
 	{
 	ret(1000);
 	if(but==butE)
@@ -11714,6 +11818,37 @@ else if(ind==iFWabout)
 	     ret(0);
 	     }
 	}
+else if(ind==iFW_IPS)
+	{
+	ret(1000);
+	if(but==butE)
+	     {
+	     tree_down(0,0);
+	     ret(0);
+	     }
+	}
+else if(ind==iFW_IPS_SEL)
+	{
+	ret(1000);
+	if (but==butU)
+		{      
+		sub_ind--;
+		gran_char(&sub_ind,0,NUMIST);
+		}
+		
+	else if (but==butD)
+		{
+		sub_ind++;
+		gran_char(&sub_ind,0,NUMIST);
+		}
+	if(but==butE)
+	     {
+		 if((sub_ind>=0)&&(sub_ind<NUMIST))	tree_up(iFW_IPS,0,0,sub_ind);
+	     else tree_down(0,0);
+	     ret(0);
+	     }
+	}
+
 but_an_end:
 n_but=0;
 
