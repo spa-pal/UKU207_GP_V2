@@ -7,7 +7,7 @@
 #include "avar_hndl.h"
 #include "main.h"
 #include "beep.h"
-//#include "snmp_data_file.h"
+#include "full_can.h"
 #include "ret.h" 
 #include <LPC17xx.h>
 
@@ -329,7 +329,29 @@ if(I_LOAD_MODE==0)
 
 if(load_I<0)load_I=0;
 //load_I=333;
-
+/*
+bps[0]._cnt=0;
+if(debug_cnt==0)
+	{
+	bps[0]._buff[6]=0x00;
+	}
+else if(debug_cnt==1)
+	{
+	bps[0]._buff[6]=0xf0;
+	}
+else if(debug_cnt==2)
+	{
+	bps[0]._buff[6]=0xff;
+	}
+else if(debug_cnt==3)
+	{
+	bps[0]._buff[6]=0x80;
+	}
+else if(debug_cnt==4)
+	{
+	bps[0]._buff[6]=0x0f;
+	}
+*/
 for(i=0;i<32;i++)
 	{
 	if(bps[i]._cnt<25)
@@ -337,7 +359,7 @@ for(i=0;i<32;i++)
 	     bps[i]._Ii=bps[i]._buff[0]+(bps[i]._buff[1]*256);
 	     bps[i]._Uin=bps[i]._buff[2]+(bps[i]._buff[3]*256);
 	     bps[i]._Uii=bps[i]._buff[4]+(bps[i]._buff[5]*256);
-	     bps[i]._Ti=(signed)(bps[i]._buff[6]);
+	     bps[i]._Ti=(signed)((signed char)bps[i]._buff[6]);
 	     bps[i]._adr_ee=bps[i]._buff[0];
 	     bps[i]._flags_tm=bps[i]._buff[8];
 		bps[i]._rotor=bps[i]._buff[10]+(bps[i]._buff[11]*256);    
@@ -352,6 +374,7 @@ for(i=0;i<32;i++)
 		bps[i]._rotor=0;    
 	     }
 	}
+
 
 I_MAX_IPS=I_MAX*NUMIST;
 I_MIN_IPS=I_MIN*NUMIST;

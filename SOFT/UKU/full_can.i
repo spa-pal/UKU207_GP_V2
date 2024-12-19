@@ -4319,7 +4319,11 @@ extern char bCAN1_INIT;
 void CAN_IRQHandler(void);
 void CAN_ISR_Rx1( void );
 
+void debug_drv(void);
+
 extern char can_debug_plazma[2][10];
+
+extern short debug_cnt;
 
 #line 4 "full_can.c"
 #line 1 "cmd.h"
@@ -4493,6 +4497,8 @@ void ubat_old_drv(void);
 void unet_drv(void);
 void matemat(void);
 void adc_init(void);
+
+void net_in_drv(void);
 void adc_drv5(void);
 void adc_drv_(void);
 void avg_hndl(void);
@@ -4731,6 +4737,8 @@ char plazma_can1,plazma_can2,plazma_can3,plazma_can4;
 short can2_tx_cnt;
 
 char bCAN1_INIT;
+
+short debug_cnt;
 
 
 char CRC1_in(void)
@@ -6453,6 +6461,12 @@ if ( CANStatus & (1 << 1) )
      }
 
 return;
+}
+
+void debug_drv(void)
+{
+debug_cnt++;
+if(debug_cnt>=5) debug_cnt=0;
 }
 
 

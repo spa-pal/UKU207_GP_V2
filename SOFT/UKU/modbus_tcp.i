@@ -4399,6 +4399,8 @@ void ubat_old_drv(void);
 void unet_drv(void);
 void matemat(void);
 void adc_init(void);
+
+void net_in_drv(void);
 void adc_drv5(void);
 void adc_drv_(void);
 void avg_hndl(void);

@@ -106,6 +106,8 @@ short can2_tx_cnt;
 
 char bCAN1_INIT;
 
+short debug_cnt;
+
 //-----------------------------------------------
 char CRC1_in(void)
 {
@@ -1827,6 +1829,12 @@ if ( CANStatus & (1 << 1) )
      }
 
 return;
+}
+//-----------------------------------------------
+void debug_drv(void)
+{
+debug_cnt++;
+if(debug_cnt>=5) debug_cnt=0;
 }
 
 

@@ -14,8 +14,8 @@ char row, row_;
 signed char col, col_;
 short ptr,ptr_;
 
-char i;
-short ii;
+//char i;
+//short ii;
 
 /*char bh2_plazma[15];
 
@@ -667,7 +667,7 @@ lcd1_wr(_SET_RAW_|in);
 //-----------------------------------------------
 void lcd_init(void) 
 {
-int i/*,ii*/;
+//int i/*,ii*/;
 
 
 
@@ -1015,7 +1015,7 @@ mov R4, #0B8H
 //-----------------------------------------------
 void lcd_clear(void)
 {
-char row,col,i;
+char row/*,col*/,i;
 
 for(row=0;row<32;row++)
 	{
@@ -1071,15 +1071,15 @@ lcd1_wr(_DISPLAY_OFF_);
 //-----------------------------------------------
 void lcd_out(char* adr)
 {
-static char mem;
+//static char mem;
 short lcd_ptr;
 
-char d1,d2;
-char row,col,i;
+//char d1,d2;
+char row/*,col*/,i;
 //strob_us(1);
 
 bitmap_hndl_2();
-
+/*
 if(mem)
 	{
 	mem=0;
@@ -1091,7 +1091,7 @@ else
 	mem=1;
 	d2=0x55;
 	d1=0xff;
-	} 
+	}  */
 
 lcd_ptr=0;
 

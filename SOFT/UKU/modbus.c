@@ -165,10 +165,10 @@ if(modbus_an_buffer[0]=='w')
 				if(modbus_an_buffer[4]=='e')
 					{
 					pvlk=5;
-					if(modbus_an_buffer[15]==crc_87(modbus_an_buffer,15))
+					if(modbus_an_buffer[15]==crc_87((char*)modbus_an_buffer,15))
 						{
 						pvlk=6;
-						if(modbus_an_buffer[16]==crc_95(modbus_an_buffer,15))
+						if(modbus_an_buffer[16]==crc_95((char*)modbus_an_buffer,15))
 
 							{
 							unsigned short ptr;
@@ -1963,7 +1963,7 @@ modbus_registers[52]=(char)((CAP_WRK_CURR)/256);			//Πεγ76
 modbus_registers[53]=(char)((CAP_WRK_CURR)%256);
 modbus_registers[58]=(char)((REV_IS_ON)/256);				//Πεγ79	
 modbus_registers[59]=(char)((REV_IS_ON)%256);
-proc_phase=7;
+proc_phase=(enum_proc_phase)7;
 modbus_registers[60]=(char)((proc_phase)/256);				//Πεγ80	
 modbus_registers[61]=(char)((proc_phase)%256);
 
@@ -1996,7 +1996,7 @@ for (i=0;i<8;i++)
 //-----------------------------------------------
 void modbus_hold_register_answer_transmit(unsigned char adr,unsigned char func,unsigned short reg_adr, unsigned short answer)
 {
-char modbus_registers[120];
+//char modbus_registers[120];
 char modbus_tx_buff[100];
 unsigned short crc_temp;
 char i;

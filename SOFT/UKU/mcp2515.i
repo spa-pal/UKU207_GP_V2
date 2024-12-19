@@ -4414,7 +4414,11 @@ extern char bCAN1_INIT;
 void CAN_IRQHandler(void);
 void CAN_ISR_Rx1( void );
 
+void debug_drv(void);
+
 extern char can_debug_plazma[2][10];
+
+extern short debug_cnt;
 
 #line 6 "mcp2515.c"
 

@@ -13,8 +13,8 @@
 ;;;14     signed char col, col_;
 ;;;15     short ptr,ptr_;
 ;;;16     
-;;;17     char i;
-;;;18     short ii;
+;;;17     //char i;
+;;;18     //short ii;
 ;;;19     
 ;;;20     /*char bh2_plazma[15];
 ;;;21     
@@ -146,7 +146,7 @@
 ;;;146    			ptr_=((short)row*128)+((short)row_*16)+((short)col);
 ;;;147    	
 ;;;148    			lcd_bitmap2[ptr_]=0;//0x0f+row_;//row+16;
-000008  4bd6              LDR      r3,|L1.868|
+000008  4bd2              LDR      r3,|L1.852|
 ;;;149    
 ;;;150    		   	ptr=((short)row*122)+((short)col*8);
 ;;;151    
@@ -167,7 +167,7 @@
 ;;;166    				//ptr=((short)row*128)+((short)col*8)+((short)col_);
 ;;;167    				//if(ptr_==384) lcd_bitmap2[ptr_]|=bit_mask_const[col_];
 ;;;168    				if(lcd_bitmap[ptr]&0x01) lcd_bitmap2[ptr_]|=bit_mask_const[col_];
-00000a  f8dfa35c          LDR      r10,|L1.872|
+00000a  f8dfa34c          LDR      r10,|L1.856|
 00000e  2000              MOVS     r0,#0                 ;140
                   |L1.16|
 000010  01c1              LSLS     r1,r0,#7              ;146
@@ -188,7 +188,7 @@
 00002e  b20e              SXTH     r6,r1                 ;146
 000030  2100              MOVS     r1,#0                 ;148
 000032  5599              STRB     r1,[r3,r6]            ;148
-000034  f8dfc334          LDR      r12,|L1.876|
+000034  f8dfc324          LDR      r12,|L1.860|
 000038  4659              MOV      r1,r11                ;148
 00003a  2207              MOVS     r2,#7                 ;164
                   |L1.60|
@@ -275,7 +275,7 @@
                   strob_us PROC
 ;;;217    //-----------------------------------------------
 ;;;218    void strob_us(short in)
-000082  49bb              LDR      r1,|L1.880|
+000082  49b7              LDR      r1,|L1.864|
 ;;;219    {
 ;;;220    LPC_GPIO0->FIODIR|=(1<<8);
 000084  680a              LDR      r2,[r1,#0]
@@ -306,7 +306,7 @@
                   lcd1_chk PROC
 ;;;262    //-----------------------------------------------
 ;;;263    void lcd1_chk(void)
-0000ac  48b0              LDR      r0,|L1.880|
+0000ac  48ac              LDR      r0,|L1.864|
 ;;;264    {
 ;;;265    LPC_GPIO1->FIODIR&=(~((1<<D0)|(1<<D1)|(1<<D2)|(1<<D3)|(1<<D4)|(1<<D5)|(1<<D6)|(1<<D7)));
 0000ae  6a01              LDR      r1,[r0,#0x20]
@@ -391,7 +391,7 @@
                   data1_wr PROC
 ;;;494    //-----------------------------------------------
 ;;;495    char data1_wr(char in)
-000106  4a9a              LDR      r2,|L1.880|
+000106  4a96              LDR      r2,|L1.864|
 ;;;496    {
 000108  b500              PUSH     {lr}
 00010a  4603              MOV      r3,r0
@@ -553,7 +553,7 @@
                   lcd1_wr PROC
 ;;;340    //-----------------------------------------------
 ;;;341    void lcd1_wr(char in)
-0001be  4a6c              LDR      r2,|L1.880|
+0001be  4a68              LDR      r2,|L1.864|
 ;;;342    {
 0001c0  b500              PUSH     {lr}
 0001c2  4603              MOV      r3,r0
@@ -711,7 +711,7 @@
 ;;;1016   void lcd_clear(void)
 00026c  b530              PUSH     {r4,r5,lr}
 ;;;1017   {
-;;;1018   char row,col,i;
+;;;1018   char row/*,col*/,i;
 ;;;1019   
 ;;;1020   for(row=0;row<32;row++)
 00026e  2400              MOVS     r4,#0
@@ -775,12 +775,12 @@
 ;;;668    void lcd_init(void) 
 0002a0  b570              PUSH     {r4-r6,lr}
 ;;;669    {
-;;;670    int i/*,ii*/;
+;;;670    //int i/*,ii*/;
 ;;;671    
 ;;;672    
 ;;;673    
 ;;;674    delay_ms(100);
-0002a2  4834              LDR      r0,|L1.884|
+0002a2  4830              LDR      r0,|L1.868|
                   |L1.676|
 0002a4  1e40              SUBS     r0,r0,#1
 0002a6  d1fd              BNE      |L1.676|
@@ -800,7 +800,7 @@
 ;;;688    
 ;;;689    					
 ;;;690    LPC_GPIO1->FIODIR|=(1<<D0)|(1<<D1)|(1<<D2)|(1<<D3)|(1<<D4)|(1<<D5)|(1<<D6)|(1<<D7);
-0002a8  4831              LDR      r0,|L1.880|
+0002a8  482d              LDR      r0,|L1.864|
 0002aa  6a01              LDR      r1,[r0,#0x20]
 0002ac  f041517f          ORR      r1,r1,#0x3fc00000
 0002b0  6201              STR      r1,[r0,#0x20]
@@ -951,54 +951,45 @@
 ;;;1072   void lcd_out(char* adr)
 000308  e92d41f0          PUSH     {r4-r8,lr}
 ;;;1073   {
-;;;1074   static char mem;
+;;;1074   //static char mem;
 ;;;1075   short lcd_ptr;
 ;;;1076   
-;;;1077   char d1,d2;
-;;;1078   char row,col,i;
+;;;1077   //char d1,d2;
+;;;1078   char row/*,col*/,i;
 ;;;1079   //strob_us(1);
 ;;;1080   
 ;;;1081   bitmap_hndl_2();
 00030c  f7fffffe          BL       bitmap_hndl_2
-;;;1082   
+;;;1082   /*
 ;;;1083   if(mem)
-000310  4819              LDR      r0,|L1.888|
-000312  7801              LDRB     r1,[r0,#0]  ; mem
-000314  b109              CBZ      r1,|L1.794|
 ;;;1084   	{
 ;;;1085   	mem=0;
-000316  2100              MOVS     r1,#0
 ;;;1086   	d1=0x55;
 ;;;1087   	d2=0xff;
-000318  e000              B        |L1.796|
-                  |L1.794|
 ;;;1088   	}
 ;;;1089   else 
 ;;;1090   	{
 ;;;1091   	mem=1;
-00031a  2101              MOVS     r1,#1
-                  |L1.796|
 ;;;1092   	d2=0x55;
 ;;;1093   	d1=0xff;
-;;;1094   	} 
+;;;1094   	}  */
 ;;;1095   
 ;;;1096   lcd_ptr=0;
-00031c  2600              MOVS     r6,#0
-00031e  7001              STRB     r1,[r0,#0]            ;1091
+000310  2600              MOVS     r6,#0
 ;;;1097   
 ;;;1098   for(row=0;row<32;row++)
-000320  ea4f0406          MOV.W    r4,r6
-                  |L1.804|
+000312  4634              MOV      r4,r6
+                  |L1.788|
 ;;;1099   	{
 ;;;1100   	//strob_us(10);
 ;;;1101   	lcd1_wr(0x80+row);
-000324  f1040080          ADD      r0,r4,#0x80
-000328  b2c0              UXTB     r0,r0
-00032a  f7fffffe          BL       lcd1_wr
+000314  f1040080          ADD      r0,r4,#0x80
+000318  b2c0              UXTB     r0,r0
+00031a  f7fffffe          BL       lcd1_wr
 ;;;1102   	//strob_us(10);
 ;;;1103   	lcd1_wr(0x80);
-00032e  2080              MOVS     r0,#0x80
-000330  f7fffffe          BL       lcd1_wr
+00031e  2080              MOVS     r0,#0x80
+000320  f7fffffe          BL       lcd1_wr
 ;;;1104      	//strob_us(10);
 ;;;1105   /*for(page=0;page<=Max_page;page++)
 ;;;1106   
@@ -1021,64 +1012,62 @@
 ;;;1123   		} */
 ;;;1124   
 ;;;1125   	for (i=0;i<16;i++)
-000334  2500              MOVS     r5,#0
+000324  2500              MOVS     r5,#0
 ;;;1126   		{
 ;;;1127   		if(i==0) strob_us(1);
 ;;;1128   		data1_wr(lcd_bitmap2[lcd_ptr++]);
-000336  4f0b              LDR      r7,|L1.868|
-000338  e000              B        |L1.828|
-                  |L1.826|
-00033a  b915              CBNZ     r5,|L1.834|
-                  |L1.828|
-00033c  2001              MOVS     r0,#1                 ;1127
-00033e  f7fffffe          BL       strob_us
-                  |L1.834|
-000342  5db8              LDRB     r0,[r7,r6]
-000344  1c76              ADDS     r6,r6,#1
-000346  b236              SXTH     r6,r6
-000348  f7fffffe          BL       data1_wr
-00034c  1c6d              ADDS     r5,r5,#1              ;1125
-00034e  b2ed              UXTB     r5,r5                 ;1125
-000350  2d10              CMP      r5,#0x10              ;1125
-000352  d3f2              BCC      |L1.826|
-000354  1c64              ADDS     r4,r4,#1              ;1098
-000356  b2e4              UXTB     r4,r4                 ;1098
-000358  2c20              CMP      r4,#0x20              ;1098
-00035a  d3e3              BCC      |L1.804|
+000326  4f0b              LDR      r7,|L1.852|
+000328  e000              B        |L1.812|
+                  |L1.810|
+00032a  b915              CBNZ     r5,|L1.818|
+                  |L1.812|
+00032c  2001              MOVS     r0,#1                 ;1127
+00032e  f7fffffe          BL       strob_us
+                  |L1.818|
+000332  5db8              LDRB     r0,[r7,r6]
+000334  1c76              ADDS     r6,r6,#1
+000336  b236              SXTH     r6,r6
+000338  f7fffffe          BL       data1_wr
+00033c  1c6d              ADDS     r5,r5,#1              ;1125
+00033e  b2ed              UXTB     r5,r5                 ;1125
+000340  2d10              CMP      r5,#0x10              ;1125
+000342  d3f2              BCC      |L1.810|
+000344  1c64              ADDS     r4,r4,#1              ;1098
+000346  b2e4              UXTB     r4,r4                 ;1098
+000348  2c20              CMP      r4,#0x20              ;1098
+00034a  d3e3              BCC      |L1.788|
 ;;;1129   		//data1_wr(0x01);
 ;;;1130   		}
 ;;;1131   
 ;;;1132   	}
 ;;;1133   
 ;;;1134   }
-00035c  e8bd81f0          POP      {r4-r8,pc}
+00034c  e8bd81f0          POP      {r4-r8,pc}
 ;;;1135   
                           ENDP
 
                   lcd_on PROC
 ;;;1057   //-----------------------------------------------
 ;;;1058   void lcd_on(void) 
-000360  20af              MOVS     r0,#0xaf
+000350  20af              MOVS     r0,#0xaf
 ;;;1059   {
 ;;;1060   lcd1_wr(_DISPLAY_ON_);
-000362  e7fe              B        lcd1_wr
+000352  e7fe              B        lcd1_wr
 ;;;1061   //lcd2_wr(_DISPLAY_ON_);
 ;;;1062   }
 ;;;1063   
                           ENDP
 
-                  |L1.868|
+                  |L1.852|
                           DCD      ||.bss||
-                  |L1.872|
+                  |L1.856|
                           DCD      lcd_bitmap
-                  |L1.876|
+                  |L1.860|
                           DCD      ||.constdata||
-                  |L1.880|
+                  |L1.864|
                           DCD      0x2009c000
-                  |L1.884|
+                  |L1.868|
                           DCD      0x00124f80
-                  |L1.888|
-                          DCD      ||.data||
 
                           AREA ||area_number.2||, CODE, READONLY, ALIGN=2
 
@@ -1722,11 +1711,6 @@
                   bit_mask_const
 000000  01020408          DCB      0x01,0x02,0x04,0x08
 000004  10204080          DCB      0x10,0x20,0x40,0x80
-
-                          AREA ||.data||, DATA, ALIGN=0
-
-                  mem
-000000  00                DCB      0x00
 
 ;*** Start embedded assembler ***
 

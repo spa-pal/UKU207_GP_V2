@@ -1939,6 +1939,8 @@ void bcd2lcd_zero(char sig);
 void int2lcd_m(signed short in,char xy,char des);
 void int2lcd_mm(signed short in,char xy,char des);
 void int2lcd_mmm(signed short in,char xy,char des);
+
+void int2lcdyx_mmm(signed short in, char y,char x,char des);
 void long2lcd_mmm(signed long in,char xy,char des);
 void long2lcdyx_mmm(signed long in,char y,char x,char des);
 void int2lcdyx(unsigned short in,char y,char x,char des);
@@ -2024,6 +2026,8 @@ void ubat_old_drv(void);
 void unet_drv(void);
 void matemat(void);
 void adc_init(void);
+
+void net_in_drv(void);
 void adc_drv5(void);
 void adc_drv_(void);
 void avg_hndl(void);
@@ -2274,7 +2278,11 @@ extern char bCAN1_INIT;
 void CAN_IRQHandler(void);
 void CAN_ISR_Rx1( void );
 
+void debug_drv(void);
+
 extern char can_debug_plazma[2][10];
+
+extern short debug_cnt;
 
 #line 18 "main.c"
 #line 1 "watchdog.h"
@@ -3189,7 +3197,858 @@ extern const short BUILD;
 extern const short BUILD_YEAR;
 extern const short BUILD_MONTH;
 extern const short BUILD_DAY;
+
+
+
 #line 35 "main.c"
+#line 1 "C:\\Keil\\ARM\\RV31\\INC\\stdio.h"
+ 
+ 
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+#line 34 "C:\\Keil\\ARM\\RV31\\INC\\stdio.h"
+
+
+  
+  typedef unsigned int size_t;    
+
+
+
+
+
+
+
+
+ 
+ 
+
+ 
+  typedef struct __va_list __va_list;
+
+
+
+
+
+   
+
+
+
+
+ 
+
+
+
+
+typedef struct __fpos_t_struct {
+    unsigned __int64 __pos;
+    
+
+
+
+ 
+    struct {
+        unsigned int __state1, __state2;
+    } __mbstate;
+} fpos_t;
+   
+
+
+ 
+
+
+   
+
+ 
+
+typedef struct __FILE FILE;
+   
+
+
+
+
+
+
+ 
+
+extern FILE __stdin, __stdout, __stderr;
+extern FILE *__aeabi_stdin, *__aeabi_stdout, *__aeabi_stderr;
+
+#line 125 "C:\\Keil\\ARM\\RV31\\INC\\stdio.h"
+    
+
+    
+
+    
+
+
+
+
+
+     
+
+
+
+   
+
+
+ 
+
+
+   
+
+
+ 
+
+   
+
+
+
+ 
+
+   
+
+
+ 
+
+
+
+
+   
+
+
+ 
+
+
+
+
+
+    
+
+
+ 
+
+
+
+
+
+
+extern __declspec(__nothrow) int remove(const char *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int rename(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) FILE *tmpfile(void);
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) char *tmpnam(char *  );
+   
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int fclose(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int fflush(FILE *  );
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) FILE *fopen(const char * __restrict  ,
+                           const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) FILE *freopen(const char * __restrict  ,
+                    const char * __restrict  ,
+                    FILE * __restrict  ) __attribute__((__nonnull__(2,3)));
+   
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) void setbuf(FILE * __restrict  ,
+                    char * __restrict  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) int setvbuf(FILE * __restrict  ,
+                   char * __restrict  ,
+                   int  , size_t  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int fprintf(FILE * __restrict  ,
+                    const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int _fprintf(FILE * __restrict  ,
+                     const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int printf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int _printf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int sprintf(char * __restrict  , const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int _sprintf(char * __restrict  , const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+
+#pragma __printf_args
+extern __declspec(__nothrow) int snprintf(char * __restrict  , size_t  ,
+                     const char * __restrict  , ...) __attribute__((__nonnull__(3)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+#pragma __printf_args
+extern __declspec(__nothrow) int _snprintf(char * __restrict  , size_t  ,
+                      const char * __restrict  , ...) __attribute__((__nonnull__(3)));
+   
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int fscanf(FILE * __restrict  ,
+                    const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int _fscanf(FILE * __restrict  ,
+                     const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int scanf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int _scanf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int sscanf(const char * __restrict  ,
+                    const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int _sscanf(const char * __restrict  ,
+                     const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+
+ 
+extern __declspec(__nothrow) int vfscanf(FILE * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) int vscanf(const char * __restrict  , __va_list) __attribute__((__nonnull__(1)));
+extern __declspec(__nothrow) int vsscanf(const char * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
+
+extern __declspec(__nothrow) int _vfscanf(FILE * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) int _vscanf(const char * __restrict  , __va_list) __attribute__((__nonnull__(1)));
+extern __declspec(__nothrow) int _vsscanf(const char * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
+
+extern __declspec(__nothrow) int vprintf(const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int _vprintf(const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+extern __declspec(__nothrow) int vfprintf(FILE * __restrict  ,
+                    const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int vsprintf(char * __restrict  ,
+                     const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int vsnprintf(char * __restrict  , size_t  ,
+                     const char * __restrict  , __va_list  ) __attribute__((__nonnull__(3)));
+   
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int _vsprintf(char * __restrict  ,
+                      const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+extern __declspec(__nothrow) int _vfprintf(FILE * __restrict  ,
+                     const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+extern __declspec(__nothrow) int _vsnprintf(char * __restrict  , size_t  ,
+                      const char * __restrict  , __va_list  ) __attribute__((__nonnull__(3)));
+   
+
+
+
+ 
+extern __declspec(__nothrow) int fgetc(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) char *fgets(char * __restrict  , int  ,
+                    FILE * __restrict  ) __attribute__((__nonnull__(1,3)));
+   
+
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int fputc(int  , FILE *  ) __attribute__((__nonnull__(2)));
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int fputs(const char * __restrict  , FILE * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) int getc(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+ 
+
+
+
+
+    extern __declspec(__nothrow) int (getchar)(void);
+
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) char *gets(char *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int putc(int  , FILE *  ) __attribute__((__nonnull__(2)));
+   
+
+
+
+
+
+ 
+
+
+
+
+    extern __declspec(__nothrow) int (putchar)(int  );
+
+   
+
+
+
+ 
+extern __declspec(__nothrow) int puts(const char *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int ungetc(int  , FILE *  ) __attribute__((__nonnull__(2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t fread(void * __restrict  ,
+                    size_t  , size_t  , FILE * __restrict  ) __attribute__((__nonnull__(1,4)));
+   
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t __fread_bytes_avail(void * __restrict  ,
+                    size_t  , FILE * __restrict  ) __attribute__((__nonnull__(1,3)));
+   
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t fwrite(const void * __restrict  ,
+                    size_t  , size_t  , FILE * __restrict  ) __attribute__((__nonnull__(1,4)));
+   
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int fgetpos(FILE * __restrict  , fpos_t * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int fseek(FILE *  , long int  , int  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int fsetpos(FILE * __restrict  , const fpos_t * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) long int ftell(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) void rewind(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) void clearerr(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int feof(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+ 
+extern __declspec(__nothrow) int ferror(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+ 
+extern __declspec(__nothrow) void perror(const char *  );
+   
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int _fisatty(FILE *   ) __attribute__((__nonnull__(1)));
+    
+ 
+
+extern __declspec(__nothrow) void __use_no_semihosting_swi(void);
+extern __declspec(__nothrow) void __use_no_semihosting(void);
+    
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+#line 944 "C:\\Keil\\ARM\\RV31\\INC\\stdio.h"
+
+
+
+ 
+#line 36 "main.c"
 
 
 
@@ -6348,7 +7207,7 @@ typedef struct
  
 #line 1031 "C:\\Keil\\ARM\\INC\\NXP\\LPC17xx\\LPC17xx.H"
 
-#line 406 "main.c"
+#line 407 "main.c"
 
 
 
@@ -7016,8 +7875,8 @@ for(ii=0;ii<488;ii++)
 void ind_hndl(void)
 {
 
-const char* ptrs[40];
-const char* sub_ptrs[40];
+const char* ptrs[50];
+const char* sub_ptrs[50];
 static char sub_cnt,sub_cnt1;
 char i,sub_cnt_max;
 
@@ -8056,6 +8915,10 @@ if(a_ind . i==iMn)
 
 		int2lcd(AMPERCHAS,'q',1);
 
+	
+	
+	
+
 	 
 		
 		
@@ -8209,7 +9072,7 @@ if(a_ind . i==iMn)
 			
 		int2lcdyx(bps[0]._Ii,1,11,1);
 		
-		int2lcdyx(bps[0]._Ti,1,15,0);
+		int2lcdyx_mmm(bps[0]._Ti,1,15,0);
 				
 		char2lcdhyx(bps[0]._flags_tm,1,19);
 				
@@ -8250,8 +9113,8 @@ if(a_ind . i==iMn)
 		int2lcdyx(bps[a_ind . s_i+1]._Ii,2,11,1);
 		
 		
-		int2lcdyx(bps[a_ind . s_i  ]._Ti,1,15,0);
-		int2lcdyx(bps[a_ind . s_i+1]._Ti,2,15,0);
+		int2lcdyx_mmm(bps[a_ind . s_i  ]._Ti,1,15,0);
+		int2lcdyx_mmm(bps[a_ind . s_i+1]._Ti,2,15,0);
 		
 		
 		char2lcdhyx(bps[a_ind . s_i1  ]._flags_tm,1,19);
@@ -8263,8 +9126,8 @@ if(a_ind . i==iMn)
 		else int2lcdyx(a_ind . s_i+3,3,0,0);
 		if(bps[a_ind . s_i+2]._Uii<10000)	int2lcdyx(bps[a_ind . s_i+2]._Uii,3,6,1);
 		else 							int2lcdyx(bps[a_ind . s_i+2]._Uii/10,3,6,0);
-		int2lcdyx(bps[a_ind . s_i+2]._Ii,3,11,1);
-		int2lcdyx(bps[a_ind . s_i+2]._Ti,3,15,0);
+		int2lcdyx_mmm(bps[a_ind . s_i+2]._Ii,3,11,1);
+		int2lcdyx_mmm(bps[a_ind . s_i+2]._Ti,3,15,0);
 		char2lcdhyx(bps[a_ind . s_i1+2]._flags_tm,3,19);
 		} else {
 		lcd_buffer[60]=1;
@@ -9349,7 +10212,7 @@ else if(a_ind . i==iK_viz_i)
 
 else if(a_ind . i==iK_load)
 	{
-	long tempL;
+	
 	bgnd_par(		" ÊÀËÈÁÐÎÂÊÀ ÍÀÃÐÓÇÊÈ",
 					" Uâûõ=     @Â       ",
 					" Iâûõ=     !A       ",
@@ -9496,7 +10359,7 @@ else if(a_ind . i==iK_bps)
 	int2lcd(bps[a_ind . s_i1]._Uin,'#',1);
 	int2lcd(U_AVT,'$',1);
 	int2lcd(bps[a_ind . s_i1]._Ii,'%',1);
-	int2lcd(bps[a_ind . s_i1]._Ti,'^',0); 
+	int2lcd_mmm(bps[a_ind . s_i1]._Ti,'^',0); 
 	 
 	
      if((a_ind . s_i==0)||(a_ind . s_i==3))
@@ -9602,7 +10465,7 @@ else if(a_ind . i==iK_bps_v2)
 	int2lcd(bps[a_ind . s_i1]._Uin,'#',1);
 	int2lcd(U_AVT,'$',1);
 	int2lcd(bps[a_ind . s_i1]._Ii,'%',1);
-	int2lcd(bps[a_ind . s_i1]._Ti,'^',0); 
+	int2lcd_mmm(bps[a_ind . s_i1]._Ti,'^',0); 
 	 
 	
 	if((a_ind . s_i==0)||(a_ind . s_i==3))
@@ -10436,12 +11299,12 @@ else if(a_ind . i==iFW_UKU)
 	bgnd_par(	" Âåðñèÿ             ",
 				" Ñáîðêà  0000.00.00 ",
 
+				 
+				"                    ",
 
 
 
 
-				" WG12232L3          ",
-				
 
 				"                    ");
 	int2lcdyx(BUILD_YEAR,1,12,0);
@@ -10602,12 +11465,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4665 "main.c"
+#line 4670 "main.c"
 
 
 
 
-#line 4687 "main.c"
+#line 4692 "main.c"
 
 
 
@@ -10615,7 +11478,7 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 void but_drv(void)
 {
-char i;
+
 ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00020) )->FIODIR|=(1<<21);
 ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00020) )->FIOPIN&=~(1<<21);
 ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00020) )->FIODIR&=~((1<<22)|(1<<23)|(1<<24)|(1<<25)|(1<<26));
@@ -18039,7 +18902,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 12124 "main.c"
+#line 12129 "main.c"
 
 
 
@@ -18144,14 +19007,14 @@ if(lc640_read_int(0x10+100+120)==reON)
 				{
 				if(sk_in_drv_stat==1)
 					{
-					return;
+					return 0;
 					}
 				}
 			if(!SK_START_LEV)
 				{
 				if(sk_in_drv_stat==-1)
 					{
-					return;
+					return 0;
 					}
 				}
 			}
@@ -18183,14 +19046,14 @@ if(lc640_read_int(0x10+100+120)==reON)
 				{
 				if(sk_in_drv_stat==1)
 					{
-					return;
+					return 0;
 					}
 				}
 			if(!SK_START_LEV)
 				{
 				if(sk_in_drv_stat==-1)
 					{
-					return;
+					return 0;
 					}
 				}
 			}
@@ -18479,6 +19342,8 @@ while (1)
 
 		avg_hndl();			
 		ramModbusCnt_hndl();
+
+		debug_drv();
 		}
 	if(b1min)
 		{

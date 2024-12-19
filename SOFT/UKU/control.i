@@ -77,6 +77,8 @@ void ubat_old_drv(void);
 void unet_drv(void);
 void matemat(void);
 void adc_init(void);
+
+void net_in_drv(void);
 void adc_drv5(void);
 void adc_drv_(void);
 void avg_hndl(void);
@@ -232,6 +234,8 @@ void bcd2lcd_zero(char sig);
 void int2lcd_m(signed short in,char xy,char des);
 void int2lcd_mm(signed short in,char xy,char des);
 void int2lcd_mmm(signed short in,char xy,char des);
+
+void int2lcdyx_mmm(signed short in, char y,char x,char des);
 void long2lcd_mmm(signed long in,char xy,char des);
 void long2lcdyx_mmm(signed long in,char y,char x,char des);
 void int2lcdyx(unsigned short in,char y,char x,char des);
@@ -1544,7 +1548,131 @@ void beep_drv(void);
 void beep_init(long zvuk,char fl);
 void beep_hndl(void);
 #line 10 "control.c"
+#line 1 "full_can.h"
 
+
+  
+
+
+
+
+
+
+
+
+#line 19 "full_can.h"
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+extern char ptr_can1_tx_wr,ptr_can1_tx_rd;
+extern long can1_info[8];
+extern long can1_id[8];
+extern long can1_data[8];
+extern long can1_datb[8];
+																							 
+extern char ptr_can2_tx_wr,ptr_can2_tx_rd;
+
+extern long can2_info[8];
+extern long can2_id[8];
+extern long can2_data[8];
+extern long can2_datb[8];
+
+extern unsigned short rotor_can[6];
+
+
+
+extern char bR;
+extern char RXBUFF[40],TXBUFF[40];
+extern char bIN,bIN2;
+extern char bd_dumm[25];
+extern char bd[25];
+extern char TX_len;
+
+extern char RXBUFF2[40],TXBUFF2[40];
+extern char can_tx_cnt;
+extern char can_tx_cnt2;
+
+
+extern char rotor_rotor_rotor[2];
+extern char can_tx_cnt;
+
+extern const char Table87[];
+extern const char Table95[];
+
+extern char can_debug_plazma[2][10];
+extern char bOUT_FREE;
+extern char can_rotor[10];
+extern char plazma_can;
+extern char plazma_can1,plazma_can2,plazma_can3,plazma_can4;
+
+
+
+typedef struct
+{
+  unsigned int Dat1; 
+                     
+                     
+                     
+  unsigned int DatA; 
+  unsigned int DatB; 
+} FULLCAN_MSG; 
+extern short volatile gCANFilter;
+extern FULLCAN_MSG volatile gFullCANList[2];
+extern short can_reset_cnt;
+
+
+
+char CRC1_in(void);
+char CRC2_in(void);
+char CRC1_out(void);
+char CRC2_out(void);
+void can1_out_adr(char* ptr,char num);
+__irq void can_isr_err (void);
+void can1_out(char data0,char data1,char data2,char data3,char data4,char data5,char data6,char data7);
+void can_adr_hndl(void);
+void can_in_an(void);
+void can_in_an2(void);
+__irq void can_isr_rx (void); 
+__irq void can_isr_tx (void); 
+short can1_init ( unsigned int can_btr);
+short can2_init ( unsigned int can_btr);
+short FullCAN_SetFilter (
+  unsigned short can_port, 
+  unsigned int CANID 
+  );
+void can2_out(char dat0,char dat1,char dat2,char dat3,char dat4,char dat5,char dat6,char dat7);
+
+void can_in_an1(void);
+
+extern char bCAN1_INIT;
+
+void CAN_IRQHandler(void);
+void CAN_ISR_Rx1( void );
+
+void debug_drv(void);
+
+extern char can_debug_plazma[2][10];
+
+extern short debug_cnt;
+
+#line 11 "control.c"
 #line 1 "ret.h"
 
 
@@ -4905,6 +5033,28 @@ if(I_LOAD_MODE==0)
 if(load_I<0)load_I=0;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 for(i=0;i<32;i++)
 	{
 	if(bps[i]._cnt<25)
@@ -4912,7 +5062,7 @@ for(i=0;i<32;i++)
 	     bps[i]._Ii=bps[i]._buff[0]+(bps[i]._buff[1]*256);
 	     bps[i]._Uin=bps[i]._buff[2]+(bps[i]._buff[3]*256);
 	     bps[i]._Uii=bps[i]._buff[4]+(bps[i]._buff[5]*256);
-	     bps[i]._Ti=(signed)(bps[i]._buff[6]);
+	     bps[i]._Ti=(signed)((signed char)bps[i]._buff[6]);
 	     bps[i]._adr_ee=bps[i]._buff[0];
 	     bps[i]._flags_tm=bps[i]._buff[8];
 		bps[i]._rotor=bps[i]._buff[10]+(bps[i]._buff[11]*256);    
@@ -4927,6 +5077,7 @@ for(i=0;i<32;i++)
 		bps[i]._rotor=0;    
 	     }
 	}
+
 
 I_MAX_IPS=I_MAX*NUMIST;
 I_MIN_IPS=I_MIN*NUMIST;
@@ -7258,7 +7409,7 @@ else if(RELE_FUNC[1]==6)
 
 void rele_drv(void)
 {
-#line 2693 "control.c"
+#line 2716 "control.c"
 
 
 ((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 = ( (((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 & ~((0xffffffff>>(32-2))<<7*2)) | ((unsigned)0 << 7*2) );

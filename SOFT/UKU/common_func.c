@@ -209,6 +209,66 @@ for (i=0;i<simb_num;i++)
 }
 
 //-----------------------------------------------
+void int2lcdyx_mmm(signed short in, char y,char x,char des)
+{
+signed char i;
+char n;
+char s[10];
+char minus='+';
+char zero_on;
+char simb_num;
+
+if(in<0)
+	{
+	in=-in;
+	minus='-';
+	}
+
+for(i=0;i<10;i++)
+	{
+	s[i]=in%10;
+	in/=10;
+	}   
+
+zero_on=1;
+simb_num=0;
+
+for (i=9;i>=0;i--)
+	{
+	if(zero_on&&(!s[i])&&(i>(des)))
+	     {
+	     s[i]=0x20;
+	     }
+	else 
+	     {
+	     s[i]=s[i]+0x30;
+	     zero_on=0;
+	     simb_num++;
+	     }
+	 }
+	          
+if(minus=='-')	
+     {
+     s[simb_num++]=minus; 
+     }    
+if(des)
+     {
+     for(i=simb_num;i>des;i--)
+          {
+          s[i]=s[i-1];
+          }
+     s[des]='.';
+     simb_num++;     
+     }
+	
+n=x+(20*y);
+for (i=0;i<simb_num;i++)
+	{
+     lcd_buffer[n-i]=s[i];
+	}
+}
+
+//-----------------------------------------------
 void long2lcd_mmm(signed long in,char xy,char des)
 {
 signed char i;

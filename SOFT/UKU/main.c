@@ -32,6 +32,7 @@
 #include "snmp_data_file.h" 
 #include "modbus_tcp.h"
 #include "curr_version.h"
+#include <stdio.h>
 
 #ifdef UKU2071x
 //#define MCP2515_CAN
@@ -1070,8 +1071,8 @@ for(ii=0;ii<488;ii++)
 void ind_hndl(void)
 {
 //const char* ptr;
-const char* ptrs[40];
-const char* sub_ptrs[40];
+const char* ptrs[50];
+const char* sub_ptrs[50];
 static char sub_cnt,sub_cnt1;
 char i,sub_cnt_max;
 //char ii_;
@@ -2110,6 +2111,10 @@ if(ind==iMn)
 
 		int2lcd(AMPERCHAS,'q',1);
 
+	//	lcd_buffer[10]='z';
+	//	int2lcdyx_mmm(bps[0]._Ti,0,10,0);
+	//	int2lcdyx(debug_cnt,0,19,0);
+
 	/*	//int2lcdyx(can2_plazma,0,19,0);*/
 		//int2lcd(pwm_u_reg,'{',0);
 		//int2lcd(bps[1]._vol_i,'}',0);
@@ -2263,7 +2268,7 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 			
 		int2lcdyx(bps[0]._Ii,1,11,1);
 		
-		int2lcdyx(bps[0]._Ti,1,15,0);
+		int2lcdyx_mmm(bps[0]._Ti,1,15,0);
 				
 		char2lcdhyx(bps[0]._flags_tm,1,19);
 				
@@ -2304,8 +2309,8 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 		int2lcdyx(bps[sub_ind+1]._Ii,2,11,1);
 		
 		
-		int2lcdyx(bps[sub_ind  ]._Ti,1,15,0);
-		int2lcdyx(bps[sub_ind+1]._Ti,2,15,0);
+		int2lcdyx_mmm(bps[sub_ind  ]._Ti,1,15,0);
+		int2lcdyx_mmm(bps[sub_ind+1]._Ti,2,15,0);
 		
 		
 		char2lcdhyx(bps[sub_ind1  ]._flags_tm,1,19);
@@ -2317,8 +2322,8 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 		else int2lcdyx(sub_ind+3,3,0,0);
 		if(bps[sub_ind+2]._Uii<10000)	int2lcdyx(bps[sub_ind+2]._Uii,3,6,1);
 		else 							int2lcdyx(bps[sub_ind+2]._Uii/10,3,6,0);
-		int2lcdyx(bps[sub_ind+2]._Ii,3,11,1);
-		int2lcdyx(bps[sub_ind+2]._Ti,3,15,0);
+		int2lcdyx_mmm(bps[sub_ind+2]._Ii,3,11,1);
+		int2lcdyx_mmm(bps[sub_ind+2]._Ti,3,15,0);
 		char2lcdhyx(bps[sub_ind1+2]._flags_tm,3,19);
 		} else {
 		lcd_buffer[60]=1;
@@ -3403,7 +3408,7 @@ else if(ind==iK_viz_i)
 
 else if(ind==iK_load)
 	{
-	long tempL;
+	//long tempL;
 	bgnd_par(		" ÊÀËÈÁÐÎÂÊÀ ÍÀÃÐÓÇÊÈ",
 					" Uâûõ=     @Â       ",
 					" Iâûõ=     !A       ",
@@ -3550,7 +3555,7 @@ else if(ind==iK_bps)
 	int2lcd(bps[sub_ind1]._Uin,'#',1);
 	int2lcd(U_AVT,'$',1);
 	int2lcd(bps[sub_ind1]._Ii,'%',1);
-	int2lcd(bps[sub_ind1]._Ti,'^',0); 
+	int2lcd_mmm(bps[sub_ind1]._Ti,'^',0); 
 	 
 	
      if((sub_ind==0)||(sub_ind==3))
@@ -3656,7 +3661,7 @@ else if(ind==iK_bps_v2)
 	int2lcd(bps[sub_ind1]._Uin,'#',1);
 	int2lcd(U_AVT,'$',1);
 	int2lcd(bps[sub_ind1]._Ii,'%',1);
-	int2lcd(bps[sub_ind1]._Ti,'^',0); 
+	int2lcd_mmm(bps[sub_ind1]._Ti,'^',0); 
 	 
 	
 	if((sub_ind==0)||(sub_ind==3))
@@ -4691,7 +4696,7 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 //-----------------------------------------------
 void but_drv(void)
 {
-char i;
+//char i;
 LPC_GPIO1->FIODIR|=(1<<21);
 LPC_GPIO1->FIOPIN&=~(1<<21);
 LPC_GPIO1->FIODIR&=~((1<<22)|(1<<23)|(1<<24)|(1<<25)|(1<<26));
@@ -12225,14 +12230,14 @@ if(lc640_read_int(EE_RESTART_ENABLE)==reON)
 				{
 				if(sk_in_drv_stat==1)
 					{
-					return;
+					return 0;
 					}
 				}
 			if(!SK_START_LEV)
 				{
 				if(sk_in_drv_stat==-1)
 					{
-					return;
+					return 0;
 					}
 				}
 			}
@@ -12264,14 +12269,14 @@ if(lc640_read_int(EE_RESTART_ENABLE)==reON)
 				{
 				if(sk_in_drv_stat==1)
 					{
-					return;
+					return 0;
 					}
 				}
 			if(!SK_START_LEV)
 				{
 				if(sk_in_drv_stat==-1)
 					{
-					return;
+					return 0;
 					}
 				}
 			}
@@ -12560,6 +12565,8 @@ while (1)
 
 		avg_hndl();			// âûðàâíèâàíèå òîêîâ
 		ramModbusCnt_hndl();
+
+		debug_drv();
 		}
 	if(b1min)
 		{

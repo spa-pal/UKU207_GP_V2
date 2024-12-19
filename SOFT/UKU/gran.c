@@ -51,3 +51,4 @@ void gran_ring_long(signed long *adr, signed long min, signed long max)
 if (*adr<min) *adr=max;
 if (*adr>max) *adr=min; 
 } 
+

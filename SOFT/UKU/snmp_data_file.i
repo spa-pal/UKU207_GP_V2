@@ -1870,6 +1870,8 @@ void ubat_old_drv(void);
 void unet_drv(void);
 void matemat(void);
 void adc_init(void);
+
+void net_in_drv(void);
 void adc_drv5(void);
 void adc_drv_(void);
 void avg_hndl(void);
@@ -5448,6 +5450,8 @@ void bcd2lcd_zero(char sig);
 void int2lcd_m(signed short in,char xy,char des);
 void int2lcd_mm(signed short in,char xy,char des);
 void int2lcd_mmm(signed short in,char xy,char des);
+
+void int2lcdyx_mmm(signed short in, char y,char x,char des);
 void long2lcd_mmm(signed long in,char xy,char des);
 void long2lcdyx_mmm(signed long in,char y,char x,char des);
 void int2lcdyx(unsigned short in,char y,char x,char des);
