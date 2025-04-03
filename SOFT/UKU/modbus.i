@@ -3851,11 +3851,13 @@ if(crc16_calculated==crc16_incapsulated)
 				{
 				I_ug=modbus_rx_arg1;
 				lc640_write_int(0x10+16,I_ug);
+				ramModbusCnt=0;
 				}
 			if(modbus_rx_arg0==51)		
 				{
 				U_up=modbus_rx_arg1;
 				lc640_write_int(0x10+18,U_up);
+				ramModbusCnt=0;
 				}
 			if(modbus_rx_arg0==52)		
 				{
@@ -3926,6 +3928,10 @@ if(crc16_calculated==crc16_incapsulated)
 
 			if(modbus_rx_arg0==60)		
 				{
+				eepromRamSwitch=0;
+				I_ug=lc640_read_int(0x10+16); 
+				U_up=lc640_read_int(0x10+18);
+
 				if(modbus_rx_arg1==1)
 					{
 
@@ -3964,9 +3970,13 @@ if(crc16_calculated==crc16_incapsulated)
  
 					stop_proc();
 					}
+				ramModbusCnt=0;
 				}
 			if(modbus_rx_arg0==61)		
 				{
+				eepromRamSwitch=0;
+				I_ug=lc640_read_int(0x10+16); 
+				U_up=lc640_read_int(0x10+18);
 				if(modbus_rx_arg1==1)
 					{
 					
@@ -4004,6 +4014,7 @@ if(crc16_calculated==crc16_incapsulated)
  
 					stop_proc();
 					}
+				ramModbusCnt=0;
 				}
 
 			if(modbus_rx_arg0==62)		
@@ -4332,18 +4343,22 @@ if(crc16_calculated==crc16_incapsulated)
 				{
 				I_ug_ram=modbus_rx_arg1;
 				eepromRamSwitch=1;
-				ramModbusCnt=300;
+				ramModbusCnt=10000;
 				}
 
 			if(modbus_rx_arg0==91)	
 				{
 				U_up_ram=modbus_rx_arg1;
 				eepromRamSwitch=1;
-				ramModbusCnt=300;
+				ramModbusCnt=10000;
 				}
 
 			if(modbus_rx_arg0==92)		
 				{
+				eepromRamSwitch=1;
+				I_ug=I_ug_ram;
+				U_up=U_up_ram;
+
 				if(modbus_rx_arg1==1)
 					{
 					if(work_stat!=wsPS)
@@ -4380,10 +4395,14 @@ if(crc16_calculated==crc16_incapsulated)
 						restart_off();
 						}
 					}
-				ramModbusCnt=300;
+				ramModbusCnt=10000;
 				}
 			if(modbus_rx_arg0==93)		
 				{
+				eepromRamSwitch=1;
+				I_ug=I_ug_ram;
+				U_up=U_up_ram;
+
 				if(modbus_rx_arg1==1)
 					{
 					if(work_stat!=wsGS)
@@ -4419,7 +4438,7 @@ if(crc16_calculated==crc16_incapsulated)
 						restart_off();
 						}
 					}
-				ramModbusCnt=300;
+				ramModbusCnt=10000;
 				}
 
 											
@@ -5197,10 +5216,10 @@ modbus_registers[18]=(char)((T_PROC_PS/3600)/256);
 modbus_registers[19]=(char)((T_PROC_PS/3600)%256);
 modbus_registers[20]=0;								
 modbus_registers[21]=0;
-if(work_stat==wsPS)modbus_registers[21]=1;
+if((work_stat==wsPS)&&(!eepromRamSwitch))modbus_registers[21]=1;
 modbus_registers[22]=0;								
 modbus_registers[23]=0;
-if(work_stat==wsGS)modbus_registers[23]=1;
+if((work_stat==wsGS)&&(!eepromRamSwitch))modbus_registers[23]=1;
 modbus_registers[24]=0;								
 modbus_registers[25]=0;
 if(REV_STAT==rsREW)modbus_registers[25]=1;
@@ -5253,10 +5272,10 @@ modbus_registers[82]=(char)((U_up_ram)/256);
 modbus_registers[83]=(char)((U_up_ram)%256);
 modbus_registers[84]=0;									
 modbus_registers[85]=0;
-if(work_stat==wsPS)modbus_registers[85]=1;
+if((work_stat==wsPS)&&(eepromRamSwitch))modbus_registers[85]=1;
 modbus_registers[86]=0;									
 modbus_registers[87]=0;
-if(work_stat==wsGS)modbus_registers[87]=1;
+if((work_stat==wsGS)&&(eepromRamSwitch))modbus_registers[87]=1;
 
 if(prot==0)
 	{

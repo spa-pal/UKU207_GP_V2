@@ -5764,11 +5764,11 @@ if(work_stat==wsGS)
 		{
 		lc640_write_long(0x10+100+92,time_proc);
 		}
-	if(time_proc_remain)
+	if((time_proc_remain) && (!eepromRamSwitch))
 		{
 		time_proc_remain--;
 		}
-	if((!time_proc_remain)&&(!T_PROC_GS_MODE))
+	if((!time_proc_remain)&&(!T_PROC_GS_MODE) && (!eepromRamSwitch))
 		{
 		work_stat=wsOFF;
 		restart_off();
@@ -5816,11 +5816,11 @@ if(work_stat==wsPS)
 		{
 		lc640_write_long(0x10+100+96,time_proc);
 		}
-	if(time_proc_remain)
+	if((time_proc_remain)&&(!eepromRamSwitch))
 		{
 		time_proc_remain--;
 		}
-	if((!time_proc_remain)&&(!T_PROC_PS_MODE))
+	if((!time_proc_remain)&&(!T_PROC_PS_MODE)&&(!eepromRamSwitch))
 		{
 		work_stat=wsOFF;
 		restart_off();
@@ -6026,11 +6026,11 @@ void stop_CAP(void) {
 
 void ramModbusCnt_hndl(void)  
 {
-if(ramModbusCnt) ramModbusCnt--;
+if((ramModbusCnt)&&(ramModbusCnt!=10000)) ramModbusCnt--;
 else 
 	{
-	I_ug_ram=0;
-	U_up_ram=0;
+	
+	
 	}	
 }
 

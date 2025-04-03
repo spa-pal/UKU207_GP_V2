@@ -777,11 +777,13 @@ if(crc16_calculated==crc16_incapsulated)
 				{
 				I_ug=modbus_rx_arg1;
 				lc640_write_int(EE_I_UG,I_ug);
+				ramModbusCnt=0;
 				}
 			if(modbus_rx_arg0==51)		//напряжение стабилизации для режима стабилизации напряжения
 				{
 				U_up=modbus_rx_arg1;
 				lc640_write_int(EE_U_UP,U_up);
+				ramModbusCnt=0;
 				}
 			if(modbus_rx_arg0==52)		//максимапльное напряжение для режима стабилизации тока
 				{
@@ -852,6 +854,10 @@ if(crc16_calculated==crc16_incapsulated)
 
 			if(modbus_rx_arg0==60)		//вкл/выкл источника напр.
 				{
+				eepromRamSwitch=0;
+				I_ug=lc640_read_int(EE_I_UG); 
+				U_up=lc640_read_int(EE_U_UP);
+
 				if(modbus_rx_arg1==1)
 					{
 /*					if(work_stat!=wsPS)
@@ -890,9 +896,13 @@ if(crc16_calculated==crc16_incapsulated)
 						}*/
 					stop_proc();
 					}
+				ramModbusCnt=0;
 				}
 			if(modbus_rx_arg0==61)		//вкл/выкл источника тока
 				{
+				eepromRamSwitch=0;
+				I_ug=lc640_read_int(EE_I_UG); 
+				U_up=lc640_read_int(EE_U_UP);
 				if(modbus_rx_arg1==1)
 					{
 					/*if(work_stat!=wsGS)
@@ -930,6 +940,7 @@ if(crc16_calculated==crc16_incapsulated)
 						} */
 					stop_proc();
 					}
+				ramModbusCnt=0;
 				}
 
 			if(modbus_rx_arg0==62)		//переключение реле реверса
@@ -1258,18 +1269,22 @@ if(crc16_calculated==crc16_incapsulated)
 				{
 				I_ug_ram=modbus_rx_arg1;
 				eepromRamSwitch=1;
-				ramModbusCnt=300;
+				ramModbusCnt=10000;
 				}
 
 			if(modbus_rx_arg0==91)	//напряжение стабилизации для режима стабилизации напряжения, в ОЗУ
 				{
 				U_up_ram=modbus_rx_arg1;
 				eepromRamSwitch=1;
-				ramModbusCnt=300;
+				ramModbusCnt=10000;
 				}
 
 			if(modbus_rx_arg0==92)		//вкл/выкл источника напр.
 				{
+				eepromRamSwitch=1;
+				I_ug=I_ug_ram;
+				U_up=U_up_ram;
+
 				if(modbus_rx_arg1==1)
 					{
 					if(work_stat!=wsPS)
@@ -1306,10 +1321,14 @@ if(crc16_calculated==crc16_incapsulated)
 						restart_off();
 						}
 					}
-				ramModbusCnt=300;
+				ramModbusCnt=10000;
 				}
 			if(modbus_rx_arg0==93)		//вкл/выкл источника тока
 				{
+				eepromRamSwitch=1;
+				I_ug=I_ug_ram;
+				U_up=U_up_ram;
+
 				if(modbus_rx_arg1==1)
 					{
 					if(work_stat!=wsGS)
@@ -1345,7 +1364,7 @@ if(crc16_calculated==crc16_incapsulated)
 						restart_off();
 						}
 					}
-				ramModbusCnt=300;
+				ramModbusCnt=10000;
 				}
 
 											
@@ -2123,10 +2142,10 @@ modbus_registers[18]=(char)((T_PROC_PS/3600)/256);		//Рег59
 modbus_registers[19]=(char)((T_PROC_PS/3600)%256);
 modbus_registers[20]=0;								//Рег60
 modbus_registers[21]=0;
-if(work_stat==wsPS)modbus_registers[21]=1;
+if((work_stat==wsPS)&&(!eepromRamSwitch))modbus_registers[21]=1;
 modbus_registers[22]=0;								//Рег61
 modbus_registers[23]=0;
-if(work_stat==wsGS)modbus_registers[23]=1;
+if((work_stat==wsGS)&&(!eepromRamSwitch))modbus_registers[23]=1;
 modbus_registers[24]=0;								//Рег62
 modbus_registers[25]=0;
 if(REV_STAT==rsREW)modbus_registers[25]=1;
@@ -2179,10 +2198,10 @@ modbus_registers[82]=(char)((U_up_ram)/256);			//Рег91
 modbus_registers[83]=(char)((U_up_ram)%256);
 modbus_registers[84]=0;									//Рег92
 modbus_registers[85]=0;
-if(work_stat==wsPS)modbus_registers[85]=1;
+if((work_stat==wsPS)&&(eepromRamSwitch))modbus_registers[85]=1;
 modbus_registers[86]=0;									//Рег93
 modbus_registers[87]=0;
-if(work_stat==wsGS)modbus_registers[87]=1;
+if((work_stat==wsGS)&&(eepromRamSwitch))modbus_registers[87]=1;
 
 if(prot==MODBUS_RTU_PROT)
 	{

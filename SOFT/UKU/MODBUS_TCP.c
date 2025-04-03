@@ -74,7 +74,7 @@ switch (evt)
 	if(modbus_tcp_unit==MODBUS_ADRESS)
 		{
 		//char modbus_tcp_tx_buff[200];
-		ramModbusCnt=300;
+		//ramModbusCnt=290;
 
 		if(modbus_tcp_func==3)		//чтение произвольного кол-ва регистров хранения
 			{
@@ -251,6 +251,9 @@ switch (evt)
 						restart_off();
 						}
 					}
+				eepromRamSwitch=0;
+				I_ug=lc640_read_int(EE_I_UG); 
+				U_up=lc640_read_int(EE_U_UP);
 				}
 			if(modbus_tcp_rx_arg0==61)		//вкл/выкл источника тока
 				{
@@ -272,6 +275,9 @@ switch (evt)
 						restart_off();
 						}
 					}
+				eepromRamSwitch=0;
+				I_ug=lc640_read_int(EE_I_UG); 
+				U_up=lc640_read_int(EE_U_UP);
 				}
 
 			if(modbus_tcp_rx_arg0==62)		//переключение реле реверса
@@ -612,16 +618,22 @@ switch (evt)
 				{
 				I_ug_ram=modbus_tcp_rx_arg1;
 				eepromRamSwitch=1;
+				ramModbusCnt=10000;
 				}
 
 			else if(modbus_tcp_rx_arg0==91)	//напряжение стабилизации для режима стабилизации напряжения, в ОЗУ
 				{
 				U_up_ram=modbus_tcp_rx_arg1;
 				eepromRamSwitch=1;
+				ramModbusCnt=10000;
 				}
 
 			else if(modbus_tcp_rx_arg0==92)		//вкл/выкл источника напр.
 				{
+				eepromRamSwitch=1;
+				I_ug=I_ug_ram;
+				U_up=U_up_ram;
+
 				if(modbus_tcp_rx_arg1==1)
 					{
 					if(work_stat!=wsPS)
@@ -641,9 +653,14 @@ switch (evt)
 						restart_off();
 						}
 					}
+				ramModbusCnt=10000;
 				}
 			else if(modbus_tcp_rx_arg0==93)		//вкл/выкл источника тока
 				{
+				eepromRamSwitch=1;
+				I_ug=I_ug_ram;
+				U_up=U_up_ram;
+
 				if(modbus_tcp_rx_arg1==1)
 					{
 					if(work_stat!=wsGS)
@@ -662,6 +679,7 @@ switch (evt)
 						restart_off();
 						}
 					}
+				ramModbusCnt=10000;
 				}
 
 			

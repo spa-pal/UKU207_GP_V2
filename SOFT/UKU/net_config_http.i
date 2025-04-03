@@ -1653,7 +1653,7 @@ U8        lhost_name[16] = "SPA-UKU202";
  U16 const snmp_PortNum  = 161;
  U16 const snmp_TrapPort = 162;
  U8  const snmp_TickItv  = 10 / 5;
- U8    snmp_Community[] = "public";
+ U8  snmp_Community[] = "public";
  U8  const snmp_TrapIp[] = { 192, 168,
                              1, 9 };
 

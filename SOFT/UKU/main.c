@@ -2195,8 +2195,8 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	if(work_stat!=wsPS) fiks_stat_U=0;
 
 
-	//int2lcdyx(net_in_drv_cnt_B,0,5,0);
-	//int2lcdyx(net_in_drv_stat_B,0,10,0);
+	//int2lcdyx(eepromRamSwitch,0,19,0);
+	//int2lcdyx(time_proc_remain,0,15,0);
 /*	int2lcdyx(lc640_read_int(EE_CAN_RESET_CNT),0,11,0);*/
 	//int2lcdyx(modbusTimeoutInMills,0,16,0);			
 /*	int2lcdyx(curr_off_start_cnt,0,19,0);
@@ -2204,6 +2204,8 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	int2lcdyx(modbus_plazma2,0,9,0); */
 	//int2lcdyx(REV_STAT,0,4,0);	
 
+	int2lcdyx(bps[0]._vol_u,0,12,0);
+	int2lcdyx(bps[0]._vol_i,0,19,0);
 	}
 
  else if(ind==iFW_IPS_SEL)
@@ -4961,6 +4963,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 				/*---work_stat=wsGS;
 					time_proc=0;
@@ -5101,6 +5104,7 @@ else if(ind==iMn)
 			}
 			if(but==butE) {
 				if(work_stat!=wsGS)	{
+					eepromRamSwitch=0;
 					start_GS();
 				/*---	work_stat=wsGS;
 					time_proc=0;
@@ -5170,6 +5174,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					/*
 					work_stat=wsGS;
@@ -5202,9 +5207,9 @@ else if(ind==iMn)
 					}											//режим непрерывной работы снимается 
 				}												//(T_PROC_GS_MODE=0)
 	
-			else if(T_PROC_GS<5)
+			else if(T_PROC_GS<30)
 				{
-				T_PROC_GS=4;
+				T_PROC_GS=29;
 				if(T_PROC_GS_MODE!=1)
 					{
 					T_PROC_GS_MODE=1;
@@ -5358,6 +5363,7 @@ else if(ind==iMn)
 					restart_on_PS();
 					bFAST_REG=1;
 					bU_VALID=0; */
+					eepromRamSwitch=0;
 					start_PS();
 					}			
 				else
@@ -5458,6 +5464,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					/*
 					work_stat=wsPS;
@@ -5532,6 +5539,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					/*
 					work_stat=wsPS;
@@ -5738,6 +5746,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					/*
 					work_stat=wsGS;
@@ -5852,6 +5861,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					/*
 					work_stat=wsGS;
@@ -5927,6 +5937,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					/*
 					work_stat=wsGS;
@@ -5992,6 +6003,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					/*
 					work_stat=wsPS;
@@ -6091,6 +6103,7 @@ else if(ind==iMn)
 				speed=1;
 			} else if(but==butE) {
 				if(work_stat!=wsPS)	{
+					eepromRamSwitch=0;
 					start_PS();
 					/*
 					work_stat=wsPS;
@@ -6165,6 +6178,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					/*
 					work_stat=wsPS;
@@ -6391,6 +6405,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					/*
 					work_stat=wsPS;
@@ -6489,6 +6504,7 @@ else if(ind==iMn)
 			} else if(but==butE) {
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					/*
 					work_stat=wsPS;
@@ -6565,7 +6581,8 @@ else if(ind==iMn)
 			else if(but==butE)
 				{
 				if(work_stat!=wsPS)
-					{
+					{  \
+					eepromRamSwitch=0;
 					start_PS();
 					/*
 					work_stat=wsPS;
@@ -6629,6 +6646,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					/*
 					work_stat=wsGS;
@@ -6741,6 +6759,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					/*
 					work_stat=wsGS;
@@ -6814,6 +6833,7 @@ else if(ind==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					/*
 					work_stat=wsGS;

@@ -4576,7 +4576,7 @@ switch (evt)
 	if(modbus_tcp_unit==MODBUS_ADRESS)
 		{
 		
-		ramModbusCnt=300;
+		
 
 		if(modbus_tcp_func==3)		
 			{
@@ -4753,6 +4753,9 @@ switch (evt)
 						restart_off();
 						}
 					}
+				eepromRamSwitch=0;
+				I_ug=lc640_read_int(0x10+16); 
+				U_up=lc640_read_int(0x10+18);
 				}
 			if(modbus_tcp_rx_arg0==61)		
 				{
@@ -4774,6 +4777,9 @@ switch (evt)
 						restart_off();
 						}
 					}
+				eepromRamSwitch=0;
+				I_ug=lc640_read_int(0x10+16); 
+				U_up=lc640_read_int(0x10+18);
 				}
 
 			if(modbus_tcp_rx_arg0==62)		
@@ -5114,16 +5120,22 @@ switch (evt)
 				{
 				I_ug_ram=modbus_tcp_rx_arg1;
 				eepromRamSwitch=1;
+				ramModbusCnt=10000;
 				}
 
 			else if(modbus_tcp_rx_arg0==91)	
 				{
 				U_up_ram=modbus_tcp_rx_arg1;
 				eepromRamSwitch=1;
+				ramModbusCnt=10000;
 				}
 
 			else if(modbus_tcp_rx_arg0==92)		
 				{
+				eepromRamSwitch=1;
+				I_ug=I_ug_ram;
+				U_up=U_up_ram;
+
 				if(modbus_tcp_rx_arg1==1)
 					{
 					if(work_stat!=wsPS)
@@ -5143,9 +5155,14 @@ switch (evt)
 						restart_off();
 						}
 					}
+				ramModbusCnt=10000;
 				}
 			else if(modbus_tcp_rx_arg0==93)		
 				{
+				eepromRamSwitch=1;
+				I_ug=I_ug_ram;
+				U_up=U_up_ram;
+
 				if(modbus_tcp_rx_arg1==1)
 					{
 					if(work_stat!=wsGS)
@@ -5164,6 +5181,7 @@ switch (evt)
 						restart_off();
 						}
 					}
+				ramModbusCnt=10000;
 				}
 
 			

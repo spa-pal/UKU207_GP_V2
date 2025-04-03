@@ -9008,6 +9008,8 @@ if(a_ind . i==iMn)
  
 	
 
+	int2lcdyx(bps[0]._vol_u,0,12,0);
+	int2lcdyx(bps[0]._vol_i,0,19,0);
 	}
 
  else if(a_ind . i==iFW_IPS_SEL)
@@ -11299,12 +11301,12 @@ else if(a_ind . i==iFW_UKU)
 	bgnd_par(	" Версия             ",
 				" Сборка  0000.00.00 ",
 
-				 
-				"                    ",
 
 
 
 
+				" WG12232L3          ",
+				
 
 				"                    ");
 	int2lcdyx(BUILD_YEAR,1,12,0);
@@ -11465,12 +11467,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4670 "main.c"
+#line 4672 "main.c"
 
 
 
 
-#line 4692 "main.c"
+#line 4694 "main.c"
 
 
 
@@ -11743,6 +11745,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 				
 
@@ -11883,6 +11886,7 @@ else if(a_ind . i==iMn)
 			}
 			if(but==254) {
 				if(work_stat!=wsGS)	{
+					eepromRamSwitch=0;
 					start_GS();
 				
 
@@ -11952,6 +11956,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					
 
@@ -11984,9 +11989,9 @@ else if(a_ind . i==iMn)
 					}											
 				}												
 	
-			else if(T_PROC_GS<5)
+			else if(T_PROC_GS<30)
 				{
-				T_PROC_GS=4;
+				T_PROC_GS=29;
 				if(T_PROC_GS_MODE!=1)
 					{
 					T_PROC_GS_MODE=1;
@@ -12140,6 +12145,7 @@ else if(a_ind . i==iMn)
 
 
  
+					eepromRamSwitch=0;
 					start_PS();
 					}			
 				else
@@ -12240,6 +12246,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					
 
@@ -12314,6 +12321,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					
 
@@ -12520,6 +12528,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					
 
@@ -12634,6 +12643,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					
 
@@ -12709,6 +12719,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					
 
@@ -12774,6 +12785,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					
 
@@ -12873,6 +12885,7 @@ else if(a_ind . i==iMn)
 				speed=1;
 			} else if(but==254) {
 				if(work_stat!=wsPS)	{
+					eepromRamSwitch=0;
 					start_PS();
 					
 
@@ -12947,6 +12960,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					
 
@@ -13173,6 +13187,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					
 
@@ -13271,6 +13286,7 @@ else if(a_ind . i==iMn)
 			} else if(but==254) {
 				if(work_stat!=wsPS)
 					{
+					eepromRamSwitch=0;
 					start_PS();
 					
 
@@ -13347,7 +13363,8 @@ else if(a_ind . i==iMn)
 			else if(but==254)
 				{
 				if(work_stat!=wsPS)
-					{
+					{  					eepromRamSwitch=0;
+
 					start_PS();
 					
 
@@ -13411,6 +13428,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					
 
@@ -13523,6 +13541,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					
 
@@ -13596,6 +13615,7 @@ else if(a_ind . i==iMn)
 				{
 				if(work_stat!=wsGS)
 					{
+					eepromRamSwitch=0;
 					start_GS();
 					
 
@@ -18902,7 +18922,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 12129 "main.c"
+#line 12149 "main.c"
 
 
 
