@@ -17,7 +17,7 @@
 
                           EXPORTAS ||area_number.5||, ||.constdata||
                   BUILD
-000000  0232              DCW      0x0232
+000000  0233              DCW      0x0233
 
                           AREA ||area_number.6||, DATA, READONLY, ALIGN=1
 
@@ -29,7 +29,7 @@
 
                           EXPORTAS ||area_number.7||, ||.constdata||
                   BUILD_MONTH
-000000  0002              DCW      0x0002
+000000  0004              DCW      0x0004
 
                           AREA ||area_number.8||, DATA, READONLY, ALIGN=1
 
