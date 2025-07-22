@@ -3463,13 +3463,11 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 60 "main.h"
+#line 61 "main.h"
 
-#line 68 "main.h"
+#line 69 "main.h"
 
-#line 79 "main.h"
-
-
+#line 80 "main.h"
 
 
 
@@ -3477,7 +3475,9 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 94 "main.h"
+
+
+#line 95 "main.h"
 
 
 
@@ -3485,13 +3485,13 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 119 "main.h"
+#line 120 "main.h"
 
 
 
 
 
-#line 133 "main.h"
+#line 134 "main.h"
 
 
 
@@ -3506,7 +3506,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 155 "main.h"
+#line 156 "main.h"
 
 
 
@@ -3549,7 +3549,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 225 "main.h"
+#line 226 "main.h"
 
 
 
@@ -3568,11 +3568,9 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 261 "main.h"
+#line 262 "main.h"
 
-#line 277 "main.h"
-
-
+#line 278 "main.h"
 
 
 
@@ -3592,9 +3590,11 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 311 "main.h"
 
-#line 325 "main.h"
+
+#line 312 "main.h"
+
+#line 326 "main.h"
 
 
 
@@ -3636,7 +3636,7 @@ typedef enum {
 	iDef,iDef_3U,iDef_RSTKM,iDef_GLONASS,iDef_KONTUR,iDef_6U,iDef_220,
 	iSet_st_prl,iK_pdp,iSet_T,
 	iDeb,iJ_bat,iK_inv_sel,
-	iK_viz_sel,iK_viz_i,iK_viz_u,
+	iK_viz_sel,iK_viz_i,iK_viz_u,iK_viz_i_2,iK_viz_u_2,
 	iAusw,iAusw_prl,iAusw_set,
 	iK_t_ext,iK_t_3U,iK_t_ext_6U,
 	iAv_view,
@@ -3709,8 +3709,9 @@ extern signed short KunetC;
 
 extern signed short MAIN_IST;
 extern signed short UMAX;
-extern signed short UB0;
-extern signed short UB20;
+
+
+ 
 
 extern signed short TSIGN;
 extern signed short AV_OFF_AVT;
@@ -3723,7 +3724,7 @@ extern signed short IMAX;
 extern signed short IMIN;
 extern signed short APV_ON;
 extern signed short IZMAX;
-extern signed short U0B;
+
 extern signed short TZAS;
 extern signed short VZ_HR;
 extern signed short TBAT;
@@ -3757,7 +3758,7 @@ extern signed short NUMEXT;
 extern signed short NUMAVT;
 
 typedef enum {apvON=0x01,apvOFF=0x00}enum_apv_on;
-extern enum_apv_on APV_ON1,APV_ON2;
+
 
 extern signed short APV_ON2_TIME;
 
@@ -3869,7 +3870,12 @@ extern signed short UOUT_OFF_EN;
 extern signed short UOUT_OFF_LEVEL;	
 extern signed short UOUT_OFF_DELAY;	
 
+extern signed short U_viz_2_max;		
+extern signed short U_viz_2_min;	   	
+extern signed short I_viz_2_max;	   	
+extern signed short I_viz_2_min;	   	
 
+extern signed short VIZ;				
 
 
 
@@ -4255,6 +4261,7 @@ extern signed short pwm_t_reg;
 extern short plazma_umax;
 
 extern short modbus_tcp_plazma_pavlik[4];
+extern short plazma_viz_i, plazma_viz_u;
 
 
  
@@ -4456,26 +4463,29 @@ void start_CAP(void);
 
 
 
-#line 158 "eeprom_map.h"
 
-
-
-#line 170 "eeprom_map.h"
-
-
-#line 181 "eeprom_map.h"
-
-
-#line 190 "eeprom_map.h"
+ 
+#line 159 "eeprom_map.h"
 
 
 
 
+#line 172 "eeprom_map.h"
+
+
+#line 183 "eeprom_map.h"
+
+
+#line 192 "eeprom_map.h"
 
 
 
 
-#line 236 "eeprom_map.h"
+
+
+
+
+#line 238 "eeprom_map.h"
 
 
 

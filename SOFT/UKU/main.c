@@ -85,9 +85,9 @@ signed short KunetC;
 
 signed short MAIN_IST;
 signed short UMAX;
-signed short UB0;
+/*signed short UB0;
 signed short UB20;
-
+*/
 signed short TSIGN;
 signed short AV_OFF_AVT;
 signed short USIGN;
@@ -100,7 +100,7 @@ signed short IMAX;
 signed short IMIN;
 signed short APV_ON;
 signed short IZMAX;
-signed short U0B;
+//signed short U0B;
 signed short TZAS;
 signed short VZ_HR;
 signed short TBAT;
@@ -126,7 +126,7 @@ signed short NUMSK;
 signed short NUMEXT;
 signed short NUMAVT;
 
-enum_apv_on APV_ON1,APV_ON2;
+//enum_apv_on APV_ON1,APV_ON2;
 signed short APV_ON2_TIME;
 
 enum_bat_is_on BAT_IS_ON[2];
@@ -238,7 +238,13 @@ signed short CUR_OFF_T_ON;
 signed short UOUT_OFF_EN;		//функция отключения источников по превышению выхода над заданием вкл./выкл.
 signed short UOUT_OFF_LEVEL;	//Порог в процентах для функции отключения источников по превышению выхода над заданием
 signed short UOUT_OFF_DELAY;	//Задержка срабатывания в секундах для функции отключения источников по превышению выхода над заданием
-	
+
+signed short U_viz_2_max;		//Напряжение при максимальном шиме
+signed short U_viz_2_min;	   	//Напряжение при минимальном шиме
+signed short I_viz_2_max;	   	//Ток при максимальном шиме
+signed short I_viz_2_min;	   	//Ток при максимальном шиме
+
+signed short VIZ;				//Переключатель алгоритма работы стабилизации (2 - 2-х точечная характеристика, остальное - 200-т точечная характеристика
 
 signed short EE_WRITE_CNT;
 //***********************************************
@@ -706,6 +712,8 @@ signed short pwm_t_reg;
 
 
 short modbus_tcp_plazma_pavlik[4];
+
+short plazma_viz_i, plazma_viz_u;
 
 //-----------------------------------------------
 void rtc_init (void) 
@@ -2204,8 +2212,12 @@ if((main_1Hz_cnt>=3600UL)&&(lc640_read_int(EE_CAN_RESET_CNT)!=0))
 	int2lcdyx(modbus_plazma2,0,9,0); */
 	//int2lcdyx(REV_STAT,0,4,0);	
 
-	int2lcdyx(bps[0]._vol_u,0,12,0);
-	int2lcdyx(bps[0]._vol_i,0,19,0);
+	//int2lcdyx(bps[0]._vol_u,0,12,0);
+	//int2lcdyx(bps[0]._vol_i,0,19,0);
+
+/*	int2lcdyx(VIZ,0,2,0);
+	int2lcdyx(plazma_viz_u,0,6,0);
+	int2lcdyx(plazma_viz_i,0,12,0);	 */
 	}
 
  else if(ind==iFW_IPS_SEL)
@@ -2652,7 +2664,7 @@ else if((ind==iSet_prl)||(ind==iK_prl))
 	
 else if(ind==iSet)
 	{
-	#define SI_SET_MAX	38
+	#define SI_SET_MAX	39
     ptrs[0]=				" Источников        !";
 	ptrs[1]=				" Максимальная длит- ";
    	ptrs[2]=				" сть процесса  0[:0]";
@@ -2688,7 +2700,9 @@ else if(ind==iSet)
 	ptrs[32]=				" Uавар           +B ";
 	ptrs[33]=				" Выключение по      ";
 	ptrs[34]=				" превышению уставки ";
-	ptrs[35]=      			" Серийный N        w";
+	ptrs[35]=				" Алгоритм U,I  200т.";
+	if(VIZ==2) ptrs[35]=	" Алгоритм U,I    2т.";
+	ptrs[36]=      			" Серийный N        w";
    	ptrs[SI_SET_MAX-2]=		" Выход              ";
 	ptrs[SI_SET_MAX-1]=		" Калибровка         ";
 	ptrs[SI_SET_MAX]=		" Тест ШИМ           ";
@@ -3319,10 +3333,12 @@ else if(ind==iK_viz_sel)
 	char i;
 	i=0;
 	
-	ptrs[i++]=	" по напряжению      ";
-	ptrs[i++]=	" по току            ";
-    	ptrs[i++]=	" Выход              ";
-    	ptrs[i++]=	"                    ";
+	ptrs[i++]=	" по напряжению 200т.";
+	ptrs[i++]=	" по току       200т.";
+	ptrs[i++]=	" по напряжению   2т.";
+	ptrs[i++]=	" по току         2т.";
+    ptrs[i++]=	" Выход              ";
+    ptrs[i++]=	"                    ";
 
 	if((sub_ind-index_set)>2)index_set=sub_ind-2;
 	else if(sub_ind<index_set)index_set=sub_ind;
@@ -3371,6 +3387,42 @@ else if(ind==iK_viz_u)
      int2lcd(viz_stat_cnt/50+1,'<',0);
 	}   
 
+else if(ind==iK_viz_u_2)
+	{
+	//char i;
+	//i=0;
+	
+/*	if(viz_stat!=vsON)
+		{
+		ptrs[0]=		" U=    [В  I=    ]А ";
+		ptrs[1]=		" Пуск               ";
+	    	ptrs[2]=		" Выход              ";
+	    	ptrs[3]=		"                    ";
+		}
+	else 
+		{*/
+		ptrs[0]=		" Uмакс.шим=       [В";
+		ptrs[1]=		" Uмин.шим=        ]В";
+	    ptrs[2]=		" Выход	             ";
+	    ptrs[3]=		"                    ";
+	/*	}*/
+
+	if((sub_ind-index_set)>2)index_set=sub_ind-2;
+	else if(sub_ind<index_set)index_set=sub_ind;
+	bgnd_par("ВЫХ. ХАР. ПО НАПРЯЖ.",
+			ptrs[index_set],
+			ptrs[index_set+1],
+			ptrs[index_set+2]);
+
+	/*if(viz_stat!=vsON)*/pointer_set(1);	 
+	/*else pointer_set(3);*/
+
+	int2lcd(U_viz_2_max,'[',1);
+     int2lcd(U_viz_2_min,']',1);
+	//int2lcd(tst_pwm_u,'>',0);
+     //int2lcd(viz_stat_cnt/50+1,'<',0);
+	} 
+
 else if(ind==iK_viz_i)
 	{
 	//char i;
@@ -3406,6 +3458,42 @@ else if(ind==iK_viz_i)
 	int2lcd(tst_pwm_i,'>',0);
      int2lcd(viz_stat_cnt/50+1,'<',0);
 	}   
+
+else if(ind==iK_viz_i_2)
+	{
+	//char i;
+	//i=0;
+	
+/*	if(viz_stat!=vsON)
+		{
+		ptrs[0]=		" U=    [В  I=    ]А ";
+		ptrs[1]=		" Пуск               ";
+	    	ptrs[2]=		" Выход              ";
+	    	ptrs[3]=		"                    ";
+		}
+	else 
+		{*/
+		ptrs[0]=		" Iмакс.шим=       [A";
+		ptrs[1]=		" Iмин.шим=        ]A";
+	    ptrs[2]=		" Выход	             ";
+	    ptrs[3]=		"                    ";
+	/*	}*/
+
+	if((sub_ind-index_set)>2)index_set=sub_ind-2;
+	else if(sub_ind<index_set)index_set=sub_ind;
+	bgnd_par("ВЫХ. ХАР. ПО ТОКУ   ",
+			ptrs[index_set],
+			ptrs[index_set+1],
+			ptrs[index_set+2]);
+
+	/*if(viz_stat!=vsON)*/pointer_set(1);	 
+	/*else pointer_set(3);*/
+
+	int2lcd(I_viz_2_max,'[',1);
+     int2lcd(I_viz_2_min,']',1);
+	//int2lcd(tst_pwm_u,'>',0);
+     //int2lcd(viz_stat_cnt/50+1,'<',0);
+	} 
 
 
 else if(ind==iK_load)
@@ -7863,7 +7951,29 @@ else if(ind==iSet)
 			tree_up(iUout_avar_control,0,0,0);
 			}
 	    }
-	else if(sub_ind==35)
+     else if(sub_ind==35)
+	     {
+	     /*if((but==butR)||(but==butR_))
+	     	{
+	     	MODBUS_ADRESS++;
+	     	gran(&MODBUS_ADRESS,1,100);
+	     	lc640_write_int(EE_MODBUS_ADRESS,MODBUS_ADRESS);
+			speed=1;
+	     	}
+	     
+	     else if((but==butL)||(but==butL_))
+	     	{
+	     	MODBUS_ADRESS--;
+	     	gran(&MODBUS_ADRESS,1,100);
+	     	lc640_write_int(EE_MODBUS_ADRESS,MODBUS_ADRESS);
+			speed=1;
+	     	}  */
+		  if(VIZ!=2) VIZ=2;
+		  else VIZ=1;
+		  lc640_write_int(EE_VIZ,VIZ);
+
+          }
+	else if(sub_ind==36)
 	    {
 	    if(but==butR)AUSW_MAIN_NUMBER++;
 	    else if(but==butR_)AUSW_MAIN_NUMBER+=20;
@@ -9784,12 +9894,12 @@ else if(ind==iK_viz_sel)
 	if(but==butD)
 		{
 		sub_ind++;
-		gran_char(&sub_ind,0,2);
+		gran_char(&sub_ind,0,4);
 		}
 	else if(but==butU)
 		{
 		sub_ind--;
-		gran_char(&sub_ind,0,2);
+		gran_char(&sub_ind,0,4);
 		}
 	else if(sub_ind==0)
 		{
@@ -9819,7 +9929,36 @@ else if(ind==iK_viz_sel)
 			//ret(1000);
 			}	
 		}
- 	else if(sub_ind==2)
+
+	else if(sub_ind==2)
+		{
+		if(but==butE)
+			{
+			tree_up(iK_viz_u_2,0,0,0);
+/*			show_mess	(	"     Установите     ",
+	          			" ток нагрузки 5-20% ",
+	          			"  от максимального  ",
+	          			"   и нажмите пуск   ",3000);	
+			viz_stat=vsOFF;
+			viz_stat_cnt=0;	*/
+			//ret(1000);
+			}	
+		}
+	else if(sub_ind==3)
+		{
+		if(but==butE)
+			{
+			tree_up(iK_viz_i_2,0,0,0);
+/*			show_mess	(	"     Установите     ",
+	          			" ток нагрузки 100% ",
+	          			"  от максимального  ",
+	          			"   и нажмите пуск   ",3000);	
+			viz_stat=vsOFF;
+			viz_stat_cnt=0;*/
+			//ret(1000);
+			}	
+		}
+ 	else if(sub_ind==4)
 		{
 		if(but==butE)
 			{
@@ -9873,6 +10012,79 @@ else if(ind==iK_viz_u)
 		}				 
 	} 
 
+else if(ind==iK_viz_u_2)
+	{
+	ret(1000);
+	if(but==butD)
+		{
+		sub_ind++;
+		gran_char(&sub_ind,0,2);
+		}
+	else if(but==butU)
+		{
+		sub_ind--;
+		gran_char(&sub_ind,0,2);
+		}
+	else if(sub_ind==0)
+		{
+		temp_SS=lc640_read_int(EE_U_VIZ_2_MAX);
+	     if(but==butR)
+	     	{
+		    temp_SS++;
+	     	}
+	     else if(but==butR_)
+	     	{
+	     	temp_SS=((temp_SS/10)+1)*10;
+	     	}	
+	     else if(but==butL)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==butL_)
+	     	{
+	     	temp_SS=((temp_SS/10)-1)*10;
+	     	}
+	    gran(&temp_SS,1,20000);
+		lc640_write_int(EE_U_VIZ_2_MAX,temp_SS);
+		lc640_write_int(EE_U_CURVE_IS_ON,0xabcd);					
+		speed=1;	
+					
+		}
+	else if(sub_ind==1)
+		{
+		temp_SS=lc640_read_int(EE_U_VIZ_2_MIN);
+	     if(but==butR)
+	     	{
+		    temp_SS++;
+	     	}
+	     else if(but==butR_)
+	     	{
+	     	temp_SS=((temp_SS/10)+1)*10;
+	     	}	
+	     else if(but==butL)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==butL_)
+	     	{
+	     	temp_SS=((temp_SS/10)-1)*10;
+	     	}
+	    gran(&temp_SS,1,20000);
+		lc640_write_int(EE_U_VIZ_2_MIN,temp_SS);
+		lc640_write_int(EE_U_CURVE_IS_ON,0xabcd);					
+		speed=1;	
+					
+		}
+ 	else if(sub_ind==2)
+		{
+		if(but==butE)
+			{
+			tree_down(0,0);
+			ret(0);
+			}
+		}				 
+	} 
+
 else if(ind==iK_viz_i)
 	{
 	ret(1000);
@@ -9908,6 +10120,79 @@ else if(ind==iK_viz_i)
 			}	
 		}*/
  	else if(sub_ind==1)
+		{
+		if(but==butE)
+			{
+			tree_down(0,0);
+			ret(0);
+			}
+		}				 
+	} 
+
+else if(ind==iK_viz_i_2)
+	{
+	ret(1000);
+	if(but==butD)
+		{
+		sub_ind++;
+		gran_char(&sub_ind,0,2);
+		}
+	else if(but==butU)
+		{
+		sub_ind--;
+		gran_char(&sub_ind,0,2);
+		}
+	else if(sub_ind==0)
+		{
+		temp_SS=lc640_read_int(EE_I_VIZ_2_MAX);
+	     if(but==butR)
+	     	{
+		    temp_SS++;
+	     	}
+	     else if(but==butR_)
+	     	{
+	     	temp_SS=((temp_SS/10)+1)*10;
+	     	}	
+	     else if(but==butL)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==butL_)
+	     	{
+	     	temp_SS=((temp_SS/10)-1)*10;
+	     	}
+	    gran(&temp_SS,1,32000);
+		lc640_write_int(EE_I_VIZ_2_MAX,temp_SS);
+		lc640_write_int(EE_I_CURVE_IS_ON,0xabcd);					
+		speed=1;	
+					
+		}
+	else if(sub_ind==1)
+		{
+		temp_SS=lc640_read_int(EE_I_VIZ_2_MIN);
+	     if(but==butR)
+	     	{
+		    temp_SS++;
+	     	}
+	     else if(but==butR_)
+	     	{
+	     	temp_SS=((temp_SS/10)+1)*10;
+	     	}	
+	     else if(but==butL)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==butL_)
+	     	{
+	     	temp_SS=((temp_SS/10)-1)*10;
+	     	}
+	    gran(&temp_SS,1,32000);
+		lc640_write_int(EE_I_VIZ_2_MIN,temp_SS);
+		lc640_write_int(EE_I_CURVE_IS_ON,0xabcd);					
+		speed=1;	
+					
+		}
+ 	else if(sub_ind==2)
 		{
 		if(but==butE)
 			{

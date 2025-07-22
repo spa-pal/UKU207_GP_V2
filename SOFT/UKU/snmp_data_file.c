@@ -27,7 +27,8 @@ signed short snmp_load_current_measure_mode;
 signed short snmp_main_menu_mode;
 signed short snmp_restart_enabled;
 signed short snmp_modbus_adress;
-signed long snmp_modbus_baudrate;	
+signed long snmp_modbus_baudrate;
+signed 	   snmp_sernum;	
 
 //signed short snmp_numofinv;
 //signed short snmp_numofavt;
@@ -197,7 +198,7 @@ for(i=0;i<snmp_numofevents;i++)event2snmp(i);
 //snmp_bpsnumber[0]=1;
 //snmp_bpsnumber[1]=2;
 
-snmp_sernum=AUSW_MAIN_NUMBER;
+
 snmp_sernum_lsb=0x1122;
 snmp_sernum_msb=0x3344;
 snmp_device_code=AUSW_MAIN;
@@ -208,7 +209,7 @@ snmp_device_code=AUSW_MAIN;
 snmp_numofbat=1;
 
 */
-
+snmp_sernum=AUSW_MAIN_NUMBER;
 /**/
 snmp_out_voltage=load_U;
 snmp_out_current=load_I;
@@ -433,7 +434,7 @@ void snmp_sernum_write (int mode)
 {
 if(mode==MIB_WRITE)
 	{
-//	lc640_write_long(EE_AUSW_MAIN_NUMBER,snmp_sernum);
+	lc640_write_long(EE_AUSW_MAIN_NUMBER,snmp_sernum);
 	//lc640_write_long(EE_AUSW_UKU_NUMBER,snmp_sernum);
 	}
 }

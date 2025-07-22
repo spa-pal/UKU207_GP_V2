@@ -285,26 +285,29 @@ void community2lcd(char* in,
 
 
 
-#line 158 "eeprom_map.h"
 
-
-
-#line 170 "eeprom_map.h"
-
-
-#line 181 "eeprom_map.h"
-
-
-#line 190 "eeprom_map.h"
+ 
+#line 159 "eeprom_map.h"
 
 
 
 
+#line 172 "eeprom_map.h"
+
+
+#line 183 "eeprom_map.h"
+
+
+#line 192 "eeprom_map.h"
 
 
 
 
-#line 236 "eeprom_map.h"
+
+
+
+
+#line 238 "eeprom_map.h"
 
 
 
@@ -741,13 +744,11 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 60 "main.h"
+#line 61 "main.h"
 
-#line 68 "main.h"
+#line 69 "main.h"
 
-#line 79 "main.h"
-
-
+#line 80 "main.h"
 
 
 
@@ -755,7 +756,9 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 94 "main.h"
+
+
+#line 95 "main.h"
 
 
 
@@ -763,13 +766,13 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 119 "main.h"
+#line 120 "main.h"
 
 
 
 
 
-#line 133 "main.h"
+#line 134 "main.h"
 
 
 
@@ -784,7 +787,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 155 "main.h"
+#line 156 "main.h"
 
 
 
@@ -827,7 +830,7 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 225 "main.h"
+#line 226 "main.h"
 
 
 
@@ -846,11 +849,9 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 261 "main.h"
+#line 262 "main.h"
 
-#line 277 "main.h"
-
-
+#line 278 "main.h"
 
 
 
@@ -870,9 +871,11 @@ extern BOOL snmp_set_community (const char *community);
 
 
 
-#line 311 "main.h"
 
-#line 325 "main.h"
+
+#line 312 "main.h"
+
+#line 326 "main.h"
 
 
 
@@ -914,7 +917,7 @@ typedef enum {
 	iDef,iDef_3U,iDef_RSTKM,iDef_GLONASS,iDef_KONTUR,iDef_6U,iDef_220,
 	iSet_st_prl,iK_pdp,iSet_T,
 	iDeb,iJ_bat,iK_inv_sel,
-	iK_viz_sel,iK_viz_i,iK_viz_u,
+	iK_viz_sel,iK_viz_i,iK_viz_u,iK_viz_i_2,iK_viz_u_2,
 	iAusw,iAusw_prl,iAusw_set,
 	iK_t_ext,iK_t_3U,iK_t_ext_6U,
 	iAv_view,
@@ -987,8 +990,9 @@ extern signed short KunetC;
 
 extern signed short MAIN_IST;
 extern signed short UMAX;
-extern signed short UB0;
-extern signed short UB20;
+
+
+ 
 
 extern signed short TSIGN;
 extern signed short AV_OFF_AVT;
@@ -1001,7 +1005,7 @@ extern signed short IMAX;
 extern signed short IMIN;
 extern signed short APV_ON;
 extern signed short IZMAX;
-extern signed short U0B;
+
 extern signed short TZAS;
 extern signed short VZ_HR;
 extern signed short TBAT;
@@ -1035,7 +1039,7 @@ extern signed short NUMEXT;
 extern signed short NUMAVT;
 
 typedef enum {apvON=0x01,apvOFF=0x00}enum_apv_on;
-extern enum_apv_on APV_ON1,APV_ON2;
+
 
 extern signed short APV_ON2_TIME;
 
@@ -1147,7 +1151,12 @@ extern signed short UOUT_OFF_EN;
 extern signed short UOUT_OFF_LEVEL;	
 extern signed short UOUT_OFF_DELAY;	
 
+extern signed short U_viz_2_max;		
+extern signed short U_viz_2_min;	   	
+extern signed short I_viz_2_max;	   	
+extern signed short I_viz_2_min;	   	
 
+extern signed short VIZ;				
 
 
 
@@ -1533,6 +1542,7 @@ extern signed short pwm_t_reg;
 extern short plazma_umax;
 
 extern short modbus_tcp_plazma_pavlik[4];
+extern short plazma_viz_i, plazma_viz_u;
 
 
  
@@ -6057,45 +6067,62 @@ short find_U_curve(signed short in)
 short ii,i=0,out=0;
 
 ii=0;
-
-if(lc640_read_int(500+(ii*2)) >= in)
+if(VIZ!=2)
 	{
-	out=0;
-	}
-else 
-	{
-	for (ii=0;ii<=200;ii+=10)
+	if(lc640_read_int(500+(ii*2)) >= in)
 		{
-		if(lc640_read_int(500+(ii*2)) <= in)
-			{
-			i=ii;
-			}
-		else continue;
-		}
-	if(i<200)
-		{
-		for (ii=i;ii<i+10;ii++)
-			{
-			if(lc640_read_int(500+(ii*2)) <= in)
-				{
-				out=ii;
-				}
-			else continue;
-			}
+		out=0;
 		}
 	else 
 		{
-		for (ii=200;ii<=202;ii++)
+		for (ii=0;ii<=200;ii+=10)
 			{
 			if(lc640_read_int(500+(ii*2)) <= in)
 				{
-				out=ii;
+				i=ii;
 				}
 			else continue;
 			}
-	
-	
+		if(i<200)
+			{
+			for (ii=i;ii<i+10;ii++)
+				{
+				if(lc640_read_int(500+(ii*2)) <= in)
+					{
+					out=ii;
+					}
+				else continue;
+				}
+			}
+		else 
+			{
+			for (ii=200;ii<=202;ii++)
+				{
+				if(lc640_read_int(500+(ii*2)) <= in)
+					{
+					out=ii;
+					}
+				else continue;
+				}
+		
+		
+			}
 		}
+	}
+else if(VIZ==2)
+	{
+	signed long temp_SL,temp_SL1;
+	temp_SL=(signed long) in;
+
+	in-= (signed long)U_viz_2_min;
+	if(in<0) return 0;
+	temp_SL1=(signed long)(U_viz_2_max-U_viz_2_min);
+	if(temp_SL1<=0)return 0;
+
+	temp_SL*=1022L;
+	temp_SL/=temp_SL1;
+
+	out=(short)temp_SL/5;
 	}
 
 return out;
@@ -6108,44 +6135,63 @@ short ii,i=0,out=0;
 
 ii=0;
 
-if(lc640_read_int(1000+(ii*2)) >= in)
+if(VIZ!=2)
 	{
-	out=0;
-	}
-else 
-	{
-	for (ii=0;ii<=200;ii+=10)
+	if(lc640_read_int(1000+(ii*2)) >= in)
 		{
-		if(lc640_read_int(1000+(ii*2)) <= in)
-			{
-			i=ii;
-			}
-		else continue;
-		}
-	
-	if(i<200)
-		{
-		for (ii=i;ii<i+10;ii++)
-			{
-			if(lc640_read_int(1000+(ii*2)) <= in)
-				{
-				out=ii;
-				}
-			else continue;
-			}
+		out=0;
 		}
 	else 
 		{
-		for (ii=200;ii<=202;ii++)
+		for (ii=0;ii<=200;ii+=10)
 			{
 			if(lc640_read_int(1000+(ii*2)) <= in)
 				{
-				out=ii;
+				i=ii;
 				}
 			else continue;
 			}
+		
+		if(i<200)
+			{
+			for (ii=i;ii<i+10;ii++)
+				{
+				if(lc640_read_int(1000+(ii*2)) <= in)
+					{
+					out=ii;
+					}
+				else continue;
+				}
+			}
+		else 
+			{
+			for (ii=200;ii<=202;ii++)
+				{
+				if(lc640_read_int(1000+(ii*2)) <= in)
+					{
+					out=ii;
+					}
+				else continue;
+				}
+			}
 		}
 	}
+else if(VIZ==2)
+	{
+	signed long temp_SL,temp_SL1;
+	temp_SL=(signed long) in;
+
+	in-= (signed long)I_viz_2_min;
+	if(in<0) return 0;
+	temp_SL1=(signed long)(I_viz_2_max-I_viz_2_min);
+	if(temp_SL1<=0)return 0;
+
+	temp_SL*=1022L;
+	temp_SL/=temp_SL1;
+
+	out=(short)temp_SL/5;
+	}
+
 return out;
 }
 
@@ -6606,6 +6652,73 @@ else if(a_ind . i==iK_viz_i)
 		}
 	}
 
+else if(a_ind . i==iK_viz_u_2)
+	{
+	char i;
+
+	if(a_ind . s_i==0)
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=1022;
+			bps[i]._vol_i=1022;
+			bps[i]._flags_tu=0;
+			}
+		}
+	else if(a_ind . s_i==1)
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=0;
+			bps[i]._vol_i=1022;
+			bps[i]._flags_tu=0;
+			}
+		}
+	else 
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=0;
+			bps[i]._vol_i=0;
+			bps[i]._flags_tu=0;
+			}
+		}
+	}
+
+else if(a_ind . i==iK_viz_i_2)
+	{
+	char i;
+
+	if(a_ind . s_i==0)
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=1022;
+			bps[i]._vol_i=1022;
+			bps[i]._flags_tu=0;
+			}
+		}
+	else if(a_ind . s_i==1)
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=1022;
+			bps[i]._vol_i=0;
+			bps[i]._flags_tu=0;
+			}
+		}
+	else 
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=0;
+			bps[i]._vol_i=0;
+			bps[i]._flags_tu=0;
+			}
+		}
+	}
+
+
 else if(work_stat==wsGS)
 	{
 	signed long temp_SL_U,temp_SL_I;
@@ -6653,11 +6766,13 @@ else if(work_stat==wsGS)
 	if(lc640_read_int(0x10+100+56)==0xabcd)
 		{
 		temp_SL_U=find_U_curve(U_maxg)*5;
+		plazma_viz_u=(short)temp_SL_U;
 		}
 	 
 	if(lc640_read_int(0x10+100+58)==0xabcd)
 		{
 		temp_SL_I=find_I_curve(I_ug_temp)*5;
+		plazma_viz_i=(short)temp_SL_I;
 		}
 
 	for(i=0;i<NUMIST;i++)
@@ -6727,6 +6842,7 @@ else if(work_stat==wsPS)
 	if(lc640_read_int(0x10+100+56)==0xabcd)
 		{	
 		temp_SL_U=find_U_curve(U_up_temp)*5;
+		plazma_viz_u=(short)temp_SL_U;
 		}
 	
 	 
@@ -6738,6 +6854,7 @@ else if(work_stat==wsPS)
 	if(lc640_read_int(0x10+100+58)==0xabcd)
 		{
 		temp_SL_I=find_I_curve(I_maxp)*5;
+		plazma_viz_i=(short)temp_SL_I;
 		}
 
 	for(i=0;i<NUMIST;i++) {
@@ -7409,7 +7526,7 @@ else if(RELE_FUNC[1]==6)
 
 void rele_drv(void)
 {
-#line 2716 "control.c"
+#line 2823 "control.c"
 
 
 ((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 = ( (((LPC_PINCON_TypeDef *) ((0x40000000UL) + 0x2C000) )->PINSEL0 & ~((0xffffffff>>(32-2))<<7*2)) | ((unsigned)0 << 7*2) );

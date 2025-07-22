@@ -3811,13 +3811,11 @@ typedef struct
 
 
 
-#line 60 "main.H"
+#line 61 "main.H"
 
-#line 68 "main.H"
+#line 69 "main.H"
 
-#line 79 "main.H"
-
-
+#line 80 "main.H"
 
 
 
@@ -3825,7 +3823,9 @@ typedef struct
 
 
 
-#line 94 "main.H"
+
+
+#line 95 "main.H"
 
 
 
@@ -3833,13 +3833,13 @@ typedef struct
 
 
 
-#line 119 "main.H"
+#line 120 "main.H"
 
 
 
 
 
-#line 133 "main.H"
+#line 134 "main.H"
 
 
 
@@ -3854,7 +3854,7 @@ typedef struct
 
 
 
-#line 155 "main.H"
+#line 156 "main.H"
 
 
 
@@ -3897,7 +3897,7 @@ typedef struct
 
 
 
-#line 225 "main.H"
+#line 226 "main.H"
 
 
 
@@ -3916,11 +3916,9 @@ typedef struct
 
 
 
-#line 261 "main.H"
+#line 262 "main.H"
 
-#line 277 "main.H"
-
-
+#line 278 "main.H"
 
 
 
@@ -3940,9 +3938,11 @@ typedef struct
 
 
 
-#line 311 "main.H"
 
-#line 325 "main.H"
+
+#line 312 "main.H"
+
+#line 326 "main.H"
 
 
 
@@ -3984,7 +3984,7 @@ typedef enum {
 	iDef,iDef_3U,iDef_RSTKM,iDef_GLONASS,iDef_KONTUR,iDef_6U,iDef_220,
 	iSet_st_prl,iK_pdp,iSet_T,
 	iDeb,iJ_bat,iK_inv_sel,
-	iK_viz_sel,iK_viz_i,iK_viz_u,
+	iK_viz_sel,iK_viz_i,iK_viz_u,iK_viz_i_2,iK_viz_u_2,
 	iAusw,iAusw_prl,iAusw_set,
 	iK_t_ext,iK_t_3U,iK_t_ext_6U,
 	iAv_view,
@@ -4057,8 +4057,9 @@ extern signed short KunetC;
 
 extern signed short MAIN_IST;
 extern signed short UMAX;
-extern signed short UB0;
-extern signed short UB20;
+
+
+ 
 
 extern signed short TSIGN;
 extern signed short AV_OFF_AVT;
@@ -4071,7 +4072,7 @@ extern signed short IMAX;
 extern signed short IMIN;
 extern signed short APV_ON;
 extern signed short IZMAX;
-extern signed short U0B;
+
 extern signed short TZAS;
 extern signed short VZ_HR;
 extern signed short TBAT;
@@ -4105,7 +4106,7 @@ extern signed short NUMEXT;
 extern signed short NUMAVT;
 
 typedef enum {apvON=0x01,apvOFF=0x00}enum_apv_on;
-extern enum_apv_on APV_ON1,APV_ON2;
+
 
 extern signed short APV_ON2_TIME;
 
@@ -4217,7 +4218,12 @@ extern signed short UOUT_OFF_EN;
 extern signed short UOUT_OFF_LEVEL;	
 extern signed short UOUT_OFF_DELAY;	
 
+extern signed short U_viz_2_max;		
+extern signed short U_viz_2_min;	   	
+extern signed short I_viz_2_max;	   	
+extern signed short I_viz_2_min;	   	
 
+extern signed short VIZ;				
 
 
 
@@ -4603,6 +4609,7 @@ extern signed short pwm_t_reg;
 extern short plazma_umax;
 
 extern short modbus_tcp_plazma_pavlik[4];
+extern short plazma_viz_i, plazma_viz_u;
 
 
  
@@ -4791,7 +4798,8 @@ extern signed short snmp_load_current_measure_mode;
 extern signed short snmp_main_menu_mode;
 extern signed short snmp_restart_enabled;
 extern signed short snmp_modbus_adress;
-extern signed long snmp_modbus_baudrate;	
+extern signed long snmp_modbus_baudrate;
+extern signed 	   snmp_sernum;	
 
 
 
@@ -5040,6 +5048,8 @@ char* aaa_="abc";
 	{ 0x02,  			12, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 5, 8, 0},  		sizeof(snmp_modbus_adress), (void *)&snmp_modbus_adress,  snmp_modbus_adress_write},  
 
 	{ 0x02,  			12, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 5, 9, 0},		sizeof(snmp_modbus_baudrate), (void *)&snmp_modbus_baudrate,  snmp_modbus_baudrate_write},  
+
+	{ 0x02,  			12, {(1*40 + 3), 6, 1, 4, 1, 130, 131, 31, 40, 5, 10, 0},		sizeof(snmp_sernum), (void *)&snmp_sernum,  snmp_sernum_write},  
 
 
 

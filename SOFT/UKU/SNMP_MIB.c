@@ -102,6 +102,8 @@ char* aaa_="abc";
 
 	{ MIB_INTEGER,  			12, {OID_ENTERPRISE, OID_DEVICE, SETTED_PARAMETERS, MODBUS_BAUDRATE_OID, 0},		MIB_INT(snmp_modbus_baudrate),  snmp_modbus_baudrate_write},  //<----  	
 
+	{ MIB_INTEGER,  			12, {OID_ENTERPRISE, OID_DEVICE, SETTED_PARAMETERS, DEVICE_SERIAL_OID, 0},		MIB_INT(snmp_sernum),  snmp_sernum_write},  //<----  	
+
 //	{ MIB_INTEGER | MIB_ATR_RO,  	12, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_DEVICE_INFO, DISPLAY_DEVICE_INFO_SERIAL, 0},	MIB_INT(snmp_sernum),	  		NULL },				//серийный номер	
 //  	{ MIB_OCTET_STR, 			12, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_DEVICE_INFO, DISPLAY_DEVICE_INFO_LOCATION, 0},  	MIB_STR(snmp_location),  		snmp_location_write},	//местоположение устройства
 //  	{ MIB_INTEGER | MIB_ATR_RO,  	12, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_DEVICE_INFO, DISPLAY_DEVICE_INFO_NUMOFBAT, 0}, 	MIB_INT(snmp_numofbat),  		NULL},				//количество введенных батарей

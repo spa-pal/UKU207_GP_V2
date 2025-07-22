@@ -1354,45 +1354,62 @@ short find_U_curve(signed short in)
 short ii,i=0,out=0;
 
 ii=0;
-
-if(lc640_read_int(SEKTOR_KURVE_U+(ii*2)) >= in)
+if(VIZ!=2)
 	{
-	out=0;
-	}
-else 
-	{
-	for (ii=0;ii<=200;ii+=10)
+	if(lc640_read_int(SEKTOR_KURVE_U+(ii*2)) >= in)
 		{
-		if(lc640_read_int(SEKTOR_KURVE_U+(ii*2)) <= in)
-			{
-			i=ii;
-			}
-		else continue;
-		}
-	if(i<200)
-		{
-		for (ii=i;ii<i+10;ii++)
-			{
-			if(lc640_read_int(SEKTOR_KURVE_U+(ii*2)) <= in)
-				{
-				out=ii;
-				}
-			else continue;
-			}
+		out=0;
 		}
 	else 
 		{
-		for (ii=200;ii<=202;ii++)
+		for (ii=0;ii<=200;ii+=10)
 			{
 			if(lc640_read_int(SEKTOR_KURVE_U+(ii*2)) <= in)
 				{
-				out=ii;
+				i=ii;
 				}
 			else continue;
 			}
-	
-	
+		if(i<200)
+			{
+			for (ii=i;ii<i+10;ii++)
+				{
+				if(lc640_read_int(SEKTOR_KURVE_U+(ii*2)) <= in)
+					{
+					out=ii;
+					}
+				else continue;
+				}
+			}
+		else 
+			{
+			for (ii=200;ii<=202;ii++)
+				{
+				if(lc640_read_int(SEKTOR_KURVE_U+(ii*2)) <= in)
+					{
+					out=ii;
+					}
+				else continue;
+				}
+		
+		
+			}
 		}
+	}
+else if(VIZ==2)
+	{
+	signed long temp_SL,temp_SL1;
+	temp_SL=(signed long) in;
+
+	in-= (signed long)U_viz_2_min;
+	if(in<0) return 0;
+	temp_SL1=(signed long)(U_viz_2_max-U_viz_2_min);
+	if(temp_SL1<=0)return 0;
+
+	temp_SL*=1022L;
+	temp_SL/=temp_SL1;
+
+	out=(short)temp_SL/5;
 	}
 
 return out;
@@ -1405,44 +1422,63 @@ short ii,i=0,out=0;
 
 ii=0;
 
-if(lc640_read_int(SEKTOR_KURVE_I+(ii*2)) >= in)
+if(VIZ!=2)
 	{
-	out=0;
-	}
-else 
-	{
-	for (ii=0;ii<=200;ii+=10)
+	if(lc640_read_int(SEKTOR_KURVE_I+(ii*2)) >= in)
 		{
-		if(lc640_read_int(SEKTOR_KURVE_I+(ii*2)) <= in)
-			{
-			i=ii;
-			}
-		else continue;
-		}
-	
-	if(i<200)
-		{
-		for (ii=i;ii<i+10;ii++)
-			{
-			if(lc640_read_int(SEKTOR_KURVE_I+(ii*2)) <= in)
-				{
-				out=ii;
-				}
-			else continue;
-			}
+		out=0;
 		}
 	else 
 		{
-		for (ii=200;ii<=202;ii++)
+		for (ii=0;ii<=200;ii+=10)
 			{
 			if(lc640_read_int(SEKTOR_KURVE_I+(ii*2)) <= in)
 				{
-				out=ii;
+				i=ii;
 				}
 			else continue;
 			}
+		
+		if(i<200)
+			{
+			for (ii=i;ii<i+10;ii++)
+				{
+				if(lc640_read_int(SEKTOR_KURVE_I+(ii*2)) <= in)
+					{
+					out=ii;
+					}
+				else continue;
+				}
+			}
+		else 
+			{
+			for (ii=200;ii<=202;ii++)
+				{
+				if(lc640_read_int(SEKTOR_KURVE_I+(ii*2)) <= in)
+					{
+					out=ii;
+					}
+				else continue;
+				}
+			}
 		}
 	}
+else if(VIZ==2)
+	{
+	signed long temp_SL,temp_SL1;
+	temp_SL=(signed long) in;
+
+	in-= (signed long)I_viz_2_min;
+	if(in<0) return 0;
+	temp_SL1=(signed long)(I_viz_2_max-I_viz_2_min);
+	if(temp_SL1<=0)return 0;
+
+	temp_SL*=1022L;
+	temp_SL/=temp_SL1;
+
+	out=(short)temp_SL/5;
+	}
+
 return out;
 }
 
@@ -1903,6 +1939,73 @@ else if(ind==iK_viz_i)
 		}
 	}
 
+else if(ind==iK_viz_u_2)
+	{
+	char i;
+
+	if(sub_ind==0)
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=1022;
+			bps[i]._vol_i=1022;
+			bps[i]._flags_tu=0;
+			}
+		}
+	else if(sub_ind==1)
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=0;
+			bps[i]._vol_i=1022;
+			bps[i]._flags_tu=0;
+			}
+		}
+	else 
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=0;
+			bps[i]._vol_i=0;
+			bps[i]._flags_tu=0;
+			}
+		}
+	}
+
+else if(ind==iK_viz_i_2)
+	{
+	char i;
+
+	if(sub_ind==0)
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=1022;
+			bps[i]._vol_i=1022;
+			bps[i]._flags_tu=0;
+			}
+		}
+	else if(sub_ind==1)
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=1022;
+			bps[i]._vol_i=0;
+			bps[i]._flags_tu=0;
+			}
+		}
+	else 
+		{
+		for(i=0;i<NUMIST;i++)
+			{
+			bps[i]._vol_u=0;
+			bps[i]._vol_i=0;
+			bps[i]._flags_tu=0;
+			}
+		}
+	}
+
+
 else if(work_stat==wsGS)
 	{
 	signed long temp_SL_U,temp_SL_I;
@@ -1950,11 +2053,13 @@ else if(work_stat==wsGS)
 	if(lc640_read_int(EE_U_CURVE_IS_ON)==0xabcd)
 		{
 		temp_SL_U=find_U_curve(U_maxg)*5;
+		plazma_viz_u=(short)temp_SL_U;
 		}
 	 
 	if(lc640_read_int(EE_I_CURVE_IS_ON)==0xabcd)
 		{
 		temp_SL_I=find_I_curve(I_ug_temp)*5;
+		plazma_viz_i=(short)temp_SL_I;
 		}
 
 	for(i=0;i<NUMIST;i++)
@@ -2024,6 +2129,7 @@ else if(work_stat==wsPS)
 	if(lc640_read_int(EE_U_CURVE_IS_ON)==0xabcd)
 		{	
 		temp_SL_U=find_U_curve(U_up_temp)*5;
+		plazma_viz_u=(short)temp_SL_U;
 		}
 	//temp_SL_U=lc640_read_int(SEKTOR_KURVE_U+(temp_SL_U*2));
 	 
@@ -2035,6 +2141,7 @@ else if(work_stat==wsPS)
 	if(lc640_read_int(EE_I_CURVE_IS_ON)==0xabcd)
 		{
 		temp_SL_I=find_I_curve(I_maxp)*5;
+		plazma_viz_i=(short)temp_SL_I;
 		}
 
 	for(i=0;i<NUMIST;i++) {

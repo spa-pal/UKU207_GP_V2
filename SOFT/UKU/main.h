@@ -57,6 +57,7 @@
 #define RESTART_ENABLED					7
 #define MUDBUS_ADRESS_OID				8
 #define MODBUS_BAUDRATE_OID				9
+#define DEVICE_SERIAL_OID					10
 
 #define WRK_PARAMETERS				6
 #define DISPLAY_STABILITY_VOLTAGE 			1  	
@@ -363,7 +364,7 @@ typedef enum {
 	iDef,iDef_3U,iDef_RSTKM,iDef_GLONASS,iDef_KONTUR,iDef_6U,iDef_220,
 	iSet_st_prl,iK_pdp,iSet_T,
 	iDeb,iJ_bat,iK_inv_sel,
-	iK_viz_sel,iK_viz_i,iK_viz_u,
+	iK_viz_sel,iK_viz_i,iK_viz_u,iK_viz_i_2,iK_viz_u_2,
 	iAusw,iAusw_prl,iAusw_set,
 	iK_t_ext,iK_t_3U,iK_t_ext_6U,
 	iAv_view,
@@ -436,8 +437,9 @@ extern signed short KunetC;
 
 extern signed short MAIN_IST;
 extern signed short UMAX;
+/*
 extern signed short UB0;
-extern signed short UB20;
+extern signed short UB20;*/
 //extern signed short TMAX;
 extern signed short TSIGN;
 extern signed short AV_OFF_AVT;
@@ -450,7 +452,7 @@ extern signed short IMAX;
 extern signed short IMIN;
 extern signed short APV_ON;
 extern signed short IZMAX;
-extern signed short U0B;
+//extern signed short U0B;
 extern signed short TZAS;
 extern signed short VZ_HR;
 extern signed short TBAT;
@@ -484,7 +486,7 @@ extern signed short NUMEXT;
 extern signed short NUMAVT;
 
 typedef enum {apvON=0x01,apvOFF=0x00}enum_apv_on;
-extern enum_apv_on APV_ON1,APV_ON2;
+//extern enum_apv_on APV_ON1,APV_ON2;
 
 extern signed short APV_ON2_TIME;
 
@@ -596,7 +598,12 @@ extern signed short UOUT_OFF_EN;	//функция отключения источников по превышению в
 extern signed short UOUT_OFF_LEVEL;	//Порог в процентах для функции отключения источников по превышению выхода над заданием
 extern signed short UOUT_OFF_DELAY;	//Задержка срабатывания в секундах для функции отключения источников по превышению выхода над заданием
 
+extern signed short U_viz_2_max;		//Напряжение при максимальном шиме
+extern signed short U_viz_2_min;	   	//Напряжение при минимальном шиме
+extern signed short I_viz_2_max;	   	//Ток при максимальном шиме
+extern signed short I_viz_2_min;	   	//Ток при максимальном шиме
 
+extern signed short VIZ;				//Переключатель алгоритма работы стабилизации (2 - 2-х точечная характеристика, остальное - 200-т точечная характеристика
 
 //***********************************************
 //Состояние источников
@@ -982,6 +989,7 @@ extern signed short pwm_t_reg;
 extern short plazma_umax;
 
 extern short modbus_tcp_plazma_pavlik[4];
+extern short plazma_viz_i, plazma_viz_u;
 /*----------------------------------------------------------------------------
  * end of file
  *---------------------------------------------------------------------------*/

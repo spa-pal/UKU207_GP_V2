@@ -15,7 +15,8 @@ extern signed short snmp_load_current_measure_mode;
 extern signed short snmp_main_menu_mode;
 extern signed short snmp_restart_enabled;
 extern signed short snmp_modbus_adress;
-extern signed long snmp_modbus_baudrate;	
+extern signed long snmp_modbus_baudrate;
+extern signed 	   snmp_sernum;	
 
 
 //Состояние первичной сети

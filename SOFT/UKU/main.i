@@ -690,13 +690,11 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
-#line 60 "main.h"
+#line 61 "main.h"
 
-#line 68 "main.h"
+#line 69 "main.h"
 
-#line 79 "main.h"
-
-
+#line 80 "main.h"
 
 
 
@@ -704,7 +702,9 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
-#line 94 "main.h"
+
+
+#line 95 "main.h"
 
 
 
@@ -712,13 +712,13 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
-#line 119 "main.h"
+#line 120 "main.h"
 
 
 
 
 
-#line 133 "main.h"
+#line 134 "main.h"
 
 
 
@@ -733,7 +733,7 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
-#line 155 "main.h"
+#line 156 "main.h"
 
 
 
@@ -776,7 +776,7 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
-#line 225 "main.h"
+#line 226 "main.h"
 
 
 
@@ -795,11 +795,9 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
-#line 261 "main.h"
+#line 262 "main.h"
 
-#line 277 "main.h"
-
-
+#line 278 "main.h"
 
 
 
@@ -819,9 +817,11 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 
 
-#line 311 "main.h"
 
-#line 325 "main.h"
+
+#line 312 "main.h"
+
+#line 326 "main.h"
 
 
 
@@ -863,7 +863,7 @@ typedef enum {
 	iDef,iDef_3U,iDef_RSTKM,iDef_GLONASS,iDef_KONTUR,iDef_6U,iDef_220,
 	iSet_st_prl,iK_pdp,iSet_T,
 	iDeb,iJ_bat,iK_inv_sel,
-	iK_viz_sel,iK_viz_i,iK_viz_u,
+	iK_viz_sel,iK_viz_i,iK_viz_u,iK_viz_i_2,iK_viz_u_2,
 	iAusw,iAusw_prl,iAusw_set,
 	iK_t_ext,iK_t_3U,iK_t_ext_6U,
 	iAv_view,
@@ -936,8 +936,9 @@ extern signed short KunetC;
 
 extern signed short MAIN_IST;
 extern signed short UMAX;
-extern signed short UB0;
-extern signed short UB20;
+
+
+ 
 
 extern signed short TSIGN;
 extern signed short AV_OFF_AVT;
@@ -950,7 +951,7 @@ extern signed short IMAX;
 extern signed short IMIN;
 extern signed short APV_ON;
 extern signed short IZMAX;
-extern signed short U0B;
+
 extern signed short TZAS;
 extern signed short VZ_HR;
 extern signed short TBAT;
@@ -984,7 +985,7 @@ extern signed short NUMEXT;
 extern signed short NUMAVT;
 
 typedef enum {apvON=0x01,apvOFF=0x00}enum_apv_on;
-extern enum_apv_on APV_ON1,APV_ON2;
+
 
 extern signed short APV_ON2_TIME;
 
@@ -1096,7 +1097,12 @@ extern signed short UOUT_OFF_EN;
 extern signed short UOUT_OFF_LEVEL;	
 extern signed short UOUT_OFF_DELAY;	
 
+extern signed short U_viz_2_max;		
+extern signed short U_viz_2_min;	   	
+extern signed short I_viz_2_max;	   	
+extern signed short I_viz_2_min;	   	
 
+extern signed short VIZ;				
 
 
 
@@ -1482,6 +1488,7 @@ extern signed short pwm_t_reg;
 extern short plazma_umax;
 
 extern short modbus_tcp_plazma_pavlik[4];
+extern short plazma_viz_i, plazma_viz_u;
 
 
  
@@ -1895,26 +1902,29 @@ void ret_hndl(void);
 
 
 
-#line 158 "eeprom_map.h"
 
-
-
-#line 170 "eeprom_map.h"
-
-
-#line 181 "eeprom_map.h"
-
-
-#line 190 "eeprom_map.h"
+ 
+#line 159 "eeprom_map.h"
 
 
 
 
+#line 172 "eeprom_map.h"
+
+
+#line 183 "eeprom_map.h"
+
+
+#line 192 "eeprom_map.h"
 
 
 
 
-#line 236 "eeprom_map.h"
+
+
+
+
+#line 238 "eeprom_map.h"
 
 
 
@@ -3011,7 +3021,8 @@ extern signed short snmp_load_current_measure_mode;
 extern signed short snmp_main_menu_mode;
 extern signed short snmp_restart_enabled;
 extern signed short snmp_modbus_adress;
-extern signed long snmp_modbus_baudrate;	
+extern signed long snmp_modbus_baudrate;
+extern signed 	   snmp_sernum;	
 
 
 
@@ -4101,9 +4112,9 @@ signed short KunetC;
 
 signed short MAIN_IST;
 signed short UMAX;
-signed short UB0;
-signed short UB20;
 
+
+ 
 signed short TSIGN;
 signed short AV_OFF_AVT;
 signed short USIGN;
@@ -4116,7 +4127,7 @@ signed short IMAX;
 signed short IMIN;
 signed short APV_ON;
 signed short IZMAX;
-signed short U0B;
+
 signed short TZAS;
 signed short VZ_HR;
 signed short TBAT;
@@ -4142,7 +4153,7 @@ signed short NUMSK;
 signed short NUMEXT;
 signed short NUMAVT;
 
-enum_apv_on APV_ON1,APV_ON2;
+
 signed short APV_ON2_TIME;
 
 enum_bat_is_on BAT_IS_ON[2];
@@ -4254,7 +4265,13 @@ signed short CUR_OFF_T_ON;
 signed short UOUT_OFF_EN;		
 signed short UOUT_OFF_LEVEL;	
 signed short UOUT_OFF_DELAY;	
-	
+
+signed short U_viz_2_max;		
+signed short U_viz_2_min;	   	
+signed short I_viz_2_max;	   	
+signed short I_viz_2_min;	   	
+
+signed short VIZ;				
 
 signed short EE_WRITE_CNT;
 
@@ -7207,7 +7224,7 @@ typedef struct
  
 #line 1031 "C:\\Keil\\ARM\\INC\\NXP\\LPC17xx\\LPC17xx.H"
 
-#line 407 "main.c"
+#line 413 "main.c"
 
 
 
@@ -7510,6 +7527,8 @@ signed short pwm_t_reg;
 
 
 short modbus_tcp_plazma_pavlik[4];
+
+short plazma_viz_i, plazma_viz_u;
 
 
 void rtc_init (void) 
@@ -9008,8 +9027,12 @@ if(a_ind . i==iMn)
  
 	
 
-	int2lcdyx(bps[0]._vol_u,0,12,0);
-	int2lcdyx(bps[0]._vol_i,0,19,0);
+	
+	
+
+
+
+ 
 	}
 
  else if(a_ind . i==iFW_IPS_SEL)
@@ -9492,12 +9515,14 @@ else if(a_ind . i==iSet)
 	ptrs[32]=				" Uавар           +B ";
 	ptrs[33]=				" Выключение по      ";
 	ptrs[34]=				" превышению уставки ";
-	ptrs[35]=      			" Серийный N        w";
-   	ptrs[38-2]=		" Выход              ";
-	ptrs[38-1]=		" Калибровка         ";
-	ptrs[38]=		" Тест ШИМ           ";
-	ptrs[38+1]=		"                    ";
-	ptrs[38+2]=		"                    ";	        
+	ptrs[35]=				" Алгоритм U,I  200т.";
+	if(VIZ==2) ptrs[35]=	" Алгоритм U,I    2т.";
+	ptrs[36]=      			" Серийный N        w";
+   	ptrs[39-2]=		" Выход              ";
+	ptrs[39-1]=		" Калибровка         ";
+	ptrs[39]=		" Тест ШИМ           ";
+	ptrs[39+1]=		"                    ";
+	ptrs[39+2]=		"                    ";	        
 	
 	if((a_ind . s_i-a_ind . i_s)>2)a_ind . i_s=a_ind . s_i-2;
 	else if(a_ind . s_i<a_ind . i_s)a_ind . i_s=a_ind . s_i;
@@ -10123,10 +10148,12 @@ else if(a_ind . i==iK_viz_sel)
 	char i;
 	i=0;
 	
-	ptrs[i++]=	" по напряжению      ";
-	ptrs[i++]=	" по току            ";
-    	ptrs[i++]=	" Выход              ";
-    	ptrs[i++]=	"                    ";
+	ptrs[i++]=	" по напряжению 200т.";
+	ptrs[i++]=	" по току       200т.";
+	ptrs[i++]=	" по напряжению   2т.";
+	ptrs[i++]=	" по току         2т.";
+    ptrs[i++]=	" Выход              ";
+    ptrs[i++]=	"                    ";
 
 	if((a_ind . s_i-a_ind . i_s)>2)a_ind . i_s=a_ind . s_i-2;
 	else if(a_ind . s_i<a_ind . i_s)a_ind . i_s=a_ind . s_i;
@@ -10175,6 +10202,42 @@ else if(a_ind . i==iK_viz_u)
      int2lcd(viz_stat_cnt/50+1,'<',0);
 	}   
 
+else if(a_ind . i==iK_viz_u_2)
+	{
+	
+	
+	
+
+
+
+
+
+
+
+
+ 
+		ptrs[0]=		" Uмакс.шим=       [В";
+		ptrs[1]=		" Uмин.шим=        ]В";
+	    ptrs[2]=		" Выход	             ";
+	    ptrs[3]=		"                    ";
+	 
+
+	if((a_ind . s_i-a_ind . i_s)>2)a_ind . i_s=a_ind . s_i-2;
+	else if(a_ind . s_i<a_ind . i_s)a_ind . i_s=a_ind . s_i;
+	bgnd_par("ВЫХ. ХАР. ПО НАПРЯЖ.",
+			ptrs[a_ind . i_s],
+			ptrs[a_ind . i_s+1],
+			ptrs[a_ind . i_s+2]);
+
+	 pointer_set(1);	 
+	 
+
+	int2lcd(U_viz_2_max,'[',1);
+     int2lcd(U_viz_2_min,']',1);
+	
+     
+	} 
+
 else if(a_ind . i==iK_viz_i)
 	{
 	
@@ -10210,6 +10273,42 @@ else if(a_ind . i==iK_viz_i)
 	int2lcd(tst_pwm_i,'>',0);
      int2lcd(viz_stat_cnt/50+1,'<',0);
 	}   
+
+else if(a_ind . i==iK_viz_i_2)
+	{
+	
+	
+	
+
+
+
+
+
+
+
+
+ 
+		ptrs[0]=		" Iмакс.шим=       [A";
+		ptrs[1]=		" Iмин.шим=        ]A";
+	    ptrs[2]=		" Выход	             ";
+	    ptrs[3]=		"                    ";
+	 
+
+	if((a_ind . s_i-a_ind . i_s)>2)a_ind . i_s=a_ind . s_i-2;
+	else if(a_ind . s_i<a_ind . i_s)a_ind . i_s=a_ind . s_i;
+	bgnd_par("ВЫХ. ХАР. ПО ТОКУ   ",
+			ptrs[a_ind . i_s],
+			ptrs[a_ind . i_s+1],
+			ptrs[a_ind . i_s+2]);
+
+	 pointer_set(1);	 
+	 
+
+	int2lcd(I_viz_2_max,'[',1);
+     int2lcd(I_viz_2_min,']',1);
+	
+     
+	} 
 
 
 else if(a_ind . i==iK_load)
@@ -11301,12 +11400,12 @@ else if(a_ind . i==iFW_UKU)
 	bgnd_par(	" Версия             ",
 				" Сборка  0000.00.00 ",
 
+				 
+				"                    ",
 
 
 
 
-				" WG12232L3          ",
-				
 
 				"                    ");
 	int2lcdyx(BUILD_YEAR,1,12,0);
@@ -11467,12 +11566,12 @@ sk_in_drv_stat_old=sk_in_drv_stat;
 
 
 
-#line 4672 "main.c"
+#line 4760 "main.c"
 
 
 
 
-#line 4694 "main.c"
+#line 4782 "main.c"
 
 
 
@@ -14256,7 +14355,7 @@ else if(a_ind . i==iSet)
 			a_ind . s_i=35;
 			a_ind . i_s=32;
             }														
-		gran_char(&a_ind . s_i,0,38);
+		gran_char(&a_ind . s_i,0,39);
 		}
 	else if(but==253)
 		{
@@ -14336,11 +14435,11 @@ else if(a_ind . i==iSet)
 			a_ind . i_s=33;
             }
 
-		gran_char(&a_ind . s_i,0,38);
+		gran_char(&a_ind . s_i,0,39);
 		}
 	else if(but==123)
 		{
-		a_ind . s_i=38-2;
+		a_ind . s_i=39-2;
 		}
 
      else if(a_ind . s_i==0)
@@ -14645,7 +14744,29 @@ else if(a_ind . i==iSet)
 			tree_up(iUout_avar_control,0,0,0);
 			}
 	    }
-	else if(a_ind . s_i==35)
+     else if(a_ind . s_i==35)
+	     {
+	     
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+		  if(VIZ!=2) VIZ=2;
+		  else VIZ=1;
+		  lc640_write_int(0x10+100+32,VIZ);
+
+          }
+	else if(a_ind . s_i==36)
 	    {
 	    if(but==239)AUSW_MAIN_NUMBER++;
 	    else if(but==111)AUSW_MAIN_NUMBER+=20;
@@ -14654,11 +14775,11 @@ else if(a_ind . i==iSet)
 		else if(but==118)AUSW_MAIN_NUMBER=15000;
 		if(AUSW_MAIN_NUMBER<13000)AUSW_MAIN_NUMBER=100000;
 		if(AUSW_MAIN_NUMBER>100000)AUSW_MAIN_NUMBER=13000;
-	    lc640_write_int(0x10+300+2,(short)(AUSW_MAIN_NUMBER&0x0000ffffUL));
-		lc640_write_int(0x10+300+2+2,(short)((AUSW_MAIN_NUMBER&0xffff0000UL)>>16UL));
+	    lc640_write_int(0x10+300+28,(short)(AUSW_MAIN_NUMBER&0x0000ffffUL));
+		lc640_write_int(0x10+300+28+2,(short)((AUSW_MAIN_NUMBER&0xffff0000UL)>>16UL));
 	    speed=1;
 	    } 
-	else if(a_ind . s_i==38-2)
+	else if(a_ind . s_i==39-2)
 	    	{
 		if(but==254)
 			{
@@ -14666,7 +14787,7 @@ else if(a_ind . i==iSet)
 			a_ind . s_i=0;
 			}
 	    	}
-	else if(a_ind . s_i==38-1)
+	else if(a_ind . s_i==39-1)
 	    	{
 		if(but==254)
 			{
@@ -14674,7 +14795,7 @@ else if(a_ind . i==iSet)
 			parol_init();
 			}
 	    	}	
-	else if(a_ind . s_i==38)
+	else if(a_ind . s_i==39)
 	    {
 		if(but==254)
 			{
@@ -16566,12 +16687,12 @@ else if(a_ind . i==iK_viz_sel)
 	if(but==251)
 		{
 		a_ind . s_i++;
-		gran_char(&a_ind . s_i,0,2);
+		gran_char(&a_ind . s_i,0,4);
 		}
 	else if(but==253)
 		{
 		a_ind . s_i--;
-		gran_char(&a_ind . s_i,0,2);
+		gran_char(&a_ind . s_i,0,4);
 		}
 	else if(a_ind . s_i==0)
 		{
@@ -16601,7 +16722,36 @@ else if(a_ind . i==iK_viz_sel)
 			
 			}	
 		}
- 	else if(a_ind . s_i==2)
+
+	else if(a_ind . s_i==2)
+		{
+		if(but==254)
+			{
+			tree_up(iK_viz_u_2,0,0,0);
+
+
+
+
+
+ 
+			
+			}	
+		}
+	else if(a_ind . s_i==3)
+		{
+		if(but==254)
+			{
+			tree_up(iK_viz_i_2,0,0,0);
+
+
+
+
+
+ 
+			
+			}	
+		}
+ 	else if(a_ind . s_i==4)
 		{
 		if(but==254)
 			{
@@ -16655,6 +16805,79 @@ else if(a_ind . i==iK_viz_u)
 		}				 
 	} 
 
+else if(a_ind . i==iK_viz_u_2)
+	{
+	ret(1000);
+	if(but==251)
+		{
+		a_ind . s_i++;
+		gran_char(&a_ind . s_i,0,2);
+		}
+	else if(but==253)
+		{
+		a_ind . s_i--;
+		gran_char(&a_ind . s_i,0,2);
+		}
+	else if(a_ind . s_i==0)
+		{
+		temp_SS=lc640_read_int(0x10+100+6);
+	     if(but==239)
+	     	{
+		    temp_SS++;
+	     	}
+	     else if(but==111)
+	     	{
+	     	temp_SS=((temp_SS/10)+1)*10;
+	     	}	
+	     else if(but==247)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==119)
+	     	{
+	     	temp_SS=((temp_SS/10)-1)*10;
+	     	}
+	    gran(&temp_SS,1,20000);
+		lc640_write_int(0x10+100+6,temp_SS);
+		lc640_write_int(0x10+100+56,0xabcd);					
+		speed=1;	
+					
+		}
+	else if(a_ind . s_i==1)
+		{
+		temp_SS=lc640_read_int(0x10+100+8);
+	     if(but==239)
+	     	{
+		    temp_SS++;
+	     	}
+	     else if(but==111)
+	     	{
+	     	temp_SS=((temp_SS/10)+1)*10;
+	     	}	
+	     else if(but==247)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==119)
+	     	{
+	     	temp_SS=((temp_SS/10)-1)*10;
+	     	}
+	    gran(&temp_SS,1,20000);
+		lc640_write_int(0x10+100+8,temp_SS);
+		lc640_write_int(0x10+100+56,0xabcd);					
+		speed=1;	
+					
+		}
+ 	else if(a_ind . s_i==2)
+		{
+		if(but==254)
+			{
+			tree_down(0,0);
+			ret(0);
+			}
+		}				 
+	} 
+
 else if(a_ind . i==iK_viz_i)
 	{
 	ret(1000);
@@ -16690,6 +16913,79 @@ else if(a_ind . i==iK_viz_i)
 
  
  	else if(a_ind . s_i==1)
+		{
+		if(but==254)
+			{
+			tree_down(0,0);
+			ret(0);
+			}
+		}				 
+	} 
+
+else if(a_ind . i==iK_viz_i_2)
+	{
+	ret(1000);
+	if(but==251)
+		{
+		a_ind . s_i++;
+		gran_char(&a_ind . s_i,0,2);
+		}
+	else if(but==253)
+		{
+		a_ind . s_i--;
+		gran_char(&a_ind . s_i,0,2);
+		}
+	else if(a_ind . s_i==0)
+		{
+		temp_SS=lc640_read_int(0x10+100+44);
+	     if(but==239)
+	     	{
+		    temp_SS++;
+	     	}
+	     else if(but==111)
+	     	{
+	     	temp_SS=((temp_SS/10)+1)*10;
+	     	}	
+	     else if(but==247)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==119)
+	     	{
+	     	temp_SS=((temp_SS/10)-1)*10;
+	     	}
+	    gran(&temp_SS,1,32000);
+		lc640_write_int(0x10+100+44,temp_SS);
+		lc640_write_int(0x10+100+58,0xabcd);					
+		speed=1;	
+					
+		}
+	else if(a_ind . s_i==1)
+		{
+		temp_SS=lc640_read_int(0x10+100+46);
+	     if(but==239)
+	     	{
+		    temp_SS++;
+	     	}
+	     else if(but==111)
+	     	{
+	     	temp_SS=((temp_SS/10)+1)*10;
+	     	}	
+	     else if(but==247)
+	     	{
+	     	temp_SS--;
+	     	}
+	     else if(but==119)
+	     	{
+	     	temp_SS=((temp_SS/10)-1)*10;
+	     	}
+	    gran(&temp_SS,1,32000);
+		lc640_write_int(0x10+100+46,temp_SS);
+		lc640_write_int(0x10+100+58,0xabcd);					
+		speed=1;	
+					
+		}
+ 	else if(a_ind . s_i==2)
 		{
 		if(but==254)
 			{
@@ -18922,7 +19218,7 @@ a_ind . i=iMn;
 
 memo_read();
 
-#line 12149 "main.c"
+#line 12434 "main.c"
 
 
 

@@ -118,9 +118,16 @@ Ktext[2]=lc640_read_int(KT_EXT2);
 	
 //MAIN_IST=lc640_read_int(EE_MAIN_IST);
 //UMAX=lc640_read_int(EE_UMAX);
-UB0=lc640_read_int(EE_UB0);
-UB20=lc640_read_int(EE_UB20);
+/*UB0=lc640_read_int(EE_UB0);
+UB20=lc640_read_int(EE_UB20);*/
 //TMAX=lc640_read_int(EE_TMAX);
+
+U_viz_2_max=lc640_read_int(EE_U_VIZ_2_MAX);
+U_viz_2_min=lc640_read_int(EE_U_VIZ_2_MIN);
+I_viz_2_max=lc640_read_int(EE_I_VIZ_2_MAX);
+I_viz_2_min=lc640_read_int(EE_I_VIZ_2_MIN);
+VIZ=lc640_read_int(EE_VIZ);
+
 TSIGN=lc640_read_int(EE_TSIGN);
 DU=lc640_read_int(EE_DU);
 USIGN=lc640_read_int(EE_USIGN);
@@ -132,7 +139,7 @@ IMAX=lc640_read_int(EE_IMAX);
 IMIN=lc640_read_int(EE_IMIN);
 APV_ON=lc640_read_int(EE_APV_ON);
 IZMAX=lc640_read_int(EE_IZMAX);
-U0B=lc640_read_int(EE_U0B);
+//U0B=lc640_read_int(EE_U0B);
 TZAS=lc640_read_int(EE_TZAS);
 NUMIST=lc640_read_int(EE_NUMIST);
 //gran(&NUMIST,0,8);
@@ -195,8 +202,8 @@ CAP_MAX_VOLT=lc640_read_int(EE_CAP_MAX_VOLT);
 CAP_WRK_CURR=lc640_read_int(EE_CAP_WRK_CURR);
 
 
-APV_ON1=(enum_apv_on)lc640_read_int(EE_APV_ON1);
-APV_ON2=(enum_apv_on)lc640_read_int(EE_APV_ON2);
+//APV_ON1=(enum_apv_on)lc640_read_int(EE_APV_ON1);
+//APV_ON2=(enum_apv_on)lc640_read_int(EE_APV_ON2);
 APV_ON2_TIME=lc640_read_int(EE_APV_ON2_TIME);
 VZ_HR=lc640_read_int(EE_VZ_HR);
 TBAT=lc640_read_int(EE_TBAT);
